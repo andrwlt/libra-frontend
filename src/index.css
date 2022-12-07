@@ -1,0 +1,24 @@
+@font-face {
+  font-family: "PxGrotesk";
+  src: url("/public/fonts/Px-Grotesk-Light.ttf") format("truetype");
+  font-weight: lighter;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "PxGrotesk";
+  src: url("/public/fonts/Px-Grotesk-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "PxGrotesk";
+  src: url("/public/fonts/Px-Grotesk-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+html {
+  font-family: PxGrotesk, system-ui, sans-serif;
+}
