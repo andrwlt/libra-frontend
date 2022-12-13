@@ -1,17 +1,27 @@
-import Branding from "./Branding";
+import BrandingStep from "./Branding";
 import CreateProduct from "./CreateProduct";
 import { Button, Steps } from "antd";
-import { Progress } from 'antd';
 import styled from "styled-components";
 import { useState } from "react";
+import Delivery from "./Delivery";
+import { Branding } from "../../types";
+import Congratulation from "./Congratulation";
+
+
+const Header = styled.div`
+  max-width: 1160px;
+  padding: 32px;
+  margin-left: auto;
+  margin-right: auto;
+`;
 
 const Footer = styled.div`
-  display: flex;
   width: 100vw;
   position: fixed;
-  justify-content: center;
   bottom: 0;
   left: 0;
+  justify-content: center;
+  display: flex;
   padding: 16px 32px;
   border-top: solid 1px #f7f7f7;
 `;
@@ -19,35 +29,67 @@ const Footer = styled.div`
 const FooterContent = styled.div`
   display: flex;
   width: 100%;
-  max-width: 1280px;
+  max-width: 1440px;
+  padding: 0 32px;
   justify-content: center;
 `;
 
 const Content = styled.div`
   height: calc(100vh - 120px);
   max-width: 1440px;
+  padding: 0 32px;
   margin-left: auto;
   margin-right: auto;
 `;
 
+const steps = [
+  {
+    title: 'Branding',
+  },
+  {
+    title: 'Product',
+  },
+  {
+    title: 'Delivery',
+  },
+  {
+    title: 'Done',
+  },
+];
+
 export default function Onboarding() {
   const [step, setStep] = useState(0);
-  const [branding, setBranding] = useState(null);
+  const [branding, setBranding] = useState<Branding>({
+    name: 'John&Doe',
+  });
 
   const onNext = () => {
     setStep(step + 1);
   };
 
+  const openDashboard = () => {
+
+  };
+
   return (
     <>
-      <Progress percent={((step + 1) / 4) * 100} strokeLinecap='square' showInfo={false}></Progress>
+      <Header>
+        <Steps
+          size="small"
+          current={step}
+          items={steps}
+        />
+      </Header>
       <Content>
-        {/* { step === 0 && <Branding></Branding>} */}
-        { step === 0 && <CreateProduct/>}
+        { step === 0 && <BrandingStep value={branding} onChange={(value: Branding) => setBranding(value)}></BrandingStep>}
+        { step === 1 && <CreateProduct branding={branding}/>}
+        { step === 2 && <Delivery/>}
+        { step === 3 && <Congratulation/>}
       </Content>
       <Footer>
         <FooterContent>
-          <Button type="primary" size="large" onClick={onNext}>Next</Button>
+          { step < 3 && <Button type="primary" size="large" onClick={onNext}>Next</Button>}
+          { step === 3 && <Button type="primary" size="large" onClick={openDashboard}>Open dashboard</Button>}
         </FooterContent>
       </Footer>
     </>

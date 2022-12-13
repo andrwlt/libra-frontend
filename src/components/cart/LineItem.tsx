@@ -1,59 +1,83 @@
 
-import { Image, Divider, Typography, Skeleton } from 'antd';
+import { Image, Typography, Skeleton } from 'antd';
 import styled from 'styled-components';
+import { LineItem as CartItemProps } from '../../types';
 
 const { Title } = Typography;
 
-type LineItem = {
-  title: string;
-  
-};
-
 const Wrapper = styled.div`
   display: flex;
-  margin-left: 8px;
+  justify-content: space-between;
+  padding-left: 32px;
+  padding-right: 32px;
+  padding-bottom: 16px;
+`;
+
+const ProductInfo = styled.div`
+  display: flex;
 `;
 
 const ImageWrapper = styled.div`
   display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
-export function LineItemSkeleton() {
+const TitleWrapper = styled.div`
+  margin-left: 16px;
+`;
+
+const PriceWrapper = styled.div`
+  margin-left: 8px;
+  min-width: 120px;
+  text-align: right;
+`;
+
+export function CartItemSkeleton() {
   return (
     <Wrapper>
-      <ImageWrapper>
-        <Skeleton.Image></Skeleton.Image>
-      </ImageWrapper>
-      <div>
-        <Skeleton/>
-        <Skeleton/>
-      </div>
+      <ProductInfo>
+        <ImageWrapper>
+          <Skeleton.Image active></Skeleton.Image>
+        </ImageWrapper>
+        <TitleWrapper>
+          <Skeleton title={ {width: 360 } } active paragraph={false}/>
+        </TitleWrapper>
+      </ProductInfo>
+      <PriceWrapper>
+        <Skeleton title={ {width: 48} } active paragraph={false}/>
+      </PriceWrapper>
     </Wrapper>
   );
 }
 
-export interface LineItemProps {
-  title: string;
-  quantity?: number;
-  price: number;
-  images: string[];
-  currency: {
-    name?: string;
-    logo?: string;
-    symbol?: string;
-  },
-}
-
-export default function LineItem(props: LineItemProps) {
+export default function LineItem({ title, image, price, currency }: CartItemProps) {
   return (
     <Wrapper>
-      <ImageWrapper>
-        <Image src={props.images[0]}></Image>
-      </ImageWrapper>
-      <div>
-        <Title>{props.title}</Title>
-        <Title>{props.price}{props.currency.symbol}</Title>
-      </div>
+      <ProductInfo>
+        <ImageWrapper>
+          { 
+            image
+            ? <Image src={image}></Image>
+            : <Skeleton.Image active></Skeleton.Image>
+          }
+        </ImageWrapper>
+        <TitleWrapper>
+          { 
+            title
+            ? <Title level={3} style={ { margin: 0 }}>{title}</Title>
+            : <Skeleton title={ {width: 360 } } active paragraph={false}/>
+          }
+        </TitleWrapper>
+      </ProductInfo>
+
+      <PriceWrapper>
+        {
+          price
+          ? <Title level={4} style={ { margin: 0 }}>{price} {currency && currency.symbol}</Title>
+          : <Skeleton title={ {width: 48} } active paragraph={false}/>
+        }    
+      </PriceWrapper>
     </Wrapper>
   );
 }

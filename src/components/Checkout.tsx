@@ -1,43 +1,100 @@
-import React from 'react';
-import logo from '../logo.svg';
-import { Layout, Menu } from 'antd';
+import { Button, Typography, Input, Divider, Form } from 'antd';
 import styled from 'styled-components';
 import Cart from './cart';
+import { Branding, LineItem } from '../types';
 
-const { Header, Content, Footer } = Layout;
+const { Title } = Typography;
 
 const Wrapper = styled.div`
+`;
+
+const CheckoutHeader = styled.div`
+  width: 100%;
+  height: 40px;
+  border-bottom: solid 1px #f7f7f7;
+`;
+
+const LogoWrapper = styled.div`
+  height: 100%;
   display: flex;
+  align-items: center;
+`;
+
+const LogoImage = styled.img`
+  height: 24px;
+`;
+
+function CheckoutLogo({ name, logo }: Branding) {
+  if (logo) {
+    return (
+      <LogoWrapper>
+        <LogoImage src={logo}/>
+      </LogoWrapper>
+    );
+  }
+
+  return (
+    <LogoWrapper>
+      <Title level={3}>{name}</Title>
+    </LogoWrapper>
+  );
+}
+
+const CheckoutBody = styled.div`
+  display: flex;
+  padding-top: 32px;
 `;
 
 const CustomerInfo = styled.div`
+  width: 50%;
+  padding-right: 64px;
+`;
 
+const ContactInfoForm = styled.div`
+  margin-top: 64px;
+  max-width: 480px;
 `;
 
 const CartWrapper = styled.div`
-
+  padding-left: 64px;
+  width: 50%;
 `;
 
-const lineItems = [
-  {
-    title: 'Testing Product',
-    price: 100,
-    images: [],
-    currency: {
-      symbol: 'USDT',
-    }
-  }
-];
+const CheckoutButtonWrapper = styled.div`
+  padding: 32px;
+`;
 
-export default function Checkout() {
+interface CheckoutProps {
+  branding: Branding;
+  items: LineItem[];
+  onCheckout?: Function;
+}
+
+export default function Checkout({ branding, items }: CheckoutProps) {
   return (
     <Wrapper>
-      <CustomerInfo>
-
-      </CustomerInfo>
-      <CartWrapper>
-        <Cart lineItems={lineItems}></Cart>
-      </CartWrapper>
+      <CheckoutHeader>
+        <CheckoutLogo name={branding.name} logo={branding.logo}/>
+      </CheckoutHeader>
+      <CheckoutBody>
+        <CustomerInfo>
+          <Title level={3}>Contact info</Title>
+          <ContactInfoForm>
+            <Form layout='vertical'>
+              <Form.Item label='Email' required>
+                <Input placeholder='john.doe@example.com'></Input>
+              </Form.Item>
+            </Form>
+          </ContactInfoForm>
+        </CustomerInfo>
+        <Divider type='vertical'></Divider>
+        <CartWrapper>
+          <Cart items={items}></Cart>
+          <CheckoutButtonWrapper>
+            <Button block type='primary' size='large' color='natural'>Checkout</Button>
+          </CheckoutButtonWrapper>
+        </CartWrapper>
+      </CheckoutBody>
     </Wrapper>
   );
 };

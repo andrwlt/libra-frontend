@@ -3,6 +3,7 @@ import Navbar from './components/Navbar';
 import Sidebar from './components/Sidebar';
 import { Routes, Route } from 'react-router-dom';
 import Onboarding from './pages/onboarding';
+import CheckoutPage from './pages/Checkout';
 import { Layout } from 'antd';
 import './App.css';
 
@@ -17,6 +18,7 @@ function App() {
 
       <Routes>
         <Route path="/" element={<Onboarding/>}/>
+        <Route path="/checkout" element={<CheckoutPage/>}/>
       </Routes>
     </div>
   );

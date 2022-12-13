@@ -1,9 +1,5 @@
-import React from 'react';
 import logo from '../logo.svg';
-import { Layout, Menu } from 'antd';
 import styled from 'styled-components';
-
-const { Header, Content, Footer } = Layout;
 
 const Wrapper = styled.div`
   height: 40px;

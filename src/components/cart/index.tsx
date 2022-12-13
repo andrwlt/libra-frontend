@@ -1,7 +1,8 @@
 
 import { Divider, Skeleton, Typography } from 'antd';
-import LineItem, { LineItemProps, LineItemSkeleton } from './LineItem';
+import LineItem, { CartItemSkeleton } from './LineItem';
 import styled from 'styled-components';
+import { LineItem as LineItemProps } from '../../types';
 
 const { Title } = Typography;
 
@@ -10,35 +11,43 @@ const Items = styled.div`
 `;
 
 const Wrapper = styled.div`
-  display: flex;
-  
 `;
 
 const Total = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  padding: 16px 32px;
 `;
 
 interface CartProps {
-  lineItems: LineItemProps[];
+  items?: LineItemProps[];
 }
 
-export default function Cart({ lineItems }: CartProps) {
+export default function Cart({ items }: CartProps) {
   return (
     <Wrapper>
       <Items>
         {
-          lineItems.length === 0 
-          ? <LineItemSkeleton/>
-          : lineItems.map(
-            (item) => <LineItem title={item.title} images={item.images} price={item.price} currency={item.currency} />
+          !items && <CartItemSkeleton/>
+        }
+        {
+          items && items.length >= 0 && items.map((item) => 
+            <LineItem
+              title={item.title}
+              image={item.image}
+              price={item.price}
+              currency={item.currency}
+            />
           )
         }
       </Items>
       <Divider/>
       <Total>
-        <Title>Total</Title>
-        <Skeleton></Skeleton>
+        <Title level={3}>Total</Title>
+        <div>
+          <Skeleton active paragraph={false} title={{ width: 48 }}/>
+        </div>
       </Total>
     </Wrapper>
   )
