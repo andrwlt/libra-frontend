@@ -1,6 +1,6 @@
 
 import { Divider, Skeleton, Typography } from 'antd';
-import LineItem, { CartItemSkeleton } from './LineItem';
+import LineItem, { LineItemSkeleton } from './LineItem';
 import styled from 'styled-components';
 import { LineItem as LineItemProps } from '../../types';
 
@@ -29,7 +29,7 @@ export default function Cart({ items }: CartProps) {
     <Wrapper>
       <Items>
         {
-          !items && <CartItemSkeleton/>
+          (!items || items.length === 0) && <LineItemSkeleton/>
         }
         {
           items && items.length >= 0 && items.map((item) => 

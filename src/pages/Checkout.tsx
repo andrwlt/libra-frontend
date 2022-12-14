@@ -4,7 +4,8 @@ import Checkout from "../components/Checkout";
 
 const Wrapper = styled.div`
   display: flex;
-  padding: 32px;
+  width: 100vw;
+  min-height: 100vh;
 `;
 
 export default function CheckoutPage() {

@@ -33,7 +33,7 @@ const PriceWrapper = styled.div`
   text-align: right;
 `;
 
-export function CartItemSkeleton() {
+export function LineItemSkeleton() {
   return (
     <Wrapper>
       <ProductInfo>
@@ -56,7 +56,7 @@ export default function LineItem({ title, image, price, currency }: CartItemProp
     <Wrapper>
       <ProductInfo>
         <ImageWrapper>
-          { 
+          {
             image
             ? <Image src={image}></Image>
             : <Skeleton.Image active></Skeleton.Image>

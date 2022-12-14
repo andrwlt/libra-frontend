@@ -6,12 +6,14 @@ import { Branding, LineItem } from '../types';
 const { Title } = Typography;
 
 const Wrapper = styled.div`
+  width: 100%;
 `;
 
 const CheckoutHeader = styled.div`
   width: 100%;
   height: 40px;
   border-bottom: solid 1px #f7f7f7;
+  padding: 0 32px;
 `;
 
 const LogoWrapper = styled.div`
@@ -35,14 +37,14 @@ function CheckoutLogo({ name, logo }: Branding) {
 
   return (
     <LogoWrapper>
-      <Title level={3}>{name}</Title>
+      <Title level={5} style={{ margin: 0 }}>{name}</Title>
     </LogoWrapper>
   );
 }
 
 const CheckoutBody = styled.div`
   display: flex;
-  padding-top: 32px;
+  padding: 32px;
 `;
 
 const CustomerInfo = styled.div`
