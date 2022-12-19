@@ -23,11 +23,15 @@ const api = {
         id: '0',
         name: 'Dot',
         symbol: 'dot',
+        network,
+        logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/6636.png',
       },
       {
         id: '1',
         name: 'USDT',
         symbol: 'usdt',
+        network,
+        logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/825.png',
       }
     ]
   },
@@ -38,12 +42,19 @@ const api = {
       branding: {
         name: 'John'
       },
+      wallet_address: "",
       items: [
         {
           title: 'Awesome digital product made by John',
           quantity: 1,
           price: 100,
-          currency: 'DOT'
+          currency: {
+            id: '1',
+            network: 'Polkadot',
+            symbol: 'DOT',
+            logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/6636.png',
+          },
+          image: 'https://picsum.photos/300/300.webp',
         }
       ],
       redirect_url: 'https://golibra.xyz/thankyou',

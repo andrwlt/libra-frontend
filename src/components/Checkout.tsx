@@ -1,25 +1,18 @@
-import { Button, Typography, Input, Divider, Form } from 'antd';
+import { Button, Typography, Input, Divider, Form, Row, Col, Card, Layout, theme } from 'antd';
 import styled from 'styled-components';
 import Cart from './cart';
 import { Branding, LineItem } from '../types';
+import FooterLinks from './FooterLinks';
+
+const { Header, Content } = Layout;
 
 const { Title } = Typography;
-
-const Wrapper = styled.div`
-  width: 100%;
-`;
-
-const CheckoutHeader = styled.div`
-  width: 100%;
-  height: 40px;
-  border-bottom: solid 1px #f7f7f7;
-  padding: 0 32px;
-`;
 
 const LogoWrapper = styled.div`
   height: 100%;
   display: flex;
   align-items: center;
+  padding-left: 14px;
 `;
 
 const LogoImage = styled.img`
@@ -37,33 +30,41 @@ function CheckoutLogo({ name, logo }: Branding) {
 
   return (
     <LogoWrapper>
-      <Title level={5} style={{ margin: 0 }}>{name}</Title>
+      <Title style={{ margin: 0 }} level={5}>{name}</Title>
     </LogoWrapper>
   );
 }
 
-const CheckoutBody = styled.div`
+const Wrapper = styled(Layout)`
+  width: 100%;
+  height: 100%;
+`;
+
+const OrderSummary = styled.div`
+  width: 100%;
+  max-width: 480px;
+  padding: 32px 32px;
   display: flex;
-  padding: 32px;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 const CustomerInfo = styled.div`
-  width: 50%;
-  padding-right: 64px;
+  width: 100%;
+  max-width: 380px;
+  padding-left: 64px;
 `;
 
 const ContactInfoForm = styled.div`
-  margin-top: 64px;
-  max-width: 480px;
-`;
-
-const CartWrapper = styled.div`
-  padding-left: 64px;
-  width: 50%;
+  max-width: 380px;
 `;
 
 const CheckoutButtonWrapper = styled.div`
-  padding: 32px;
+  padding-top: 64px;
+`;
+
+const FullHeightRow = styled(Row)`
+  height: 100%;
 `;
 
 interface CheckoutProps {
@@ -73,30 +74,40 @@ interface CheckoutProps {
 }
 
 export default function Checkout({ branding, items }: CheckoutProps) {
+  const {
+    token: { colorBgContainer, colorBorder },
+  } = theme.useToken();
+
   return (
-    <Wrapper>
-      <CheckoutHeader>
+    <Wrapper style={{ minHeight: '100%' }}>
+      <Header style={ { background: colorBgContainer, borderBottom: `solid 1px ${colorBorder}` }}>
         <CheckoutLogo name={branding.name} logo={branding.logo}/>
-      </CheckoutHeader>
-      <CheckoutBody>
-        <CustomerInfo>
-          <Title level={3}>Contact info</Title>
-          <ContactInfoForm>
-            <Form layout='vertical'>
-              <Form.Item label='Email' required>
-                <Input placeholder='john.doe@example.com'></Input>
-              </Form.Item>
-            </Form>
-          </ContactInfoForm>
-        </CustomerInfo>
-        <Divider type='vertical'></Divider>
-        <CartWrapper>
-          <Cart items={items}></Cart>
-          <CheckoutButtonWrapper>
-            <Button block type='primary' size='large' color='natural'>Checkout</Button>
-          </CheckoutButtonWrapper>
-        </CartWrapper>
-      </CheckoutBody>
+      </Header>
+      <Content>
+        <FullHeightRow>
+          <Col span={12} style={ { display: 'flex', justifyContent: 'flex-end' }}>
+            <OrderSummary>
+              <Cart items={items}></Cart>
+              <FooterLinks></FooterLinks>
+            </OrderSummary>
+          </Col>
+          <Col style={ { background: colorBgContainer, borderLeft: `solid 1px ${colorBorder}` }} span={12}>
+            <CustomerInfo>
+              <ContactInfoForm>
+                <Title level={4}>Contact info</Title>
+                <Form layout='vertical'>
+                  <Form.Item label='Email' required>
+                    <Input placeholder='john.doe@example.com'></Input>
+                  </Form.Item>
+                </Form>
+              </ContactInfoForm>
+              <CheckoutButtonWrapper>
+                <Button block type='primary' size='large' color='natural'>Checkout</Button>
+              </CheckoutButtonWrapper>
+            </CustomerInfo>
+          </Col>
+        </FullHeightRow>
+      </Content>
     </Wrapper>
   );
 };

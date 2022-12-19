@@ -1,18 +1,29 @@
-import { useState } from "react";
-import styled from "styled-components";
+import { useEffect, useState } from "react";
 import Checkout from "../components/Checkout";
+import api from "../api";
+import { LineItem } from "../types";
+import styled from "styled-components";
 
 const Wrapper = styled.div`
-  display: flex;
   width: 100vw;
-  min-height: 100vh;
+  height: 100vh;
 `;
 
 export default function CheckoutPage() {
   const [branding, setBranding] = useState({
-    name: 'Andrew',
+    name: '',
   });
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState<LineItem[]>([]);
+
+  useEffect(() => {
+    const fetchCheckoutData = async () => {
+      const checkoutData = await api.getCheckoutData();
+      setBranding(checkoutData.branding);
+      setItems(checkoutData.items);
+    };
+
+    fetchCheckoutData();
+  }, []);
 
   return (
     <Wrapper>

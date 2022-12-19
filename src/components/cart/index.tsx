@@ -1,23 +1,17 @@
 
-import { Divider, Skeleton, Typography } from 'antd';
-import LineItem, { LineItemSkeleton } from './LineItem';
+import { Divider, Typography, Space, Skeleton } from 'antd';
+import LineItem from './LineItem';
 import styled from 'styled-components';
 import { LineItem as LineItemProps } from '../../types';
+import Pricing from '../Pricing';
 
-const { Title } = Typography;
+const { Title, Paragraph } = Typography;
 
 const Items = styled.div`
-
+  margin: 32px 0px;
 `;
 
 const Wrapper = styled.div`
-`;
-
-const Total = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px 32px;
 `;
 
 interface CartProps {
@@ -25,30 +19,35 @@ interface CartProps {
 }
 
 export default function Cart({ items }: CartProps) {
+  const total = items?.reduce((total, item) => (total + (item.price || 0)), 0);
+
   return (
     <Wrapper>
+      <Title level={3}>Order Summary</Title>
+      <Skeleton
+        paragraph={false}
+        title={{ width: 128 }}
+        loading={!items || items.length === 0}
+      >
+        <Space>
+          <Title type='secondary' level={4}>Total: </Title>
+          <Pricing
+            amount={total}
+            currency={items && items[0]?.currency} 
+            hasLogo
+            size='large'
+          />
+        </Space>
+      </Skeleton>
+      <Divider/>
       <Items>
         {
-          (!items || items.length === 0) && <LineItemSkeleton/>
+          (!items || items.length === 0) && <LineItem/>
         }
         {
-          items && items.length >= 0 && items.map((item) => 
-            <LineItem
-              title={item.title}
-              image={item.image}
-              price={item.price}
-              currency={item.currency}
-            />
-          )
+          items && items.length >= 0 && items.map((item, index) => <LineItem key={index} data={item}/>)
         }
       </Items>
-      <Divider/>
-      <Total>
-        <Title level={3}>Total</Title>
-        <div>
-          <Skeleton active paragraph={false} title={{ width: 48 }}/>
-        </div>
-      </Total>
     </Wrapper>
   )
 }

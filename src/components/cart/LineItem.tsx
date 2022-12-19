@@ -1,19 +1,12 @@
 
 import { Image, Typography, Skeleton } from 'antd';
 import styled from 'styled-components';
-import { LineItem as CartItemProps } from '../../types';
+import { LineItem as LineItemType } from '../../types';
+import Pricing from '../Pricing';
 
-const { Title } = Typography;
+const { Paragraph } = Typography;
 
 const Wrapper = styled.div`
-  display: flex;
-  justify-content: space-between;
-  padding-left: 32px;
-  padding-right: 32px;
-  padding-bottom: 16px;
-`;
-
-const ProductInfo = styled.div`
   display: flex;
 `;
 
@@ -21,63 +14,69 @@ const ImageWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 96px;
+  height: 96px;
+  margin-right: 16px;
 `;
 
-const TitleWrapper = styled.div`
-  margin-left: 16px;
+const ProductImage = styled(Image)`
+  height: 100%;
+  width: 100%;
+  max-width: 100%;
+  border-radius: 4px;
+`
+
+const ProductInfoWrapper = styled.div`
 `;
 
-const PriceWrapper = styled.div`
-  margin-left: 8px;
-  min-width: 120px;
-  text-align: right;
+const SkeletonImage = styled(Skeleton.Image)`
+  width: 100% !important;
+  height: 100% !important;
+
+  svg {
+    width: 48px !important;
+    height: 48px !important;
+  }
+`;
+
+const SkeletonProductTitle = styled(Skeleton.Input)`
+  width: 220px !important;
+  height: 16px !important;
 `;
 
 export function LineItemSkeleton() {
   return (
     <Wrapper>
-      <ProductInfo>
-        <ImageWrapper>
-          <Skeleton.Image active></Skeleton.Image>
-        </ImageWrapper>
-        <TitleWrapper>
-          <Skeleton title={ {width: 360 } } active paragraph={false}/>
-        </TitleWrapper>
-      </ProductInfo>
-      <PriceWrapper>
-        <Skeleton title={ {width: 48} } active paragraph={false}/>
-      </PriceWrapper>
+      <ImageWrapper>
+        <SkeletonImage active />
+      </ImageWrapper>
+      <ProductInfoWrapper>
+        <SkeletonProductTitle active/>
+        <Skeleton title={false} active></Skeleton>
+      </ProductInfoWrapper>
     </Wrapper>
   );
 }
 
-export default function LineItem({ title, image, price, currency }: CartItemProps) {
+interface LineItemProps {
+  data?: LineItemType;
+}
+
+export default function LineItem({ data }: LineItemProps) {
+  if (!data) {
+    return <LineItemSkeleton/>
+  }
+
   return (
     <Wrapper>
-      <ProductInfo>
-        <ImageWrapper>
-          {
-            image
-            ? <Image src={image}></Image>
-            : <Skeleton.Image active></Skeleton.Image>
-          }
-        </ImageWrapper>
-        <TitleWrapper>
-          { 
-            title
-            ? <Title level={3} style={ { margin: 0 }}>{title}</Title>
-            : <Skeleton title={ {width: 360 } } active paragraph={false}/>
-          }
-        </TitleWrapper>
-      </ProductInfo>
-
-      <PriceWrapper>
-        {
-          price
-          ? <Title level={4} style={ { margin: 0 }}>{price} {currency && currency.symbol}</Title>
-          : <Skeleton title={ {width: 48} } active paragraph={false}/>
-        }    
-      </PriceWrapper>
+      <ImageWrapper>
+        <ProductImage placeholder preview={false} src={data.image}/>
+      </ImageWrapper>
+      <ProductInfoWrapper>
+        <Paragraph strong>{data.title}</Paragraph>
+        <Pricing size='normal' amount={data.price} hasLogo currency={data.currency}></Pricing>
+        <Paragraph type='secondary'>{data.title}</Paragraph>
+      </ProductInfoWrapper>
     </Wrapper>
   );
 }

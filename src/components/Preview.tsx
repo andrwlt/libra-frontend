@@ -1,10 +1,7 @@
-import React, { ReactNode } from 'react';
-import logo from '../logo.svg';
-import { Layout, Menu } from 'antd';
+import { ReactNode } from 'react';
 import styled from 'styled-components';
 
-const { Header, Content, Footer } = Layout;
-
+// TODO: Full height and width follow ratio 16:9
 const Wrapper = styled.div`
   width: 768px;
   height: 540px;
@@ -33,20 +30,21 @@ const PreviewHeader = styled.div`
 `;
 
 const PreviewBody = styled.div`
-  width: calc(100% - 64px);
-  height: calc(100% - 59px);
+  width: 100%;
+  height: 100%;
   background: #f7f7f7;
   border: solid 1px rgb(227, 219, 214);
   border-radius: 0 0 6px 6px;
-  padding: 8px 32px;
 `;
 
 const PreviewContent = styled.div`
   zoom: 0.5;
+  width: 100%;
+  height: 100%;
 `;
 
 interface PreviewProps {
-  content?: ReactNode;
+  children?: ReactNode;
 }
 
 export default function Preview(props: PreviewProps) {
@@ -59,7 +57,7 @@ export default function Preview(props: PreviewProps) {
       </PreviewHeader>
       <PreviewBody>
         <PreviewContent>
-          { props.content }
+          { props.children }
         </PreviewContent>
       </PreviewBody>
     </Wrapper>

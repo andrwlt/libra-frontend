@@ -30,7 +30,9 @@ export default function CreateProduct({ branding }: CreateProductProps) {
   return (
     <Wrapper>
       <PreviewWrapper>
-        <Preview content={<Checkout branding={branding} items={items}/>}/>
+        <Preview>
+          <Checkout branding={branding} items={items}/>
+        </Preview>
       </PreviewWrapper>
       <ProductFormWrapper>
         <ProductForm onInput={(value: LineItem) => setItems([value])}/>
