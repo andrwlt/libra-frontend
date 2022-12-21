@@ -1,8 +1,10 @@
-import { Button, Typography, Input, Divider, Form, Row, Col, Card, Layout, theme } from 'antd';
+import { Button, Typography, Input, Form, Row, Col, Layout, theme } from 'antd';
 import styled from 'styled-components';
 import Cart from './cart';
 import { Branding, LineItem } from '../types';
 import FooterLinks from './FooterLinks';
+import ConnectWallet from './ConnectWallet';
+import { useState } from 'react';
 
 const { Header, Content } = Layout;
 
@@ -42,21 +44,22 @@ const Wrapper = styled(Layout)`
 
 const OrderSummary = styled.div`
   width: 100%;
-  max-width: 480px;
-  padding: 32px 32px;
+  max-width: 460px;
+  padding: 32px;
+  padding-right: 64px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 `;
 
-const CustomerInfo = styled.div`
+const PaymentFormWrapper = styled.div`
   width: 100%;
-  max-width: 380px;
+  max-width: 460px;
+  padding: 32px;
   padding-left: 64px;
 `;
 
 const ContactInfoForm = styled.div`
-  max-width: 380px;
 `;
 
 const CheckoutButtonWrapper = styled.div`
@@ -75,12 +78,25 @@ interface CheckoutProps {
 
 export default function Checkout({ branding, items }: CheckoutProps) {
   const {
-    token: { colorBgContainer, colorBorder },
+    token: { colorBgContainer, colorBorderSecondary },
   } = theme.useToken();
+
+  const [wallet, setWallet] = useState<any>(null);
+
+  const handleAccountSelected = ({ wallet, account }: any) => {
+    setWallet({
+      wallet,
+      account,
+    });
+  };
+  
+  const handleCheckout = () => {
+    
+  };
 
   return (
     <Wrapper style={{ minHeight: '100%' }}>
-      <Header style={ { background: colorBgContainer, borderBottom: `solid 1px ${colorBorder}` }}>
+      <Header style={ { background: colorBgContainer, borderBottom: `solid 1px ${colorBorderSecondary}` }}>
         <CheckoutLogo name={branding.name} logo={branding.logo}/>
       </Header>
       <Content>
@@ -91,20 +107,29 @@ export default function Checkout({ branding, items }: CheckoutProps) {
               <FooterLinks></FooterLinks>
             </OrderSummary>
           </Col>
-          <Col style={ { background: colorBgContainer, borderLeft: `solid 1px ${colorBorder}` }} span={12}>
-            <CustomerInfo>
-              <ContactInfoForm>
-                <Title level={4}>Contact info</Title>
-                <Form layout='vertical'>
-                  <Form.Item label='Email' required>
-                    <Input placeholder='john.doe@example.com'></Input>
-                  </Form.Item>
-                </Form>
-              </ContactInfoForm>
-              <CheckoutButtonWrapper>
-                <Button block type='primary' size='large' color='natural'>Checkout</Button>
-              </CheckoutButtonWrapper>
-            </CustomerInfo>
+          <Col style={ { background: colorBgContainer, borderLeft: `solid 1px ${colorBorderSecondary}` }} span={12}>
+            <PaymentFormWrapper>
+              <Title level={3}>Pay by cryptocurrencies</Title>
+              {
+                <ConnectWallet onAccountSelected={handleAccountSelected}/>
+              }
+
+              {
+                wallet && <>
+                  <ContactInfoForm>
+                    <Title level={4}>What's your contact information?</Title>
+                    <Form layout='vertical'>
+                      <Form.Item label='Email' required>
+                        <Input placeholder='john.doe@example.com'></Input>
+                      </Form.Item>
+                    </Form>
+                  </ContactInfoForm>
+                  <CheckoutButtonWrapper>
+                    <Button block type='primary' size='large' color='natural'>Checkout</Button>
+                  </CheckoutButtonWrapper>
+                </>
+              }
+            </PaymentFormWrapper>
           </Col>
         </FullHeightRow>
       </Content>

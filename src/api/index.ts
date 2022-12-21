@@ -2,6 +2,23 @@ const wait = (time: number) => new Promise((resolve) => {
   setTimeout(resolve, time);
 });
 
+interface Transaction {
+  payload: {
+    payee: string;
+    amount: string;
+    currency: string;
+  },
+  account: {
+    address: string;
+    signer: any;
+  }
+}
+interface CreateOrderParams {
+  checkoutId: string;
+  email: string;
+  transaction: Transaction;
+}
+
 const api = {
   getPayments() {
 
@@ -45,7 +62,8 @@ const api = {
       wallet_address: "",
       items: [
         {
-          title: 'Awesome digital product made by John',
+          title: 'Year-end party at somewhere',
+          description: '',
           quantity: 1,
           price: 100,
           currency: {
@@ -59,6 +77,11 @@ const api = {
       ],
       redirect_url: 'https://golibra.xyz/thankyou',
     }
+  },
+
+  async createOrder({ checkoutId, email, transaction }: CreateOrderParams) {
+    await wait(1000);
+    console.log(checkoutId, email, transaction);
   }
 };
 

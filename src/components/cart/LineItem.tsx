@@ -75,7 +75,7 @@ export default function LineItem({ data }: LineItemProps) {
       <ProductInfoWrapper>
         <Paragraph strong>{data.title}</Paragraph>
         <Pricing size='normal' amount={data.price} hasLogo currency={data.currency}></Pricing>
-        <Paragraph type='secondary'>{data.title}</Paragraph>
+        <Paragraph type='secondary'>{data.description}</Paragraph>
       </ProductInfoWrapper>
     </Wrapper>
   );

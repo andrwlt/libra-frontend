@@ -35,6 +35,6 @@ export default function Pricing({
   return <Space size={4} align="start">
     { hasLogo && <CurrencyLogo size='small' src={currency?.logo}>{currency?.symbol}</CurrencyLogo> }
     <Paragraph style={{ marginBottom: '0.5em', fontSize: '12px' }}>{ amount }</Paragraph>
-    <Paragraph strong style={{ marginBottom: '0.5em', fontSize: '12px' }}>{ currency?.symbol }</Paragraph>
+    <Paragraph style={{ marginBottom: '0.5em', fontSize: '12px' }}>{ currency?.symbol }</Paragraph>
   </Space>;
 }
