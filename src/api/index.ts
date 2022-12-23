@@ -1,3 +1,5 @@
+import { Checkout } from "types";
+
 const wait = (time: number) => new Promise((resolve) => {
   setTimeout(resolve, time);
 });
@@ -53,18 +55,17 @@ const api = {
     ]
   },
 
-  async getCheckoutData() {
+  async getCheckout(): Promise<Checkout> {
     await wait(1000);
     return {
       branding: {
         name: 'John'
       },
-      wallet_address: "",
+      payee: "",
       items: [
         {
           title: 'Year-end party at somewhere',
           description: '',
-          quantity: 1,
           price: 100,
           currency: {
             id: '1',
@@ -75,7 +76,24 @@ const api = {
           image: 'https://picsum.photos/300/300.webp',
         }
       ],
-      redirect_url: 'https://golibra.xyz/thankyou',
+      total: 100,
+      currency: {
+        id: '1',
+        network: 'Polkadot',
+        symbol: 'DOT',
+        logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/6636.png',
+      },
+      network: {
+        id: 'polkadot',
+        name: 'Polkadot',
+        rpc: 'rpc',
+        gas: {
+          id: '1',
+          network: 'Polkadot',
+          symbol: 'DOT',
+          logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/6636.png',
+        },
+      },
     }
   },
 

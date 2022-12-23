@@ -1,3 +1,9 @@
+export interface Network {
+  id: string;
+  name: string;
+  rpc: string;
+  gas: Currency;
+}
 export interface Branding {
   name: string;
   logo?: string;
@@ -19,25 +25,12 @@ export interface LineItem {
 }
 
 export interface Checkout {
+  network: Network;
+  branding: Branding;
   items: LineItem[];
-  network: string;
   payee: string;
   total: number;
   currency: Currency;
 }
 
-export interface Network {
-  id: string;
-  name: string;
-  rpc: string;
-}
 
-interface User {
-  uid: string;
-  email?: string;
-  wallet: {
-    address: string;
-  },
-  created_at: number;
-  updated_at: number;
-}

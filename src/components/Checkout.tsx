@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import Cart from './cart';
 import { Branding, LineItem } from '../types';
 import FooterLinks from './FooterLinks';
-import ConnectWallet from './ConnectWallet';
 import { useState } from 'react';
 
 const { Header, Content } = Layout;
@@ -76,22 +75,16 @@ interface CheckoutProps {
   onCheckout?: Function;
 }
 
-export default function Checkout({ branding, items }: CheckoutProps) {
+export default function Checkout({ branding, items, onCheckout }: CheckoutProps) {
   const {
     token: { colorBgContainer, colorBorderSecondary },
   } = theme.useToken();
 
-  const [wallet, setWallet] = useState<any>(null);
-
-  const handleAccountSelected = ({ wallet, account }: any) => {
-    setWallet({
-      wallet,
-      account,
-    });
-  };
+  const [email, setEmail] = useState<string>('');
   
   const handleCheckout = () => {
-    
+    // TODO: validation
+    onCheckout && onCheckout({ email });
   };
 
   return (
@@ -109,26 +102,17 @@ export default function Checkout({ branding, items }: CheckoutProps) {
           </Col>
           <Col style={ { background: colorBgContainer, borderLeft: `solid 1px ${colorBorderSecondary}` }} span={12}>
             <PaymentFormWrapper>
-              <Title level={3}>Pay by cryptocurrencies</Title>
-              {
-                <ConnectWallet onAccountSelected={handleAccountSelected}/>
-              }
-
-              {
-                wallet && <>
-                  <ContactInfoForm>
-                    <Title level={4}>What's your contact information?</Title>
-                    <Form layout='vertical'>
-                      <Form.Item label='Email' required>
-                        <Input placeholder='john.doe@example.com'></Input>
-                      </Form.Item>
-                    </Form>
-                  </ContactInfoForm>
-                  <CheckoutButtonWrapper>
-                    <Button block type='primary' size='large' color='natural'>Checkout</Button>
-                  </CheckoutButtonWrapper>
-                </>
-              }
+              <ContactInfoForm>
+                <Title level={4}>What's your contact information?</Title>
+                <Form layout='vertical'>
+                  <Form.Item label='Email' required>
+                    <Input value={email} onInput={(e: any) => { setEmail(e.target.value) }} placeholder='john.doe@example.com'></Input>
+                  </Form.Item>
+                </Form>
+              </ContactInfoForm>
+              <CheckoutButtonWrapper>
+                <Button onClick={handleCheckout} block type='primary' size='large' color='natural'>Checkout</Button>
+              </CheckoutButtonWrapper>
             </PaymentFormWrapper>
           </Col>
         </FullHeightRow>

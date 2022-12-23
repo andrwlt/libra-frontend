@@ -1,6 +1,4 @@
-import { useState } from "react";
 import styled from "styled-components";
-import Checkout from "../../components/Checkout";
 
 const Wrapper = styled.div`
   display: flex;
