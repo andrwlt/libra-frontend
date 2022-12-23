@@ -14,6 +14,7 @@ const Line = styled.div`
   width: 100%;
   box-sizing: border-box;
   padding: 0 16px;
+  margin-top: -8px;
   display: flex;
   justify-content: space-between;
 `;
