@@ -1,9 +1,6 @@
-import { Typography } from 'antd';
 import Select from 'components/Select';
 import styled from 'styled-components';
 import { useExtensions } from 'contexts/extensions';
-
-const { Title } = Typography;
 
 const Wrapper = styled.div`
   width: 100%;

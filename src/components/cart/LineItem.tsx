@@ -3,6 +3,7 @@ import { Image, Typography, Skeleton } from 'antd';
 import styled from 'styled-components';
 import { LineItem as LineItemType } from '../../types';
 import Pricing from '../Pricing';
+import getImageUrl from 'utils/getImageUrl';
 
 const { Paragraph } = Typography;
 
@@ -70,7 +71,7 @@ export default function LineItem({ data }: LineItemProps) {
   return (
     <Wrapper>
       <ImageWrapper>
-        <ProductImage placeholder preview={false} src={data.image}/>
+        <ProductImage placeholder preview={false} src={getImageUrl(data.image)}/>
       </ImageWrapper>
       <ProductInfoWrapper>
         <Paragraph strong>{data.title}</Paragraph>

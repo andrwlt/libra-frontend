@@ -1,5 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
-import Onboarding from './pages/onboarding';
+import Onboarding from './pages/Onboard';
 import CheckoutPage from './pages/Checkout';
 import Dashboard from './pages/dashboard';
 import './App.css';

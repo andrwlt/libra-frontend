@@ -4,10 +4,17 @@ export interface Network {
   rpc: string;
   gas: Currency;
 }
+
+export interface PreUploadImage {
+  name: string;
+  type: 'image/svg+xml' | 'image/jpeg' | 'image/png';
+  content: string; 
+}
 export interface Branding {
   name: string;
-  logo?: string;
+  logo?: string | PreUploadImage;
   email?: string;
+  wallet?: string;
 }
 export interface Currency {
   id: string;
@@ -19,7 +26,7 @@ export interface Currency {
 export interface LineItem {
   title: string;
   description?: string;
-  image: string;
+  image: string | PreUploadImage;
   price?: number;
   currency?: Currency;
 }

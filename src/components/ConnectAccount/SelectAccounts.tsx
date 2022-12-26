@@ -1,12 +1,10 @@
-import { Typography, Skeleton } from 'antd';
+import { Skeleton } from 'antd';
 import Select from 'components/Select';
 import styled from 'styled-components';
 import { useExtensions } from 'contexts/extensions';
 import { useEffect, useState } from 'react';
 import { APP_NAME } from 'config';
 import { useAccount } from 'contexts/account';
-
-const { Title } = Typography;
 
 const Wrapper = styled.div`
   width: 100%;

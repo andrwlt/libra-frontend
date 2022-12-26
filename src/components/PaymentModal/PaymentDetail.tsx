@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Typography, Divider, Button, Space } from "antd";
+import { Typography, Divider, Button } from "antd";
 import Pricing from "components/Pricing";
 import { Currency } from "types";
 import { useState } from "react";

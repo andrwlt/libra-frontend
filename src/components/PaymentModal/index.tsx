@@ -1,8 +1,9 @@
-import { Modal } from "antd";
-import PaymentDetail from 'components/PaymentDetail';
-import ConnectAccount from 'components/ConnectAccount';
-import { useAccount } from "contexts/account";
 import { useEffect, useState } from "react";
+import { Modal } from "antd";
+import PaymentDetail from 'components/PaymentModal/PaymentDetail';
+import ConnectAccount from 'components/ConnectAccount';
+import PaymentSuccess from "./PaymentSuccess";
+import { useAccount } from "contexts/account";
 import { Currency } from "types";
 
 interface PaymentModalProps {
@@ -15,6 +16,7 @@ interface PaymentModalProps {
 enum PaymentStep {
   ConnectAccount,
   Pay,
+  Success,
 }
 
 export default function PaymentModal({
@@ -33,8 +35,6 @@ export default function PaymentModal({
     }
   }, [account])
 
-  console.log(step);
-
   return (
     <Modal open={opened} footer={false} title={false} closable={false}>
       {
@@ -42,6 +42,9 @@ export default function PaymentModal({
       }
       {
         step === PaymentStep.Pay && <PaymentDetail orderAmount={orderAmount} currency={currency}/>
+      }
+      {
+        step === PaymentStep.Success && <PaymentSuccess/>
       }
     </Modal>
   )

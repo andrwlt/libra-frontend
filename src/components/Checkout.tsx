@@ -1,9 +1,11 @@
-import { Button, Typography, Input, Form, Row, Col, Layout, theme } from 'antd';
+import { Button, Typography, Input, Form, Row, Col, Layout, theme, Skeleton } from 'antd';
 import styled from 'styled-components';
 import Cart from './cart';
 import { Branding, LineItem } from '../types';
 import FooterLinks from './FooterLinks';
 import { useState } from 'react';
+
+import getImageUrl from 'utils/getImageUrl';
 
 const { Header, Content } = Layout;
 
@@ -21,10 +23,16 @@ const LogoImage = styled.img`
 `;
 
 function CheckoutLogo({ name, logo }: Branding) {
+  if (!name || !logo) {
+    return <LogoWrapper>
+      <Skeleton.Button style={{ marginTop: '16px' }} active/>
+    </LogoWrapper>
+  }
+
   if (logo) {
     return (
       <LogoWrapper>
-        <LogoImage src={logo}/>
+        <LogoImage src={getImageUrl(logo)} alt="brand logo"/>
       </LogoWrapper>
     );
   }

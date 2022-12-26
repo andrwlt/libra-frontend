@@ -26,14 +26,6 @@ const api = {
 
   },
 
-  getProduct() {
-
-  },
-
-  createProduct() {
-
-  },
-
   async getCurrencies(network: string) {
     await wait(500);
 
