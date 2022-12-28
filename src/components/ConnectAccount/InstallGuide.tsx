@@ -14,23 +14,18 @@ const Wrapper = styled.div`
 const Footer = styled.div`
   display: flex;
   justify-content: flex-end;
-  padding: 8px 16px;
 `;
 
 export default () => {
   return (
     <Wrapper>
-      <div>
-        <Title level={4}>Install extension wallet</Title>
-        <Paragraph>
-          There is no extension wallet detected on the browser. Please install PolkadotJs extension and deposit your crypto currency to process the payment.
-        </Paragraph>
-      </div>
-      <Footer>
-        <a target='_blank' href='https://polkadot.js.org/extension/' rel="noreferrer">
-          <Button size="large" type="primary">Install</Button>
-        </a>
-      </Footer>
+      <Title level={4}>Install extension wallet</Title>
+      <Paragraph>
+        There is no extension wallet detected on the browser. Please install PolkadotJs extension and deposit your crypto currency to process the payment.
+      </Paragraph>
+      <a target='_blank' href='https://polkadot.js.org/extension/' rel="noreferrer">
+        <Button size="large" type="primary" block>Install wallet</Button>
+      </a>
     </Wrapper>
   );
 };

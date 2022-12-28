@@ -5,6 +5,7 @@ import { useExtensions } from 'contexts/extensions';
 import { useEffect, useState } from 'react';
 import { APP_NAME } from 'config';
 import { useAccount } from 'contexts/account';
+import { Account } from 'contexts/account/types';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -17,7 +18,7 @@ interface SelectAccountProps {
 export default ({ extensionId }: SelectAccountProps) => {
   const { extensions } = useExtensions();
   const { setAccount } = useAccount();
-  const [accounts, setAccounts] = useState([]);
+  const [accounts, setAccounts] = useState<Account[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const loadAccounts = async () => {
@@ -40,7 +41,6 @@ export default ({ extensionId }: SelectAccountProps) => {
     }
   }, [accounts]);
 
-
   const options = accounts.map((account: any) => ({
     title: account.name,
     description: `${account.address.slice(0, 12)}...${account.address.slice(-12)}`,
@@ -48,7 +48,8 @@ export default ({ extensionId }: SelectAccountProps) => {
   }));
 
   const handleAccountSelected = (event: any) => {
-
+    const account = accounts.find(item => item.address === event.value);
+    setAccount(account);
   };
   
   return (

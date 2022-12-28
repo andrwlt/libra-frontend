@@ -65,7 +65,9 @@ const api = {
             symbol: 'DOT',
             logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/6636.png',
           },
-          image: 'https://picsum.photos/300/300.webp',
+          images: [
+            'https://picsum.photos/300/400.webp',
+          ],
         }
       ],
       total: 100,

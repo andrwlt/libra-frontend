@@ -35,18 +35,6 @@ const NextButtonWrapper = styled.div`
   justify-content: flex-end;
 `;
 
-const BrandingFormWrapper = styled.div`
-
-`;
-
-const ProductFormWrapper = styled.div`
-
-`;
-
-const DeliveryFormWrapper = styled.div`
-
-`;
-
 const Content = styled.div`
   height: 680px;
   padding: 32px;
@@ -68,7 +56,7 @@ export default function Onboarding() {
   });
   const [product, setProduct] = useState<LineItem>({
     title: '',
-    image: '',
+    images: [],
   });
 
   const handleOnNext = () => {
@@ -87,7 +75,7 @@ export default function Onboarding() {
     <>
       <Header>
         <Row>
-          <Col span={5}>
+          <Col span={6}>
             <Space direction="vertical">
               <LogoWrapper>
                 <Logo src={logo} alt="logo" />
@@ -110,7 +98,7 @@ export default function Onboarding() {
               step === steps.length && <Congratulation/>
             }
           </Col>
-          <Col span={3}>
+          <Col span={2}>
             <NextButtonWrapper>
               { step < steps.length && <Button type="primary" size="large" onClick={handleOnNext}>Next</Button> }
             </NextButtonWrapper>

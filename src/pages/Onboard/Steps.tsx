@@ -1,4 +1,4 @@
-import { Typography, Button, theme } from "antd";
+import { Typography, theme } from "antd";
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import styled from "styled-components";
 

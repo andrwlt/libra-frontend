@@ -1,9 +1,11 @@
-import { Button, Typography, Input, Form, Row, Col, Layout, theme, Skeleton } from 'antd';
-import styled from 'styled-components';
-import Cart from './cart';
-import { Branding, LineItem } from '../types';
-import FooterLinks from './FooterLinks';
 import { useState } from 'react';
+import styled from 'styled-components';
+import { Button, Typography, Input, Form, Row, Col, Layout, theme, Skeleton, Select } from 'antd';
+import ProductInfo from './ProductInfo';
+import PaymentDetail from './PaymentDetail';
+import FooterLinks from '../FooterLinks';
+import { Branding, LineItem } from 'types';
+
 
 import getImageUrl from 'utils/getImageUrl';
 
@@ -23,7 +25,7 @@ const LogoImage = styled.img`
 `;
 
 function CheckoutLogo({ name, logo }: Branding) {
-  if (!name || !logo) {
+  if (!name && !logo) {
     return <LogoWrapper>
       <Skeleton.Button style={{ marginTop: '16px' }} active/>
     </LogoWrapper>
@@ -70,7 +72,7 @@ const ContactInfoForm = styled.div`
 `;
 
 const CheckoutButtonWrapper = styled.div`
-  padding-top: 64px;
+  padding-top: 32px;
 `;
 
 const FullHeightRow = styled(Row)`
@@ -89,11 +91,6 @@ export default function Checkout({ branding, items, onCheckout }: CheckoutProps)
   } = theme.useToken();
 
   const [email, setEmail] = useState<string>('');
-  
-  const handleCheckout = () => {
-    // TODO: validation
-    onCheckout && onCheckout({ email });
-  };
 
   return (
     <Wrapper style={{ minHeight: '100%' }}>
@@ -104,23 +101,19 @@ export default function Checkout({ branding, items, onCheckout }: CheckoutProps)
         <FullHeightRow>
           <Col span={12} style={ { display: 'flex', justifyContent: 'flex-end' }}>
             <OrderSummary>
-              <Cart items={items}></Cart>
+              <ProductInfo product={items[0]}></ProductInfo>
               <FooterLinks></FooterLinks>
             </OrderSummary>
           </Col>
           <Col style={ { background: colorBgContainer, borderLeft: `solid 1px ${colorBorderSecondary}` }} span={12}>
             <PaymentFormWrapper>
-              <ContactInfoForm>
-                <Title level={4}>What's your contact information?</Title>
-                <Form layout='vertical'>
-                  <Form.Item label='Email' required>
-                    <Input value={email} onInput={(e: any) => { setEmail(e.target.value) }} placeholder='john.doe@example.com'></Input>
-                  </Form.Item>
-                </Form>
-              </ContactInfoForm>
-              <CheckoutButtonWrapper>
-                <Button onClick={handleCheckout} block type='primary' size='large' color='natural'>Checkout</Button>
-              </CheckoutButtonWrapper>
+              <Title level={4}>Contact information</Title>
+              <Form layout='vertical'>
+                <Form.Item label='Email' required>
+                  <Input value={email} onInput={(e: any) => { setEmail(e.target.value) }} placeholder='john.doe@example.com'></Input>
+                </Form.Item>
+              </Form>
+              <PaymentDetail/>
             </PaymentFormWrapper>
           </Col>
         </FullHeightRow>

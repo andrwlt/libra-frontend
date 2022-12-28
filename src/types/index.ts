@@ -26,7 +26,7 @@ export interface Currency {
 export interface LineItem {
   title: string;
   description?: string;
-  image: string | PreUploadImage;
+  images: string[] | PreUploadImage[];
   price?: number;
   currency?: Currency;
 }

@@ -28,19 +28,32 @@ const Header = styled.div`
 const Footer = styled.div`
   width: 100%;
   box-sizing: border-box;
-  padding: 32px;
+  padding-top: 48px;
+  padding-bottom: 16px;
 `;
 
 interface PaymentDetailProps {
   orderAmount: number;
   currency: Currency;
+  onPaymentSuccess?: Function;
 }
 
 export default function PaymentDetail({
   orderAmount,
   currency,
+  onPaymentSuccess,
 }: PaymentDetailProps) {
-  const [estimatedGasFee, setEstimatedGasFee] = useState<number>(0.0001);
+  const [estimatedGasFee] = useState<number>(0.0001);
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const handlePay = () => {
+    setLoading(true);
+
+    setTimeout(() => {
+      setLoading(false);
+      onPaymentSuccess && onPaymentSuccess();
+    }, 2000);
+  };
 
   return <Wrapper>
     <Header>
@@ -61,7 +74,7 @@ export default function PaymentDetail({
       <Pricing amount={estimatedGasFee + orderAmount} currency={currency}></Pricing>
     </Line>
     <Footer>
-      <Button type="primary" size="large" block>Pay</Button>
+      <Button loading={loading} onClick={handlePay} type="primary" size="large" block>Pay</Button>
     </Footer>
   </Wrapper>
 }

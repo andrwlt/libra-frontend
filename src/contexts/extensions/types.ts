@@ -18,4 +18,5 @@ export interface Extension extends ExtensionConfig {
 
 export interface ExtensionsContextInterface {
   extensions: Extension[];
+  isReady: boolean;
 }

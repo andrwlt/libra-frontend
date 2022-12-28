@@ -71,7 +71,10 @@ export default function LineItem({ data }: LineItemProps) {
   return (
     <Wrapper>
       <ImageWrapper>
-        <ProductImage placeholder preview={false} src={getImageUrl(data.image)}/>
+        {
+          data.images[0] ? <ProductImage placeholder preview={false} src={getImageUrl(data.images[0])}/>
+          : <SkeletonImage active />
+        } 
       </ImageWrapper>
       <ProductInfoWrapper>
         <Paragraph strong>{data.title}</Paragraph>
@@ -79,5 +82,5 @@ export default function LineItem({ data }: LineItemProps) {
         <Paragraph type='secondary'>{data.description}</Paragraph>
       </ProductInfoWrapper>
     </Wrapper>
-  );
+  )
 }

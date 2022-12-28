@@ -41,7 +41,7 @@ export default function PaymentModal({
         step === PaymentStep.ConnectAccount && <ConnectAccount/>
       }
       {
-        step === PaymentStep.Pay && <PaymentDetail orderAmount={orderAmount} currency={currency}/>
+        step === PaymentStep.Pay && <PaymentDetail orderAmount={orderAmount} currency={currency} onPaymentSuccess={() => { setStep(PaymentStep.Success) }}/>
       }
       {
         step === PaymentStep.Success && <PaymentSuccess/>
