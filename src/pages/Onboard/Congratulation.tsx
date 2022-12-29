@@ -13,7 +13,7 @@ const Wrapper = styled.div`
 export default function Congratulation() {
   return (
     <Wrapper>
-      <Title level={2}>Congratulation! Your checkout page is ready now!</Title>
+      <Title level={2} style={{ marginTop: 0 }}>Congratulation! Your checkout page is ready now!</Title>
       <Title level={5}>Please use the url bellow to start selling your product.</Title>
       <SharableURL url="https://golibra.xyz/checkout/john-doe/cjhje"/>
     </Wrapper>

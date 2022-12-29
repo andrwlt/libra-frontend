@@ -1,6 +1,7 @@
 import { Typography, theme } from "antd";
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import styled from "styled-components";
+import { useState } from "react";
 
 const { Title } = Typography;
 
@@ -10,17 +11,17 @@ const Wrapper = styled.div`
 
 const BackButton = styled.div`
   position: absolute;
-  left: -36px;
-  top: -4px;
+  left: -24px;
+  top: 7px;
   cursor: pointer;
 
   svg {
-    color: #f0f0f0;
+    color: rgba(0, 0, 0, 0.45);
   }
 
   &::hover {
     svg {
-      color: #000;
+      color: rgba(0, 0, 0);
     }
   }
 `;
@@ -33,8 +34,10 @@ interface StepsProps {
 
 export default function Steps({ items, current, onBack }: StepsProps) {
   const {
-    token: { colorTextBase },
+    token: { colorTextHeading, colorTextSecondary },
   } = theme.useToken();
+
+  const [hovered, setHovered] = useState(false);
 
   const handleOnBack = () => {
     onBack && onBack();
@@ -42,12 +45,21 @@ export default function Steps({ items, current, onBack }: StepsProps) {
 
   return <Wrapper>
     {
-      current > 1 && <BackButton onClick={handleOnBack}>
-        <ArrowLeftOutlined size={32} style={{ color: colorTextBase }}/>
+      current > 0 && <BackButton
+        onClick={handleOnBack}
+        onMouseEnter={() => { setHovered(true) }}
+        onMouseLeave={() => { setHovered(false) }}
+      >
+        <ArrowLeftOutlined style={{ color: hovered ? colorTextSecondary: colorTextHeading, fontSize: '1rem', fontWeight: 'bold' }}/>
       </BackButton>
     }
 
-    <Title style={{ margin: '8px 0 0 0'}} level={4}>{ items[current -1] }</Title>
-    <Title style={{ margin: '8px 0 0 0'}} level={5} type="secondary" >Step {current} of {items.length}</Title>
+    {
+      hovered ? <Title style={{ margin: '8px 0 0 0'}} level={4}>Back</Title> :
+      <>
+        <Title style={{ margin: '8px 0 0 0'}} level={4}>{ items[current -1] }</Title>
+        <Title style={{ margin: '8px 0 0 0'}} level={5} type="secondary" >Step {current} of {items.length}</Title>
+      </>
+    }
   </Wrapper>
 }

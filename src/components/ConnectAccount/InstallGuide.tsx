@@ -11,12 +11,7 @@ const Wrapper = styled.div`
   justify-content: space-between;
 `;
 
-const Footer = styled.div`
-  display: flex;
-  justify-content: flex-end;
-`;
-
-export default () => {
+export default function InstallationGuide() {
   return (
     <Wrapper>
       <Title level={4}>Install extension wallet</Title>

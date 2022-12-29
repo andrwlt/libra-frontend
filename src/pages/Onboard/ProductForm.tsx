@@ -1,7 +1,7 @@
-import { Input, InputNumber, Select } from "antd";
+import { Input, InputNumber } from "antd";
 import ImageUploader from "components/ImageUploader";
 import styled from "styled-components";
-import { Asset, LineItem } from "../../types";
+import { LineItem } from "../../types";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -29,28 +29,20 @@ const FieldLabel = styled.div`
 `;
 
 interface Props {
-  onChange?: Function;
-  value: LineItem;
-  assets: Asset[];
+  onChange: Function;
+  formData: LineItem;
 }
 
-export default function ProductFrom({ value, onChange, assets }: Props) {
-
-  const handleChange = (e: any) => {
-    if (onChange) {
-      onChange({
-        ...value,
-        [e.target.name]: e.target.value,
-      });
-    }
+export default function ProductFrom({ formData, onChange }: Props) {
+  const updateForm = (field: string, value: any) => {
+    onChange({
+      ...formData,
+      [field]: value,
+    })
   };
 
   const handleProductImage = (e: any) => {
-    onChange && onChange({ ...value, image: e });
-  };
-
-  const handleCurrencyChange = (e: any) => {
-    console.log('Currency changes: ', e);
+    onChange && onChange({ ...formData, images: [...formData.images, e] });
   };
 
   return (
@@ -66,8 +58,8 @@ export default function ProductFrom({ value, onChange, assets }: Props) {
           <Input
             placeholder="Eg. Meditation course, a book, ..."
             name="name"
-            value={value.name}
-            onChange={handleChange}
+            value={formData.name}
+            onChange={(e) => updateForm('name', e.target.value)}
           ></Input>
         </Field>
         <Field>
@@ -78,13 +70,11 @@ export default function ProductFrom({ value, onChange, assets }: Props) {
             <InputNumber
               name='price'
               placeholder="Eg. 1 DOT, 10 USDT, ..."
-              value={value.price}
-              onChange={handleChange}
+              value={formData.price}
+              onChange={(value) => updateForm('price', value)}
               style={ { width: 'calc(100% - 60px)'}}
             />
-            <Select value='dot' onChange={handleCurrencyChange} style={ { width: '60px'}}>
-              { assets.map((asset) => <Select.Option key={asset} value={asset}>{asset}</Select.Option>)}
-            </Select>
+            <Input value='Dot' readOnly style={{ width: '60px' }}></Input>
           </Input.Group>
         </Field>
       </FormWrapper>

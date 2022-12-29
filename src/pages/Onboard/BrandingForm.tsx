@@ -56,7 +56,7 @@ export default function BrandingStep({ value, onChange }: BrandingProps) {
       <FormWrapper>
         <Field>
           <FieldLabel>
-            What is your branding name?
+            What is your brand name?
           </FieldLabel>
           <Input
             name="name"

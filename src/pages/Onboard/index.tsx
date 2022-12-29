@@ -1,5 +1,5 @@
 
-import { Button, Row, Col, Space } from "antd";
+import { Button, Row, Col, Space, Typography } from "antd";
 import styled from "styled-components";
 import { useState } from "react";
 import Preview from "components/Preview";
@@ -8,6 +8,7 @@ import Steps from "./Steps";
 import BrandingForm from './BrandingForm';
 import ProductFrom from "./ProductForm";
 import Congratulation from "./Congratulation";
+import ConnectAccount from "components/ConnectAccount";
 import logo from '../../logo.svg';
 
 import { Brand, LineItem } from "../../types";
@@ -29,11 +30,24 @@ const Logo = styled.img`
   height: 24px;
 `;
 
+const ConnectAccountWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 420px;
+`;
+
 const NextButtonWrapper = styled.div`
   height: 100%;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
+  box-sizing: border-box;
   justify-content: flex-end;
+  padding-top: 12px;
+  padding-right: 16px;
 `;
 
 const Content = styled.div`
@@ -47,6 +61,7 @@ const Content = styled.div`
 const steps = [
   'Setup your brand',
   'Add your product',
+  'Connect your account',
   'Start selling'
 ];
 
@@ -55,11 +70,12 @@ export default function Onboarding() {
   const [brand, setBrand] = useState<Brand>({
     name: '',
   });
-  const [product, setProduct] = useState<LineItem>({
+  const [lineItem, setLineItem] = useState<LineItem>({
     name: '',
     price: 0,
     images: [],
   });
+  const [loading, setLoading] = useState(false);
 
   const handleOnNext = () => {
     setStep(step + 1);
@@ -69,11 +85,21 @@ export default function Onboarding() {
     setStep(step - 1);
   };
 
+  const handleCreateCheckout = () => {
+    setLoading(true);
+
+    setTimeout(() => {
+      // TODO: Call API to create checkout
+      setLoading(false);
+      setStep(step + 1);
+    }, 1000);
+  };
+
   const checkout = {
     brand,
     payee: '',
-    items: [product],
-    amount: product.price,
+    items: [lineItem],
+    amount: lineItem.price,
     asset: 'dot',
   };
 
@@ -98,7 +124,18 @@ export default function Onboarding() {
               step === 1 && <BrandingForm value={brand} onChange={(value: Brand) => setBrand(value)}/>
             }
             {
-              step === 2 && <ProductFrom assets={[]} value={product} onChange={(value: LineItem) => setProduct(value)}></ProductFrom>
+              step === 2 && <ProductFrom
+                formData={lineItem}
+                onChange={(value: LineItem) => setLineItem(value)}
+              />
+            }
+            {
+              step === 3 && <ConnectAccountWrapper>
+                <Typography.Paragraph style={{ width: '100%' }} strong>
+                  Choose your account to receive the payments
+                </Typography.Paragraph>
+                <ConnectAccount/>
+              </ConnectAccountWrapper>
             }
             {
               step === steps.length && <Congratulation/>
@@ -106,14 +143,18 @@ export default function Onboarding() {
           </Col>
           <Col span={2}>
             <NextButtonWrapper>
-              { step < steps.length && <Button type="primary" size="large" onClick={handleOnNext}>Next</Button> }
+              { step < 3 && <Button type="primary" onClick={handleOnNext}>Next</Button> }
+              { step === 3 && <Button type="primary" onClick={handleCreateCheckout} loading={loading}>Create checkout</Button> }
+              {
+                step === 4 && <Button type="primary">Open dashboard</Button> 
+              }
             </NextButtonWrapper>
           </Col>
         </Row>
       </Header>
       <Content>
         <Preview>
-          <Checkout checkout={checkout}></Checkout>
+          <Checkout preview checkout={checkout}></Checkout>
         </Preview>
       </Content>
     </>

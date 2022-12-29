@@ -25,16 +25,17 @@ export default function ProductInfo({
 }: Props) {
   const { name, description, price, images } = product;
 
-  const imageUrl = getImageUrl(images[0]);
+  const imageUrl = images[0] ? getImageUrl(images[0]) : '';
 
   const assetMetadata = ASSET_METADATA.dot;
 
   return <Wrapper>
-    <Typography.Title type="secondary" level={5} style={{ marginBottom: 0 }}>{name}</Typography.Title>
+    <Typography.Title type="secondary" level={4} style={{ marginBottom: 0 }}>{name}</Typography.Title>
     {
+      !!price && 
       <Space align="center">
         { assetMetadata.logo && <Avatar src={assetMetadata.logo} size='small'></Avatar>}
-        <Typography.Title level={4} style={{ margin: '1rem 0' }}>{price} {assetMetadata.symbol}</Typography.Title>
+        <Typography.Title level={3} style={{ margin: '1rem 0', textTransform: 'capitalize' }}>{price} {assetMetadata.symbol}</Typography.Title>
       </Space>
     }
 

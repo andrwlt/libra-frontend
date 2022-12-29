@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { Typography, Input, Form, Row, Col, Layout, theme, Skeleton, Select } from 'antd';
+import { Typography, Input, Form, Row, Col, Layout, theme, Skeleton } from 'antd';
 import ProductInfo from './ProductInfo';
 import PaymentDetail from './PaymentDetail';
 import FooterLinks from '../FooterLinks';
@@ -74,10 +74,14 @@ const FullHeightRow = styled(Row)`
 
 interface CheckoutProps {
   checkout: CheckoutType,
+  preview?: boolean;
   onCheckout?: Function;
 }
 
-export default function Checkout({ checkout, onCheckout }: CheckoutProps) {
+export default function Checkout({
+  checkout,
+  preview = false,
+}: CheckoutProps) {
   const { brand, items } = checkout;
   const {
     token: { colorBgContainer, colorBorderSecondary },
@@ -106,7 +110,7 @@ export default function Checkout({ checkout, onCheckout }: CheckoutProps) {
                   <Input value={email} onInput={(e: any) => { setEmail(e.target.value) }} placeholder='john.doe@example.com'></Input>
                 </Form.Item>
               </Form>
-              <PaymentDetail checkoutData={checkout}/>
+              <PaymentDetail preview={preview} checkoutData={checkout}/>
             </PaymentFormWrapper>
           </Col>
         </FullHeightRow>
