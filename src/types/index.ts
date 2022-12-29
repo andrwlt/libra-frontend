@@ -26,3 +26,17 @@ export interface Checkout {
   asset: string;
   items: LineItem[];
 }
+
+export interface Charge  {
+  id: string;
+  object: 'charge';
+  from: Address;
+  to:  Address;
+  amount: Balance;
+  asset: string;
+  description: string;
+  metadata: any;
+  hash: string;
+  created: string;
+  status: 'succeeded' | 'pending' | 'failed';
+}

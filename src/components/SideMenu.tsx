@@ -32,10 +32,7 @@ function createMenuItem(
 
 const items: MenuItem[] = [
   createMenuItem('Payments', 'payments', <SyncOutlined />),
-  createMenuItem('Checkout', 'checkout', <ShopOutlined />, [
-    createMenuItem('Pages', 'checkout-pages'),
-    createMenuItem('Orders', 'orders'),
-  ]),
+  createMenuItem('Checkout', 'checkout', <ShopOutlined />),
   createMenuItem('Settings', 'settings', <SettingOutlined/>),
 ];
 

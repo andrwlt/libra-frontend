@@ -1,4 +1,7 @@
 import { Checkout } from "types";
+import { charges, checkout } from './fixtures';
+
+import { Charge } from "types";
 
 const wait = (time: number) => new Promise((resolve) => {
   setTimeout(resolve, time);
@@ -22,51 +25,15 @@ interface CreateOrderParams {
 }
 
 const api = {
-  getPayments() {
-
-  },
-
-  async getCurrencies(network: string) {
+  async getCharges(): Promise<Charge[]> {
     await wait(500);
-
-    return [
-      {
-        id: '0',
-        name: 'Dot',
-        symbol: 'dot',
-        network,
-        logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/6636.png',
-      },
-      {
-        id: '1',
-        name: 'USDT',
-        symbol: 'usdt',
-        network,
-        logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/825.png',
-      }
-    ]
+    
+    return charges;
   },
 
   async getCheckout(): Promise<Checkout> {
     await wait(1000);
-    return {
-      brand: {
-        name: 'Andrew'
-      },
-      payee: '',
-      items: [
-        {
-          name: 'Year-end party at somewhere',
-          description: '',
-          price: 100,
-          images: [
-            'https://picsum.photos/300/400.webp',
-          ],
-        }
-      ],
-      amount: 100,
-      asset: 'dot'
-    }
+    return checkout;
   },
 
   async createOrder({ checkoutId, email, transaction }: CreateOrderParams) {

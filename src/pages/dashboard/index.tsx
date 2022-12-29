@@ -2,7 +2,7 @@
 import Navbar from "../../components/Navbar";
 import { Layout } from 'antd';
 import { Routes, Route } from 'react-router-dom';
-import Payments from "./Payments";
+import Payments from "pages/Dashboard/Payments";
 import SideMenu from "../../components/SideMenu";
 
 const { Content }  = Layout;

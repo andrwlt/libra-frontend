@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router-dom';
 import Onboarding from './pages/Onboard';
 import CheckoutPage from './pages/Checkout';
-import Dashboard from './pages/dashboard';
+import Dashboard from './pages/Dashboard';
 import './App.css';
 
 function App() {
