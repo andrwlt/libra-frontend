@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import App from './App';
 import { ConfigProvider } from 'antd';
+import { Providers } from 'contexts';
 import theme from './theme';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
@@ -19,7 +20,9 @@ root.render(
     <Provider store={store}>
       <BrowserRouter>
         <ConfigProvider theme={theme}>
-          <App />
+          <Providers>
+            <App />
+          </Providers>
         </ConfigProvider>
       </BrowserRouter>
     </Provider>

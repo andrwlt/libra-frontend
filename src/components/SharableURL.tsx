@@ -8,11 +8,6 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
 `;
-
-const ShareButtons = styled.div`
-
-`;
-
 interface SharableURLProps {
   url: string;
 }
@@ -26,7 +21,7 @@ export default function SharableURL({ url }: SharableURLProps) {
           style={{ width: 'calc(100% - 96px)' }}
           defaultValue={url}
         />
-        <Tooltip title="copy git url">
+        <Tooltip title="copy url">
           <Button icon={<CopyOutlined />} />
         </Tooltip>
       </Input.Group>

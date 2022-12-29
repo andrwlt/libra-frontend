@@ -1,21 +1,30 @@
-import { useState } from "react";
-import styled from "styled-components";
+import { useEffect, useState } from "react";
 import Checkout from "../components/Checkout";
+import api from "../api";
+import styled from "styled-components";
 
 const Wrapper = styled.div`
-  display: flex;
-  padding: 32px;
+  width: 100vw;
+  height: 100vh;
 `;
 
 export default function CheckoutPage() {
-  const [branding, setBranding] = useState({
-    name: 'Andrew',
-  });
-  const [items, setItems] = useState([]);
+  const [checkout, setCheckout] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchCheckoutData = async () => {
+      const checkoutData = await api.getCheckout();
+      setCheckout(checkoutData)
+    };
+
+    fetchCheckoutData();
+  }, []);
 
   return (
     <Wrapper>
-      <Checkout branding={branding} items={items}></Checkout>
+      {
+        checkout && <Checkout checkout={checkout}/>
+      }
     </Wrapper>
   );
 }
