@@ -33,7 +33,7 @@ export default function Cart({ items }: CartProps) {
           <Title type='secondary' level={4}>Total: </Title>
           <Pricing
             amount={total}
-            currency={items && items[0]?.currency} 
+            currency={items && items} 
             hasLogo
             size='large'
           />

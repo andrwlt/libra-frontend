@@ -8,11 +8,6 @@ const Wrapper = styled.div`
   flex-direction: column;
   align-items: center;
 `;
-
-const ShareButtons = styled.div`
-
-`;
-
 interface SharableURLProps {
   url: string;
 }

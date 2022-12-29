@@ -50,44 +50,22 @@ const api = {
   async getCheckout(): Promise<Checkout> {
     await wait(1000);
     return {
-      branding: {
-        name: 'John'
+      brand: {
+        name: 'Andrew'
       },
-      payee: "",
+      payee: '',
       items: [
         {
-          title: 'Year-end party at somewhere',
+          name: 'Year-end party at somewhere',
           description: '',
           price: 100,
-          currency: {
-            id: '1',
-            network: 'Polkadot',
-            symbol: 'DOT',
-            logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/6636.png',
-          },
           images: [
             'https://picsum.photos/300/400.webp',
           ],
         }
       ],
-      total: 100,
-      currency: {
-        id: '1',
-        network: 'Polkadot',
-        symbol: 'DOT',
-        logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/6636.png',
-      },
-      network: {
-        id: 'polkadot',
-        name: 'Polkadot',
-        rpc: 'rpc',
-        gas: {
-          id: '1',
-          network: 'Polkadot',
-          symbol: 'DOT',
-          logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/6636.png',
-        },
-      },
+      amount: 100,
+      asset: 'dot'
     }
   },
 

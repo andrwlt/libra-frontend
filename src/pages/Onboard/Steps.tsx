@@ -37,13 +37,13 @@ export default function Steps({ items, current, onBack }: StepsProps) {
   } = theme.useToken();
 
   const handleOnBack = () => {
-
+    onBack && onBack();
   };
 
   return <Wrapper>
     {
-      current !== 1 && <BackButton>
-        <ArrowLeftOutlined size={32}/>
+      current > 1 && <BackButton onClick={handleOnBack}>
+        <ArrowLeftOutlined size={32} style={{ color: colorTextBase }}/>
       </BackButton>
     }
 

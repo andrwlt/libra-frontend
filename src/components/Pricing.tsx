@@ -1,12 +1,11 @@
 import styled from "styled-components";
-import { Currency } from "../types";
-import { Avatar, Typography, Space, Skeleton } from "antd";
+import { Avatar, Typography, Space } from "antd";
 
 const { Title, Paragraph } = Typography;
 
 interface PricingProps {
   amount?: number;
-  currency?: Currency;
+  currency?: any;
   hasLogo?: boolean;
   isLoading?: boolean;
   size?: 'normal' | 'large';

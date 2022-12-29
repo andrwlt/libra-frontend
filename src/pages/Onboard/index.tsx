@@ -2,7 +2,6 @@
 import { Button, Row, Col, Space } from "antd";
 import styled from "styled-components";
 import { useState } from "react";
-import { Branding, LineItem } from "../../types";
 import Preview from "components/Preview";
 import Checkout from "components/Checkout";
 import Steps from "./Steps";
@@ -10,6 +9,8 @@ import BrandingForm from './BrandingForm';
 import ProductFrom from "./ProductForm";
 import Congratulation from "./Congratulation";
 import logo from '../../logo.svg';
+
+import { Brand, LineItem } from "../../types";
 
 const Header = styled.div`
   max-width: 1160px;
@@ -44,18 +45,19 @@ const Content = styled.div`
 `;
 
 const steps = [
-  'Setup your branding',
+  'Setup your brand',
   'Add your product',
   'Start selling'
 ];
 
 export default function Onboarding() {
   const [step, setStep] = useState(1);
-  const [branding, setBranding] = useState<Branding>({
+  const [brand, setBrand] = useState<Brand>({
     name: '',
   });
   const [product, setProduct] = useState<LineItem>({
-    title: '',
+    name: '',
+    price: 0,
     images: [],
   });
 
@@ -67,8 +69,12 @@ export default function Onboarding() {
     setStep(step - 1);
   };
 
-  const openDashboard = () => {
-
+  const checkout = {
+    brand,
+    payee: '',
+    items: [product],
+    amount: product.price,
+    asset: 'dot',
   };
 
   return (
@@ -89,10 +95,10 @@ export default function Onboarding() {
           </Col>
           <Col span={16}>
             {
-              step === 1 && <BrandingForm value={branding} onChange={(value: Branding) => setBranding(value)}/>
+              step === 1 && <BrandingForm value={brand} onChange={(value: Brand) => setBrand(value)}/>
             }
             {
-              step === 2 && <ProductFrom currencies={[]} value={product} onChange={(value: LineItem) => setProduct(value)}></ProductFrom>
+              step === 2 && <ProductFrom assets={[]} value={product} onChange={(value: LineItem) => setProduct(value)}></ProductFrom>
             }
             {
               step === steps.length && <Congratulation/>
@@ -107,7 +113,7 @@ export default function Onboarding() {
       </Header>
       <Content>
         <Preview>
-          <Checkout branding={branding} items={product ? [product] : []}></Checkout>
+          <Checkout checkout={checkout}></Checkout>
         </Preview>
       </Content>
     </>

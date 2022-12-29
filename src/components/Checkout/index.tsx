@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import styled from 'styled-components';
-import { Button, Typography, Input, Form, Row, Col, Layout, theme, Skeleton, Select } from 'antd';
+import { Typography, Input, Form, Row, Col, Layout, theme, Skeleton, Select } from 'antd';
 import ProductInfo from './ProductInfo';
 import PaymentDetail from './PaymentDetail';
 import FooterLinks from '../FooterLinks';
-import { Branding, LineItem } from 'types';
+import { Brand as BrandType, Checkout as CheckoutType } from 'types';
 
 
 import getImageUrl from 'utils/getImageUrl';
@@ -24,7 +24,7 @@ const LogoImage = styled.img`
   height: 24px;
 `;
 
-function CheckoutLogo({ name, logo }: Branding) {
+function CheckoutLogo({ name, logo }: BrandType) {
   if (!name && !logo) {
     return <LogoWrapper>
       <Skeleton.Button style={{ marginTop: '16px' }} active/>
@@ -68,24 +68,17 @@ const PaymentFormWrapper = styled.div`
   padding-left: 64px;
 `;
 
-const ContactInfoForm = styled.div`
-`;
-
-const CheckoutButtonWrapper = styled.div`
-  padding-top: 32px;
-`;
-
 const FullHeightRow = styled(Row)`
   height: 100%;
 `;
 
 interface CheckoutProps {
-  branding: Branding;
-  items: LineItem[];
+  checkout: CheckoutType,
   onCheckout?: Function;
 }
 
-export default function Checkout({ branding, items, onCheckout }: CheckoutProps) {
+export default function Checkout({ checkout, onCheckout }: CheckoutProps) {
+  const { brand, items } = checkout;
   const {
     token: { colorBgContainer, colorBorderSecondary },
   } = theme.useToken();
@@ -95,13 +88,13 @@ export default function Checkout({ branding, items, onCheckout }: CheckoutProps)
   return (
     <Wrapper style={{ minHeight: '100%' }}>
       <Header style={ { background: colorBgContainer, borderBottom: `solid 1px ${colorBorderSecondary}` }}>
-        <CheckoutLogo name={branding.name} logo={branding.logo}/>
+        <CheckoutLogo name={brand.name} logo={brand.logo}/>
       </Header>
       <Content>
         <FullHeightRow>
           <Col span={12} style={ { display: 'flex', justifyContent: 'flex-end' }}>
             <OrderSummary>
-              <ProductInfo product={items[0]}></ProductInfo>
+              <ProductInfo product={items[0]} asset='dot'></ProductInfo>
               <FooterLinks></FooterLinks>
             </OrderSummary>
           </Col>
@@ -113,7 +106,7 @@ export default function Checkout({ branding, items, onCheckout }: CheckoutProps)
                   <Input value={email} onInput={(e: any) => { setEmail(e.target.value) }} placeholder='john.doe@example.com'></Input>
                 </Form.Item>
               </Form>
-              <PaymentDetail/>
+              <PaymentDetail checkoutData={checkout}/>
             </PaymentFormWrapper>
           </Col>
         </FullHeightRow>

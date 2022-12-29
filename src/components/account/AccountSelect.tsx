@@ -1,6 +1,5 @@
 import Account from "components/account/Account";
 import { Button, Dropdown, Skeleton } from "antd";
-import styled from "styled-components";
 import { useEffect, useState } from "react";
 import type { MenuProps } from "antd";
 
@@ -13,7 +12,6 @@ function getItems(accounts: any[]): MenuProps['items'] {
 
 export default function AccountSelect({ accounts, onChange }: any) {
   const [selected, setSelected] = useState();
-  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     setSelected(accounts[0]);
@@ -32,18 +30,23 @@ export default function AccountSelect({ accounts, onChange }: any) {
   const handleSelect: MenuProps['onClick'] = ({ key }) => {
     const account = accounts.find((account: any) => account.address === key);
     setSelected(account);
-    setOpen(false);
   };
 
   return (
-    <Dropdown open={open} trigger={['click']} onOpenChange={(e) => { setOpen(e) }} menu={{
-      items,
-      onClick: handleSelect,
-    }}>
-      {
-        !selected ? <Button size="large" block> Select an account</Button>
-        : <Account variant="select" onClick={() => setOpen(!open)} account={selected}/>
-      }
+    <Dropdown
+      trigger={['click']}
+      menu={{
+        items,
+        onClick: handleSelect,
+      }}
+    >
+      <a onClick={(e) => e.preventDefault()}>
+        {
+          !selected ? <Button size="large" block> Select an account</Button>
+          : <Account variant="select" account={selected}/>
+        }
+      </a>
+      
     </Dropdown>
   )
 }

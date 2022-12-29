@@ -53,7 +53,6 @@ export const ExtensionsProvider = ({children}: {
         setExtensions(getExtensions());
         setIsReady(true);
         clearInterval(retryInterval);
-        console.log('fak');
       }
 
       if (++retryCounter === MAX_RETRY) {

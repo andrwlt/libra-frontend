@@ -1,7 +1,7 @@
 import { Input } from "antd";
 import ImageUploader from "components/ImageUploader";
 import styled from "styled-components";
-import { Branding } from "../../types";
+import { Brand } from "../../types";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -30,7 +30,7 @@ const FieldLabel = styled.div`
 
 interface BrandingProps {
   onChange?: Function;
-  value: Branding;
+  value: Brand;
 }
 
 export default function BrandingStep({ value, onChange }: BrandingProps) {
@@ -62,17 +62,6 @@ export default function BrandingStep({ value, onChange }: BrandingProps) {
             name="name"
             placeholder="Eg. John Brand, Libra, ..."
             value={value.name}
-            onChange={handleChange}
-          />
-        </Field>
-        <Field>
-          <FieldLabel>
-            What is your cryptocurrencies wallet address?
-          </FieldLabel>
-          <Input
-            name="wallet"
-            placeholder="Eg. 5HGjWAeFDfFCWPsjFQdVV2Msvz2XtMktvgocEZcCj68kUMaw"
-            value={value.wallet}
             onChange={handleChange}
           />
         </Field>

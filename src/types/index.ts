@@ -1,43 +1,28 @@
-export interface Network {
-  id: string;
-  name: string;
-  rpc: string;
-  gas: Currency;
-}
+export type Address = string;
+export type Balance = number;
+export type Asset = string;
 
 export interface PreUploadImage {
   name: string;
   type: 'image/svg+xml' | 'image/jpeg' | 'image/png';
   content: string; 
 }
-export interface Branding {
-  name: string;
+export interface Brand {
+  name?: string;
   logo?: string | PreUploadImage;
-  email?: string;
-  wallet?: string;
-}
-export interface Currency {
-  id: string;
-  network: string;
-  symbol: string;
-  logo?: string;
 }
 
 export interface LineItem {
-  title: string;
+  name: string;
   description?: string;
   images: string[] | PreUploadImage[];
-  price?: number;
-  currency?: Currency;
+  price: Balance;
 }
 
 export interface Checkout {
-  network: Network;
-  branding: Branding;
+  brand: Brand,
+  payee: Address;
+  amount: Balance;
+  asset: string;
   items: LineItem[];
-  payee: string;
-  total: number;
-  currency: Currency;
 }
-
-

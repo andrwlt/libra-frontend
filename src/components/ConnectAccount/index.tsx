@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import InstallGuide from './InstallGuide';
 import AccountSelect from 'components/account/AccountSelect';
 import { Button, Skeleton } from 'antd';
-import { web3FromSource } from '@polkadot/extension-dapp';
+import { saveConnectedExtension, isExtensionConnected } from 'utils/extensions';
 
 import { APP_NAME } from 'config';
 
@@ -18,27 +18,16 @@ export default function ConnectAccount({
   const { extensions, isReady } = useExtensions();
   const [extension, setExtension] = useState<any>();
   const [accounts, setAccounts] = useState<any>([]);
+  const [signer, setSinger] = useState<any>();
   const [loading, setLoading] = useState(false);
-  const [isExtensionConnected, setIsExtensionConnected] = useState(false);
 
   const connectExtension = async () => {
     setLoading(true);
     if (extension) {
       const result = await extension.enable(APP_NAME);
-      setIsExtensionConnected(true);
+      setSinger(result.signer);
       setAccounts(await result.accounts.get());
-    }
-    setLoading(false);
-  };
-
-  const checkExtensionConnected = async () => {
-    setLoading(true);
-    try {
-      console.log(extension.id);
-      const result = await web3FromSource(extension.id);
-      setIsExtensionConnected(true);
-    } catch (e) {
-      console.log(e);
+      saveConnectedExtension(extension.id);
     }
     setLoading(false);
   };
@@ -51,13 +40,16 @@ export default function ConnectAccount({
   }, [isReady]);
 
   useEffect(() => {
-    if (extension) {
-      checkExtensionConnected();
+    if (extension && isExtensionConnected(extension.id)) {
+      connectExtension();
     }
   }, [extension])
 
   const handleAccountSelected = (account: any) => {
-    onAccountConnected && onAccountConnected(account);
+    onAccountConnected && onAccountConnected({
+      ...account,
+      signer,
+    });
   };
 
   if (loading || !isReady) {
@@ -68,7 +60,7 @@ export default function ConnectAccount({
     return <InstallGuide/>
   }
 
-  if (extension && !isExtensionConnected) {
+  if (extension && !isExtensionConnected(extension.id)) {
     return <>
       <Button
         loading={loading}

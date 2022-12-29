@@ -53,7 +53,7 @@ export default function Account({
   return <div
     style={style}
     onMouseEnter={() => { setHovered(true) }}
-    onMouseLeave={() => setHovered(false) }
+    onMouseLeave={() => { setHovered(false) }}
     onClick={handleClick}
   >
     <Space align="center" size='middle'>

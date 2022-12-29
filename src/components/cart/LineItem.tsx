@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { LineItem as LineItemType } from '../../types';
 import Pricing from '../Pricing';
 import getImageUrl from 'utils/getImageUrl';
+import { ASSET_METADATA } from 'config';
 
 const { Paragraph } = Typography;
 
@@ -77,8 +78,8 @@ export default function LineItem({ data }: LineItemProps) {
         } 
       </ImageWrapper>
       <ProductInfoWrapper>
-        <Paragraph strong>{data.title}</Paragraph>
-        <Pricing size='normal' amount={data.price} hasLogo currency={data.currency}></Pricing>
+        <Paragraph strong>{data.name}</Paragraph>
+        <Pricing size='normal' amount={data.price} hasLogo currency={ASSET_METADATA.dot}></Pricing>
         <Paragraph type='secondary'>{data.description}</Paragraph>
       </ProductInfoWrapper>
     </Wrapper>

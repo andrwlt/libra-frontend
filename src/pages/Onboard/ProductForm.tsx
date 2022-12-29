@@ -1,7 +1,7 @@
 import { Input, InputNumber, Select } from "antd";
 import ImageUploader from "components/ImageUploader";
 import styled from "styled-components";
-import { Currency, LineItem } from "../../types";
+import { Asset, LineItem } from "../../types";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -31,10 +31,10 @@ const FieldLabel = styled.div`
 interface Props {
   onChange?: Function;
   value: LineItem;
-  currencies: Currency[];
+  assets: Asset[];
 }
 
-export default function ProductFrom({ value, onChange, currencies }: Props) {
+export default function ProductFrom({ value, onChange, assets }: Props) {
 
   const handleChange = (e: any) => {
     if (onChange) {
@@ -65,8 +65,8 @@ export default function ProductFrom({ value, onChange, currencies }: Props) {
           </FieldLabel>
           <Input
             placeholder="Eg. Meditation course, a book, ..."
-            name="title"
-            value={value.title}
+            name="name"
+            value={value.name}
             onChange={handleChange}
           ></Input>
         </Field>
@@ -82,8 +82,8 @@ export default function ProductFrom({ value, onChange, currencies }: Props) {
               onChange={handleChange}
               style={ { width: 'calc(100% - 60px)'}}
             />
-            <Select value={value.currency?.id} onChange={handleCurrencyChange} style={ { width: '60px'}}>
-              { currencies.map((currency) => <Select.Option key={currency.id} value={currency.id}>{currency.symbol}</Select.Option>)}
+            <Select value='dot' onChange={handleCurrencyChange} style={ { width: '60px'}}>
+              { assets.map((asset) => <Select.Option key={asset} value={asset}>{asset}</Select.Option>)}
             </Select>
           </Input.Group>
         </Field>
