@@ -11,7 +11,9 @@ import Congratulation from "./Congratulation";
 import ConnectAccount from "components/ConnectAccount";
 import logo from '../../logo.svg';
 
-import { Brand, LineItem } from "../../types";
+import api from "api";
+
+import { Brand, LineItem } from "types";
 
 const Header = styled.div`
   max-width: 1160px;
@@ -75,6 +77,7 @@ export default function Onboarding() {
     price: 0,
     images: [],
   });
+  const [account, setAccount] = useState<any>(null);
   const [loading, setLoading] = useState(false);
 
   const handleOnNext = () => {
@@ -85,14 +88,26 @@ export default function Onboarding() {
     setStep(step - 1);
   };
 
-  const handleCreateCheckout = () => {
+  const handleCreateCheckout = async () => {
     setLoading(true);
 
-    setTimeout(() => {
-      // TODO: Call API to create checkout
-      setLoading(false);
-      setStep(step + 1);
-    }, 1000);
+    await api.createCheckout({
+      account,
+      checkout: {
+        brand,
+        payee: account.address,
+        item: lineItem,
+        asset: 'DOT',
+        metadata: {},
+        afterPayment: {},
+      },
+    });
+
+    setLoading(false);
+  };
+
+  const handleAccountConnected = (account: any) => {
+    setAccount(account);
   };
 
   const checkout = {
@@ -134,7 +149,7 @@ export default function Onboarding() {
                 <Typography.Paragraph style={{ width: '100%' }} strong>
                   Choose your account to receive the payments
                 </Typography.Paragraph>
-                <ConnectAccount/>
+                <ConnectAccount onAccountConnected={handleAccountConnected}/>
               </ConnectAccountWrapper>
             }
             {
@@ -144,7 +159,7 @@ export default function Onboarding() {
           <Col span={2}>
             <NextButtonWrapper>
               { step < 3 && <Button type="primary" onClick={handleOnNext}>Next</Button> }
-              { step === 3 && <Button type="primary" onClick={handleCreateCheckout} loading={loading}>Create checkout</Button> }
+              { step === 3 && <Button type="primary" disabled={!account} onClick={handleCreateCheckout} loading={loading}>Create checkout</Button> }
               {
                 step === 4 && <Button type="primary">Open dashboard</Button> 
               }

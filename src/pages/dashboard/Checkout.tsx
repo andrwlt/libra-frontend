@@ -6,23 +6,7 @@ import { Checkout as CheckoutDataType } from "types";
 import shortStr from "utils/shortStr";
 
 import api from 'api';
-
-const useCheckoutStatusColor = (status: string) => {
-  const {token: {
-    colorSuccess,
-  }} = theme.useToken();
-
-  return colorSuccess;
-};
-interface CheckoutStatusProps {
-  value: string;
-}
-
-const CheckoutStatus = ({ value }: CheckoutStatusProps) => {
-  const color = useCheckoutStatusColor(value);
-
-  return <Badge count={value} color={color} style={{ textTransform: 'capitalize' }}/>
-};
+import { useAccount } from "contexts/account";
 
 const columns: ColumnsType<CheckoutDataType> = [
   {
@@ -31,20 +15,15 @@ const columns: ColumnsType<CheckoutDataType> = [
     render: (id) => <Typography.Link copyable ellipsis>https://checkout.golibra.xyz/{id}</Typography.Link>
   },
   {
-    title: 'Status',
-    dataIndex: 'status',
-    render: (status) => <CheckoutStatus value={status}/>
-  },
-  {
     title: 'Name',
-    dataIndex: 'items',
+    dataIndex: 'item',
     align: 'center',
-    render: (items) => <Typography>{items[0]?.name}</Typography>
+    render: (item) => <Typography>{item?.name}</Typography>
   },
   {
     title: 'Price',
-    dataIndex: 'amount',
-    align: 'right',
+    dataIndex: 'item',
+    render: (item) => <Typography>{item?.price}</Typography>
   },
   {
     dataIndex: 'asset',
@@ -63,13 +42,14 @@ const Wrapper = styled.div`
 export default function Checkout() {
   const [checkoutList, setCheckoutList] = useState<CheckoutDataType[]>([]);
   const [loading, setLoading] = useState(false);
+  const { account } = useAccount();
 
   useEffect(() => {
     const fetchCheckoutList = async () => {
       setLoading(true);
 
       try {
-        const data = await api.getCheckoutList();
+        const data = await api.getCheckoutList(account);
         setCheckoutList(data);
       } catch (err) {
 
@@ -78,8 +58,10 @@ export default function Checkout() {
       setLoading(false);
     };
 
-    fetchCheckoutList();
-  }, []);
+    if (account) {
+      fetchCheckoutList();
+    }
+  }, [account]);
 
   return (
     <Wrapper>

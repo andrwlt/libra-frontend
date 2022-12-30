@@ -12,9 +12,13 @@ const Wrapper = styled.div`
   width: 100%;
 `;
 
+interface ConnectAccountProps {
+  onAccountConnected: Function;
+}
+
 export default function ConnectAccount({
   onAccountConnected,
-}: any) {
+}: ConnectAccountProps) {
   const { extensions, isReady } = useExtensions();
   const [extension, setExtension] = useState<any>();
   const [accounts, setAccounts] = useState<any>([]);

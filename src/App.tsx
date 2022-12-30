@@ -10,7 +10,7 @@ function App() {
       <Routes>
         <Route path="checkout" element={<CheckoutPage/>}/>
         <Route path="onboard" element={<Onboarding/>}/>
-        <Route path="dashboard" element={<Dashboard/>}/>
+        <Route path="/*" element={<Dashboard/>}/>
       </Routes>
     </div>
   );
