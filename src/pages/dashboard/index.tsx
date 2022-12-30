@@ -1,9 +1,10 @@
 
-import Navbar from "../../components/Navbar";
-import { Layout } from 'antd';
 import { Routes, Route } from 'react-router-dom';
+import { Layout } from 'antd';
+import Navbar from "components/Navbar";
+import SideMenu from "components/SideMenu";
 import Payments from "pages/Dashboard/Payments";
-import SideMenu from "../../components/SideMenu";
+import Checkout from "pages/Dashboard/Checkout";
 
 const { Content }  = Layout;
 
@@ -15,7 +16,9 @@ export default function Dashboard() {
         <SideMenu></SideMenu>
         <Content>
           <Routes>
-            <Route path="payments" element={<Payments/>}/>
+            <Route path="dashboard" element={<Payments/>}/>
+            <Route path="dashboard/payments" element={<Payments/>}/>
+            <Route path="dashboard/checkout" element={<Checkout/>}/>
           </Routes>
         </Content>
       </Layout>

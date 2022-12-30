@@ -46,19 +46,19 @@ const columns: ColumnsType<ChargeDataType> = [
     render: (status) => <ChargeStatus value={status}/>
   },
   {
+    title: 'Customer',
+    dataIndex: 'from',
+    render: (address) => <a>{shortStr(address)}</a>,
+  },
+  {
     title: 'Amount',
     className: 'column-money',
     dataIndex: 'amount',
     align: 'right',
   },
   {
-    title: 'Asset',
     dataIndex: 'asset',
-  },
-  {
-    title: 'From',
-    dataIndex: 'from',
-    render: (address) => <a>{shortStr(address)}</a>,
+    align: 'center',
   },
   {
     title: 'Description',

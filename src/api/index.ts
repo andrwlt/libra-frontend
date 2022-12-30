@@ -27,13 +27,19 @@ interface CreateOrderParams {
 const api = {
   async getCharges(): Promise<Charge[]> {
     await wait(500);
-    
+
     return charges;
   },
 
   async getCheckout(): Promise<Checkout> {
     await wait(1000);
     return checkout;
+  },
+
+  async getCheckoutList(): Promise<Checkout[]> {
+    await wait(1000);
+
+    return Array.from(Array(10).keys()).map(() => checkout);
   },
 
   async createOrder({ checkoutId, email, transaction }: CreateOrderParams) {

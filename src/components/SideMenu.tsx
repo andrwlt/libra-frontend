@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { Link } from "react-router-dom";
 import { Layout, Menu, theme } from 'antd';
 import type { MenuProps } from 'antd';
 import {
@@ -31,8 +32,8 @@ function createMenuItem(
 }
 
 const items: MenuItem[] = [
-  createMenuItem('Payments', 'payments', <SyncOutlined />),
-  createMenuItem('Checkout', 'checkout', <ShopOutlined />),
+  createMenuItem(<Link to='dashboard/payments'>Payments</Link>, 'payments', <SyncOutlined />),
+  createMenuItem(<Link to='dashboard/checkout'>Checkout</Link>, 'checkout', <ShopOutlined />),
   createMenuItem('Settings', 'settings', <SettingOutlined/>),
 ];
 
