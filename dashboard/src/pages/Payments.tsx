@@ -36,31 +36,37 @@ const ChargeStatus = ({ value }: ChargeStatusProps) => {
 
 const columns: ColumnsType<ChargeDataType> = [
   {
+    key: 'hash',
     title: 'Hash',
     dataIndex: 'hash',
     render: (hash) => <a>{shortStr(hash)}</a>,
   },
   {
+    key: 'status',
     title: 'Status',
     dataIndex: 'status',
     render: (status) => <ChargeStatus value={status}/>
   },
   {
+    key: 'from',
     title: 'Customer',
     dataIndex: 'from',
     render: (address) => <a>{shortStr(address)}</a>,
   },
   {
+    key: 'amount',
     title: 'Amount',
     className: 'column-money',
     dataIndex: 'amount',
     align: 'right',
   },
   {
+    key: 'asset',
     dataIndex: 'asset',
     align: 'center',
   },
   {
+    key: 'description',
     title: 'Description',
     dataIndex: 'description',
   },
@@ -99,6 +105,7 @@ export default function Payments() {
         loading={loading}
         columns={columns}
         dataSource={charges}
+        rowKey='id'
         title={() => <Typography.Title level={3}>Payments</Typography.Title>}
       />
     </Wrapper>
