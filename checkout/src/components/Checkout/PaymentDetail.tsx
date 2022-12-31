@@ -2,7 +2,6 @@ import ConnectAccount from "components/ConnectAccount";
 import styled from "styled-components";
 import { useState } from "react";
 import { Button, Typography } from "antd";
-import { createTransferTx } from 'utils/substrate';
 import { NETWORKS } from "config";
 import Account from "components/account/Account";
 import { Checkout as CheckoutDataType } from "types";
@@ -12,54 +11,34 @@ const Wrapper = styled.div`
 `;
 
 interface PaymentDetailProps {
+  loading?: boolean;
   checkout: CheckoutDataType;
-  preview?: boolean;
+  onPay?: Function;
 }
 
 export default function PaymentDetail({
+  loading = false,
   checkout,
-  preview = false,
+  onPay,
 }: PaymentDetailProps) {
   const [account, setAccount] = useState();
-  const [paying, setPaying] = useState(false);
 
   const handleAccountConnected = (account: any) => {
     setAccount(account);
   };
 
-  const handlePay = async (e: any) => {
-    if (preview) {
-      setPaying(true);
-
-      setTimeout(() => {
-        setPaying(false);
-      }, 1000);
-    }
-
-    setPaying(true);
-    await createTransferTx(NETWORKS.westend.endpoints.rpc, account, checkout.payee, checkout.item.price);
-    setPaying(false);
-  };
-
   return <Wrapper>
     <Typography.Title level={4}>Payment method</Typography.Title>
+    <ConnectAccount onAccountConnected={handleAccountConnected}/>
     {
-      preview ?
-      <Account
-        variant="select"
-        account={ {name: 'Test Account', address: '5ERjkQVj8M7v5UVZQ8qTbZ2qb1o5TgNXq9tXt2BsWF9jBpDu'} }
-      /> :
-      <ConnectAccount onAccountConnected={handleAccountConnected}/>
-    }
-    {
-      (account || preview) && 
+      account && 
       <Button
         style={{ marginTop: '24px' }}
         type='primary'
         size='large'
         block
-        loading={paying}
-        onClick={handlePay}
+        loading={loading}
+        onClick={() => { onPay && onPay({ account })}}
       >Pay</Button>
     }
   </Wrapper>

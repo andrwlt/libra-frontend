@@ -1,7 +1,6 @@
 import { Space, Typography, theme } from "antd";
 import { DownOutlined } from '@ant-design/icons';
 import Identicon from "@polkadot/react-identicon";
-import styled from "styled-components";
 import { useState } from "react";
 
 const { Paragraph } = Typography;
