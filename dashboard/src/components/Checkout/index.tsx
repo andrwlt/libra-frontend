@@ -82,7 +82,7 @@ export default function Checkout({
   checkout,
   preview = false,
 }: CheckoutProps) {
-  const { brand, items } = checkout;
+  const { brand, item, asset } = checkout;
   const {
     token: { colorBgContainer, colorBorderSecondary },
   } = theme.useToken();
@@ -98,7 +98,7 @@ export default function Checkout({
         <FullHeightRow>
           <Col span={12} style={ { display: 'flex', justifyContent: 'flex-end' }}>
             <OrderSummary>
-              <ProductInfo product={items[0]} asset='dot'></ProductInfo>
+              <ProductInfo product={item} asset={asset}></ProductInfo>
               <FooterLinks></FooterLinks>
             </OrderSummary>
           </Col>

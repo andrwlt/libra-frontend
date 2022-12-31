@@ -45,7 +45,7 @@ export default function Steps({ items, current, onBack }: StepsProps) {
 
   return <Wrapper>
     {
-      current > 0 && <BackButton
+      current > 1 && <BackButton
         onClick={handleOnBack}
         onMouseEnter={() => { setHovered(true) }}
         onMouseLeave={() => { setHovered(false) }}

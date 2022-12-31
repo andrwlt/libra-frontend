@@ -1,19 +1,20 @@
 
 import { Button, Row, Col, Space, Typography } from "antd";
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Preview from "components/Preview";
 import Checkout from "components/Checkout";
 import Steps from "./Steps";
 import BrandingForm from './BrandingForm';
 import ProductFrom from "./ProductForm";
 import Congratulation from "./Congratulation";
-import ConnectAccount from "components/ConnectAccount";
+import ConnectAccountButton from "components/account/ConnectAccountButton";
 import logo from 'assets/logo.svg';
 
 import api from "api";
 
 import { Brand, LineItem } from "types";
+import { useAccount } from "contexts/account";
 
 const Header = styled.div`
   max-width: 1160px;
@@ -32,23 +33,13 @@ const Logo = styled.img`
   height: 24px;
 `;
 
-const ConnectAccountWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 420px;
-`;
-
 const NextButtonWrapper = styled.div`
   height: 100%;
   display: flex;
   align-items: flex-start;
   box-sizing: border-box;
   justify-content: flex-end;
-  padding-top: 40px;
+  padding-top: 38px;
   padding-right: 16px;
 `;
 
@@ -60,10 +51,34 @@ const Content = styled.div`
   background: #f0f0f0;
 `;
 
+interface ValidationResult {
+  error: boolean;
+  messages: Record<string, string>;
+}
+
+function validateLineItem(data: any): ValidationResult {
+  let error = false;
+  let messages: Record<string, string>  = {};
+
+  if (!data.name) {
+    error = true;
+    messages.name = 'Product name is required.';
+  }
+
+  if (!data.price) {
+    error = true;
+    messages.price = 'Product price is required.';
+  }
+
+  return {
+    error,
+    messages,
+  };
+}
+
 const steps = [
   'Setup your brand',
   'Add your product',
-  'Connect your account',
   'Start selling'
 ];
 
@@ -77,7 +92,10 @@ export default function Onboarding() {
     price: 0,
     images: [],
   });
-  const [account, setAccount] = useState<any>(null);
+  const [errorMessages, setErrorMessages] = useState<Record<string, string>>({});
+  const [blur, setBlur] = useState(false);
+  const [asset] = useState('DOT');
+  const { account } = useAccount();
   const [loading, setLoading] = useState(false);
 
   const handleOnNext = () => {
@@ -88,34 +106,53 @@ export default function Onboarding() {
     setStep(step - 1);
   };
 
+  useEffect(() => {
+    if (blur) {
+      const { messages } = validateLineItem(lineItem);
+      console.log(messages);
+      setErrorMessages(messages);
+    }
+  }, [lineItem])
+
   const handleCreateCheckout = async () => {
-    setLoading(true);
+    if (!account) return;
 
-    await api.createCheckout({
-      account,
-      checkout: {
-        brand,
-        payee: account.address,
-        item: lineItem,
-        asset: 'DOT',
-        metadata: {},
-        afterPayment: {},
-      },
-    });
+    const { error, messages } = validateLineItem(lineItem);
 
-    setLoading(false);
-  };
+    if (error) {
+      setErrorMessages(messages);
+      setBlur(true);
+      return;
+    }
 
-  const handleAccountConnected = (account: any) => {
-    setAccount(account);
+    try {
+      setLoading(true);
+
+      await api.createCheckout({
+        account,
+        checkout: {
+          brand,
+          payee: account.address,
+          item: lineItem,
+          asset: 'DOT',
+          metadata: {},
+          afterPayment: {},
+        },
+      });
+
+      setStep(step + 1);
+    } catch (e) {
+
+    } finally {
+      setLoading(false);
+    }
   };
 
   const checkout = {
     brand,
     payee: '',
-    items: [lineItem],
-    amount: lineItem.price,
-    asset: 'dot',
+    item: lineItem,
+    asset,
   };
 
   return (
@@ -141,16 +178,10 @@ export default function Onboarding() {
             {
               step === 2 && <ProductFrom
                 formData={lineItem}
+                asset={asset}
+                errors={errorMessages}
                 onChange={(value: LineItem) => setLineItem(value)}
               />
-            }
-            {
-              step === 3 && <ConnectAccountWrapper>
-                <Typography.Paragraph style={{ width: '100%' }} strong>
-                  Choose your account to receive the payments
-                </Typography.Paragraph>
-                <ConnectAccount onAccountConnected={handleAccountConnected}/>
-              </ConnectAccountWrapper>
             }
             {
               step === steps.length && <Congratulation/>
@@ -158,8 +189,18 @@ export default function Onboarding() {
           </Col>
           <Col span={2}>
             <NextButtonWrapper>
-              { step < 3 && <Button type="primary" onClick={handleOnNext}>Next</Button> }
-              { step === 3 && <Button type="primary" disabled={!account} onClick={handleCreateCheckout} loading={loading}>Create checkout</Button> }
+              { step === 1 && <Button type="primary" onClick={handleOnNext}>Next</Button> }
+              {
+                step === 2 && <Space direction="vertical">
+                  {
+                    account && <>
+                      <Button type="primary" disabled={!account} onClick={handleCreateCheckout} loading={loading}>Create checkout</Button>
+                      <Typography.Paragraph style={{ margin: 0 }}>for account</Typography.Paragraph>
+                    </>
+                  }
+                  <ConnectAccountButton/>
+                </Space>
+              }
               {
                 step === 4 && <Button type="primary">Open dashboard</Button> 
               }

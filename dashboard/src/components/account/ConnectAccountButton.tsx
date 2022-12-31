@@ -18,7 +18,7 @@ function AccountOption({ account, onClick }: any) {
       border: `solid 1px ${hovered ? colorPrimary : colorBorder }`,
       background: `${hovered ? colorPrimaryBgHover : ''}`,
       cursor: 'pointer',
-      padding: '16px 8px',
+      padding: '16px',
       margin: '8px 0',
     }}
     onMouseEnter={() => { setHovered(true) }}
@@ -41,17 +41,14 @@ export default function ConnectAccountButton() {
   const [signer, setSigner] = useState<any>(null);
   const [accounts, setAccounts] = useState<any>([]);
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
 
   const connectExtension = async () => {
-    setLoading(true);
     if (extension) {
       const result = await extension.enable(APP_NAME);
       setSigner(result.signer);
       setAccounts(await result.accounts.get());
       saveConnectedExtension(extension.id);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
@@ -59,7 +56,7 @@ export default function ConnectAccountButton() {
       const polkadotJs = extensions.find(item => item.id === 'polkadot-js');
       setExtension(polkadotJs);
     }
-  }, [isReady]);
+  }, [isReady, extensions]);
 
   useEffect(() => {
     if (extension && isExtensionConnected(extension.id)) {
@@ -86,13 +83,13 @@ export default function ConnectAccountButton() {
 
   return <>
     {
-      account ? <Button onClick={() => setOpen(true)} style={{ padding: '0px 32px'}}>
+      account ? <Button block onClick={() => setOpen(true)} style={{ padding: '0px 32px'}}>
         <Space align="center">
-          <Identicon style={{ marginTop: '4px' }} value={account.address} size={16} theme='polkadot'></Identicon>
+          <Identicon style={{ marginTop: '6px' }} value={account.address} size={16} theme='polkadot'></Identicon>
           <Typography.Paragraph style={{ margin: 0 }}>{ account.name }</Typography.Paragraph>
         </Space>
       </Button> :
-      <Button type="primary" onClick={() => setOpen(true)}>Connect wallet</Button>
+      <Button block type="primary" onClick={() => setOpen(true)}>Connect wallet</Button>
     }
     <Modal
       open ={open}

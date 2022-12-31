@@ -1,6 +1,6 @@
 import logo from 'assets/logo.svg';
 import styled from 'styled-components';
-import { Layout, Button, Modal, Menu, theme } from 'antd'; 
+import { Layout, theme } from 'antd'; 
 import ConnectAccountButton from 'components/account/ConnectAccountButton';
 
 const { Header } = Layout;
