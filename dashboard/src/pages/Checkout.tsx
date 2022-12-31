@@ -52,7 +52,7 @@ export default function Checkout() {
         const data = await api.getCheckoutList(account);
         setCheckoutList(data);
       } catch (err) {
-
+        console.log(err);
       }
 
       setLoading(false);
@@ -66,6 +66,7 @@ export default function Checkout() {
   return (
     <Wrapper>
       <Table
+        rowKey='id'
         loading={loading}
         columns={columns}
         dataSource={checkoutList}

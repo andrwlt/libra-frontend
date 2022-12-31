@@ -16,9 +16,9 @@ export default function Dashboard() {
         <SideMenu></SideMenu>
         <Content>
           <Routes>
-            <Route path="dashboard" element={<Payments/>}/>
-            <Route path="dashboard/payments" element={<Payments/>}/>
-            <Route path="dashboard/checkout" element={<Checkout/>}/>
+            <Route path="" element={<Payments/>}/>
+            <Route path="payments" element={<Payments/>}/>
+            <Route path="checkout" element={<Checkout/>}/>
           </Routes>
         </Content>
       </Layout>

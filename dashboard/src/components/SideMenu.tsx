@@ -32,8 +32,8 @@ function createMenuItem(
 }
 
 const items: MenuItem[] = [
-  createMenuItem(<Link to='dashboard/payments'>Payments</Link>, 'payments', <SyncOutlined />),
-  createMenuItem(<Link to='dashboard/checkout'>Checkout</Link>, 'checkout', <ShopOutlined />),
+  createMenuItem(<Link to='payments'>Payments</Link>, 'payments', <SyncOutlined />),
+  createMenuItem(<Link to='checkout'>Checkout</Link>, 'checkout', <ShopOutlined />),
   createMenuItem('Settings', 'settings', <SettingOutlined/>),
 ];
 
