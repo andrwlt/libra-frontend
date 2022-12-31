@@ -27,15 +27,17 @@ export default function ProductInfo({
 
   const imageUrl = images[0] ? getImageUrl(images[0]) : '';
 
-  const assetMetadata = ASSET_METADATA.DOT;
+  const assetMetadata = ASSET_METADATA[asset];
+
+  const renderedPrice = assetMetadata ? price / (10 ** assetMetadata.decimals) : price;
 
   return <Wrapper>
     <Typography.Title type="secondary" level={4} style={{ marginBottom: 0 }}>{name}</Typography.Title>
     {
       !!price && 
       <Space align="center">
-        { assetMetadata.logo && <Avatar src={assetMetadata.logo} size='small'></Avatar>}
-        <Typography.Title level={3} style={{ margin: '1rem 0', textTransform: 'capitalize' }}>{price} {assetMetadata.symbol}</Typography.Title>
+        { assetMetadata && <Avatar src={assetMetadata.logo} size='default'></Avatar>}
+        <Typography.Title level={2} style={{ margin: '1rem 0', textTransform: 'capitalize' }}>{renderedPrice} {asset}</Typography.Title>
       </Space>
     }
 

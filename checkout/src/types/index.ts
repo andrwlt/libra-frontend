@@ -2,6 +2,13 @@ export type Address = string;
 export type Balance = number;
 export type Asset = string;
 
+export interface AssetMetadata {
+  network: string;
+  symbol: string;
+  decimals: number;
+  logo: string;
+}
+
 export interface PreUploadImage {
   name: string;
   type: 'image/svg+xml' | 'image/jpeg' | 'image/png';

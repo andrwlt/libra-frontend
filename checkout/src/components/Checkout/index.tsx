@@ -1,11 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Typography, Input, Form, Row, Col, Layout, theme, Skeleton } from 'antd';
+import { Typography, Input, Form, Row, Col, Layout, theme, Skeleton, message } from 'antd';
 import ProductInfo from './ProductInfo';
 import PaymentDetail from './PaymentDetail';
-import FooterLinks from '../FooterLinks';
+import FooterLinks from 'components/FooterLinks';
+import { createTransferTx } from 'utils/substrate';
 import { Brand as BrandType, Checkout as CheckoutType } from 'types';
-
+import { NETWORKS } from 'config';
 
 import getImageUrl from 'utils/getImageUrl';
 
@@ -82,15 +83,66 @@ export default function Checkout({
   checkout,
   preview = false,
 }: CheckoutProps) {
-  const { brand, item } = checkout;
   const {
     token: { colorBgContainer, colorBorderSecondary },
   } = theme.useToken();
+  const [messageApi, contextHolder] = message.useMessage();
+
+  const { brand, item, asset } = checkout;
 
   const [email, setEmail] = useState<string>('');
+  const [emailError, setEmailError] = useState<string>('');
+  const [paying, setPaying] = useState(false);
+
+  useEffect(() => {
+    setEmailError('');
+  }, [email]);
+
+  const handlePay = async ({ account }: any) => {
+    if (!email) {
+      setEmailError('Email is required.');
+      return;
+    }
+
+    if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))) {
+      setEmailError('Invalid email.');
+      return;
+    }
+
+    setPaying(true);
+
+    try {
+      const tx = await createTransferTx(
+        NETWORKS.westend.endpoints.rpc,
+        account,
+        checkout.payee,
+        checkout.item.price
+      );
+
+      const formData = new FormData();
+      formData.append('email', email);
+      formData.append('tx', tx);
+
+      const response = await fetch(window.location.href, {
+        body: formData,
+        method: "post"
+      });
+
+      if (response.status === 200) {
+
+      } else {
+        throw new Error(response.statusText);
+      }
+    } catch (err: any) {
+      messageApi.error(err.message);
+    } finally {
+      setPaying(false);
+    }
+  };
 
   return (
     <Wrapper style={{ minHeight: '100%' }}>
+      { contextHolder }
       <Header style={ { background: colorBgContainer, borderBottom: `solid 1px ${colorBorderSecondary}` }}>
         <CheckoutLogo name={brand.name} logo={brand.logo}/>
       </Header>
@@ -98,7 +150,7 @@ export default function Checkout({
         <FullHeightRow>
           <Col span={12} style={ { display: 'flex', justifyContent: 'flex-end' }}>
             <OrderSummary>
-              <ProductInfo product={item} asset={checkout.asset}></ProductInfo>
+              <ProductInfo product={item} asset={asset}></ProductInfo>
               <FooterLinks></FooterLinks>
             </OrderSummary>
           </Col>
@@ -106,11 +158,15 @@ export default function Checkout({
             <PaymentFormWrapper>
               <Title level={4}>Contact information</Title>
               <Form layout='vertical'>
-                <Form.Item label='Email' required>
+                <Form.Item
+                  label='Email'
+                  validateStatus={ emailError ? 'error' : undefined }
+                >
                   <Input value={email} onInput={(e: any) => { setEmail(e.target.value) }} placeholder='john.doe@example.com'></Input>
+                  { emailError && <Typography.Text type='danger'>{ emailError }</Typography.Text>}
                 </Form.Item>
               </Form>
-              <PaymentDetail preview={preview} checkout={checkout}/>
+              <PaymentDetail loading={paying} checkout={checkout} onPay={handlePay}/>
             </PaymentFormWrapper>
           </Col>
         </FullHeightRow>
