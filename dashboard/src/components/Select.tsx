@@ -15,10 +15,6 @@ interface SelectOptionEvents {
   onSelected: Function;
 }
 
-const OptionWrapper = styled.div`
-  display: flex;
-`;
-
 function Option({
   title,
   description,

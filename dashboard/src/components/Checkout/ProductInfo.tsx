@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Image, Space, Typography, Avatar } from "antd";
 import getImageUrl from "utils/getImageUrl";
 
-import { LineItem, Asset } from "types";
+import { LineItem, Asset, AssetMetadata } from "types";
 
 import { ASSET_METADATA } from "config";
 
@@ -21,21 +21,21 @@ interface Props {
 
 export default function ProductInfo({
   product,
-  asset = 'dot',
+  asset,
 }: Props) {
   const { name, description, price, images } = product;
 
   const imageUrl = images[0] ? getImageUrl(images[0]) : '';
 
-  const assetMetadata = ASSET_METADATA.dot;
+  const assetMetadata: AssetMetadata = ASSET_METADATA[asset];
 
   return <Wrapper>
     <Typography.Title type="secondary" level={4} style={{ marginBottom: 0 }}>{name}</Typography.Title>
     {
-      !!price && 
+      !!price &&
       <Space align="center">
-        { assetMetadata.logo && <Avatar src={assetMetadata.logo} size='small'></Avatar>}
-        <Typography.Title level={3} style={{ margin: '1rem 0', textTransform: 'capitalize' }}>{price} {assetMetadata.symbol}</Typography.Title>
+        { assetMetadata && <Avatar src={assetMetadata.logo} size='small'></Avatar>}
+        <Typography.Title level={3} style={{ margin: '1rem 0' }}>{price} {asset}</Typography.Title>
       </Space>
     }
 
