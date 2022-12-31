@@ -123,7 +123,7 @@ export default function Checkout({
       formData.append('email', email);
       formData.append('tx', tx);
 
-      const response = await fetch(window.location.href, {
+      const response = await fetch(`${window.location.href}/pay`, {
         body: formData,
         method: "post"
       });
