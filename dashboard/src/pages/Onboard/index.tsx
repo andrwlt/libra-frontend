@@ -15,6 +15,7 @@ import api from "api";
 
 import { Brand, LineItem } from "types";
 import { useAccount } from "contexts/account";
+import { Link } from "react-router-dom";
 
 const Header = styled.div`
   max-width: 1160px;
@@ -94,7 +95,8 @@ export default function Onboarding() {
   });
   const [errorMessages, setErrorMessages] = useState<Record<string, string>>({});
   const [blur, setBlur] = useState(false);
-  const [asset] = useState('DOT');
+  const [checkoutURL, setCheckoutURL] = useState('');
+  const [asset] = useState('WND');
   const { account } = useAccount();
   const [loading, setLoading] = useState(false);
 
@@ -128,17 +130,19 @@ export default function Onboarding() {
     try {
       setLoading(true);
 
-      await api.createCheckout({
+      const result = await api.createCheckout({
         account,
         checkout: {
-          brand,
+          branding: brand,
           payee: account.address,
           item: lineItem,
-          asset: 'DOT',
+          asset,
           metadata: {},
           afterPayment: {},
         },
       });
+
+      setCheckoutURL(`${process.env.REACT_APP_CHECKOUT_URL}/${result.id}`);
 
       setStep(step + 1);
     } catch (e) {
@@ -149,7 +153,7 @@ export default function Onboarding() {
   };
 
   const checkout = {
-    brand,
+    branding: brand,
     payee: '',
     item: lineItem,
     asset,
@@ -184,17 +188,17 @@ export default function Onboarding() {
               />
             }
             {
-              step === steps.length && <Congratulation/>
+              step === steps.length && <Congratulation checkoutURL={checkoutURL}/>
             }
           </Col>
           <Col span={2}>
             <NextButtonWrapper>
-              { step === 1 && <Button type="primary" onClick={handleOnNext}>Next</Button> }
+              { step === 1 && <Button shape="round" type="primary" onClick={handleOnNext}>Next</Button> }
               {
                 step === 2 && <Space direction="vertical">
                   {
                     account && <>
-                      <Button type="primary" disabled={!account} onClick={handleCreateCheckout} loading={loading}>Create checkout</Button>
+                      <Button shape="round" type="primary" disabled={!account} onClick={handleCreateCheckout} loading={loading}>Create checkout</Button>
                       <Typography.Paragraph style={{ margin: 0 }}>for account</Typography.Paragraph>
                     </>
                   }
@@ -202,7 +206,9 @@ export default function Onboarding() {
                 </Space>
               }
               {
-                step === 4 && <Button type="primary">Open dashboard</Button> 
+                step === 3 && <Link to="/checkout">
+                  <Button shape="round" type="primary">Open dashboard</Button>
+                </Link> 
               }
             </NextButtonWrapper>
           </Col>

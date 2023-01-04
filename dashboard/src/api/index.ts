@@ -1,33 +1,11 @@
 import { Checkout } from "types";
-import { charges, checkout } from './fixtures';
 import axios from "axios";
 
 import { Charge } from "types";
 
-const wait = (time: number) => new Promise((resolve) => {
-  setTimeout(resolve, time);
-});
-
 const instance = axios.create({
-  baseURL: 'http://192.168.100.140:3000/',
+  baseURL: process.env.REACT_APP_API_URL,
 });
-
-interface Transaction {
-  payload: {
-    payee: string;
-    amount: string;
-    currency: string;
-  },
-  account: {
-    address: string;
-    signer: any;
-  }
-}
-interface CreateOrderParams {
-  checkoutId: string;
-  email: string;
-  transaction: Transaction;
-}
 
 const api = {
   async login(account: any) {
@@ -62,7 +40,7 @@ const api = {
 
     const response = await instance.post('/checkout', checkout, {
       headers: {
-        'authorization': `Bearer ${accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
       }, 
     });
 
@@ -74,28 +52,24 @@ const api = {
 
     const response = await instance.get('/checkout', {
       headers: {
-        'authorization': `Bearer ${accessToken}`,
+        'Authorization': `Bearer ${accessToken}`,
       },
     });
 
     return response.data;
   },
 
-  async getCharges(): Promise<Charge[]> {
-    await wait(500);
+  async getCharges(account: any): Promise<Charge[]> {
+    const accessToken = await this.getAccessToken(account);
 
-    return charges;
+    const response = await instance.get('/charges', {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    });
+
+    return response.data;
   },
-
-  async getCheckout(): Promise<Checkout> {
-    await wait(1000);
-    return checkout;
-  },
-
-  async createOrder({ checkoutId, email, transaction }: CreateOrderParams) {
-    await wait(1000);
-    console.log(checkoutId, email, transaction);
-  }
 };
 
 export default api;

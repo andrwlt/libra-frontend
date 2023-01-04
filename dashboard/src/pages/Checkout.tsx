@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Table, Typography } from 'antd';
+import { Table, Typography, Button } from 'antd';
+import { Link } from "react-router-dom";
 import type { ColumnsType } from 'antd/es/table';
 import { Checkout as CheckoutDataType } from "types";
 import shortStr from "utils/shortStr";
@@ -12,17 +13,24 @@ const columns: ColumnsType<CheckoutDataType> = [
   {
     title: 'URL',
     dataIndex: 'id',
-    render: (id) => <Typography.Link copyable ellipsis>https://checkout.golibra.xyz/{id}</Typography.Link>
+    render: (id) => <Typography.Link
+      style={{ width: '240px' }}
+      copyable
+      ellipsis
+    >
+      {`${process.env.REACT_APP_CHECKOUT_URL}/${id}`}
+    </Typography.Link>
   },
   {
     title: 'Name',
     dataIndex: 'item',
-    align: 'center',
+    align: 'left',
     render: (item) => <Typography>{item?.name}</Typography>
   },
   {
     title: 'Price',
     dataIndex: 'item',
+    align: 'right',
     render: (item) => <Typography>{item?.price}</Typography>
   },
   {
@@ -37,6 +45,12 @@ const columns: ColumnsType<CheckoutDataType> = [
 
 const Wrapper = styled.div`
   padding: 32px;
+`;
+
+const TableHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 export default function Checkout() {
@@ -70,7 +84,12 @@ export default function Checkout() {
         loading={loading}
         columns={columns}
         dataSource={checkoutList}
-        title={() => <Typography.Title level={3}>Checkout</Typography.Title>}
+        title={() => <TableHeader>
+          <Typography.Title level={3}>Payments</Typography.Title>
+          <Link to="/checkout/new">
+            <Button type="primary" shape="round">Create checkout</Button>
+          </Link>
+        </TableHeader>}
       />
     </Wrapper>
   );

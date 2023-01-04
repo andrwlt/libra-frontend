@@ -21,7 +21,7 @@ export default function SharableURL({ url }: SharableURLProps) {
           style={{ width: 'calc(100% - 96px)' }}
           defaultValue={url}
         />
-        <Tooltip title="copy url">
+        <Tooltip title="Copy">
           <Button icon={<CopyOutlined />} />
         </Tooltip>
       </Input.Group>

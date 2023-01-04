@@ -29,13 +29,7 @@ export async function createTransferTx(rpc: string, account: any, to: string, am
 
   connection.setSigner(account.signer);
 
-  const signed = await connection.tx.balances.transfer(to, amount).signAsync(account.address);
+  const signed = await (await connection.tx.balances.transfer(to, amount).signAsync(account.address)).toHuman();
 
-  console.log(signed.toRawType());
-  console.log(signed.toJSON());
-
-  const decoded: any = connection.createType('Extrinsic', signed);
-
-  connection.rpc.author.submitAndWatchExtrinsic(decoded);
-  console.log('Decoded: ', decoded.toHuman());
+  return signed;
 }

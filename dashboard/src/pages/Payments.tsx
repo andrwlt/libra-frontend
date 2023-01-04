@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Table, Typography, Badge, theme } from 'antd';
+import { Table, Typography, Badge, Button, theme } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { Charge as ChargeDataType } from "types";
 import shortStr from "utils/shortStr";
+import { useAccount } from "contexts/account";
 
 import api from 'api';
 
@@ -79,13 +80,14 @@ const Wrapper = styled.div`
 export default function Payments() {
   const [charges, setCharges] = useState<ChargeDataType[]>([]);
   const [loading, setLoading] = useState(false);
+  const { account } = useAccount();
 
   useEffect(() => {
     const fetchCharges = async () => {
       setLoading(true);
 
       try {
-        const data = await api.getCharges();
+        const data = await api.getCharges(account);
         setCharges(data);
       } catch (err) {
 
@@ -94,10 +96,8 @@ export default function Payments() {
       setLoading(false);
     };
 
-    fetchCharges();
-  }, []);
-
-
+    account && fetchCharges();
+  }, [account]);
 
   return (
     <Wrapper>

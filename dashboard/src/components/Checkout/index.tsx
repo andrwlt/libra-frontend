@@ -6,7 +6,6 @@ import PaymentDetail from './PaymentDetail';
 import FooterLinks from '../FooterLinks';
 import { Brand as BrandType, Checkout as CheckoutType } from 'types';
 
-
 import getImageUrl from 'utils/getImageUrl';
 
 const { Header, Content } = Layout;
@@ -82,7 +81,7 @@ export default function Checkout({
   checkout,
   preview = false,
 }: CheckoutProps) {
-  const { brand, item, asset } = checkout;
+  const { branding, item, asset } = checkout;
   const {
     token: { colorBgContainer, colorBorderSecondary },
   } = theme.useToken();
@@ -92,7 +91,7 @@ export default function Checkout({
   return (
     <Wrapper style={{ minHeight: '100%' }}>
       <Header style={ { background: colorBgContainer, borderBottom: `solid 1px ${colorBorderSecondary}` }}>
-        <CheckoutLogo name={brand.name} logo={brand.logo}/>
+        <CheckoutLogo name={branding?.name} logo={branding?.logo}/>
       </Header>
       <Content>
         <FullHeightRow>

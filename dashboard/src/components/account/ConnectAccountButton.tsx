@@ -7,6 +7,8 @@ import InstallationGuide from "components/ConnectAccount/InstallGuide";
 import { saveConnectedExtension, isExtensionConnected } from "utils/extensions";
 import { APP_NAME } from "config";
 
+const CONNECTED_ACCOUNT_KEY = 'libra-connected-account';
+
 function AccountOption({ account, onClick }: any) {
   const [hovered, setHovered] = useState(false);
 
@@ -32,8 +34,6 @@ function AccountOption({ account, onClick }: any) {
   </div>
 }
 
-
-
 export default function ConnectAccountButton() {
   const { account, setAccount } = useAccount();
   const { extensions, isReady } = useExtensions();
@@ -41,13 +41,16 @@ export default function ConnectAccountButton() {
   const [signer, setSigner] = useState<any>(null);
   const [accounts, setAccounts] = useState<any>([]);
   const [open, setOpen] = useState(false);
+  const [connecting, setConnecting] = useState(false);
 
   const connectExtension = async () => {
     if (extension) {
+      setConnecting(true);
       const result = await extension.enable(APP_NAME);
       setSigner(result.signer);
       setAccounts(await result.accounts.get());
       saveConnectedExtension(extension.id);
+      setConnecting(false);
     }
   };
 
@@ -62,16 +65,25 @@ export default function ConnectAccountButton() {
     if (extension && isExtensionConnected(extension.id)) {
       connectExtension();
     }
-  }, [extension])
+  }, [extension]);
 
-  // useEffect(() => {
-  //   if (accounts.length > 0) {
-  //     setAccount({
-  //       ...accounts[0],
-  //       signer,
-  //     });
-  //   }
-  // }, [accounts]);
+  useEffect(() => {
+    if (accounts && accounts.length > 0) {
+      const selectedAddress = localStorage.getItem(CONNECTED_ACCOUNT_KEY);
+
+      if (selectedAddress) {
+        const selectedAccount = accounts.find((account: any) => account.address === selectedAddress);
+        if (selectedAccount) {
+          setAccount({
+            ...selectedAccount,
+            signer,
+          });
+        } else {
+          localStorage.removeItem(CONNECTED_ACCOUNT_KEY);
+        }
+      }
+    }
+  }, [accounts])
   
   const handleAccountSelected = (selected: any) => {
     setAccount({
@@ -79,17 +91,34 @@ export default function ConnectAccountButton() {
       signer,
     });
     setOpen(false);
+    localStorage.setItem(CONNECTED_ACCOUNT_KEY, selected.address);
+  };
+
+  const handleConnectExtension = async () => {
+    try {
+      await connectExtension();
+      setOpen(true);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return <>
     {
-      account ? <Button block onClick={() => setOpen(true)} style={{ padding: '0px 32px'}}>
+      account ? <Button shape="round" block onClick={() => setOpen(true)} style={{ padding: '0px 32px'}}>
         <Space align="center">
           <Identicon style={{ marginTop: '6px' }} value={account.address} size={16} theme='polkadot'></Identicon>
           <Typography.Paragraph style={{ margin: 0 }}>{ account.name }</Typography.Paragraph>
         </Space>
       </Button> :
-      <Button block type="primary" onClick={() => setOpen(true)}>Connect wallet</Button>
+      <Button
+        shape="round"
+        loading={!isReady || connecting}
+        block type="primary"
+        onClick={handleConnectExtension}
+      >
+        Connect wallet
+      </Button>
     }
     <Modal
       open ={open}
