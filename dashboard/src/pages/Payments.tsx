@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Table, Typography, Badge, theme } from 'antd';
+import { Table, Typography, Badge, Button, theme } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { Charge as ChargeDataType } from "types";
 import shortStr from "utils/shortStr";

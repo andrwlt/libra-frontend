@@ -4,7 +4,7 @@ import axios from "axios";
 import { Charge } from "types";
 
 const instance = axios.create({
-  baseURL: 'https://api.libra.atscale.xyz/',
+  baseURL: process.env.REACT_APP_API_URL,
 });
 
 const api = {
