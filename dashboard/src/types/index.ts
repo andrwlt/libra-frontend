@@ -1,13 +1,11 @@
 export type Address = string;
 export type Balance = number;
 export type Asset = string;
-
 export interface AssetMetadata {
   decimals: number;
   symbol: string;
   logo: string;
 }
-
 export interface PreUploadImage {
   name: string;
   type: 'image/svg+xml' | 'image/jpeg' | 'image/png';
@@ -26,7 +24,7 @@ export interface LineItem {
 }
 
 export interface Checkout {
-  brand: Brand,
+  branding: Brand,
   payee: Address;
   asset: string;
   item: LineItem;

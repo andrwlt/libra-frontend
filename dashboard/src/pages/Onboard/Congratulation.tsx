@@ -10,12 +10,16 @@ const Wrapper = styled.div`
   margin-right: auto;
 `;
 
-export default function Congratulation() {
+interface Props {
+  checkoutURL: string;
+}
+
+export default function Congratulation({ checkoutURL }: Props) {
   return (
     <Wrapper>
       <Title level={2} style={{ marginTop: 0 }}>Congratulation! Your checkout page is ready now!</Title>
       <Title level={5}>Please use the url bellow to start selling your product.</Title>
-      <SharableURL url="https://golibra.xyz/checkout/john-doe/cjhje"/>
+      <SharableURL url={checkoutURL}/>
     </Wrapper>
   );
 }

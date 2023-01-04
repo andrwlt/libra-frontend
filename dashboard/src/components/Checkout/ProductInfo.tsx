@@ -5,6 +5,7 @@ import getImageUrl from "utils/getImageUrl";
 import { LineItem, Asset, AssetMetadata } from "types";
 
 import { ASSET_METADATA } from "config";
+import { formatBalance } from "utils/format/balance";
 
 const Wrapper = styled.div`
   width: 100%;
@@ -35,7 +36,7 @@ export default function ProductInfo({
       !!price &&
       <Space align="center">
         { assetMetadata && <Avatar src={assetMetadata.logo} size='small'></Avatar>}
-        <Typography.Title level={3} style={{ margin: '1rem 0' }}>{price} {asset}</Typography.Title>
+        <Typography.Title level={3} style={{ margin: '1rem 0' }}>{formatBalance(price, asset)} {asset}</Typography.Title>
       </Space>
     }
 

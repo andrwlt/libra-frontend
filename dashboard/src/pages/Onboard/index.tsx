@@ -94,7 +94,8 @@ export default function Onboarding() {
   });
   const [errorMessages, setErrorMessages] = useState<Record<string, string>>({});
   const [blur, setBlur] = useState(false);
-  const [asset] = useState('DOT');
+  const [checkoutURL, setCheckoutURL] = useState('');
+  const [asset] = useState('WND');
   const { account } = useAccount();
   const [loading, setLoading] = useState(false);
 
@@ -128,17 +129,19 @@ export default function Onboarding() {
     try {
       setLoading(true);
 
-      await api.createCheckout({
+      const result = await api.createCheckout({
         account,
         checkout: {
-          brand,
+          branding: brand,
           payee: account.address,
           item: lineItem,
-          asset: 'DOT',
+          asset,
           metadata: {},
           afterPayment: {},
         },
       });
+
+      setCheckoutURL(`https://checkout.libra.atscale.xyz/${result.id}`);
 
       setStep(step + 1);
     } catch (e) {
@@ -149,7 +152,7 @@ export default function Onboarding() {
   };
 
   const checkout = {
-    brand,
+    branding: brand,
     payee: '',
     item: lineItem,
     asset,
@@ -184,7 +187,7 @@ export default function Onboarding() {
               />
             }
             {
-              step === steps.length && <Congratulation/>
+              step === steps.length && <Congratulation checkoutURL={checkoutURL}/>
             }
           </Col>
           <Col span={2}>

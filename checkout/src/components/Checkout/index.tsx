@@ -88,7 +88,7 @@ export default function Checkout({
   } = theme.useToken();
   const [messageApi, contextHolder] = message.useMessage();
 
-  const { brand, item, asset } = checkout;
+  const { branding, item, asset } = checkout;
 
   const [email, setEmail] = useState<string>('');
   const [emailError, setEmailError] = useState<string>('');
@@ -119,13 +119,15 @@ export default function Checkout({
         checkout.item.price
       );
 
-      const formData = new FormData();
-      formData.append('email', email);
-      formData.append('tx', tx);
-
-      const response = await fetch(`${window.location.href}/pay`, {
-        body: formData,
-        method: "post"
+      const response = await fetch(`${window.location.href}pay`, {
+        body: JSON.stringify({
+          tx,
+          email,
+        }),
+        method: "post",
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
 
       if (response.status === 200) {
@@ -144,7 +146,7 @@ export default function Checkout({
     <Wrapper style={{ minHeight: '100%' }}>
       { contextHolder }
       <Header style={ { background: colorBgContainer, borderBottom: `solid 1px ${colorBorderSecondary}` }}>
-        <CheckoutLogo name={brand.name} logo={brand.logo}/>
+        <CheckoutLogo name={branding?.name} logo={branding?.logo}/>
       </Header>
       <Content>
         <FullHeightRow>
