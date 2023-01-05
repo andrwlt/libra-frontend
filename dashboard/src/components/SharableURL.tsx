@@ -1,6 +1,8 @@
 import styled from 'styled-components';
 import { CopyOutlined, TwitterOutlined, FacebookFilled, InstagramFilled } from '@ant-design/icons';
 import { Input, Tooltip, Button, Divider, Space } from 'antd';
+import ClipboardJS from 'clipboard';
+import { useEffect, useState, useRef } from 'react';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -13,16 +15,30 @@ interface SharableURLProps {
 }
 
 export default function SharableURL({ url }: SharableURLProps) {
+  const [copied, setCopied] = useState(false);
+  const copyButtonRef = useRef(null);
+
+  useEffect(() => {
+    if (copyButtonRef.current) {
+      const clipboard = new ClipboardJS(copyButtonRef.current);
+
+      clipboard.on('success', () => {
+        setCopied(true);
+      });
+    }
+  }, [copyButtonRef]);
+
   return (
-    <Wrapper>
+    <Wrapper onMouseLeave={() => { setCopied(false) }}>
       <Input.Group compact>
         <Input
           readOnly
           style={{ width: 'calc(100% - 96px)' }}
+          value={url}
           defaultValue={url}
         />
-        <Tooltip title="Copy">
-          <Button icon={<CopyOutlined />} />
+        <Tooltip title={copied ? 'Copied' : 'Copy' }>
+          <Button ref={copyButtonRef} data-clipboard-text={url} icon={<CopyOutlined />} />
         </Tooltip>
       </Input.Group>
       <Divider>or share it on</Divider>
