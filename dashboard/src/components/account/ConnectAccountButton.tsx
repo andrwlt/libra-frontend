@@ -14,7 +14,7 @@ function AccountOption({ account, onClick }: any) {
 
   const { token: { colorPrimary, colorBorder, colorPrimaryBgHover, borderRadius }} = theme.useToken();
 
-  return <div 
+  return <div
     style={{
       borderRadius,
       border: `solid 1px ${hovered ? colorPrimary : colorBorder }`,

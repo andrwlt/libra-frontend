@@ -9,6 +9,7 @@ import BrandingForm from './BrandingForm';
 import ProductFrom from "./ProductForm";
 import Congratulation from "./Congratulation";
 import ConnectAccountButton from "components/account/ConnectAccountButton";
+import { toSmallestUnit } from 'utils/format/balance';
 import logo from 'assets/logo.svg';
 
 import api from "api";
@@ -114,7 +115,19 @@ export default function Onboarding() {
       console.log(messages);
       setErrorMessages(messages);
     }
-  }, [lineItem])
+  }, [lineItem, blur])
+
+  const checkout = {
+    branding: brand,
+    payee: account?.address || '',
+    item: {
+      ...lineItem,
+      price: toSmallestUnit(lineItem.price, asset),
+    },
+    asset,
+    metadata: {},
+    afterPayment: {},
+  };
 
   const handleCreateCheckout = async () => {
     if (!account) return;
@@ -130,17 +143,7 @@ export default function Onboarding() {
     try {
       setLoading(true);
 
-      const result = await api.createCheckout({
-        account,
-        checkout: {
-          branding: brand,
-          payee: account.address,
-          item: lineItem,
-          asset,
-          metadata: {},
-          afterPayment: {},
-        },
-      });
+      const result = await api.createCheckout({ account, checkout });
 
       setCheckoutURL(`${process.env.REACT_APP_CHECKOUT_URL}/${result.id}`);
 
@@ -150,13 +153,6 @@ export default function Onboarding() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const checkout = {
-    branding: brand,
-    payee: '',
-    item: lineItem,
-    asset,
   };
 
   return (
