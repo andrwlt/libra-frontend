@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 import { Layout, Menu, theme } from 'antd';
 import type { MenuProps } from 'antd';
 import {
-  SettingOutlined,
   SyncOutlined,
   ShopOutlined,
 } from '@ant-design/icons';
+import { Routes, Route } from 'react-router-dom';
 
 const { Sider } = Layout;
 
@@ -32,9 +32,8 @@ function createMenuItem(
 }
 
 const items: MenuItem[] = [
-  createMenuItem(<Link to='payments'>Payments</Link>, 'payments', <SyncOutlined />),
-  createMenuItem(<Link to='checkout'>Checkout</Link>, 'checkout', <ShopOutlined />),
-  createMenuItem('Settings', 'settings', <SettingOutlined/>),
+  createMenuItem(<Link to='/payments'>Payments</Link>, 'payments', <SyncOutlined />),
+  createMenuItem(<Link to='/checkout'>Checkout</Link>, 'checkout', <ShopOutlined />),
 ];
 
 export default function Navbar() {
@@ -44,7 +43,24 @@ export default function Navbar() {
 
   return (
     <Wrapper style={ {background: colorBgContainer }}>
-      <Menu mode="inline" style={{ height: '100%' }} items={items}/>
+      <Routes>
+        {
+          items.map(
+            (item: any) => <Route
+              key={item.key}
+              path={`/${item.key}/*`}
+              element={
+                <Menu
+                  mode="inline"
+                  style={{ height: '100%' }}
+                  items={items}
+                  selectedKeys={[item.key]}
+                />
+              }
+            />
+          )
+        }
+      </Routes>
     </Wrapper>
   );
 };

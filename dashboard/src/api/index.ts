@@ -2,6 +2,7 @@ import { Checkout } from "types";
 import axios from "axios";
 
 import { Charge } from "types";
+import { isTokenExpired } from "utils/auth";
 
 const instance = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
@@ -28,7 +29,7 @@ const api = {
   async getAccessToken(account: any) {
     let accessToken = localStorage.getItem(account.address);
 
-    if (accessToken) {
+    if (accessToken && !isTokenExpired(accessToken)) {
       return accessToken;
     }
 
