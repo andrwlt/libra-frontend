@@ -4,7 +4,7 @@ import { Typography, Input, Form, Row, Col, Layout, theme, Skeleton, Modal, Resu
 import ProductInfo from './ProductInfo';
 import PaymentDetail from './PaymentDetail';
 import FooterLinks from 'components/FooterLinks';
-import { createTransferTx } from 'utils/substrate';
+import { createTransferTx, createConnection } from 'utils/substrate';
 import { Brand as BrandType, Checkout as CheckoutType } from 'types';
 import { NETWORKS } from 'config';
 
@@ -95,6 +95,11 @@ export default function Checkout({ checkout }: CheckoutProps) {
   useEffect(() => {
     setEmailError('');
   }, [email]);
+
+  useEffect(() => {
+    // Preload network connection to improve speed.
+    createConnection(NETWORKS.westend.endpoints.rpc);
+  }, []);
 
   const handlePay = async ({ account }: any) => {
     if (!email) {
