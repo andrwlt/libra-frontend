@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Typography, Input, Form, Row, Col, Layout, theme, Skeleton, message } from 'antd';
+import { Typography, Input, Form, Row, Col, Layout, theme, Skeleton, Modal, Result, Button, message } from 'antd';
 import ProductInfo from './ProductInfo';
 import PaymentDetail from './PaymentDetail';
 import FooterLinks from 'components/FooterLinks';
@@ -79,10 +79,7 @@ interface CheckoutProps {
   onCheckout?: Function;
 }
 
-export default function Checkout({
-  checkout,
-  preview = false,
-}: CheckoutProps) {
+export default function Checkout({ checkout }: CheckoutProps) {
   const {
     token: { colorBgContainer, colorBorderSecondary },
   } = theme.useToken();
@@ -93,6 +90,7 @@ export default function Checkout({
   const [email, setEmail] = useState<string>('');
   const [emailError, setEmailError] = useState<string>('');
   const [paying, setPaying] = useState(false);
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     setEmailError('');
@@ -104,7 +102,7 @@ export default function Checkout({
       return;
     }
 
-    if (!(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email))) {
+    if (!(/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(.\w{2,3})+$/.test(email))) {
       setEmailError('Invalid email.');
       return;
     }
@@ -130,8 +128,8 @@ export default function Checkout({
         },
       });
 
-      if (response.status === 200) {
-
+      if (response.status === 200 || response.status === 201) {
+        setSuccess(true);
       } else {
         throw new Error('Fail to process payment.');
       }
@@ -140,6 +138,10 @@ export default function Checkout({
     } finally {
       setPaying(false);
     }
+  };
+
+  const handleBack = () => {
+    window.history.back();
   };
 
   return (
@@ -173,6 +175,18 @@ export default function Checkout({
           </Col>
         </FullHeightRow>
       </Content>
+      <Modal open={success} closable={false} closeIcon={false} footer={false}>
+        <Result
+          status='success'
+          title='Thanks for your payment'
+          subTitle='An order summary will be sent to your email within minutes'
+          extra={[
+            <Button key="back" onClick={handleBack}>
+              Go back
+            </Button>
+          ]}
+        />
+      </Modal>
     </Wrapper>
   );
 };
