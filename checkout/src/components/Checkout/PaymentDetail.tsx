@@ -2,13 +2,9 @@ import ConnectAccount from "components/ConnectAccount";
 import styled from "styled-components";
 import { useState } from "react";
 import { Button, Typography } from "antd";
-import { NETWORKS } from "config";
-import Account from "components/account/Account";
 import { Checkout as CheckoutDataType } from "types";
 
-const Wrapper = styled.div`
-
-`;
+const Wrapper = styled.div``;
 
 interface PaymentDetailProps {
   loading?: boolean;
@@ -18,7 +14,6 @@ interface PaymentDetailProps {
 
 export default function PaymentDetail({
   loading = false,
-  checkout,
   onPay,
 }: PaymentDetailProps) {
   const [account, setAccount] = useState();

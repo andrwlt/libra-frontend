@@ -119,7 +119,7 @@ export default function Checkout({
         checkout.item.price
       );
 
-      const response = await fetch(`${window.location.href}pay`, {
+      const response = await fetch(`${window.location.href}/pay`, {
         body: JSON.stringify({
           tx,
           email,
@@ -133,7 +133,7 @@ export default function Checkout({
       if (response.status === 200) {
 
       } else {
-        throw new Error(response.statusText);
+        throw new Error('Fail to process payment.');
       }
     } catch (err: any) {
       messageApi.error(err.message);
