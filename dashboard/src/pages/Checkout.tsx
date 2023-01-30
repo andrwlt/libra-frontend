@@ -1,37 +1,35 @@
-import { useEffect, useState } from "react";
-import styled from "styled-components";
+import { useEffect, useState } from 'react';
+import styled from 'styled-components';
 import { Table, Typography, Button } from 'antd';
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 import type { ColumnsType } from 'antd/es/table';
-import { Checkout as CheckoutDataType } from "types";
-import shortStr from "utils/shortStr";
+import { Checkout as CheckoutDataType } from 'types';
+import shortStr from 'utils/shortStr';
 
-import api from 'api';
-import { useAccount } from "contexts/account";
+import api from 'services/api';
+import { useAccount } from 'contexts/account';
 
 const columns: ColumnsType<CheckoutDataType> = [
   {
     title: 'URL',
     dataIndex: 'id',
-    render: (id) => <Typography.Link
-      style={{ width: '240px' }}
-      copyable
-      ellipsis
-    >
-      {`${process.env.REACT_APP_CHECKOUT_URL}/${id}`}
-    </Typography.Link>
+    render: (id) => (
+      <Typography.Link style={{ width: '240px' }} copyable ellipsis>
+        {`${process.env.REACT_APP_CHECKOUT_URL}/${id}`}
+      </Typography.Link>
+    ),
   },
   {
     title: 'Name',
     dataIndex: 'item',
     align: 'left',
-    render: (item) => <Typography>{item?.name}</Typography>
+    render: (item) => <Typography>{item?.name}</Typography>,
   },
   {
     title: 'Price',
     dataIndex: 'item',
     align: 'right',
-    render: (item) => <Typography>{item?.price}</Typography>
+    render: (item) => <Typography>{item?.price}</Typography>,
   },
   {
     dataIndex: 'asset',
@@ -80,16 +78,20 @@ export default function Checkout() {
   return (
     <Wrapper>
       <Table
-        rowKey='id'
+        rowKey="id"
         loading={loading}
         columns={columns}
         dataSource={checkoutList}
-        title={() => <TableHeader>
-          <Typography.Title level={3}>Payments</Typography.Title>
-          <Link to="/checkout/new">
-            <Button type="primary" shape="round">Create checkout</Button>
-          </Link>
-        </TableHeader>}
+        title={() => (
+          <TableHeader>
+            <Typography.Title level={3}>Payments</Typography.Title>
+            <Link to="/checkout/new">
+              <Button type="primary" shape="round">
+                Create checkout
+              </Button>
+            </Link>
+          </TableHeader>
+        )}
       />
     </Wrapper>
   );

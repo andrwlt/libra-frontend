@@ -35,7 +35,7 @@ function AccountOption({ account, onClick }: any) {
 }
 
 export default function ConnectAccountButton() {
-  const { account, setAccount } = useAccount();
+  const { account, connect } = useAccount();
   const { extensions, isReady } = useExtensions();
   const [extension, setExtension] = useState<any>(null);
   const [signer, setSigner] = useState<any>(null);
@@ -74,7 +74,7 @@ export default function ConnectAccountButton() {
       if (selectedAddress) {
         const selectedAccount = accounts.find((account: any) => account.address === selectedAddress);
         if (selectedAccount) {
-          setAccount({
+          connect({
             ...selectedAccount,
             signer,
           });
@@ -86,7 +86,7 @@ export default function ConnectAccountButton() {
   }, [accounts])
   
   const handleAccountSelected = (selected: any) => {
-    setAccount({
+    connect({
       ...selected,
       signer,
     });

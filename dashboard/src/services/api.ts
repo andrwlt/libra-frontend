@@ -1,8 +1,8 @@
-import { Checkout } from "types";
-import axios from "axios";
+import { Checkout } from 'types';
+import axios from 'axios';
 
-import { Charge } from "types";
-import { isTokenExpired } from "utils/auth";
+import { Charge } from 'types';
+import { isTokenExpired } from 'utils/auth';
 
 const instance = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
@@ -41,8 +41,8 @@ const api = {
 
     const response = await instance.post('/checkout', checkout, {
       headers: {
-        'Authorization': `Bearer ${accessToken}`,
-      }, 
+        Authorization: `Bearer ${accessToken}`,
+      },
     });
 
     return response.data;
@@ -53,7 +53,7 @@ const api = {
 
     const response = await instance.get('/checkout', {
       headers: {
-        'Authorization': `Bearer ${accessToken}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     });
 
@@ -65,7 +65,7 @@ const api = {
 
     const response = await instance.get('/charges', {
       headers: {
-        'Authorization': `Bearer ${accessToken}`,
+        Authorization: `Bearer ${accessToken}`,
       },
     });
 

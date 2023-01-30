@@ -9,10 +9,10 @@ const defaultExtensionsContext = {
 
 const MAX_RETRY = 10;
 
-export const ExtensionsContext = React.createContext<ExtensionsContextInterface>(defaultExtensionsContext);
+export const ExtensionsContext =
+  React.createContext<ExtensionsContextInterface>(defaultExtensionsContext);
 
 export const useExtensions = () => React.useContext(ExtensionsContext);
-
 
 function hasInjectedWeb3() {
   return !!(window as any).injectedWeb3;
@@ -36,11 +36,9 @@ function getExtensions(): Extension[] {
   });
 
   return extensions;
-};
+}
 
-export const ExtensionsProvider = ({children}: {
-  children: React.ReactNode;
-}) => {
+export const ExtensionsProvider = ({ children }: { children: React.ReactNode }) => {
   const [extensions, setExtensions] = useState<Extension[]>([]);
   const [isReady, setIsReady] = useState(false);
 
@@ -65,11 +63,13 @@ export const ExtensionsProvider = ({children}: {
   }, []);
 
   return (
-    <ExtensionsContext.Provider value={{
-      extensions,
-      isReady,
-    }}>
-      { children }
+    <ExtensionsContext.Provider
+      value={{
+        extensions,
+        isReady,
+      }}
+    >
+      {children}
     </ExtensionsContext.Provider>
-  )
-}
+  );
+};

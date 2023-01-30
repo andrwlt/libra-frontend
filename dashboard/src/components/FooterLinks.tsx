@@ -1,5 +1,5 @@
-import styled from "styled-components";
-import { Typography, Space } from "antd";
+import styled from 'styled-components';
+import { Typography, Space } from 'antd';
 import logo from 'assets/logo.svg';
 
 const { Paragraph, Link } = Typography;
@@ -21,14 +21,18 @@ const FooterLink = styled(Link)`
 `;
 
 export default function FooterLinks() {
-  return <Wrapper>
-    <Space align="center">
-      <Paragraph style={{ margin: 0 }} strong>Powered by </Paragraph>
-      <img src={logo} height={16} alt="Libra Logo"/>
-    </Space>
-    <Space>
-      <FooterLink>Privacy</FooterLink>
-      <FooterLink>Terms</FooterLink>
-    </Space>
-  </Wrapper>
+  return (
+    <Wrapper>
+      <Space align="center">
+        <Paragraph style={{ margin: 0 }} strong>
+          Powered by{' '}
+        </Paragraph>
+        <img src={logo} height={16} alt="Libra Logo" />
+      </Space>
+      <Space>
+        <FooterLink>Privacy</FooterLink>
+        <FooterLink>Terms</FooterLink>
+      </Space>
+    </Wrapper>
+  );
 }

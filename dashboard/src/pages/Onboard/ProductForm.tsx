@@ -1,7 +1,7 @@
-import { Input, InputNumber, Typography } from "antd";
-import ImageUploader from "components/ImageUploader";
-import styled from "styled-components";
-import { LineItem } from "../../types";
+import { Input, InputNumber, Typography } from 'antd';
+import ImageUploader from 'components/ImageUploader';
+import styled from 'styled-components';
+import { LineItem } from '../../types';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -49,38 +49,39 @@ export default function ProductFrom({ formData, asset, onChange, errors }: Props
   return (
     <Wrapper>
       <ImageUploaderWrapper>
-        <ImageUploader size={240} name="Product image" onChange={handleProductImage}/>
+        <ImageUploader size={240} name="Product image" onChange={handleProductImage} />
       </ImageUploaderWrapper>
       <FormWrapper>
         <Field>
-          <FieldLabel>
-            What product do you want to sell?
-          </FieldLabel>
+          <FieldLabel>What product do you want to sell?</FieldLabel>
           <Input
             placeholder="Eg. Meditation course, a book, ..."
             name="name"
-            status={ errors.name ? 'error' : undefined }
+            status={errors.name ? 'error' : undefined}
             value={formData.name}
             onChange={(e) => updateForm('name', e.target.value)}
           ></Input>
-          { errors.name && <Typography.Text type="danger">{errors.name}</Typography.Text>}
+          {errors.name && <Typography.Text type="danger">{errors.name}</Typography.Text>}
         </Field>
         <Field>
-          <FieldLabel>
-            What is price of your product? 
-          </FieldLabel>
+          <FieldLabel>What is price of your product?</FieldLabel>
           <Input.Group compact>
             <InputNumber
-              name='price'
+              name="price"
               placeholder="Eg. 1 DOT, 10 USDT, ..."
-              status={ errors.price ? 'error' : undefined }
+              status={errors.price ? 'error' : undefined}
               value={formData.price}
               onChange={(value) => updateForm('price', value)}
-              style={ { width: 'calc(100% - 60px)'}}
+              style={{ width: 'calc(100% - 60px)' }}
             />
-            <Input value={asset} readOnly style={{ width: '60px' }} status={ errors.price ? 'error' : undefined }></Input>
+            <Input
+              value={asset}
+              readOnly
+              style={{ width: '60px' }}
+              status={errors.price ? 'error' : undefined}
+            ></Input>
           </Input.Group>
-          { errors.price && <Typography.Text type="danger">{errors.price}</Typography.Text>}
+          {errors.price && <Typography.Text type="danger">{errors.price}</Typography.Text>}
         </Field>
       </FormWrapper>
     </Wrapper>

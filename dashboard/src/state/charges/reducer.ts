@@ -1,5 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit'
-import { shallowEqual } from 'react-redux'
+import { createSlice } from '@reduxjs/toolkit';
+import { shallowEqual } from 'react-redux';
 
 interface Charge {
   id: string;
@@ -9,7 +9,7 @@ interface Charge {
   amount: number;
   asset: string;
   description: string;
-  metadata: any,
+  metadata: any;
   hash: string;
   created: string;
 }
@@ -22,7 +22,7 @@ interface ChargesState {
 const initialState: ChargesState = {
   loading: false,
   charges: [],
-}
+};
 
 const chargesSlices = createSlice({
   name: 'charges',
@@ -35,7 +35,7 @@ const chargesSlices = createSlice({
       state.charges = payload;
     },
   },
-})
+});
 
-export const { setCharges } = chargesSlices.actions
-export default chargesSlices.reducer
+export const { setCharges } = chargesSlices.actions;
+export default chargesSlices.reducer;

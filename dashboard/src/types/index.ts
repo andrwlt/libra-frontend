@@ -9,7 +9,7 @@ export interface AssetMetadata {
 export interface PreUploadImage {
   name: string;
   type: 'image/svg+xml' | 'image/jpeg' | 'image/png';
-  content: string; 
+  content: string;
 }
 export interface Brand {
   name?: string;
@@ -24,17 +24,17 @@ export interface LineItem {
 }
 
 export interface Checkout {
-  branding: Brand,
+  branding: Brand;
   payee: Address;
   asset: string;
   item: LineItem;
 }
 
-export interface Charge  {
+export interface Charge {
   id: string;
   object: 'charge';
   from: Address;
-  to:  Address;
+  to: Address;
   amount: Balance;
   asset: string;
   description: string;

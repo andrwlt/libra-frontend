@@ -7,13 +7,14 @@ const Wrapper = styled.div`
   height: 540px;
   margin-left: auto;
   margin-right: auto;
-  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 3%), 0 1px 6px -1px rgb(0 0 0 / 2%), 0 2px 4px 0 rgb(0 0 0 / 2%);
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 3%), 0 1px 6px -1px rgb(0 0 0 / 2%),
+    0 2px 4px 0 rgb(0 0 0 / 2%);
 `;
 
 const ColorDot = styled.div`
   width: 12px;
   height: 12px;
-  background: ${props => props.color || "gray"};
+  background: ${(props) => props.color || 'gray'};
   margin-right: 8px;
   border-radius: 50%;
 `;
@@ -51,15 +52,13 @@ export default function Preview(props: PreviewProps) {
   return (
     <Wrapper>
       <PreviewHeader>
-        <ColorDot color='rgb(255, 96, 87)'/>
-        <ColorDot color='rgb(254, 188, 46)'/>
-        <ColorDot color='rgb(43, 199, 64)'/>
+        <ColorDot color="rgb(255, 96, 87)" />
+        <ColorDot color="rgb(254, 188, 46)" />
+        <ColorDot color="rgb(43, 199, 64)" />
       </PreviewHeader>
       <PreviewBody>
-        <PreviewContent>
-          { props.children }
-        </PreviewContent>
+        <PreviewContent>{props.children}</PreviewContent>
       </PreviewBody>
     </Wrapper>
   );
-};
+}

@@ -1,7 +1,7 @@
-import { Space, Typography, theme } from "antd";
+import { Space, Typography, theme } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
-import Identicon from "@polkadot/react-identicon";
-import { useState } from "react";
+import Identicon from '@polkadot/react-identicon';
+import { useState } from 'react';
 
 const { Paragraph } = Typography;
 
@@ -9,22 +9,17 @@ interface AccountProps {
   account: {
     name: string;
     address: string;
-  },
-  hoverable?: boolean,
-  onClick?: Function,
-  variant?: 'default' | 'select',
+  };
+  hoverable?: boolean;
+  onClick?: Function;
+  variant?: 'default' | 'select';
 }
 
-export default function Account({
-  account,
-  onClick,
-  variant = 'default',
-}: AccountProps) {
+export default function Account({ account, onClick, variant = 'default' }: AccountProps) {
   const { name, address } = account;
-  const { token: {
-    colorPrimary,
-    colorBorder,
-  } } = theme.useToken();
+  const {
+    token: { colorPrimary, colorBorder },
+  } = theme.useToken();
 
   const [hovered, setHovered] = useState(false);
 
@@ -32,7 +27,7 @@ export default function Account({
     onClick && onClick({ name, address });
   };
 
-  const shortedAddress = `${account.address.slice(0, 16)}...${account.address.slice(-12)}`
+  const shortedAddress = `${account.address.slice(0, 16)}...${account.address.slice(-12)}`;
 
   let style: any = {
     display: 'flex',
@@ -46,28 +41,36 @@ export default function Account({
       ...style,
       cursor: 'pointer',
       border: `solid 1px ${hovered ? colorPrimary : colorBorder}`,
-    }
+    };
   }
 
-  return <div
-    style={style}
-    onMouseEnter={() => { setHovered(true) }}
-    onMouseLeave={() => { setHovered(false) }}
-    onClick={handleClick}
-  >
-    <Space align="center" size='middle'>
-      <Identicon value={address} size={24} theme='substrate'></Identicon>
-      <Space direction="vertical" size={4}>
-        <Paragraph strong style={{ marginBottom: 0 }}>{name}</Paragraph>
-        <Paragraph style={{ marginBottom: '0', fontSize: '12px'}}>{shortedAddress}</Paragraph>
+  return (
+    <div
+      style={style}
+      onMouseEnter={() => {
+        setHovered(true);
+      }}
+      onMouseLeave={() => {
+        setHovered(false);
+      }}
+      onClick={handleClick}
+    >
+      <Space align="center" size="middle">
+        <Identicon value={address} size={24} theme="substrate"></Identicon>
+        <Space direction="vertical" size={4}>
+          <Paragraph strong style={{ marginBottom: 0 }}>
+            {name}
+          </Paragraph>
+          <Paragraph style={{ marginBottom: '0', fontSize: '12px' }}>{shortedAddress}</Paragraph>
+        </Space>
       </Space>
-    </Space>
-    {
-      variant === 'select' && <DownOutlined
-        style={{
-          color: hovered ? colorPrimary : colorBorder,
-        }}
-      />
-    }
-  </div>
+      {variant === 'select' && (
+        <DownOutlined
+          style={{
+            color: hovered ? colorPrimary : colorBorder,
+          }}
+        />
+      )}
+    </div>
+  );
 }

@@ -1,4 +1,3 @@
-
 import { Image, Typography, Skeleton } from 'antd';
 import styled from 'styled-components';
 import { LineItem as LineItemType } from '../../types';
@@ -26,10 +25,9 @@ const ProductImage = styled(Image)`
   width: 100%;
   max-width: 100%;
   border-radius: 4px;
-`
-
-const ProductInfoWrapper = styled.div`
 `;
+
+const ProductInfoWrapper = styled.div``;
 
 const SkeletonImage = styled(Skeleton.Image)`
   width: 100% !important;
@@ -53,7 +51,7 @@ export function LineItemSkeleton() {
         <SkeletonImage active />
       </ImageWrapper>
       <ProductInfoWrapper>
-        <SkeletonProductTitle active/>
+        <SkeletonProductTitle active />
         <Skeleton title={false} active></Skeleton>
       </ProductInfoWrapper>
     </Wrapper>
@@ -66,22 +64,23 @@ interface LineItemProps {
 
 export default function LineItem({ data }: LineItemProps) {
   if (!data) {
-    return <LineItemSkeleton/>
+    return <LineItemSkeleton />;
   }
 
   return (
     <Wrapper>
       <ImageWrapper>
-        {
-          data.images[0] ? <ProductImage placeholder preview={false} src={getImageUrl(data.images[0])}/>
-          : <SkeletonImage active />
-        } 
+        {data.images[0] ? (
+          <ProductImage placeholder preview={false} src={getImageUrl(data.images[0])} />
+        ) : (
+          <SkeletonImage active />
+        )}
       </ImageWrapper>
       <ProductInfoWrapper>
         <Paragraph strong>{data.name}</Paragraph>
-        <Pricing size='normal' amount={data.price} hasLogo currency={ASSET_METADATA.dot}></Pricing>
-        <Paragraph type='secondary'>{data.description}</Paragraph>
+        <Pricing size="normal" amount={data.price} hasLogo currency={ASSET_METADATA.dot}></Pricing>
+        <Paragraph type="secondary">{data.description}</Paragraph>
       </ProductInfoWrapper>
     </Wrapper>
-  )
+  );
 }

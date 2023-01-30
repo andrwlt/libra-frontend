@@ -17,7 +17,7 @@ interface SelectAccountProps {
 
 export default ({ extensionId }: SelectAccountProps) => {
   const { extensions } = useExtensions();
-  const { setAccount } = useAccount();
+  const { connect } = useAccount();
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -37,7 +37,7 @@ export default ({ extensionId }: SelectAccountProps) => {
 
   useEffect(() => {
     if (accounts.length === 1) {
-      setAccount(accounts[0]);
+      connect(accounts[0]);
     }
   }, [accounts]);
 
@@ -49,7 +49,7 @@ export default ({ extensionId }: SelectAccountProps) => {
 
   const handleAccountSelected = (event: any) => {
     const account = accounts.find(item => item.address === event.value);
-    setAccount(account);
+    connect(account);
   };
   
   return (

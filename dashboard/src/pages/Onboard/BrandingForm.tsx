@@ -1,7 +1,7 @@
-import { Input } from "antd";
-import ImageUploader from "components/ImageUploader";
-import styled from "styled-components";
-import { Brand } from "../../types";
+import { Input } from 'antd';
+import ImageUploader from 'components/ImageUploader';
+import styled from 'styled-components';
+import { Brand } from '../../types';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -34,7 +34,6 @@ interface BrandingProps {
 }
 
 export default function BrandingStep({ value, onChange }: BrandingProps) {
-
   const handleChange = (e: any) => {
     if (onChange) {
       onChange({
@@ -51,13 +50,11 @@ export default function BrandingStep({ value, onChange }: BrandingProps) {
   return (
     <Wrapper>
       <ImageUploaderWrapper>
-        <ImageUploader name="Brand logo" onChange={handleLogoChange}/>
+        <ImageUploader name="Brand logo" onChange={handleLogoChange} />
       </ImageUploaderWrapper>
       <FormWrapper>
         <Field>
-          <FieldLabel>
-            What is your brand name?
-          </FieldLabel>
+          <FieldLabel>What is your brand name?</FieldLabel>
           <Input
             name="name"
             placeholder="Eg. John Brand, Libra, ..."

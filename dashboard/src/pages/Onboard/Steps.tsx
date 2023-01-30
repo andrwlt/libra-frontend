@@ -1,7 +1,7 @@
-import { Typography, theme } from "antd";
+import { Typography, theme } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
-import styled from "styled-components";
-import { useState } from "react";
+import styled from 'styled-components';
+import { useState } from 'react';
 
 const { Title } = Typography;
 
@@ -43,23 +43,42 @@ export default function Steps({ items, current, onBack }: StepsProps) {
     onBack && onBack();
   };
 
-  return <Wrapper>
-    {
-      current > 1 && <BackButton
-        onClick={handleOnBack}
-        onMouseEnter={() => { setHovered(true) }}
-        onMouseLeave={() => { setHovered(false) }}
-      >
-        <ArrowLeftOutlined style={{ color: hovered ? colorTextSecondary: colorTextHeading, fontSize: '1rem', fontWeight: 'bold' }}/>
-      </BackButton>
-    }
+  return (
+    <Wrapper>
+      {current > 1 && (
+        <BackButton
+          onClick={handleOnBack}
+          onMouseEnter={() => {
+            setHovered(true);
+          }}
+          onMouseLeave={() => {
+            setHovered(false);
+          }}
+        >
+          <ArrowLeftOutlined
+            style={{
+              color: hovered ? colorTextSecondary : colorTextHeading,
+              fontSize: '1rem',
+              fontWeight: 'bold',
+            }}
+          />
+        </BackButton>
+      )}
 
-    {
-      hovered ? <Title style={{ margin: '8px 0 0 0'}} level={4}>Back</Title> :
-      <>
-        <Title style={{ margin: '8px 0 0 0'}} level={4}>{ items[current -1] }</Title>
-        <Title style={{ margin: '8px 0 0 0'}} level={5} type="secondary" >Step {current} of {items.length}</Title>
-      </>
-    }
-  </Wrapper>
+      {hovered ? (
+        <Title style={{ margin: '8px 0 0 0' }} level={4}>
+          Back
+        </Title>
+      ) : (
+        <>
+          <Title style={{ margin: '8px 0 0 0' }} level={4}>
+            {items[current - 1]}
+          </Title>
+          <Title style={{ margin: '8px 0 0 0' }} level={5} type="secondary">
+            Step {current} of {items.length}
+          </Title>
+        </>
+      )}
+    </Wrapper>
+  );
 }

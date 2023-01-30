@@ -6,5 +6,5 @@ export const EXTENSIONS = [
     name: 'Polkadot.{Js}',
     logo: polkadotJsLogo,
     installURL: 'https://polkadot.js.org/extension/',
-  }
-]
+  },
+];

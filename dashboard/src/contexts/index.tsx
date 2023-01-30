@@ -1,6 +1,7 @@
-import React from "react";
-import { AccountsProvider } from "./account";
-import { ExtensionsProvider } from "./extensions";
+import React from 'react';
+import { AccountsProvider } from './account';
+import { ExtensionsProvider } from './extensions';
+import { ApiProvider } from './api';
 
 interface Props {
   children: React.ReactNode;
@@ -10,8 +11,8 @@ export const Providers = ({ children }: Props) => {
   return (
     <ExtensionsProvider>
       <AccountsProvider>
-        { children }
+        <ApiProvider>{children}</ApiProvider>
       </AccountsProvider>
     </ExtensionsProvider>
-  )
-}
+  );
+};

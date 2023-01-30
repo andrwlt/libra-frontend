@@ -1,19 +1,17 @@
-import { useEffect, useState } from "react";
-import styled from "styled-components";
+import { useEffect, useState } from 'react';
+import styled from 'styled-components';
 import { Table, Typography, Badge, theme } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { Charge as ChargeDataType } from "types";
-import shortStr from "utils/shortStr";
-import { useAccount } from "contexts/account";
+import { Charge as ChargeDataType } from 'types';
+import shortStr from 'utils/shortStr';
+import { useAccount } from 'contexts/account';
 
-import api from 'api';
+import api from 'services/api';
 
 const useChargeStatusColor = (status: string) => {
-  const {token: {
-    colorSuccess,
-    colorPrimary,
-    colorError,
-  }} = theme.useToken();
+  const {
+    token: { colorSuccess, colorPrimary, colorError },
+  } = theme.useToken();
 
   if (status === 'succeeded') {
     return colorSuccess;
@@ -32,7 +30,7 @@ interface ChargeStatusProps {
 const ChargeStatus = ({ value }: ChargeStatusProps) => {
   const color = useChargeStatusColor(value);
 
-  return <Badge count={value} color={color} style={{ textTransform: 'capitalize' }}/>
+  return <Badge count={value} color={color} style={{ textTransform: 'capitalize' }} />;
 };
 
 const columns: ColumnsType<ChargeDataType> = [
@@ -46,7 +44,7 @@ const columns: ColumnsType<ChargeDataType> = [
     key: 'status',
     title: 'Status',
     dataIndex: 'status',
-    render: (status) => <ChargeStatus value={status}/>
+    render: (status) => <ChargeStatus value={status} />,
   },
   {
     key: 'from',
@@ -89,9 +87,7 @@ export default function Payments() {
       try {
         const data = await api.getCharges(account);
         setCharges(data);
-      } catch (err) {
-
-      }
+      } catch (err) {}
 
       setLoading(false);
     };
@@ -105,7 +101,7 @@ export default function Payments() {
         loading={loading}
         columns={columns}
         dataSource={charges}
-        rowKey='id'
+        rowKey="id"
         title={() => <Typography.Title level={3}>Payments</Typography.Title>}
       />
     </Wrapper>

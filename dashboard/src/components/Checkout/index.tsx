@@ -25,22 +25,26 @@ const LogoImage = styled.img`
 
 function CheckoutLogo({ name, logo }: BrandType) {
   if (!name && !logo) {
-    return <LogoWrapper>
-      <Skeleton.Button style={{ marginTop: '16px' }} active/>
-    </LogoWrapper>
+    return (
+      <LogoWrapper>
+        <Skeleton.Button style={{ marginTop: '16px' }} active />
+      </LogoWrapper>
+    );
   }
 
   if (logo) {
     return (
       <LogoWrapper>
-        <LogoImage src={getImageUrl(logo)} alt="brand logo"/>
+        <LogoImage src={getImageUrl(logo)} alt="brand logo" />
       </LogoWrapper>
     );
   }
 
   return (
     <LogoWrapper>
-      <Title style={{ margin: 0 }} level={5}>{name}</Title>
+      <Title style={{ margin: 0 }} level={5}>
+        {name}
+      </Title>
     </LogoWrapper>
   );
 }
@@ -72,15 +76,12 @@ const FullHeightRow = styled(Row)`
 `;
 
 interface CheckoutProps {
-  checkout: CheckoutType,
+  checkout: CheckoutType;
   preview?: boolean;
   onCheckout?: Function;
 }
 
-export default function Checkout({
-  checkout,
-  preview = false,
-}: CheckoutProps) {
+export default function Checkout({ checkout, preview = false }: CheckoutProps) {
   const { branding, item, asset } = checkout;
   const {
     token: { colorBgContainer, colorBorderSecondary },
@@ -90,30 +91,44 @@ export default function Checkout({
 
   return (
     <Wrapper style={{ minHeight: '100%' }}>
-      <Header style={ { background: colorBgContainer, borderBottom: `solid 1px ${colorBorderSecondary}` }}>
-        <CheckoutLogo name={branding?.name} logo={branding?.logo}/>
+      <Header
+        style={{ background: colorBgContainer, borderBottom: `solid 1px ${colorBorderSecondary}` }}
+      >
+        <CheckoutLogo name={branding?.name} logo={branding?.logo} />
       </Header>
       <Content>
         <FullHeightRow>
-          <Col span={12} style={ { display: 'flex', justifyContent: 'flex-end' }}>
+          <Col span={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
             <OrderSummary>
               <ProductInfo product={item} asset={asset}></ProductInfo>
               <FooterLinks></FooterLinks>
             </OrderSummary>
           </Col>
-          <Col style={ { background: colorBgContainer, borderLeft: `solid 1px ${colorBorderSecondary}` }} span={12}>
+          <Col
+            style={{
+              background: colorBgContainer,
+              borderLeft: `solid 1px ${colorBorderSecondary}`,
+            }}
+            span={12}
+          >
             <PaymentFormWrapper>
               <Title level={4}>Contact information</Title>
-              <Form layout='vertical'>
-                <Form.Item label='Email' required>
-                  <Input value={email} onInput={(e: any) => { setEmail(e.target.value) }} placeholder='john.doe@example.com'></Input>
+              <Form layout="vertical">
+                <Form.Item label="Email" required>
+                  <Input
+                    value={email}
+                    onInput={(e: any) => {
+                      setEmail(e.target.value);
+                    }}
+                    placeholder="john.doe@example.com"
+                  ></Input>
                 </Form.Item>
               </Form>
-              <PaymentDetail preview={preview} checkoutData={checkout}/>
+              <PaymentDetail preview={preview} checkoutData={checkout} />
             </PaymentFormWrapper>
           </Col>
         </FullHeightRow>
       </Content>
     </Wrapper>
   );
-};
+}

@@ -1,8 +1,7 @@
-import { Typography, Card, Avatar, Space } from "antd";
-import styled from "styled-components";
+import { Typography, Card, Avatar, Space } from 'antd';
+import styled from 'styled-components';
 
 const { Title, Paragraph } = Typography;
-
 
 interface SelectOption {
   title: string;
@@ -20,30 +19,34 @@ function Option({
   description,
   image,
   value,
-  onSelected
+  onSelected,
 }: SelectOption & SelectOptionEvents) {
   const handleClick = () => {
     onSelected && onSelected({ value });
   };
 
-  return <Card hoverable onClick={handleClick} style={{ marginTop: '16px' }}>
-    <Space align="center" size='middle'>
-      <Avatar src={image}>{ title }</Avatar>
-      <Space direction="vertical" size={4}>
-        <Paragraph strong style={{ marginBottom: 0 }}>{title}</Paragraph>
-        { description && <Paragraph style={{ marginBottom: '0', fontSize: '12px'}}>{description}</Paragraph>}
+  return (
+    <Card hoverable onClick={handleClick} style={{ marginTop: '16px' }}>
+      <Space align="center" size="middle">
+        <Avatar src={image}>{title}</Avatar>
+        <Space direction="vertical" size={4}>
+          <Paragraph strong style={{ marginBottom: 0 }}>
+            {title}
+          </Paragraph>
+          {description && (
+            <Paragraph style={{ marginBottom: '0', fontSize: '12px' }}>{description}</Paragraph>
+          )}
+        </Space>
       </Space>
-    </Space>
-  </Card>
+    </Card>
+  );
 }
 
 const Wrapper = styled.div`
   width: 100%;
 `;
 
-const Options = styled.div`
-
-`;
+const Options = styled.div``;
 
 interface SelectProps {
   label?: string;
@@ -51,24 +54,26 @@ interface SelectProps {
   onChange?: Function;
 }
 
-export default function Select({ label, items, onChange}: SelectProps) {
+export default function Select({ label, items, onChange }: SelectProps) {
   const handleItemSelected = ({ value }: any) => {
     onChange && onChange({ value });
   };
 
   return (
     <Wrapper>
-      { label && <Title level={4}>{label}</Title>}
+      {label && <Title level={4}>{label}</Title>}
 
       <Options>
-        { items.map((item) => <Option
-          key={item.value}
-          title={item.title}
-          description={item.description}
-          value={item.value}
-          image={item.image}
-          onSelected={handleItemSelected}
-        />)}
+        {items.map((item) => (
+          <Option
+            key={item.value}
+            title={item.title}
+            description={item.description}
+            value={item.value}
+            image={item.image}
+            onSelected={handleItemSelected}
+          />
+        ))}
       </Options>
     </Wrapper>
   );

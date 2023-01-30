@@ -29,24 +29,23 @@ export default function SharableURL({ url }: SharableURLProps) {
   }, [copyButtonRef]);
 
   return (
-    <Wrapper onMouseLeave={() => { setCopied(false) }}>
+    <Wrapper
+      onMouseLeave={() => {
+        setCopied(false);
+      }}
+    >
       <Input.Group compact>
-        <Input
-          readOnly
-          style={{ width: 'calc(100% - 96px)' }}
-          value={url}
-          defaultValue={url}
-        />
-        <Tooltip title={copied ? 'Copied' : 'Copy' }>
+        <Input readOnly style={{ width: 'calc(100% - 96px)' }} value={url} defaultValue={url} />
+        <Tooltip title={copied ? 'Copied' : 'Copy'}>
           <Button ref={copyButtonRef} data-clipboard-text={url} icon={<CopyOutlined />} />
         </Tooltip>
       </Input.Group>
       <Divider>or share it on</Divider>
-      <Space size='large'>
-        <Button size='large' shape='circle' icon={<TwitterOutlined/>}></Button>
-        <Button size='large' shape='circle' icon={<FacebookFilled/>}></Button>
-        <Button size='large' shape='circle' icon={<InstagramFilled/>}></Button>
+      <Space size="large">
+        <Button size="large" shape="circle" icon={<TwitterOutlined />}></Button>
+        <Button size="large" shape="circle" icon={<FacebookFilled />}></Button>
+        <Button size="large" shape="circle" icon={<InstagramFilled />}></Button>
       </Space>
     </Wrapper>
   );
-};
+}

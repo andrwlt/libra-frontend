@@ -1,12 +1,12 @@
-import Account from "components/account/Account";
-import { Button, Dropdown, Skeleton } from "antd";
-import { useEffect, useState } from "react";
-import type { MenuProps } from "antd";
+import Account from 'components/account/Account';
+import { Button, Dropdown, Skeleton } from 'antd';
+import { useEffect, useState } from 'react';
+import type { MenuProps } from 'antd';
 
 function getItems(accounts: any[]): MenuProps['items'] {
   return accounts.map((account) => ({
     key: account.address,
-    label: (<Account account={account}/>)
+    label: <Account account={account} />,
   }));
 }
 
@@ -22,7 +22,7 @@ export default function AccountSelect({ accounts, onChange }: any) {
   }, [selected]);
 
   if (accounts.length === 0) {
-    return <Skeleton.Input active></Skeleton.Input>
+    return <Skeleton.Input active></Skeleton.Input>;
   }
 
   const items = getItems(accounts);
@@ -41,12 +41,15 @@ export default function AccountSelect({ accounts, onChange }: any) {
       }}
     >
       <a onClick={(e) => e.preventDefault()}>
-        {
-          !selected ? <Button size="large" block> Select an account</Button>
-          : <Account variant="select" account={selected}/>
-        }
+        {!selected ? (
+          <Button size="large" block>
+            {' '}
+            Select an account
+          </Button>
+        ) : (
+          <Account variant="select" account={selected} />
+        )}
       </a>
-      
     </Dropdown>
-  )
+  );
 }
