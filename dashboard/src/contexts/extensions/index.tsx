@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { EXTENSIONS } from 'config';
-import { ExtensionConfig, Extension, ExtensionsContextInterface } from './types';
+import { EXTENSIONS, APP_NAME } from 'config';
+import { ExtensionConfig, Extension, ConnectedExtension, ExtensionsContextInterface } from './types';
+import { message } from 'antd';
 
 const defaultExtensionsContext = {
   extensions: [],
   isReady: false,
+  isConnecting: false,
+  connectExtension: async () => {},
+  connectedExtension: null,
 };
 
 const MAX_RETRY = 10;
@@ -40,8 +44,35 @@ function getExtensions(): Extension[] {
 
 export const ExtensionsProvider = ({ children }: { children: React.ReactNode }) => {
   const [extensions, setExtensions] = useState<Extension[]>([]);
+  const [isConnecting, setIsConnecting] = useState(false);
+  const [connectedExtension, setConnectedExtension] = useState<null | ConnectedExtension>(null);
   const [isReady, setIsReady] = useState(false);
 
+  const connectExtension = async (extensionId: string): Promise<null | any> => {
+    setIsConnecting(true);
+
+    if (isReady) {
+      const extension = extensions.find(ext => ext.id === extensionId);
+
+      if (extension) {
+        try {
+          const connection = await extension.enable(APP_NAME);
+          const accounts = await connection.accounts.get();
+          setConnectedExtension({
+            ...extension,
+            accounts,
+            signer: connection.signer,
+          });
+        } catch (err) {
+          message.error(`${err}`);
+        }
+      }
+    }
+
+    setIsConnecting(false);
+  };
+
+  // Retry until the extensions is injected to browser
   let retryCounter = 0;
   let retryInterval: ReturnType<typeof setInterval>;
 
@@ -67,6 +98,9 @@ export const ExtensionsProvider = ({ children }: { children: React.ReactNode }) 
       value={{
         extensions,
         isReady,
+        connectExtension,
+        isConnecting,
+        connectedExtension,
       }}
     >
       {children}

@@ -6,6 +6,5 @@ export interface Account {
 
 export interface AccountContextInterface {
   account: Account | null;
-  connect: Function;
-  disconnect: Function;
+  setAccount: Function;
 }

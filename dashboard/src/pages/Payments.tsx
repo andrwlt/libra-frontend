@@ -3,10 +3,9 @@ import styled from 'styled-components';
 import { Table, Typography, Badge, theme } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { Charge as ChargeDataType } from 'types';
-import shortStr from 'utils/shortStr';
+import { truncate } from 'utils/format/address';
 import { useAccount } from 'contexts/account';
-
-import api from 'services/api';
+import { useApi } from 'contexts/api';
 
 const useChargeStatusColor = (status: string) => {
   const {
@@ -38,7 +37,7 @@ const columns: ColumnsType<ChargeDataType> = [
     key: 'hash',
     title: 'Hash',
     dataIndex: 'hash',
-    render: (hash) => <a>{shortStr(hash)}</a>,
+    render: (hash) => <a>{truncate(hash)}</a>,
   },
   {
     key: 'status',
@@ -50,7 +49,7 @@ const columns: ColumnsType<ChargeDataType> = [
     key: 'from',
     title: 'Customer',
     dataIndex: 'from',
-    render: (address) => <a>{shortStr(address)}</a>,
+    render: (address) => <a>{truncate(address)}</a>,
   },
   {
     key: 'amount',
@@ -76,6 +75,7 @@ const Wrapper = styled.div`
 `;
 
 export default function Payments() {
+  const { getCharges } = useApi();
   const [charges, setCharges] = useState<ChargeDataType[]>([]);
   const [loading, setLoading] = useState(false);
   const { account } = useAccount();
@@ -85,7 +85,7 @@ export default function Payments() {
       setLoading(true);
 
       try {
-        const data = await api.getCharges(account);
+        const data = await getCharges();
         setCharges(data);
       } catch (err) {}
 

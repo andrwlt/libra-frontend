@@ -1,10 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import { Provider } from 'react-redux';
-import { store } from './state/store';
-import {
-  BrowserRouter,
-} from "react-router-dom";
+import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import { ConfigProvider } from 'antd';
 import { Providers } from 'contexts';
@@ -17,16 +13,14 @@ const root = createRoot(container);
 
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-      <BrowserRouter>
-        <ConfigProvider theme={theme}>
-          <Providers>
-            <App />
-          </Providers>
-        </ConfigProvider>
-      </BrowserRouter>
-    </Provider>
-  </React.StrictMode>
+    <BrowserRouter>
+      <ConfigProvider theme={theme}>
+        <Providers>
+          <App />
+        </Providers>
+      </ConfigProvider>
+    </BrowserRouter>
+  </React.StrictMode>,
 );
 
 // If you want to start measuring performance in your app, pass a function

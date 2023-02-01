@@ -1,9 +1,3 @@
-export interface Account {
-  address: string;
-  name: string;
-  singer?: any;
-}
-
 export interface ExtensionConfig {
   id: string;
   name: string;
@@ -16,7 +10,15 @@ export interface Extension extends ExtensionConfig {
   accounts?: any;
 }
 
+export interface ConnectedExtension extends ExtensionConfig {
+  signer: any;
+  accounts: any[];
+}
+
 export interface ExtensionsContextInterface {
   extensions: Extension[];
   isReady: boolean;
+  connectExtension: (name: string) => Promise<void>;
+  isConnecting: boolean;
+  connectedExtension: ConnectedExtension | null;
 }

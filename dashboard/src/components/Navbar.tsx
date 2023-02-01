@@ -1,13 +1,11 @@
 import logo from 'assets/logo.svg';
 import styled from 'styled-components';
 import { Button, Layout, theme } from 'antd';
-import { MenuProps, Menu, Popover, Space, Divider } from 'antd';
+import { MenuProps, Menu, Popover, Space, Typography } from 'antd';
 import { Link } from 'react-router-dom';
 import { useAccount } from 'contexts/account';
 import Identicon from '@polkadot/react-identicon';
 import { truncate } from 'utils/format/address';
-
-import { useState } from 'react';
 
 const { Header } = Layout;
 
@@ -55,35 +53,50 @@ const items: MenuItem[] = [
   createMenuItem(<Link to="/checkout">Checkout</Link>, 'checkout'),
 ];
 
-const AccountMenuItem = styled.div`
-  cursor: pointer;
-`;
-
-function AccountMenu() {
-  const { account, disconnect } = useAccount();
-
-  const handleLogOut = async () => {
-    disconnect();
-  };
+function AccountInfo() {
+  const { account } = useAccount();
 
   return (
-    <div>
-      <div>{ account ? truncate(account.address) : '' }</div>
-      <Divider></Divider>
-      <Button style={{ padding: 0 }} type='link' onClick={handleLogOut}>Log Out</Button>
+    <div style={{ display: 'flex' }}>
+      <div style={{ display: 'flex', alignItems: 'center', marginRight: '16px' }}>
+        <Identicon
+          value={account?.address}
+          size={40}
+          theme="polkadot"
+          style={{ cursor: 'pointer' }}
+        ></Identicon>
+      </div>
+      <div>
+        <Typography.Paragraph strong style={{ marginBottom: '4px' }}>
+          {account?.name}
+        </Typography.Paragraph>
+        <Typography.Paragraph style={{ fontWeight: 'normal', marginBottom: '4px' }} type="secondary">
+          {account ? truncate(account.address) : ''}
+        </Typography.Paragraph>
+      </div>
     </div>
   );
 }
 
 export function Account() {
-  const { account, disconnect } = useAccount();
-  const {
-    token: { colorBgContainer, boxShadow },
-  } = theme.useToken();
+  const { account, setAccount } = useAccount();
+
+  const handleLogOut = async () => {
+    setAccount(null);
+  };
 
   return (
     <div>
-      <Popover placement="bottomRight" open content={<AccountMenu />} title="Account">
+      <Popover
+        trigger="click"
+        placement="bottomRight"
+        content={
+          <Button type="link" block onClick={handleLogOut}>
+            Log Out
+          </Button>
+        }
+        title={<AccountInfo />}
+      >
         <div style={{ display: 'flex', alignItems: 'center', padding: '8px' }}>
           <Identicon
             value={account?.address}
