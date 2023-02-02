@@ -47,11 +47,11 @@ const Wrapper = styled.div`
 
 const TableHeader = styled.div`
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
 `;
 
-export default function Checkout() {
+export default function ListCheckout() {
   const [checkoutList, setCheckoutList] = useState<CheckoutDataType[]>([]);
   const [loading, setLoading] = useState(false);
   const { account } = useAccount();
@@ -77,6 +77,7 @@ export default function Checkout() {
 
   return (
     <Wrapper>
+      <Typography.Title level={4}>Checkout</Typography.Title>
       <Table
         rowKey="id"
         loading={loading}
@@ -84,9 +85,8 @@ export default function Checkout() {
         dataSource={checkoutList}
         title={() => (
           <TableHeader>
-            <Typography.Title level={3}>Payments</Typography.Title>
             <Link to="/checkout/new">
-              <Button type="primary" shape="round">
+              <Button type="primary">
                 Create checkout
               </Button>
             </Link>

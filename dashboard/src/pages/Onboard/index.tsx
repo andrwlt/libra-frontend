@@ -18,7 +18,6 @@ import { useAccount } from 'contexts/account';
 import { Link } from 'react-router-dom';
 
 const Header = styled.div`
-  max-width: 1160px;
   padding: 32px;
   margin-left: auto;
   margin-right: auto;
@@ -111,7 +110,6 @@ export default function Onboarding() {
   useEffect(() => {
     if (blur) {
       const { messages } = validateLineItem(lineItem);
-      console.log(messages);
       setErrorMessages(messages);
     }
   }, [lineItem, blur]);

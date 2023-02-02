@@ -40,6 +40,7 @@ export default function Steps({ items, current, onBack }: StepsProps) {
   const [hovered, setHovered] = useState(false);
 
   const handleOnBack = () => {
+    setHovered(false);
     onBack && onBack();
   };
 

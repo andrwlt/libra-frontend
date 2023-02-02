@@ -1,11 +1,12 @@
 import logo from 'assets/logo.svg';
 import styled from 'styled-components';
-import { Button, Layout, theme } from 'antd';
+import { Button, Divider, Layout, theme } from 'antd';
 import { MenuProps, Menu, Popover, Space, Typography } from 'antd';
 import { Link } from 'react-router-dom';
 import { useAccount } from 'contexts/account';
 import Identicon from '@polkadot/react-identicon';
 import { truncate } from 'utils/format/address';
+import { useAuth } from 'contexts/auth';
 
 const { Header } = Layout;
 
@@ -59,12 +60,7 @@ function AccountInfo() {
   return (
     <div style={{ display: 'flex' }}>
       <div style={{ display: 'flex', alignItems: 'center', marginRight: '16px' }}>
-        <Identicon
-          value={account?.address}
-          size={40}
-          theme="polkadot"
-          style={{ cursor: 'pointer' }}
-        ></Identicon>
+        <Identicon value={account?.address} size={40} theme="polkadot" style={{ cursor: 'pointer' }}></Identicon>
       </div>
       <div>
         <Typography.Paragraph strong style={{ marginBottom: '4px' }}>
@@ -79,10 +75,11 @@ function AccountInfo() {
 }
 
 export function Account() {
-  const { account, setAccount } = useAccount();
+  const { account } = useAccount();
+  const { logout } = useAuth();
 
   const handleLogOut = async () => {
-    setAccount(null);
+    logout();
   };
 
   return (
@@ -97,14 +94,12 @@ export function Account() {
         }
         title={<AccountInfo />}
       >
-        <div style={{ display: 'flex', alignItems: 'center', padding: '8px' }}>
-          <Identicon
-            value={account?.address}
-            size={32}
-            theme="polkadot"
-            style={{ cursor: 'pointer' }}
-          ></Identicon>
-        </div>
+        <Button size='large' ghost style={{ display: 'flex', alignItems: 'center' }}>
+          <Identicon value={account?.address} size={24} theme="polkadot" style={{ cursor: 'pointer' }}></Identicon>
+          <Typography.Paragraph style={{ marginBottom: 2, marginLeft: '8px' }} strong>
+            {account?.name}
+          </Typography.Paragraph>
+        </Button>
       </Popover>
     </div>
   );
@@ -112,11 +107,11 @@ export function Account() {
 
 export default function Navbar() {
   const {
-    token: { colorBgContainer, boxShadow },
+    token: { colorBgContainer, boxShadow, colorBorder },
   } = theme.useToken();
 
   return (
-    <Wrapper style={{ background: colorBgContainer, boxShadow }}>
+    <Wrapper style={{ background: colorBgContainer, boxShadow, borderBottom: `solid 1px ${colorBorder}` }}>
       <LogoWrapper>
         <Link to="/">
           <Logo src={logo} alt="logo" />

@@ -2,7 +2,8 @@ import { Routes, Route } from 'react-router-dom';
 import { Layout } from 'antd';
 import Navbar from 'components/Navbar';
 import Payments from 'pages/Payments';
-import Checkout from 'pages/Checkout';
+import ListCheckout from 'pages/ListCheckout';
+import CheckoutConfig from 'pages/CheckoutConfig';
 import { useAuth } from 'contexts/auth';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
@@ -25,9 +26,10 @@ export default function Dashboard() {
       <Navbar />
       <Content>
         <Routes>
-          <Route path="" element={<Payments />} />
+          <Route path="/" element={<Payments />} />
           <Route path="/payments" element={<Payments />} />
-          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/checkout" element={<ListCheckout />} />
+          <Route path="/checkout/new" element={<CheckoutConfig/>} />
         </Routes>
       </Content>
     </Layout>

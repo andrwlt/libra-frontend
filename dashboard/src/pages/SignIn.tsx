@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Button, Space, Typography, Modal, Spin, theme } from 'antd';
+import { Button, Space, Typography, Modal, Spin, Card, theme } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import Identicon from '@polkadot/react-identicon';
@@ -62,6 +62,10 @@ export default function SignIn() {
   const { login, isLoggingIn, setToken } = useAuth();
   const navigate = useNavigate();
 
+  const {
+    token: { boxShadow, colorBgLayout },
+  } = theme.useToken();
+
   const [open, setOpen] = useState(false);
 
   const handleConnectExtension = async () => {
@@ -93,26 +97,37 @@ export default function SignIn() {
   if (!isReady || isLoggingIn) {
     return (
       <Wrapper>
-        <Spin tip="Loading ..." indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}></Spin>
+        <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}></Spin>
       </Wrapper>
     );
   }
 
   return (
-    <Wrapper>
-      <Space style={{ maxWidth: '560px', marginTop: '-48px' }} direction="vertical" size="large" align="start">
-        <img width="360px" src={logo} alt="Libra Logo"></img>
-        <Typography.Title level={2}>Decentralized payments system that empowers the next e-commerce</Typography.Title>
+    <Wrapper style={{ background: colorBgLayout }}>
+      <Card style={{ boxShadow, maxWidth: '480px', width: '100%', padding: '1rem' }}>
+        <a href='https://golibra.xyz'>
+          <img src={logo} height={36} alt='Libra Logo'></img>
+        </a>
+        <Typography.Title level={3}>Login</Typography.Title>
+
+        <Typography.Title style={{ fontWeight: 'normal', marginTop: '-4px' }} type='secondary' level={5}>Continue to Libra</Typography.Title>
+
         <Button
+          style={{ marginTop: '32px' }}
           disabled={isConnecting}
           loading={isConnecting}
           type="primary"
           size="large"
+          block
           onClick={handleConnectExtension}
         >
-          Log in with wallet
+          Continue with wallet
         </Button>
-      </Space>
+
+        <Typography.Paragraph type='secondary' style={{ marginTop: '16px' }}>
+          New to Libra? <a href='/onboard'>Try now</a>
+        </Typography.Paragraph>
+      </Card>
 
       <Modal open={open} onCancel={() => setOpen(false)} footer={false}>
         {connectedExtension && connectedExtension.accounts.length > 0 && (

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { message } from 'antd';
 import { isTokenExpired } from 'utils/auth';
 import { useExtensions } from 'contexts/extensions';
+import { useAccount } from 'contexts/account';
 
 const defaultAuthContext = {
   token: null,
@@ -23,6 +24,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [token, setToken] = useState<string | null>();
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const { connectedExtension } = useExtensions();
+  const { account, setAccount } = useAccount();
 
   const login = async (account: any): Promise<void> => {
     setIsLoggingIn(true);
@@ -54,6 +56,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setIsLoggingIn(false);
   };
 
+  const logout = () => {
+    if (account) {
+      localStorage.removeItem(account.address);
+      setToken(null);
+      setAccount(null);
+    }
+  };
+
   const isAuthenticated = () => token && !isTokenExpired(token);
 
   return (
@@ -64,6 +74,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         isLoggingIn,
         isAuthenticated,
         login,
+        logout,
       }}
     >
       {children}

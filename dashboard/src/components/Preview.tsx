@@ -1,14 +1,11 @@
 import { ReactNode } from 'react';
 import styled from 'styled-components';
+import { theme } from 'antd';
 
 // TODO: Full height and width follow ratio 16:9
 const Wrapper = styled.div`
-  width: 768px;
-  height: 540px;
   margin-left: auto;
   margin-right: auto;
-  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 3%), 0 1px 6px -1px rgb(0 0 0 / 2%),
-    0 2px 4px 0 rgb(0 0 0 / 2%);
 `;
 
 const ColorDot = styled.div`
@@ -20,7 +17,7 @@ const ColorDot = styled.div`
 `;
 
 const PreviewHeader = styled.div`
-  width: calc(100% - 64px);
+  width: 100%;
   height: 40px;
   background: rgb(227, 219, 214);
   border: solid 1px rgb(227, 219, 214);
@@ -28,14 +25,16 @@ const PreviewHeader = styled.div`
   display: flex;
   align-items: center;
   padding: 0 32px;
+  box-sizing: border-box;
 `;
 
 const PreviewBody = styled.div`
   width: 100%;
-  height: 100%;
+  height: calc(100% - 40px);
   background: #f7f7f7;
   border: solid 1px rgb(227, 219, 214);
   border-radius: 0 0 6px 6px;
+  box-sizing: border-box;
 `;
 
 const PreviewContent = styled.div`
@@ -45,19 +44,25 @@ const PreviewContent = styled.div`
 `;
 
 interface PreviewProps {
+  width?: number;
+  height?: number;
   children?: ReactNode;
 }
 
-export default function Preview(props: PreviewProps) {
+export default function Preview({ width = 768, height = 540, children }: PreviewProps) {
+  const {
+    token: { boxShadow },
+  } = theme.useToken();
+
   return (
-    <Wrapper>
+    <Wrapper style={{ width: `${width}px`, height: `${height}px`, boxShadow }}>
       <PreviewHeader>
         <ColorDot color="rgb(255, 96, 87)" />
         <ColorDot color="rgb(254, 188, 46)" />
         <ColorDot color="rgb(43, 199, 64)" />
       </PreviewHeader>
       <PreviewBody>
-        <PreviewContent>{props.children}</PreviewContent>
+        <PreviewContent>{children}</PreviewContent>
       </PreviewBody>
     </Wrapper>
   );

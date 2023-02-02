@@ -72,6 +72,8 @@ const columns: ColumnsType<ChargeDataType> = [
 
 const Wrapper = styled.div`
   padding: 32px;
+  max-width: 1440px;
+  margin: auto;
 `;
 
 export default function Payments() {
@@ -79,6 +81,10 @@ export default function Payments() {
   const [charges, setCharges] = useState<ChargeDataType[]>([]);
   const [loading, setLoading] = useState(false);
   const { account } = useAccount();
+
+  const {
+    token: { boxShadow },
+  } = theme.useToken();
 
   useEffect(() => {
     const fetchCharges = async () => {
@@ -97,12 +103,13 @@ export default function Payments() {
 
   return (
     <Wrapper>
+      <Typography.Title level={4}>Payments</Typography.Title>
       <Table
+        style={{ boxShadow }}
         loading={loading}
         columns={columns}
         dataSource={charges}
         rowKey="id"
-        title={() => <Typography.Title level={3}>Payments</Typography.Title>}
       />
     </Wrapper>
   );
