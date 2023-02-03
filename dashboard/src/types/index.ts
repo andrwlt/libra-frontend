@@ -28,6 +28,9 @@ export interface Checkout {
   payee: Address;
   asset: string;
   item: LineItem;
+  afterPayment?: {
+    redirectUrl: string;
+  };
 }
 
 export interface Charge {

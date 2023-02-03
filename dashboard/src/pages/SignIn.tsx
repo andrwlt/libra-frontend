@@ -89,7 +89,7 @@ export default function SignIn() {
       const token = localStorage.getItem(connectedAccount.address);
       if (token && !isTokenExpired(token)) {
         setToken(token);
-        navigate('/');
+        navigate(-1);
       }
     }
   }, []);

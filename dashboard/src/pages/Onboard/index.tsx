@@ -123,7 +123,9 @@ export default function Onboarding() {
     },
     asset,
     metadata: {},
-    afterPayment: {},
+    afterPayment: {
+      redirectUrl: '',
+    },
   };
 
   const handleCreateCheckout = async () => {

@@ -2,7 +2,6 @@ import { ReactNode } from 'react';
 import styled from 'styled-components';
 import { theme } from 'antd';
 
-// TODO: Full height and width follow ratio 16:9
 const Wrapper = styled.div`
   margin-left: auto;
   margin-right: auto;
@@ -47,15 +46,16 @@ interface PreviewProps {
   width?: number;
   height?: number;
   children?: ReactNode;
+  style?: Record<string, string>;
 }
 
-export default function Preview({ width = 768, height = 540, children }: PreviewProps) {
+export default function Preview({ width = 768, height = 540, children, style = {} }: PreviewProps) {
   const {
     token: { boxShadow },
   } = theme.useToken();
 
   return (
-    <Wrapper style={{ width: `${width}px`, height: `${height}px`, boxShadow }}>
+    <Wrapper style={{ width: `${width}px`, height: `${height}px`, boxShadow, ...style }}>
       <PreviewHeader>
         <ColorDot color="rgb(255, 96, 87)" />
         <ColorDot color="rgb(254, 188, 46)" />

@@ -94,7 +94,7 @@ export function Account() {
         }
         title={<AccountInfo />}
       >
-        <Button size='large' ghost style={{ display: 'flex', alignItems: 'center' }}>
+        <Button size="large" style={{ display: 'flex', alignItems: 'center' }}>
           <Identicon value={account?.address} size={24} theme="polkadot" style={{ cursor: 'pointer' }}></Identicon>
           <Typography.Paragraph style={{ marginBottom: 2, marginLeft: '8px' }} strong>
             {account?.name}
@@ -111,7 +111,9 @@ export default function Navbar() {
   } = theme.useToken();
 
   return (
-    <Wrapper style={{ background: colorBgContainer, boxShadow, borderBottom: `solid 1px ${colorBorder}` }}>
+    <Wrapper
+      style={{ padding: '0 64px', background: colorBgContainer, boxShadow, borderBottom: `solid 1px ${colorBorder}` }}
+    >
       <LogoWrapper>
         <Link to="/">
           <Logo src={logo} alt="logo" />
