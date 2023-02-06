@@ -107,7 +107,7 @@ export default function Payments() {
     };
 
     account && fetchCharges();
-  }, [account]);
+  }, [account, getCharges, getListCheckout]);
 
   const subTitle = hasCheckout
     ? 'To accept payments from your customers, you need to share your checkout link with your customers first.'
@@ -123,7 +123,9 @@ export default function Payments() {
 
   return (
     <Wrapper>
-      <Typography.Title level={4}>Payments</Typography.Title>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '16px' }}>
+        <Typography.Title level={4}>Payments</Typography.Title>
+      </div>
       {loading || charges.length > 0 ? (
         <Table style={{ boxShadow }} loading={loading} columns={columns} dataSource={charges} rowKey="id" />
       ) : (
@@ -131,7 +133,7 @@ export default function Payments() {
           <Result
             style={{ maxWidth: '480px', margin: 'auto' }}
             icon={<WalletOutlined />}
-            title="Your payments will show here"
+            title="Your received payments will show here"
             subTitle={subTitle}
             extra={[
               hasCheckout ? (

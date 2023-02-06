@@ -24,6 +24,7 @@ export interface LineItem {
 }
 
 export interface Checkout {
+  id?: string;
   branding: Brand;
   payee: Address;
   asset: string;

@@ -1,15 +1,17 @@
-import { Typography, Tabs, Form, Input, Select, theme, message } from 'antd';
+import { Typography, Tabs, theme, message } from 'antd';
 import type { TabsProps } from 'antd';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
 import Preview from 'components/Preview';
 import Checkout from 'components/Checkout';
-import ImageUploader from 'components/ImageUploader';
 import { useAccount } from 'contexts/account';
 import { useApi } from 'contexts/api';
 import { ActionBar } from './ActionBar';
 import { Checkout as CheckoutType } from 'types';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import BrandingForm from './BrandingForm';
+import ProductForm from './ProductForm';
+import AfterPaymentForm from './AfterPaymentForm';
 
 const Wrapper = styled.div``;
 
@@ -21,94 +23,56 @@ const PreviewContainer = styled.div`
   padding: 0 64px;
 `;
 
-const BrandingForm = () => {
-  const [form] = Form.useForm();
-  const handleLogoChange = () => {};
-
-  return (
-    <Form layout="vertical" form={form}>
-      <Form.Item label="Name" required>
-        <Input placeholder="Name of your brand" />
-      </Form.Item>
-      <Form.Item label="Logo">
-        <ImageUploader name="Brand logo" onChange={handleLogoChange} />
-      </Form.Item>
-    </Form>
-  );
-};
-
-const ProductForm = () => {
-  const [form] = Form.useForm();
-
-  const handleProductImageChanged = () => {};
-
-  return (
-    <Form layout="vertical" form={form}>
-      <div style={{ display: 'flex' }}>
-        <div style={{ flexGrow: 1 }}>
-          <Form.Item label="Name" required>
-            <Input placeholder="Name of your product or service" />
-          </Form.Item>
-          <Form.Item label="Description" required>
-            <Input.TextArea placeholder="Description about your product or service" />
-          </Form.Item>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', paddingLeft: '32px', justifyContent: 'center' }}>
-          <ImageUploader name="Product image" onChange={handleProductImageChanged} />
-        </div>
-      </div>
-      <Form.Item label="Price" required>
-        <Input placeholder="Price of your product or service" />
-      </Form.Item>
-      <Form.Item label="Asset" required>
-        <Select defaultValue="wnd">
-          <Select.Option value="wnd">WND</Select.Option>
-          <Select.Option value="dot">DOT</Select.Option>
-        </Select>
-      </Form.Item>
-    </Form>
-  );
-};
-
-const AfterPaymentForm = () => {
-  const [form] = Form.useForm();
-
-  return (
-    <Form layout="vertical" form={form}>
-      <Form.Item label="Redirect URL">
-        <Input placeholder="Your website URL" />
-      </Form.Item>
-    </Form>
-  );
-};
-
 interface CheckoutConfigProps {
-  checkout: any;
-  onUpdate: Function;
+  checkout: CheckoutType;
+  onChange: any;
 }
 
-const ConfigForm = ({ checkout, onUpdate }: CheckoutConfigProps) => {
+const ConfigForm = ({ checkout, onChange = () => {} }: CheckoutConfigProps) => {
+  const handleBrandingChange = (value: any) => {
+    onChange({
+      ...checkout,
+      branding: value,
+    });
+  };
+
+  const handleProductChange = (value: any) => {
+    console.log(value);
+    onChange({
+      ...checkout,
+      item: value,
+    });
+  };
+
+  const handleAfterPaymentChange = (value: any) => {
+    onChange({
+      ...checkout,
+      afterPayment: value,
+    });
+  };
+
   const items: TabsProps['items'] = [
-    {
-      key: 'branding',
-      label: 'Branding',
-      children: <BrandingForm />,
-    },
     {
       key: 'product',
       label: `Product`,
-      children: <ProductForm />,
+      children: <ProductForm initialValues={checkout.item} onValuesChange={handleProductChange} />,
+    },
+    {
+      key: 'branding',
+      label: 'Branding',
+      children: <BrandingForm initialValues={checkout.branding} onValuesChange={handleBrandingChange} />,
     },
     {
       key: 'afterPayment',
       label: `After Payment`,
-      children: <AfterPaymentForm />,
+      children: <AfterPaymentForm initialValues={checkout.afterPayment} onValuesChange={handleAfterPaymentChange} />,
     },
   ];
 
   return (
     <div style={{ width: '100%', maxWidth: '480px' }}>
       <Typography.Title level={4}>New checkout</Typography.Title>
+
       <Tabs items={items}></Tabs>
     </div>
   );
@@ -134,18 +98,32 @@ export default function CheckoutConfig() {
   } = theme.useToken();
 
   const { account } = useAccount();
-  const { createCheckout } = useApi();
+  const { createCheckout, getCheckout } = useApi();
 
   const [checkout, setCheckout] = useState(defaultCheckout);
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
+  const { id } = useParams();
 
   useEffect(() => {
     if (account) {
       setCheckout({ ...checkout, payee: account.address });
     }
   }, [account]);
+
+  useEffect(() => {
+    if (id) {
+      const fetchCheckout = async () => {
+        const checkout = await getCheckout(id);
+        if (checkout) {
+          setCheckout(checkout);
+        }
+      };
+
+      fetchCheckout();
+    }
+  }, [id]);
 
   const handleSave = async () => {
     setLoading(true);
@@ -159,6 +137,10 @@ export default function CheckoutConfig() {
     }
 
     setLoading(false);
+  };
+
+  const handleConfigChanged = (value: any) => {
+    setCheckout(checkout);
   };
 
   return (
@@ -176,12 +158,7 @@ export default function CheckoutConfig() {
             boxShadow,
           }}
         >
-          <ConfigForm
-            checkout={checkout}
-            onUpdate={(value: CheckoutType) => {
-              setCheckout(value);
-            }}
-          />
+          <ConfigForm checkout={checkout} onChange={handleConfigChanged} />
         </div>
         <PreviewContainer>
           <Typography.Title level={4}>Preview</Typography.Title>

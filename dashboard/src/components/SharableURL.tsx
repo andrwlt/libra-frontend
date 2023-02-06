@@ -35,7 +35,7 @@ export default function SharableURL({ url }: SharableURLProps) {
       }}
     >
       <Input.Group compact>
-        <Input readOnly style={{ width: 'calc(100% - 96px)' }} value={url} defaultValue={url} />
+        <Input readOnly style={{ width: 'calc(100% - 48px)' }} value={url} defaultValue={url} />
         <Tooltip title={copied ? 'Copied' : 'Copy'}>
           <Button ref={copyButtonRef} data-clipboard-text={url} icon={<CopyOutlined />} />
         </Tooltip>

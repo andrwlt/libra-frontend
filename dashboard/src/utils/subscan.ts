@@ -12,7 +12,7 @@ const getBaseUrl = (asset: string) => {
   throw Error(`Asset ${asset} is unsupported.`);
 };
 
-export default {
+const subscan = {
   getAccountUrl(asset: string, address: string) {
     const baseUrl = getBaseUrl(asset);
 
@@ -25,3 +25,5 @@ export default {
     return `${baseUrl}/extrinsic/${hash}`;
   },
 };
+
+export default subscan;

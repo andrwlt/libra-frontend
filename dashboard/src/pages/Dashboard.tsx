@@ -30,6 +30,7 @@ export default function Dashboard() {
           <Route path="/payments" element={<Payments />} />
           <Route path="/checkout" element={<ListCheckout />} />
           <Route path="/checkout/new" element={<CheckoutConfig/>} />
+          <Route path="/checkout/:id/edit" element={<CheckoutConfig/>} />
         </Routes>
       </Content>
     </Layout>
