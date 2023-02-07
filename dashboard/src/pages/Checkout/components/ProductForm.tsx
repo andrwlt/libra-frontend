@@ -1,5 +1,6 @@
-import { Form, Input, InputNumber, Select, Space } from 'antd';
+import { Form, Input, InputNumber, Select } from 'antd';
 import ImageUploader from 'components/ImageUploader';
+import { useEffect } from 'react';
 
 interface ProductFormProps {
   initialValues?: any;
@@ -9,6 +10,10 @@ interface ProductFormProps {
 const ProductForm = ({ initialValues = {}, onValuesChange = () => {} }: ProductFormProps) => {
   const [form] = Form.useForm();
   const handleProductImageChanged = () => {};
+
+  useEffect(() => {
+    form.setFieldsValue(initialValues);
+  }, [initialValues, form]);
 
   return (
     <Form form={form} layout="vertical" initialValues={initialValues} onValuesChange={onValuesChange}>
@@ -25,8 +30,9 @@ const ProductForm = ({ initialValues = {}, onValuesChange = () => {} }: ProductF
           <ImageUploader name="Product image" onChange={handleProductImageChanged} />
         </div>
       </div>
-      <Space>
+      <div style={{ width: '100%', display: 'flex', paddingRight: '8px' }}>
         <Form.Item
+          style={{ flexGrow: 1, paddingRight: '32px' }}
           label="Price"
           name="price"
           required
@@ -35,15 +41,15 @@ const ProductForm = ({ initialValues = {}, onValuesChange = () => {} }: ProductF
             { type: 'number', message: 'Product price must be a number' },
           ]}
         >
-          <InputNumber  placeholder="Price of your product or service" />
+          <InputNumber style={{ width: '100%' }} placeholder="Price of your product or service" />
         </Form.Item>
         <Form.Item label="Asset" name="asset">
-          <Select>
+          <Select style={{ width: '102px' }}>
             <Select.Option value="wnd">WND</Select.Option>
             <Select.Option value="dot">DOT</Select.Option>
           </Select>
         </Form.Item>
-      </Space>
+      </div>
     </Form>
   );
 };

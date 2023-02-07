@@ -1,5 +1,6 @@
 import { Form, Input } from 'antd';
 import ImageUploader from 'components/ImageUploader';
+import { useEffect } from 'react';
 
 interface BrandingFormProps {
   initialValues?: any;
@@ -10,11 +11,15 @@ const BrandingForm = ({ initialValues = {}, onValuesChange = () => {} }: Brandin
   const [form] = Form.useForm();
   const handleLogoChange = () => {};
 
+  useEffect(() => {
+    form.setFieldsValue(initialValues);
+  }, [initialValues, form]);
+
   return (
     <Form form={form} layout="vertical" initialValues={initialValues} onValuesChange={onValuesChange}>
       <Form.Item
         label="Name"
-        name={['branding', 'name']}
+        name='name'
         required
         rules={[{ required: true, message: 'Brand name is required!' }]}
       >

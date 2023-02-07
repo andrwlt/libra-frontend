@@ -137,11 +137,11 @@ export default function Payments() {
             subTitle={subTitle}
             extra={[
               hasCheckout ? (
-                <Button type="primary" onClick={goToCheckout}>
+                <Button key="goToCheckout" type="primary" onClick={goToCheckout}>
                   Get checkout links
                 </Button>
               ) : (
-                <Button type="primary" onClick={createCheckout}>
+                <Button key="createCheckout" type="primary" onClick={createCheckout}>
                   Create checkout
                 </Button>
               ),

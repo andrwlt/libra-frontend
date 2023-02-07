@@ -1,17 +1,14 @@
-import { Typography, Tabs, theme, message } from 'antd';
-import type { TabsProps } from 'antd';
-import styled from 'styled-components';
 import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Typography, theme, message } from 'antd';
+import styled from 'styled-components';
 import Preview from 'components/Preview';
 import Checkout from 'components/Checkout';
 import { useAccount } from 'contexts/account';
 import { useApi } from 'contexts/api';
-import { ActionBar } from './ActionBar';
+import { ActionBar } from './components/ActionBar';
 import { Checkout as CheckoutType } from 'types';
-import { useNavigate, useParams } from 'react-router-dom';
-import BrandingForm from './BrandingForm';
-import ProductForm from './ProductForm';
-import AfterPaymentForm from './AfterPaymentForm';
+import ConfigurationForm from './components/ConfigurationForm';
 
 const Wrapper = styled.div``;
 
@@ -22,61 +19,6 @@ const PreviewContainer = styled.div`
   width: 60%;
   padding: 0 64px;
 `;
-
-interface CheckoutConfigProps {
-  checkout: CheckoutType;
-  onChange: any;
-}
-
-const ConfigForm = ({ checkout, onChange = () => {} }: CheckoutConfigProps) => {
-  const handleBrandingChange = (value: any) => {
-    onChange({
-      ...checkout,
-      branding: value,
-    });
-  };
-
-  const handleProductChange = (value: any) => {
-    console.log(value);
-    onChange({
-      ...checkout,
-      item: value,
-    });
-  };
-
-  const handleAfterPaymentChange = (value: any) => {
-    onChange({
-      ...checkout,
-      afterPayment: value,
-    });
-  };
-
-  const items: TabsProps['items'] = [
-    {
-      key: 'product',
-      label: `Product`,
-      children: <ProductForm initialValues={checkout.item} onValuesChange={handleProductChange} />,
-    },
-    {
-      key: 'branding',
-      label: 'Branding',
-      children: <BrandingForm initialValues={checkout.branding} onValuesChange={handleBrandingChange} />,
-    },
-    {
-      key: 'afterPayment',
-      label: `After Payment`,
-      children: <AfterPaymentForm initialValues={checkout.afterPayment} onValuesChange={handleAfterPaymentChange} />,
-    },
-  ];
-
-  return (
-    <div style={{ width: '100%', maxWidth: '480px' }}>
-      <Typography.Title level={4}>New checkout</Typography.Title>
-
-      <Tabs items={items}></Tabs>
-    </div>
-  );
-};
 
 const defaultCheckout: CheckoutType = {
   branding: {},
@@ -89,7 +31,7 @@ const defaultCheckout: CheckoutType = {
     redirectUrl: '',
   },
   payee: '',
-  asset: '',
+  asset: 'wnd',
 };
 
 export default function CheckoutConfig() {
@@ -98,7 +40,7 @@ export default function CheckoutConfig() {
   } = theme.useToken();
 
   const { account } = useAccount();
-  const { createCheckout, getCheckout } = useApi();
+  const { createCheckout, getCheckout, updateCheckout } = useApi();
 
   const [checkout, setCheckout] = useState(defaultCheckout);
   const [loading, setLoading] = useState(false);
@@ -113,34 +55,42 @@ export default function CheckoutConfig() {
   }, [account]);
 
   useEffect(() => {
-    if (id) {
-      const fetchCheckout = async () => {
-        const checkout = await getCheckout(id);
-        if (checkout) {
-          setCheckout(checkout);
-        }
-      };
+    const fetchCheckout = async (checkoutId: string) => {
+      const checkout = await getCheckout(checkoutId);
+      if (checkout) {
+        setCheckout(checkout);
+      }
+    };
 
-      fetchCheckout();
-    }
-  }, [id]);
+    account && id && fetchCheckout(id);
+  }, [account, id]);
 
   const handleSave = async () => {
     setLoading(true);
 
-    try {
-      await createCheckout(checkout);
-      message.success('Checkout created');
-      navigate('/checkout');
-    } catch (err) {
-      message.error('Fail to create checkout');
+    if (id) {
+      try {
+        await updateCheckout(id, checkout);
+        message.success('Checkout updated');
+        navigate('/checkout');
+      } catch (err) {
+        message.error('Fail to update checkout');
+      }
+    } else {
+      try {
+        await createCheckout(checkout);
+        message.success('Checkout created');
+        navigate('/checkout');
+      } catch (err) {
+        message.error('Fail to create checkout');
+      }
     }
 
     setLoading(false);
   };
 
   const handleConfigChanged = (value: any) => {
-    setCheckout(checkout);
+    setCheckout(value);
   };
 
   return (
@@ -158,7 +108,7 @@ export default function CheckoutConfig() {
             boxShadow,
           }}
         >
-          <ConfigForm checkout={checkout} onChange={handleConfigChanged} />
+          <ConfigurationForm checkout={checkout} onChange={handleConfigChanged} />
         </div>
         <PreviewContainer>
           <Typography.Title level={4}>Preview</Typography.Title>

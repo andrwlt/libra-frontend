@@ -1,4 +1,5 @@
 import { Form, Input } from 'antd';
+import { useEffect } from 'react';
 
 interface AfterPaymentFormProps {
   initialValues?: any;
@@ -7,6 +8,10 @@ interface AfterPaymentFormProps {
 
 const AfterPaymentForm = ({ initialValues = {}, onValuesChange = () => {} }: AfterPaymentFormProps) => {
   const [form] = Form.useForm();
+
+  useEffect(() => {
+    form.setFieldsValue(initialValues);
+  }, [initialValues, form]);
 
   return (
     <Form form={form} layout="vertical" initialValues={initialValues} onValuesChange={onValuesChange}>
