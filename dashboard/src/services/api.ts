@@ -37,15 +37,21 @@ const api = {
   },
 
   async createCheckout({ account, checkout }: any) {
-    const accessToken = await this.getAccessToken(account);
+    if (account) {
+      const accessToken = await this.getAccessToken(account);
 
-    const response = await instance.post('/checkout', checkout, {
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    });
-
-    return response.data;
+      const response = await instance.post('/checkout', checkout, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
+  
+      return response.data;
+    } else {
+      const response = await instance.post('/checkout', checkout);
+  
+      return response.data;
+    }
   },
 
   async getCheckoutList(account: any): Promise<Checkout[]> {
