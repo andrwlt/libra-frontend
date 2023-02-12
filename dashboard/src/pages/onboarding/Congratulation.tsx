@@ -1,5 +1,7 @@
+import { useEffect, useRef } from "react";
 import SharableURL from 'components/SharableURL';
 import { Typography } from 'antd';
+import { Confetti } from "components/confetti";
 
 const { Title } = Typography;
 
@@ -8,6 +10,13 @@ interface Props {
 }
 
 export default function Congratulation({ checkoutURL }: Props) {
+  useEffect(() => {
+    const confetti = new Confetti();
+    setTimeout(() => {
+      confetti.explode({ x: window.innerWidth, y: window.innerHeight / 2 });
+    }, 50);
+  }, []);
+
   return (
     <div style={{ width: '100vw', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
       <div style={{ maxWidth: '540px', height: 'auto' }}>

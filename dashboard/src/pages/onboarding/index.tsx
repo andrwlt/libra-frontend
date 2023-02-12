@@ -2,16 +2,19 @@ import styled from 'styled-components';
 import { useState } from 'react';
 import Preview from 'components/Preview';
 import CheckoutPage from 'components/Checkout';
+import FullPageLoading from 'components/FullPageLoading';
 import Steps from './steps/Steps';
 import BrandingForm from './steps/BrandingForm';
 import ProductForm from './steps/ProductForm';
-import AddWallet from './steps/AddWalletStep';
+import ConnectWallet from './steps/ConnectWallet';
 import Congratulation from './Congratulation';
 import { toSmallestUnit } from 'utils/format/balance';
 
 import api from 'services/api';
 import { Checkout as CheckoutType } from 'types';
-import { theme, Button } from 'antd';
+import { theme, Button, Modal, Typography, Spin } from 'antd';
+import { useExtensions } from 'contexts/extensions';
+import AccountOption from 'components/account/AccountOption';
 
 const Header = styled.div`
   padding: 32px 64px;
@@ -45,6 +48,9 @@ export default function Onboarding() {
   const [checkout, setCheckout] = useState(defaultCheckout);
   const [isCreatingCheckout, setIsCreatingCheckout] = useState(false);
   const [checkoutURL, setCheckoutURL] = useState('');
+  const [open, setOpen] = useState(false);
+  const { connectExtension, connectedExtension } = useExtensions();
+  const [connectingExtension, setConnectingExtension] = useState(false);
   const {
     token: { boxShadow, colorBgLayout },
   } = theme.useToken();
@@ -63,12 +69,17 @@ export default function Onboarding() {
     });
   };
 
-  const handlePayeeChanged = (value: string) => {
-    console.log(value);
-    setCheckout({ ...checkout, payee: value });
+  const handleConnectExtension = async () => {
+    setConnectingExtension(true);
+
+    await connectExtension('polkadot-js');
+
+    setConnectingExtension(false);
+    setOpen(true);
   };
 
-  const handleCreateCheckout = async () => {
+  const handleCreateCheckout = async (account: any) => {
+    setOpen(false);
     setIsCreatingCheckout(true);
 
     // const result = await api.createCheckout({
@@ -112,10 +123,10 @@ export default function Onboarding() {
     },
     {
       name: 'Add your wallet',
-      component: <AddWallet value={checkout.payee} onChange={handlePayeeChanged} />,
+      component: <ConnectWallet />,
       nextAction: (
-        <Button type="primary" onClick={handleCreateCheckout} loading={isCreatingCheckout}>
-          Create checkout
+        <Button type="primary" loading={connectingExtension} onClick={handleConnectExtension}>
+          Connect wallet
         </Button>
       ),
     },
@@ -135,6 +146,19 @@ export default function Onboarding() {
           <CheckoutPage checkout={checkout}></CheckoutPage>
         </Preview>
       </Content>
+      <FullPageLoading isOpen={isCreatingCheckout} message="Creating your checkout page..."></FullPageLoading>
+      <Modal open={open} onCancel={() => setOpen(false)} footer={false}>
+        {connectedExtension && connectedExtension.accounts.length > 0 && (
+          <>
+            <Typography.Title level={3}>Select an account</Typography.Title>
+            <div>
+              {connectedExtension.accounts.map((account: any) => (
+                <AccountOption key={account.address} account={account} onClick={handleCreateCheckout} />
+              ))}
+            </div>
+          </>
+        )}
+      </Modal>
     </>
   );
 }
