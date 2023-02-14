@@ -8,11 +8,11 @@ import BrandingForm from './steps/BrandingForm';
 import ProductForm from './steps/ProductForm';
 import ConnectWallet from './steps/ConnectWallet';
 import Congratulation from './Congratulation';
-import { toSmallestUnit } from 'utils/format/balance';
+import { formatBalance, toSmallestUnit } from 'utils/format/balance';
 
 import api from 'services/api';
 import { Checkout as CheckoutType } from 'types';
-import { theme, Button, Modal, Typography, Spin } from 'antd';
+import { theme, Button, Modal, Typography } from 'antd';
 import { useExtensions } from 'contexts/extensions';
 import AccountOption from 'components/account/AccountOption';
 
@@ -41,7 +41,7 @@ const defaultCheckout: CheckoutType = {
     redirectUrl: '',
   },
   payee: '',
-  asset: 'WND',
+  asset: 'wnd',
 };
 
 export default function Onboarding() {
@@ -59,12 +59,26 @@ export default function Onboarding() {
     setCheckout({ ...checkout, branding: value });
   };
 
-  const handleProductChanged = (value: any) => {
+  const handleProductChanged = (values: any) => {
+    const asset = values.asset === undefined ? checkout.asset : values.asset;
+    delete values.asset;
+
+    let price = checkout.item.price;
+    if (values.price === null) price = 0;
+    if (values.price) {
+      price = toSmallestUnit(values.price, asset)
+    };
+    if (asset !== checkout.asset) {
+      price = toSmallestUnit(formatBalance(price, checkout.asset), asset);
+    }
+
     setCheckout({
       ...checkout,
+      asset,
       item: {
         ...checkout.item,
-        ...value,
+        ...values,
+        price,
       },
     });
   };
@@ -82,35 +96,33 @@ export default function Onboarding() {
     setOpen(false);
     setIsCreatingCheckout(true);
 
-    // const result = await api.createCheckout({
-    //   checkout: {
-    //     ...checkout,
-    //     item: {
-    //       ...checkout.item,
-    //       price: toSmallestUnit(checkout.item.price, checkout.asset),
-    //     },
-    //   },
-    // });
+    const result = await api.createCheckout({
+      checkout: {
+        ...checkout,
+        item: {
+          ...checkout.item,
+          price: toSmallestUnit(checkout.item.price, checkout.asset),
+        },
+      },
+    });
 
-    // setCheckoutURL(`${process.env.REACT_APP_CHECKOUT_URL}/${result.id}`);
+    setCheckoutURL(`${process.env.REACT_APP_CHECKOUT_URL}/${result.id}`);
 
-    setTimeout(() => {
-      setCheckoutURL(`${process.env.REACT_APP_CHECKOUT_URL}/test-checkout`);
-      setIsCreatingCheckout(false);
-    }, 1000);
-
-    // setIsCreatingCheckout(false);
+    setIsCreatingCheckout(false);
   };
+
+  const isValidCheckoutItem = checkout.item.name && checkout.item.price;
 
   const steps = [
     {
       name: 'Add your product',
+      disabled: !isValidCheckoutItem,
       component: (
         <ProductForm
-          value={{
+          values={{
             name: checkout.item.name,
             description: checkout.item.description,
-            price: checkout.item.price,
+            price: checkout.item.price === 0 ? null : formatBalance(checkout.item.price, checkout.asset),
             asset: checkout.asset,
           }}
           onChange={handleProductChanged}
@@ -119,6 +131,7 @@ export default function Onboarding() {
     },
     {
       name: 'Setup your branding',
+      disabled: !checkout.branding.name,
       component: <BrandingForm value={checkout.branding} onChange={handleBrandingChanged} />,
     },
     {

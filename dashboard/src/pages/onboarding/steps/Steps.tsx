@@ -15,6 +15,7 @@ interface StepItem {
   name: string;
   component: ReactNode;
   nextAction?: ReactNode;
+  disabled?: boolean;
 }
 
 interface StepsProps {
@@ -59,7 +60,7 @@ export default function Steps({ steps = [], onNext = () => {}, onBack = () => {}
         {currentStep.nextAction ? (
           currentStep.nextAction
         ) : (
-          <Button type="primary" onClick={handleNext}>
+          <Button disabled={currentStep.disabled} type="primary" onClick={handleNext}>
             Next
           </Button>
         )}

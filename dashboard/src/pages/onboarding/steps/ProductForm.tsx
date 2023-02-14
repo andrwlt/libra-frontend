@@ -1,36 +1,34 @@
 import { Input, InputNumber, Select, Form, Space } from 'antd';
 import FormItem from 'antd/es/form/FormItem';
 import ImageUploader from 'components/ImageUploader';
-import { toSmallestUnit, formatBalance } from 'utils/format/balance';
 
-interface ProductFormValue {
+export interface ProductFormValues {
   name: string;
   description?: string;
   image?: string;
-  price: number;
+  price: number | null;
   asset: string;
 }
 
-interface ProductFormProps {
-  onChange: (value: Partial<ProductFormValue>) => void;
-  value: ProductFormValue;
+export interface ProductFormProps {
+  onChange: (values: Partial<ProductFormValues>) => void;
+  values: ProductFormValues;
 }
 
-export default function ProductFrom({ value, onChange }: ProductFormProps) {
+export default function ProductFrom({ values, onChange }: ProductFormProps) {
   const handleProductImageChanged = () => {};
   const [form] = Form.useForm();
 
-  const handleValuesChanged = (value: any) => {
-    onChange && onChange(value);
+  const handleValuesChanged = (changedValues: Partial<ProductFormValues>) => {
+    onChange && onChange(changedValues);
   };
 
-  const handlePriceChange = (value: any) => {
-    onChange && onChange({ price: value });
+  const handlePriceChange = (price: number | null) => {
+    onChange && onChange({ price: price || 0 });
   };
 
-  const handleAssetChange = (value: any) => {
-    console.log(value);
-    onChange && onChange({ asset: value });
+  const handleAssetChange = (asset: string) => {
+    onChange && onChange({ asset });
   };
 
   return (
@@ -38,19 +36,30 @@ export default function ProductFrom({ value, onChange }: ProductFormProps) {
       form={form}
       layout="vertical"
       style={{ width: '100%', display: 'flex', justifyContent: 'center' }}
+      initialValues={values}
       onValuesChange={handleValuesChanged}
     >
       <Space size="large">
         <div style={{ width: '320px' }}>
-          <FormItem name='name' label="What product do you want to sell?" required>
+          <FormItem
+            name="name"
+            label="What product do you want to sell?"
+            rules={[{ required: true, message: 'Product name is required' }]}
+            required
+          >
             <Input placeholder="Eg. Meditation course, a book, ..."></Input>
           </FormItem>
           <FormItem label="What is price of your product?" required>
             <Input.Group compact>
-              <InputNumber onChange={handlePriceChange} name="price" placeholder="Eg. 1 DOT, 10 USDT, ..." style={{ width: 'calc(100% - 88px)' }} />
-              <Select style={{ width: '88px' }} onChange={handleAssetChange}>
-                <Select.Option value="WND">WND</Select.Option>
-                <Select.Option value="DOT">DOT</Select.Option>
+              <InputNumber
+                value={values.price}
+                onChange={handlePriceChange}
+                placeholder="Eg. 1 DOT, 10 USDT, ..."
+                style={{ width: 'calc(100% - 88px)' }}
+              />
+              <Select value={values.asset} style={{ width: '88px' }} onChange={handleAssetChange}>
+                <Select.Option value="wnd">WND</Select.Option>
+                <Select.Option value="dot">DOT</Select.Option>
               </Select>
             </Input.Group>
           </FormItem>
