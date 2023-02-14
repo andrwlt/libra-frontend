@@ -1,8 +1,9 @@
 import styled from 'styled-components';
-import { CopyOutlined, TwitterOutlined, FacebookFilled, InstagramFilled } from '@ant-design/icons';
+import { CopyOutlined, TwitterOutlined, FacebookFilled, LinkedinFilled } from '@ant-design/icons';
 import { Input, Tooltip, Button, Divider, Space } from 'antd';
 import ClipboardJS from 'clipboard';
 import { useEffect, useState, useRef } from 'react';
+import ShareButton from './ShareButton';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -42,9 +43,9 @@ export default function SharableURL({ url }: SharableURLProps) {
       </Input.Group>
       <Divider>or share it on</Divider>
       <Space size="large">
-        <Button size="large" shape="circle" icon={<TwitterOutlined />}></Button>
-        <Button size="large" shape="circle" icon={<FacebookFilled />}></Button>
-        <Button size="large" shape="circle" icon={<InstagramFilled />}></Button>
+        <ShareButton sharer='twitter' url={url} icon={<TwitterOutlined />}/>
+        <ShareButton sharer='facebook' url={url} icon={<FacebookFilled />}/>
+        <ShareButton sharer='linkedin' url={url} icon={<LinkedinFilled />}/>
       </Space>
     </Wrapper>
   );
