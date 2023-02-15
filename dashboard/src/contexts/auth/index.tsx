@@ -48,8 +48,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       setToken(response.data.accessToken);
       setIsLoggingIn(false);
-    } catch (err) {
-      console.log(err);
+    } catch (_) {
       message.error('Fail to login.');
     }
 

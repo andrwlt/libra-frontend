@@ -52,6 +52,7 @@ export default function CheckoutConfig() {
     if (account) {
       setCheckout({ ...checkout, payee: account.address });
     }
+    // eslint-disable-next-line
   }, [account]);
 
   useEffect(() => {
@@ -63,6 +64,7 @@ export default function CheckoutConfig() {
     };
 
     account && id && fetchCheckout(id);
+    // eslint-disable-next-line
   }, [account, id]);
 
   const handleSave = async () => {

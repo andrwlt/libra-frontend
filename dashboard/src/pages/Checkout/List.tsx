@@ -1,16 +1,21 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import { Typography, Button, Row, Col, Card, Result, theme } from 'antd';
+import { Typography, Button, Row, Col, Card, Result, Space, Avatar, theme } from 'antd';
 import { ShopOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { Checkout as CheckoutDataType } from 'types';
 import { useNavigate } from 'react-router-dom';
-import SharableURL from 'components/SharableURL';
+import CopyableField from 'components/CopyableField';
+import truncate from 'utils/truncate';
+import { formatBalance } from 'utils/format/balance';
+import { ASSET_METADATA } from 'config';
 
 import api from 'services/api';
 import { useAccount } from 'contexts/account';
 
 const Wrapper = styled.div`
   padding: 32px;
+  max-width: 1440px;
+  margin: auto;
 `;
 
 const Loading = () => (
@@ -27,6 +32,58 @@ const Loading = () => (
   </Row>
 );
 
+function CheckoutItem({ checkout }: any) {
+  const {
+    token: { boxShadow, colorError },
+  } = theme.useToken();
+  const navigate = useNavigate();
+
+  const editCheckout = (id?: string) => {
+    navigate(`/checkout/${id}/edit`, { state: { id } });
+  };
+
+  const deleteCheckout = (id?: string) => {
+    console.log(id);
+  };
+
+  const assetMetadata = ASSET_METADATA[checkout.asset];
+
+  return (
+    <Card
+      style={{ boxShadow }}
+      title={checkout.item.name}
+      actions={[
+        <DeleteOutlined
+          key="delete"
+          style={{ color: colorError }}
+          onClick={() => {
+            deleteCheckout(checkout.id);
+          }}
+        />,
+        <EditOutlined
+          key="edit"
+          onClick={() => {
+            editCheckout(checkout.id);
+          }}
+        />,
+      ]}
+    >
+      <Space align="center">
+        {assetMetadata && (
+          <Avatar src={assetMetadata.logo} size="small">
+            {checkout.asset}
+          </Avatar>
+        )}
+        <Typography.Title level={3} style={{ margin: '1rem 0' }}>
+          {formatBalance(checkout.item.price, checkout.asset)} {assetMetadata ? assetMetadata.symbol : checkout.asset}
+        </Typography.Title>
+      </Space>
+      <Typography.Paragraph>{checkout.item.description}</Typography.Paragraph>
+      <CopyableField text={truncate(`${process.env.REACT_APP_CHECKOUT_URL}/${checkout.id}`, { start: 32, end: 6 })} />
+    </Card>
+  );
+}
+
 export default function ListCheckout() {
   const [checkoutList, setCheckoutList] = useState<CheckoutDataType[]>([]);
   const [loading, setLoading] = useState(true);
@@ -34,7 +91,7 @@ export default function ListCheckout() {
   const navigate = useNavigate();
 
   const {
-    token: { boxShadow, colorError },
+    token: { boxShadow },
   } = theme.useToken();
 
   useEffect(() => {
@@ -58,14 +115,6 @@ export default function ListCheckout() {
     navigate('/checkout/new');
   };
 
-  const editCheckout = (id?: string) => {
-    navigate(`/checkout/${id}/edit`, { state: { id } });
-  };
-
-  const deleteCheckout = (id?: string) => {
-    console.log(id);
-  };
-
   const hasCheckout = checkoutList && checkoutList.length > 0;
 
   return (
@@ -75,7 +124,7 @@ export default function ListCheckout() {
           Checkout
         </Typography.Title>
 
-        {hasCheckout && <Button type="primary">Create checkout</Button>}
+        {hasCheckout && <Button type="primary" onClick={createCheckout}>Create checkout</Button>}
       </div>
 
       {loading && <Loading />}
@@ -88,7 +137,7 @@ export default function ListCheckout() {
             title="Start selling your product"
             subTitle="To start selling your product, first you need to create checkout page to receive payments from customers."
             extra={[
-              <Button type="primary" onClick={createCheckout}>
+              <Button key="create" type="primary" onClick={createCheckout}>
                 Create checkout
               </Button>,
             ]}
@@ -97,28 +146,10 @@ export default function ListCheckout() {
       )}
 
       {!loading && (
-        <Row gutter={16}>
+        <Row gutter={[32, 32]}>
           {checkoutList.map((checkout) => (
             <Col span={8} key={checkout.id}>
-              <Card
-                style={{ boxShadow }}
-                title={checkout.item.name}
-                actions={[
-                  <DeleteOutlined
-                    style={{ color: colorError }}
-                    onClick={() => {
-                      deleteCheckout(checkout.id);
-                    }}
-                  />,
-                  <EditOutlined
-                    onClick={() => {
-                      editCheckout(checkout.id);
-                    }}
-                  />,
-                ]}
-              >
-                <SharableURL url={`${process.env.REACT_APP_CHECKOUT_URL}/${checkout.id}`}></SharableURL>
-              </Card>
+              <CheckoutItem checkout={checkout}></CheckoutItem>
             </Col>
           ))}
         </Row>

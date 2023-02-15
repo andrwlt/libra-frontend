@@ -11,7 +11,7 @@ interface ConfettiConfig {
 
 const defaultConfig: ConfettiConfig = {
   gravity: 10,
-  particleCount: 150,
+  particleCount: 100,
   particleSize: 1,
   explosionPower: 25,
   destroyTarget: false,

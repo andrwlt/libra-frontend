@@ -34,7 +34,7 @@ export default function ProductInfo({ product, asset }: Props) {
       </Typography.Title>
       {!!price && (
         <Space align="center">
-          {assetMetadata && <Avatar src={assetMetadata.logo} size="small"></Avatar>}
+          {assetMetadata && <Avatar src={assetMetadata.logo} size="small">{asset}</Avatar>}
           <Typography.Title level={3} style={{ margin: '1rem 0' }}>
             {formatBalance(price, asset)} {asset}
           </Typography.Title>
