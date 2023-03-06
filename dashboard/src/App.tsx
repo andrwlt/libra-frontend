@@ -1,16 +1,23 @@
-import { Routes, Route } from 'react-router-dom';
-import Onboarding from 'pages/onboarding';
-import Dashboard from 'pages/Dashboard';
-import SignIn from 'pages/SignIn';
+import { NotifyContext } from 'app/hooks';
+import { message } from 'antd';
+import routes from 'router';
+import { useRoutes } from 'react-router-dom';
+import { setAxiosToken } from 'services/requester';
+import { useAuth } from 'features/auth/authHooks';
 
 function App() {
+  const [messageApi, contextHolder] = message.useMessage();
+  const element = useRoutes(routes);
+  const { token } = useAuth();
+
+  if (token) {
+    setAxiosToken(token);
+  }
+
   return (
-    <div className="App">
-      <Routes>
-        <Route path="login" element={<SignIn />}></Route>
-        <Route path="/onboard" element={<Onboarding />}/>
-        <Route path="/*" element={<Dashboard />} />
-      </Routes>
+    <div className="app">
+      {contextHolder}
+      <NotifyContext.Provider value={messageApi}>{element}</NotifyContext.Provider>
     </div>
   );
 }
