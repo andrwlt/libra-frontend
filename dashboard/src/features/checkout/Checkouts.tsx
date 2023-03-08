@@ -1,7 +1,7 @@
 import styled from 'styled-components';
-import { Typography, Button, Row, Col, Card, Result, Space, Avatar, theme } from 'antd';
+import { Typography, Button, Row, Col, Card, Result, Space, Avatar, theme, Popconfirm } from 'antd';
 import { ShopOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { useCheckouts } from 'features/checkout/checkoutHooks';
+import { useCheckouts, useDeleteCheckout } from 'features/checkout/checkoutHooks';
 import { useNavigate } from 'react-router-dom';
 import CopyableField from 'components/Common/CopyableField';
 import { truncate } from 'utils/format/formatText';
@@ -44,7 +44,15 @@ const Loading = () => (
   </Row>
 );
 
-function CheckoutItem({ checkout }: any) {
+function CheckoutItem({
+  checkout,
+  handleDeleteCheckout,
+  deleteCheckoutLoading,
+}: {
+  checkout: any;
+  handleDeleteCheckout: (id: string) => void;
+  deleteCheckoutLoading: boolean;
+}) {
   const {
     token: { boxShadow, colorError },
   } = theme.useToken();
@@ -54,10 +62,6 @@ function CheckoutItem({ checkout }: any) {
     navigate(`/checkout/${id}/edit`);
   };
 
-  const deleteCheckout = (id: string) => {
-    console.log(id);
-  };
-
   const assetMetadata = ASSET_METADATA[checkout.asset];
 
   return (
@@ -65,8 +69,15 @@ function CheckoutItem({ checkout }: any) {
       style={{ boxShadow }}
       title={checkout.item.name || ` `}
       actions={[
-        <DeleteOutlined key="delete" style={{ color: colorError }} onClick={() => deleteCheckout(checkout.id)} />,
-        <EditOutlined key="edit" onClick={() => goToEditCheckout(checkout.id)} />,
+        <Popconfirm
+          title="Are you sure to delete this checkout?"
+          onConfirm={() => handleDeleteCheckout(checkout.id)}
+          okText="Delete"
+          cancelText="Cancel"
+        >
+          <DeleteOutlined disabled={deleteCheckoutLoading} key="delete" style={{ color: colorError }} />
+        </Popconfirm>,
+        <EditOutlined disabled={deleteCheckoutLoading} key="edit" onClick={() => goToEditCheckout(checkout.id)} />,
       ]}
     >
       <Space align="center">
@@ -87,7 +98,8 @@ function CheckoutItem({ checkout }: any) {
 
 export default function Checkouts() {
   const { t } = useTranslation();
-  let { checkouts, getCheckoutsLoading } = useCheckouts();
+  const { checkouts, getCheckoutsLoading } = useCheckouts();
+  const { handleDeleteCheckout, deleteCheckoutLoading } = useDeleteCheckout();
   const navigate = useNavigate();
 
   const {
@@ -113,7 +125,11 @@ export default function Checkouts() {
         <Row gutter={[32, 32]}>
           {checkouts.map((checkout) => (
             <Col span={8} key={checkout.id}>
-              <CheckoutItem checkout={checkout}></CheckoutItem>
+              <CheckoutItem
+                checkout={checkout}
+                handleDeleteCheckout={handleDeleteCheckout}
+                deleteCheckoutLoading={deleteCheckoutLoading}
+              ></CheckoutItem>
             </Col>
           ))}
         </Row>

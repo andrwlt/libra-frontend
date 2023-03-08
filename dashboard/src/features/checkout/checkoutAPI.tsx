@@ -17,6 +17,10 @@ const checkoutAPI: CheckoutAPI = {
   updateCheckout(checkout) {
     return requester.put(`/checkout/${checkout.id}`, checkout);
   },
+
+  deleteCheckout(id) {
+    return requester.delete(`/checkout/${id}`);
+  },
 };
 
 export default checkoutAPI;

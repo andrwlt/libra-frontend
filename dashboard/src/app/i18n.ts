@@ -106,6 +106,7 @@ i18n
             pay: 'Pay',
             checkoutCreatedSuccessfully: 'Checkout Created Successfully',
             checkoutUpdatedSuccessfully: 'Checkout Updated Successfully',
+            checkoutDeletedSuccessfully: 'Checkout Deleted Successfully'
           },
 
           footer: {

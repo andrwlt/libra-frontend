@@ -37,8 +37,6 @@ export default function ImageUploader({ label, onChange, value }: Props) {
     return isImage && isLt2M;
   };
 
-  console.log('value', value);
-
   const handleChange = async (e: any) => {
     setLoading(true);
     const base64 = await getBase64(e.file.originFileObj as RcFile);

@@ -29,6 +29,7 @@ export interface CheckoutAPI {
   getCheckout: (id: string) => AxiosPromise;
   createCheckout: (checkout: CheckoutType) => AxiosPromise;
   updateCheckout: (checkout: CheckoutType) => AxiosPromise;
+  deleteCheckout: (id: string) => AxiosPromise;
 }
 
 export interface CheckoutListState {
@@ -62,6 +63,14 @@ export interface UpdateCheckoutState {
 
 export interface UpdateCheckoutHookType extends UpdateCheckoutState {
   handleUpdateCheckout: (checkout: CheckoutType) => void;
+}
+export interface DeleteCheckoutState {
+  deleteCheckoutLoading: boolean;
+  deleteCheckoutSuccess: any;
+  deleteCheckoutFailed: any;
+}
+export interface DeleteCheckoutHookType extends DeleteCheckoutState {
+  handleDeleteCheckout: (id: string) => void;
 }
 
 export interface FormItemsPropsType {
