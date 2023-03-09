@@ -27,7 +27,7 @@ i18n
           copy: 'Copy',
           orShareItOn: 'or share it on',
           loading: 'Loading...',
-          sessionExpried: 'Session is expried. Please login again!',
+          sessionExpired: 'Session is expired. Please login again!',
 
           asset: {
             wnd: 'WND',
