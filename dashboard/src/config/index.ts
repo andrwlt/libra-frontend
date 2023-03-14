@@ -14,7 +14,7 @@ export const ASSET_METADATA: Record<string, AssetMetadata> = {
   wnd: {
     decimals: 12,
     symbol: 'WND',
-    logo: 'https://polkadot.js.org/apps/static/westend_colour.eb7969da.svg',
+    logo: 'https://raw.githubusercontent.com/paritytech/polkadot-staking-dashboard/master/src/img/westend_icon.svg',
   },
 };
 

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Table, Badge, theme, Card, Button, Result } from 'antd';
+import { Table, Badge, theme, Card, Button, Result, Space, Avatar } from 'antd';
 import { WalletOutlined } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
 import { Charge as ChargeDataType } from './types';
@@ -10,6 +10,8 @@ import PATHS from 'router/paths';
 import { useCharges } from 'features/payment/paymentHooks';
 import PageHeader from 'components/Common/PageHeader';
 import { useTranslation } from 'react-i18next';
+import { ASSET_METADATA } from 'config';
+import { formatBalance } from 'utils/format/balance';
 
 const useChargeStatusColor = (status: string) => {
   const {
@@ -36,30 +38,40 @@ const columns: ColumnsType<ChargeDataType> = [
   {
     key: 'hash',
     title: 'Hash',
-    render: (hash, { asset }) => <a href={subscan.getTxUrl(asset, hash)}>{truncate(hash)}</a>,
+    render: ({ asset, hash }) => <a href={subscan.getTxUrl(asset, hash)}>{truncate(hash)}</a>,
   },
   {
     key: 'status',
     title: 'Status',
-    render: (status) => <ChargeStatus status={status} />,
+    render: ({ status }) => <ChargeStatus status={status} />,
   },
   {
     key: 'from',
     title: 'Customer',
-    render: (address, { asset }) => <a href={subscan.getAccountUrl(asset, address)}>{truncate(address)}</a>,
+    render: ({ asset, from }) => <a href={subscan.getAccountUrl(asset, from)}>{truncate(from)}</a>,
   },
   {
     key: 'amount',
     title: 'Amount',
     align: 'right',
-  },
-  {
-    key: 'asset',
-    align: 'center',
+    render: ({ asset, amount }) => {
+      const assetMetadata = ASSET_METADATA[asset];
+      return (
+        <Space align="center">
+          {assetMetadata && (
+            <Avatar src={assetMetadata.logo} size="small">
+              {asset}
+            </Avatar>
+          )}
+          <span> { formatBalance(amount, asset)} {ASSET_METADATA[asset].symbol}</span>
+        </Space>
+      );
+    },
   },
   {
     key: 'description',
     title: 'Description',
+    render: ({ receiptEmail  }) => <a>{receiptEmail}</a>,
   },
 ];
 
@@ -72,6 +84,7 @@ const Wrapper = styled.div`
 export default function Payments() {
   const { t } = useTranslation();
   const { charges, hasCheckout, getChargesLoading } = useCharges();
+  console.log(charges);
   const navigate = useNavigate();
 
   const {
