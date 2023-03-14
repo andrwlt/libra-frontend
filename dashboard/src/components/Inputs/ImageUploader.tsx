@@ -27,7 +27,7 @@ export default function ImageUploader({ label, onChange, value, purpose, onField
     formData.append('purpose', purpose);
 
     try {
-      const response = await requester.post('http://api.libra.atscale.xyz/files', formData, {
+      const response = await requester.post(process.env.REACT_APP_API_URL || '', formData, {
         headers: { 'content-type': 'multipart/form-data' },
       });
       onSuccess?.(response);
