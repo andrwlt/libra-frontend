@@ -25,19 +25,23 @@ const BrandingNameFormItem = ({ onboardingMode }: FormItemsPropsType) => {
 
 const CheckoutBrandingFormItems = ({ isShow, onboardingMode = false }: FormItemsPropsType) => {
   const { t } = useTranslation();
+  const label = t('checkout.brandLogo');
 
   return (
     <>
       {onboardingMode ? (
         <Space size="large" style={{ display: isShow ? '' : 'none' }}>
-          <ImageUploader size={240} label={t<string>('checkout.brandLogo')} />
+          <Form.Item noStyle name={['branding', 'image']}>
+            <ImageUploader size={240} label={label} purpose="brand_logo" />
+          </Form.Item>
+
           <BrandingNameFormItem />
         </Space>
       ) : (
         <>
           <BrandingNameFormItem />
-          <Form.Item label="Logo">
-            <ImageUploader label={t<string>('checkout.brandLogo')} />
+          <Form.Item label="Logo" name={['branding', 'image']}>
+            <ImageUploader label={label} purpose="brand_logo" />
           </Form.Item>
         </>
       )}

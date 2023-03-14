@@ -26,3 +26,15 @@ html {
 body {
   margin: 0;
 }
+
+.checkout-table__actions .ant-dropdown-menu,
+.checkout-table__actions .ant-dropdown-menu .ant-dropdown-menu-item {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+.checkout-table__actions .ant-dropdown-menu .ant-dropdown-menu-item .checkout-table__action-item {
+  padding-left: 8px;
+  margin: 0;
+  width: calc(100% - 8px);
+}

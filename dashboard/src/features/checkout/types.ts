@@ -24,6 +24,16 @@ export interface CheckoutType {
   };
 }
 
+interface LineItemResponse extends LineItem {
+  price: number;
+}
+export interface CheckoutReseponse extends CheckoutType {
+  id: string;
+  item: LineItemResponse;
+  active: boolean;
+  created: string;
+}
+
 export interface CheckoutAPI {
   getCheckouts: () => AxiosPromise;
   getCheckout: (id: string) => AxiosPromise;
@@ -33,7 +43,7 @@ export interface CheckoutAPI {
 }
 
 export interface CheckoutListState {
-  checkouts: CheckoutType[];
+  checkouts: CheckoutReseponse[];
   getCheckoutsLoading: boolean;
   getCheckoutsFailed: any;
 }

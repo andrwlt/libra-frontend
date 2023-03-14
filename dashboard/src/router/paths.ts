@@ -13,8 +13,8 @@ const PATHS = {
 
   checkout: {
     root: '/checkouts',
-    create: '/checkout/create',
-    edit: '/checkout/:id/edit',
+    create: '/checkouts/create',
+    edit: '/checkouts/:id/edit',
   },
 };
 

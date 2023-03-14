@@ -1,15 +1,18 @@
+import { useState } from 'react';
 import styled from 'styled-components';
-import { Typography, Button, Row, Col, Card, Result, Space, Avatar, theme, Popconfirm } from 'antd';
-import { ShopOutlined, DeleteOutlined, EditOutlined } from '@ant-design/icons';
-import { useCheckouts, useDeleteCheckout } from 'features/checkout/checkoutHooks';
+import { Button, Card, Result, Space, Avatar, theme, Popconfirm, Table, Tag, Dropdown } from 'antd';
+import { ShopOutlined, EllipsisOutlined } from '@ant-design/icons';
+import { useCheckouts, useDeleteCheckout, useResetCheckout } from 'features/checkout/checkoutHooks';
 import { useNavigate } from 'react-router-dom';
 import CopyableField from 'components/Common/CopyableField';
-import { truncate } from 'utils/format/formatText';
-import { formatBalance } from 'utils/format/balance';
+import { getCheckoutLink, getCheckoutPrice, formatCreatedDate } from 'utils/format/formatText';
 import { ASSET_METADATA } from 'config';
 import PATHS from 'router/paths';
 import PageHeader from 'components/Common/PageHeader';
 import { useTranslation } from 'react-i18next';
+import { CheckoutReseponse as Checkout } from './types';
+import type { MenuProps } from 'antd';
+import type { ColumnsType } from 'antd/es/table';
 
 const Wrapper = styled.div`
   padding: 32px;
@@ -17,97 +20,115 @@ const Wrapper = styled.div`
   margin: auto;
 `;
 
-const StyledCard = styled(Card)`
-  .ant-card-head {
-    min-height: 58px;
-  }
-
-  .product-description {
-    min-height: 22px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-`;
-
-const Loading = () => (
-  <Row gutter={[32, 32]}>
-    <Col span={8}>
-      <Card loading></Card>
-    </Col>
-    <Col span={8}>
-      <Card loading></Card>
-    </Col>
-    <Col span={8}>
-      <Card loading></Card>
-    </Col>
-  </Row>
-);
-
-function CheckoutItem({
-  checkout,
-  handleDeleteCheckout,
-  deleteCheckoutLoading,
-}: {
-  checkout: any;
-  handleDeleteCheckout: (id: string) => void;
-  deleteCheckoutLoading: boolean;
-}) {
-  const {
-    token: { boxShadow, colorError },
-  } = theme.useToken();
-  const navigate = useNavigate();
-
-  const goToEditCheckout = (id: string) => {
-    navigate(`/checkout/${id}/edit`);
-  };
-
-  const assetMetadata = ASSET_METADATA[checkout.asset];
-
-  return (
-    <StyledCard
-      style={{ boxShadow }}
-      title={checkout.item.name || ` `}
-      actions={[
-        <Popconfirm
-          title="Are you sure to delete this checkout?"
-          onConfirm={() => handleDeleteCheckout(checkout.id)}
-          okText="Delete"
-          cancelText="Cancel"
-        >
-          <DeleteOutlined disabled={deleteCheckoutLoading} key="delete" style={{ color: colorError }} />
-        </Popconfirm>,
-        <EditOutlined disabled={deleteCheckoutLoading} key="edit" onClick={() => goToEditCheckout(checkout.id)} />,
-      ]}
-    >
-      <Space align="center">
-        {assetMetadata && (
-          <Avatar src={assetMetadata.logo} size="small">
-            {checkout.asset}
-          </Avatar>
-        )}
-        <Typography.Title level={3} style={{ margin: '1rem 0' }}>
-          {formatBalance(checkout.item.price, checkout.asset)} {assetMetadata ? assetMetadata.symbol : checkout.asset}
-        </Typography.Title>
-      </Space>
-      <Typography.Paragraph className="product-description">{checkout.item.description}</Typography.Paragraph>
-      <CopyableField text={truncate(`${process.env.REACT_APP_CHECKOUT_URL}/${checkout.id}`, { start: 32, end: 6 })} />
-    </StyledCard>
-  );
-}
-
 export default function Checkouts() {
   const { t } = useTranslation();
+  const [openedPopconfirm, setOpenedPopconfirm] = useState('');
   const { checkouts, getCheckoutsLoading } = useCheckouts();
-  const { handleDeleteCheckout, deleteCheckoutLoading } = useDeleteCheckout();
   const navigate = useNavigate();
-
+  const { handleDeleteCheckout, deleteCheckoutLoading } = useDeleteCheckout();
   const {
     token: { boxShadow },
   } = theme.useToken();
+  useResetCheckout();
 
   const goToCreateCheckout = () => navigate(PATHS.checkout.create);
+  const goToEditCheckout = (id: string) => navigate(`/checkouts/${id}/edit`);
+
   const hasCheckout = checkouts.length > 0;
+
+  const columns: ColumnsType<Checkout> = [
+    {
+      title: 'Link URL',
+      key: 'Link URL',
+      render: (checkout: Checkout) => <CopyableField text={getCheckoutLink(checkout.id)} />,
+    },
+    {
+      title: 'Status',
+      key: 'Status',
+      render: ({ active }: Checkout) => {
+        const text = active ? 'Active' : 'Deactivated';
+        const color = active ? 'success' : 'default';
+        return <Tag color={color}>{text}</Tag>;
+      },
+    },
+    {
+      title: 'Name',
+      key: 'Name',
+      render: ({ item: { name } }: Checkout) => name,
+    },
+    {
+      title: 'Price',
+      key: 'Price',
+      render: (checkout: Checkout) => {
+        const assetMetadata = ASSET_METADATA[checkout.asset];
+        return (
+          <Space align="center">
+            {assetMetadata && (
+              <Avatar src={assetMetadata.logo} size="small">
+                {checkout.asset}
+              </Avatar>
+            )}
+            <span> {getCheckoutPrice(checkout, assetMetadata)}</span>
+          </Space>
+        );
+      },
+    },
+    {
+      title: 'Created',
+      key: 'Created',
+      render: (checkout: Checkout) => {
+        return formatCreatedDate(checkout.created);
+      },
+    },
+    {
+      title: '',
+      width: 70,
+      render: (checkout: Checkout) => {
+        const items: MenuProps['items'] = [
+          {
+            label: (
+              <p className="checkout-table__action-item" onClick={() => goToEditCheckout(checkout.id)}>
+                Edit
+              </p>
+            ),
+            key: 'Edit',
+          },
+          {
+            label: (
+              <p className="checkout-table__action-item" onClick={() => setOpenedPopconfirm(checkout.id)}>
+                Delete
+              </p>
+            ),
+            key: 'Delete',
+          },
+        ];
+        return (
+          <Dropdown
+            menu={{ items }}
+            trigger={['click']}
+            overlayStyle={{ width: 150 }}
+            overlayClassName="checkout-table__actions"
+          >
+            <Popconfirm
+              title={t('checkout.deleteCheckoutWarning')}
+              onConfirm={() => handleDeleteCheckout(checkout.id)}
+              okText="Delete"
+              cancelText="Cancel"
+              okButtonProps={{ loading: deleteCheckoutLoading }}
+              cancelButtonProps={{ disabled: deleteCheckoutLoading }}
+              open={openedPopconfirm === checkout.id}
+              onCancel={() => setOpenedPopconfirm('')}
+            >
+              <Button size="small" type="text">
+                <EllipsisOutlined />
+              </Button>
+            </Popconfirm>
+          </Dropdown>
+        );
+      },
+      key: 'action',
+    },
+  ];
 
   return (
     <Wrapper>
@@ -119,20 +140,8 @@ export default function Checkouts() {
         )}
       </PageHeader>
 
-      {getCheckoutsLoading ? (
-        <Loading />
-      ) : hasCheckout ? (
-        <Row gutter={[32, 32]}>
-          {checkouts.map((checkout) => (
-            <Col span={8} key={checkout.id}>
-              <CheckoutItem
-                checkout={checkout}
-                handleDeleteCheckout={handleDeleteCheckout}
-                deleteCheckoutLoading={deleteCheckoutLoading}
-              ></CheckoutItem>
-            </Col>
-          ))}
-        </Row>
+      {getCheckoutsLoading || hasCheckout ? (
+        <Table dataSource={checkouts} columns={columns} loading={getCheckoutsLoading} rowKey="id" />
       ) : (
         <Card style={{ boxShadow }}>
           <Result

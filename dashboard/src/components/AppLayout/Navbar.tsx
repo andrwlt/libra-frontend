@@ -2,7 +2,7 @@ import logo from 'assets/logo.svg';
 import styled from 'styled-components';
 import { Button, Layout, theme } from 'antd';
 import { MenuProps, Menu, Popover, Space, Typography } from 'antd';
-import { Link } from 'react-router-dom';
+import { NavLink, Link } from 'react-router-dom';
 import { useAuth, useLogout } from 'features/auth/authHooks';
 import Identicon from '@polkadot/react-identicon';
 import { truncate } from 'utils/format/formatText';
@@ -28,6 +28,20 @@ const LogoWrapper = styled.div`
 
 const NavbarMenu = styled.div`
   height: 40px;
+
+  .ant-menu-item:has(.active-link) {
+    color: #1677ff;
+    background-color: transparent;
+
+    &::after {
+      border-width: 2px;
+      border-bottom-color: #1677ff;
+    }
+
+    &:hover {
+      color: #1677ff !important;
+    }
+  }
 `;
 
 const Logo = styled.img`
@@ -104,9 +118,22 @@ export default function Navbar() {
     token: { colorBgContainer, boxShadow, colorBorder },
   } = theme.useToken();
 
+  const getClassName = ({ isActive, isPending }: { isActive: boolean; isPending: boolean }) =>
+    isPending ? 'pending-link' : isActive ? 'active-link' : '';
+
   const items: MenuItem[] = [
-    createMenuItem(<Link to={PATHS.payment.root}>{t('payments')}</Link>, 'payments'),
-    createMenuItem(<Link to={PATHS.checkout.root}>{t('checkoutLabel')}</Link>, 'checkout'),
+    createMenuItem(
+      <NavLink to={PATHS.payment.root} className={getClassName}>
+        {t('payments')}
+      </NavLink>,
+      'payments',
+    ),
+    createMenuItem(
+      <NavLink to={PATHS.checkout.root} className={getClassName}>
+        {t('checkoutLabel')}
+      </NavLink>,
+      'checkouts',
+    ),
   ];
 
   return (

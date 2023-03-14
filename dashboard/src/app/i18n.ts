@@ -106,7 +106,8 @@ i18n
             pay: 'Pay',
             checkoutCreatedSuccessfully: 'Checkout Created Successfully',
             checkoutUpdatedSuccessfully: 'Checkout Updated Successfully',
-            checkoutDeletedSuccessfully: 'Checkout Deleted Successfully'
+            checkoutDeletedSuccessfully: 'Checkout Deleted Successfully',
+            deleteCheckoutWarning: 'Are you sure to delete this checkout?',
           },
 
           footer: {
@@ -114,6 +115,11 @@ i18n
             libraLogo: 'Libra Logo',
             privacy: 'Privacy',
             terms: 'Terms',
+          },
+
+          imageUploader: {
+            fileTypeWarning: 'You can only upload SVG/PNG/JPG file!',
+            fileSizeWarning: 'Image must smaller than 2MB!',
           },
         },
       },

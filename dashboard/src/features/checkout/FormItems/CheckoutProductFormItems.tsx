@@ -121,8 +121,8 @@ const CheckoutProductFormItems = ({ isShow, onboardingMode = false }: FormItemsP
               </Input.Group>
             </FormItem>
           </div>
-          <Form.Item name="image" noStyle>
-            <ImageUploader size={240} label={t<string>('checkout.productImage')} />
+          <Form.Item name={['item', 'image']} noStyle>
+            <ImageUploader size={240} label={t<string>('checkout.productImage')} purpose="product_image" />
           </Form.Item>
         </Space>
       ) : (
@@ -137,8 +137,8 @@ const CheckoutProductFormItems = ({ isShow, onboardingMode = false }: FormItemsP
             </div>
 
             <div style={{ display: 'flex', alignItems: 'center', paddingLeft: '32px', justifyContent: 'center' }}>
-              <Form.Item name="image" noStyle>
-                <ImageUploader label={t<string>('checkout.productImage')} />
+              <Form.Item name={['item', 'image']} noStyle>
+                <ImageUploader label={t<string>('checkout.productImage')} purpose="product_image" />
               </Form.Item>
             </div>
           </div>

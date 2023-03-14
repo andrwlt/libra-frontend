@@ -70,9 +70,10 @@ export const updateCheckout = createAppAsyncThunk(
 
 export const deleteCheckout = createAppAsyncThunk(
   'checkout/deleteCheckout',
-  async (id: string, { rejectWithValue }) => {
+  async (id: string, { rejectWithValue, dispatch }) => {
     try {
       await checkoutAPI.deleteCheckout(id);
+      dispatch(getCheckouts());
       return id;
     } catch (err) {
       return rejectWithValue(err);
