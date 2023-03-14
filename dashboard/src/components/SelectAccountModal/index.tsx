@@ -1,6 +1,5 @@
 import { Typography, Modal } from 'antd';
 import AccountOption from 'components/SelectAccountModal/AccountOption';
-import { useConnectExtension } from 'features/auth/authHooks';
 import { AccountType } from 'features/auth/types';
 import { useTranslation } from 'react-i18next';
 
@@ -8,12 +7,13 @@ type SelectAccountModalPropsType = {
   open: boolean;
   onClose: () => void;
   onSelectAccount: (account: AccountType) => void;
+  connectedExtension: any;
+  connectExtensionLoading: boolean;
 };
 
 const SelectAccountModal = (props: SelectAccountModalPropsType) => {
   const { t } = useTranslation();
-  const { open, onClose, onSelectAccount } = props;
-  const { connectedExtension, connectExtensionLoading } = useConnectExtension();
+  const { open, onClose, onSelectAccount, connectExtensionLoading, connectedExtension } = props;
 
   return (
     <Modal open={open} onCancel={onClose} footer={false}>

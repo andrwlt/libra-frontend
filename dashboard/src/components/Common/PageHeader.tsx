@@ -17,7 +17,7 @@ const Wraper = styled.div`
 const PageHeader = ({ title, children }: { title: string; children?: ReactNode }) => {
   return (
     <Wraper>
-      <Typography.Title style={{ margin: 0 }} level={4}>
+      <Typography.Title style={{ margin: 0 }} level={3}>
         {title}
       </Typography.Title>
 

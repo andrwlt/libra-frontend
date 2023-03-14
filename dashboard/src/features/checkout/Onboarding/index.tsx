@@ -6,7 +6,7 @@ import FullPageLoading from 'components/Common/FullPageLoading';
 import Steps from './steps/Steps';
 import ConnectWallet from '../FormItems/ConnectWallet';
 import { theme, Button, Form } from 'antd';
-import { useLogin } from 'features/auth/authHooks';
+import { useLogin, useConnectExtension } from 'features/auth/authHooks';
 import { useCheckout, useCreateCheckout, useResetCheckout } from 'features/checkout/checkoutHooks';
 import SelectAccountModal from 'components/SelectAccountModal';
 import CheckoutProductFormItems from 'features/checkout/FormItems/CheckoutProductFormItems';
@@ -34,13 +34,21 @@ export default function Onboarding() {
   const { t } = useTranslation();
   const [form] = Form.useForm();
   const { checkout } = useCheckout();
+
   const onboardingMode = true;
   const { checkoutURL, handleCreateCheckout, createCheckoutLoading } = useCreateCheckout(onboardingMode);
   const [previewingCheckout, setPreviewingCheckout] = useState(checkout);
   const [isOpenSelectAccountModal, setIsOpenSelectAccountModal] = useState(false);
   const { handleLogin, loginLoading } = useLogin();
+  const { handleConnectExtension, connectExtensionLoading, connectedExtension } = useConnectExtension(() => {
+    setIsOpenSelectAccountModal(true);
+  });
   const [stepIndex, setStepIndex] = useState(0);
-  const onFieldsChange = useDeboundCallback(() => setPreviewingCheckout(form.getFieldsValue()));
+
+  const onFieldsChange = useDeboundCallback(() => {
+    setPreviewingCheckout(form.getFieldsValue());
+  });
+
   useResetCheckout();
 
   const {
@@ -67,7 +75,7 @@ export default function Onboarding() {
       index: 2,
       name: 'Add your wallet',
       nextAction: (
-        <Button type="primary" onClick={() => setIsOpenSelectAccountModal(true)}>
+        <Button loading={connectExtensionLoading} type="primary" onClick={handleConnectExtension}>
           {t('onboarding.connectWallet')}
         </Button>
       ),
@@ -102,8 +110,8 @@ export default function Onboarding() {
             initialValues={checkout}
             onFieldsChange={onFieldsChange}
           >
-            <CheckoutProductFormItems isShow={stepIndex === 0} onboardingMode />
-            <CheckoutBrandingFormItems isShow={stepIndex === 1} onboardingMode />
+            <CheckoutProductFormItems isShow={stepIndex === 0} onboardingMode onFieldsChange={onFieldsChange} />
+            <CheckoutBrandingFormItems isShow={stepIndex === 1} onboardingMode onFieldsChange={onFieldsChange} />
           </Form>
 
           <ConnectWallet isShow={stepIndex === 3} />
@@ -125,6 +133,8 @@ export default function Onboarding() {
         open={isOpenSelectAccountModal}
         onClose={() => setIsOpenSelectAccountModal(false)}
         onSelectAccount={loginThenCreateCheckout}
+        connectExtensionLoading={connectExtensionLoading}
+        connectedExtension={connectedExtension}
       />
     </>
   );

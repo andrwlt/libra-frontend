@@ -10,8 +10,10 @@ import {
   selectUpdateCheckoutState,
   updateCheckout,
   resetCheckout,
+  selectDeleteCheckoutState,
+  deleteCheckout,
 } from 'features/checkout/checkoutSlice';
-import { CheckoutType, CreateCheckoutHookType, UpdateCheckoutHookType } from './types';
+import { CheckoutType, CreateCheckoutHookType, UpdateCheckoutHookType, DeleteCheckoutHookType } from './types';
 import { FormInstance } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import PATHS from 'router/paths';
@@ -106,4 +108,24 @@ export const useReinitCheckoutForm = (form: FormInstance, update: Function) => {
       update(checkout);
     }
   }, [checkout, form, update]);
+};
+
+export const useDeleteCheckout = (): DeleteCheckoutHookType => {
+  const { t } = useTranslation();
+  const state = useAppSelector(selectDeleteCheckoutState);
+  const dispatch = useAppDispatch();
+
+  const handleDeleteCheckout = (id: string) => {
+    dispatch(deleteCheckout(id));
+  };
+
+  const message = t('checkout.checkoutDeletedSuccessfully');
+
+  useSuccess(state.deleteCheckoutSuccess, message);
+  useFailed(state.deleteCheckoutFailed);
+
+  return {
+    ...state,
+    handleDeleteCheckout,
+  };
 };

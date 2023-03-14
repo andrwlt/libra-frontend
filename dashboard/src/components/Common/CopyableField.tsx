@@ -20,15 +20,24 @@ export default function CopyableField({ text }: any) {
   }, [copyButtonRef]);
 
   return (
-    <Input.Group
-      compact
-      onMouseLeave={() => {
-        setCopied(false);
-      }}
-    >
-      <Input readOnly style={{ width: 'calc(100% - 48px)' }} value={text} defaultValue={text} />
+    <Input.Group compact>
+      <Input
+        readOnly
+        style={{ width: 'calc(100% - 48px)', background: 'rgb(247, 250, 252)' }}
+        value={text}
+        defaultValue={text}
+      />
       <Tooltip title={copied ? t<string>('copied') : t<string>('copy')}>
-        <Button ref={copyButtonRef} data-clipboard-text={text} icon={<CopyOutlined />} />
+        <Button
+          ref={copyButtonRef}
+          data-clipboard-text={text}
+          icon={<CopyOutlined />}
+          onMouseLeave={() => {
+            setTimeout(() => {
+              setCopied(false);
+            }, 300);
+          }}
+        />
       </Tooltip>
     </Input.Group>
   );

@@ -3,13 +3,13 @@ import { PreUploadImage } from 'types';
 
 export interface Brand {
   name?: string;
-  logo?: string | PreUploadImage;
+  logo?: string;
 }
 
 export interface LineItem {
   name: string;
   description?: string;
-  images: string[] | PreUploadImage[];
+  image: string;
   price: number | null;
 }
 
@@ -24,15 +24,26 @@ export interface CheckoutType {
   };
 }
 
+interface LineItemResponse extends LineItem {
+  price: number;
+}
+export interface CheckoutReseponse extends CheckoutType {
+  id: string;
+  item: LineItemResponse;
+  active: boolean;
+  created: string;
+}
+
 export interface CheckoutAPI {
   getCheckouts: () => AxiosPromise;
   getCheckout: (id: string) => AxiosPromise;
   createCheckout: (checkout: CheckoutType) => AxiosPromise;
   updateCheckout: (checkout: CheckoutType) => AxiosPromise;
+  deleteCheckout: (id: string) => AxiosPromise;
 }
 
 export interface CheckoutListState {
-  checkouts: CheckoutType[];
+  checkouts: CheckoutReseponse[];
   getCheckoutsLoading: boolean;
   getCheckoutsFailed: any;
 }
@@ -63,8 +74,17 @@ export interface UpdateCheckoutState {
 export interface UpdateCheckoutHookType extends UpdateCheckoutState {
   handleUpdateCheckout: (checkout: CheckoutType) => void;
 }
+export interface DeleteCheckoutState {
+  deleteCheckoutLoading: boolean;
+  deleteCheckoutSuccess: any;
+  deleteCheckoutFailed: any;
+}
+export interface DeleteCheckoutHookType extends DeleteCheckoutState {
+  handleDeleteCheckout: (id: string) => void;
+}
 
 export interface FormItemsPropsType {
   onboardingMode?: boolean;
   isShow?: boolean;
+  onFieldsChange?: () => void;
 }

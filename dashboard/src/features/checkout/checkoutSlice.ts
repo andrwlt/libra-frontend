@@ -5,6 +5,7 @@ import {
   CreateCheckoutState,
   UpdateCheckoutState,
   CheckoutType,
+  DeleteCheckoutState,
 } from './types';
 import { createAppAsyncThunk } from 'app/hooks';
 import checkoutAPI from './checkoutAPI';
@@ -67,16 +68,32 @@ export const updateCheckout = createAppAsyncThunk(
   },
 );
 
-interface CheckoutState extends CheckoutListState, CheckoutDetailsState, CreateCheckoutState, UpdateCheckoutState {}
+export const deleteCheckout = createAppAsyncThunk(
+  'checkout/deleteCheckout',
+  async (id: string, { rejectWithValue, dispatch }) => {
+    try {
+      await checkoutAPI.deleteCheckout(id);
+      dispatch(getCheckouts());
+      return id;
+    } catch (err) {
+      return rejectWithValue(err);
+    }
+  },
+);
+
+interface CheckoutState
+  extends CheckoutListState,
+    CheckoutDetailsState,
+    CreateCheckoutState,
+    UpdateCheckoutState,
+    DeleteCheckoutState {}
 
 const initCheckout = {
-  image:
-    'https://media.istockphoto.com/id/1322277517/photo/wild-grass-in-the-mountains-at-sunset.jpg?s=612x612&w=0&k=20&c=6mItwwFFGqKNKEAzv0mv6TaxhLN3zSE43bWmFN--J5w=',
   branding: {},
   item: {
     name: '',
     price: null,
-    images: [],
+    image: '',
   },
   afterPayment: {
     redirectUrl: '',
@@ -102,6 +119,10 @@ const initialState: CheckoutState = {
   updateCheckoutLoading: false,
   updateCheckoutSuccess: undefined,
   updateCheckoutFailed: undefined,
+
+  deleteCheckoutLoading: false,
+  deleteCheckoutSuccess: undefined,
+  deleteCheckoutFailed: undefined,
 };
 
 export const authSlice = createSlice({
@@ -162,6 +183,20 @@ export const authSlice = createSlice({
         state.updateCheckoutLoading = false;
         state.updateCheckoutFailed = payload;
       })
+
+      .addCase(deleteCheckout.pending, (state) => {
+        state.deleteCheckoutLoading = true;
+      })
+      .addCase(deleteCheckout.fulfilled, (state, { payload: deletedId }) => {
+        state.deleteCheckoutLoading = false;
+        state.deleteCheckoutSuccess = deletedId;
+        state.checkouts = state.checkouts.filter(({ id }) => id !== deletedId);
+      })
+      .addCase(deleteCheckout.rejected, (state, { payload }) => {
+        state.deleteCheckoutLoading = false;
+        state.deleteCheckoutFailed = payload;
+      })
+
       .addCase(resetStore, () => {
         return initialState;
       });
@@ -199,6 +234,14 @@ export const selectUpdateCheckoutState = ({
   updateCheckoutFailed,
   updateCheckoutLoading,
   updateCheckoutSuccess,
+});
+
+export const selectDeleteCheckoutState = ({
+  checkout: { deleteCheckoutFailed, deleteCheckoutLoading, deleteCheckoutSuccess },
+}: RootState): DeleteCheckoutState => ({
+  deleteCheckoutFailed,
+  deleteCheckoutLoading,
+  deleteCheckoutSuccess,
 });
 
 export const { resetCheckout } = authSlice.actions;

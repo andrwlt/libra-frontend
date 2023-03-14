@@ -64,7 +64,9 @@ const Checkout = () => {
   useReinitCheckoutForm(form, setPreviewingCheckout);
   useResetCheckout();
 
-  const onFieldsChange = useDeboundCallback(() => setPreviewingCheckout(form.getFieldsValue()));
+  const onFieldsChange = useDeboundCallback(() => {
+    setPreviewingCheckout(form.getFieldsValue());
+  });
 
   const [activeStep, setActiveStep] = useState<string>('product');
 

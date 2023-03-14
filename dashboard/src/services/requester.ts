@@ -27,7 +27,7 @@ export const setupInstantsInterceptor = (store: ToolkitStore) => {
           hasLogout = true;
           store.dispatch(resetStore());
           store.dispatch(logout());
-          message.open({ type: 'error', content: i18next.t('sessionExpried') });
+          message.open({ type: 'error', content: i18next.t('sessionExpired') });
 
           setTimeout(() => {
             hasLogout = false;
