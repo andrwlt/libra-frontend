@@ -3,7 +3,7 @@ import { Button, Typography, Spin, Card, theme as antdTheme } from 'antd';
 import { LoadingOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import logo from 'assets/logo.svg';
-import { useExtensions, useAuth, useLogin } from 'features/auth/authHooks';
+import { useExtensions, useAuth, useLogin, useConnectExtension } from 'features/auth/authHooks';
 import SelectAccountModal from 'components/SelectAccountModal';
 import { Navigate } from 'react-router-dom';
 import { isTokenExpired } from 'utils/auth';
@@ -27,6 +27,9 @@ const SignInWrapper = styled.div<PropsType>`
 export default function SignIn() {
   const { getExtensionsLoading } = useExtensions();
   const [isSelectAccountModalOpen, setIsSelectAccountModalOpen] = useState(false);
+  const { handleConnectExtension, connectExtensionLoading, connectedExtension } = useConnectExtension(() => {
+    setIsSelectAccountModalOpen(true);
+  });
   const { token } = useAuth();
   const { loginLoading, handleLogin } = useLogin();
   const { t } = useTranslation();
@@ -60,11 +63,12 @@ export default function SignIn() {
         </Typography.Title>
 
         <Button
+          loading={connectExtensionLoading}
           style={{ marginTop: '32px' }}
           type="primary"
           size="large"
           block
-          onClick={() => setIsSelectAccountModalOpen(true)}
+          onClick={handleConnectExtension}
         >
           {t('signIn.continueWithWallet')}
         </Button>
@@ -78,6 +82,8 @@ export default function SignIn() {
         open={isSelectAccountModalOpen}
         onSelectAccount={handleLogin}
         onClose={() => setIsSelectAccountModalOpen(false)}
+        connectExtensionLoading={connectExtensionLoading}
+        connectedExtension={connectedExtension}
       />
     </SignInWrapper>
   );

@@ -21,7 +21,7 @@ export interface Extension extends ExtensionConfig {
 
 export interface ConnectedExtension extends ExtensionConfig {
   signer: any;
-  accounts:AccountType[];
+  accounts: AccountType[];
 }
 
 export interface ExtensionsContextInterface {
@@ -39,13 +39,13 @@ export interface ExtensionState {
 }
 
 export interface ConnectExtensionState {
-  connectedExtension: ConnectedExtension | undefined;
+  connectedExtension: ConnectedExtension | any;
   connectExtensionLoading: boolean;
   connectExtensionFailed: any;
 }
 
 export interface ConnectExtensionHook extends ConnectExtensionState {
-  handleConnectExtension: (extensionId: string) => void;
+  handleConnectExtension: () => void;
 }
 
 export interface LoginState {

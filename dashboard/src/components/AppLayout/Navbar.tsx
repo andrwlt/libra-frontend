@@ -42,6 +42,15 @@ const NavbarMenu = styled.div`
       color: #1677ff !important;
     }
   }
+
+  .ant-menu-item:has(.unactive-link) {
+    color: rgba(0, 0, 0, 0.88);
+
+    &::after {
+      border-width: 2px;
+      border-bottom-color: transparent;
+    }
+  }
 `;
 
 const Logo = styled.img`
@@ -119,7 +128,7 @@ export default function Navbar() {
   } = theme.useToken();
 
   const getClassName = ({ isActive, isPending }: { isActive: boolean; isPending: boolean }) =>
-    isPending ? 'pending-link' : isActive ? 'active-link' : '';
+    isPending ? 'pending-link' : isActive ? 'active-link' : 'unactive-link';
 
   const items: MenuItem[] = [
     createMenuItem(

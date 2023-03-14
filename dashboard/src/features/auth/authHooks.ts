@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useAppSelector, useAppDispatch, useFailed } from 'app/hooks';
+import { useAppSelector, useAppDispatch, useFailed, useSuccess } from 'app/hooks';
 import {
   connectExtension,
   getExtensions,
@@ -10,9 +10,9 @@ import {
   logout,
   selectAuthHookState,
   resetStore,
-  resetLoginState
+  resetLoginState,
 } from './authSlice';
-import { LoginHook, ConnectExtensionState, AuthHookState, AccountType } from './types';
+import { LoginHook, ConnectExtensionHook, AuthHookState, AccountType } from './types';
 import { EXTENSION_IDS } from 'config';
 
 export const useExtensions = (revalidate: boolean = false) => {
@@ -55,19 +55,19 @@ export const useAuth = (): AuthHookState => {
   return state;
 };
 
-export const useConnectExtension = (revalidate: boolean = false): ConnectExtensionState => {
+export const useConnectExtension = (onConnected: () => void): ConnectExtensionHook => {
   const state = useAppSelector(selectConnectExtensionState);
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    if ((!state.connectedExtension || revalidate) && !state.connectExtensionLoading) {
-      dispatch(connectExtension(EXTENSION_IDS.POLKADOT_JS));
-    }
-  }, [dispatch, revalidate, state.connectedExtension, state.connectExtensionLoading]);
+  const handleConnectExtension = () => {
+    dispatch(connectExtension(EXTENSION_IDS.POLKADOT_JS));
+  };
+
+  useSuccess(state.connectedExtension, '', onConnected);
 
   useFailed(state.connectExtensionFailed);
 
-  return state;
+  return { ...state, handleConnectExtension };
 };
 
 export const useLogout = (): (() => void) => {

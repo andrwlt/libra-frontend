@@ -41,7 +41,9 @@ export function ActionBar({ onSubmitCheckout, loading, form }: ActionBarProps) {
       checkout.item.name !== formValues.item.name ||
       checkout.item.description !== formValues.item.description ||
       checkout.item.price !== formValues.item.price ||
+      checkout.item.image !== formValues.item.image ||
       checkout.branding.name !== formValues.branding.name ||
+      checkout.branding.logo !== formValues.branding.logo ||
       checkout.afterPayment?.redirectUrl !== formValues.afterPayment?.redirectUrl;
 
     if (isFormChanged) {

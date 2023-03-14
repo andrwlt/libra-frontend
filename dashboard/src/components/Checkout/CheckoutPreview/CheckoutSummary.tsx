@@ -5,7 +5,6 @@ import { AssetMetadata } from 'types';
 import { LineItem } from 'features/checkout/types';
 import { ASSET_METADATA } from 'config';
 import { formatBalance } from 'utils/format/balance';
-import getImageUrl from 'utils/getImageUrl';
 import logo from 'assets/logo.svg';
 import { useTranslation } from 'react-i18next';
 
@@ -33,9 +32,7 @@ interface Props {
 }
 
 function ProductInfo({ product, asset }: Props) {
-  const { name, description, price, images } = product || {};
-
-  const imageUrl = images?.[0] ? getImageUrl(images[0]) : '';
+  const { name, description, price, image } = product || {};
 
   const assetMetadata: AssetMetadata = ASSET_METADATA[asset];
 
@@ -60,7 +57,7 @@ function ProductInfo({ product, asset }: Props) {
       {description && <Typography.Paragraph type="secondary">{description}</Typography.Paragraph>}
 
       <ProductImage>
-        <Image src={imageUrl} preview={false} />
+        <Image src={image} preview={false} />
       </ProductImage>
     </Wrapper>
   );

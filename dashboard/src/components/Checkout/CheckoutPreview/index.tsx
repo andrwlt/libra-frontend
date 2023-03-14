@@ -3,7 +3,6 @@ import { Typography, Row, Layout, theme, Skeleton } from 'antd';
 import CheckoutSummary from './CheckoutSummary';
 import PaymentSummary from './PaymentSummary';
 import { Brand as BrandType, CheckoutType } from 'features/checkout/types';
-import getImageUrl from 'utils/getImageUrl';
 import { ReactNode } from 'react';
 
 const { Header, Content } = Layout;
@@ -33,7 +32,7 @@ function BrandLogo({ name, logo }: BrandType) {
   }
 
   if (logo) {
-    content = <LogoImage src={getImageUrl(logo)} alt="brand logo" />;
+    content = <LogoImage src={logo} alt="brand logo" />;
   }
 
   return <LogoWrapper>{content}</LogoWrapper>;

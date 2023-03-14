@@ -101,7 +101,7 @@ const ProductNameFormItem = ({ onboardingMode }: FormItemsPropsType) => {
   );
 };
 
-const CheckoutProductFormItems = ({ isShow, onboardingMode = false }: FormItemsPropsType) => {
+const CheckoutProductFormItems = ({ isShow, onboardingMode = false, onFieldsChange }: FormItemsPropsType) => {
   const { t } = useTranslation();
 
   return (
@@ -122,7 +122,12 @@ const CheckoutProductFormItems = ({ isShow, onboardingMode = false }: FormItemsP
             </FormItem>
           </div>
           <Form.Item name={['item', 'image']} noStyle>
-            <ImageUploader size={240} label={t<string>('checkout.productImage')} purpose="product_image" />
+            <ImageUploader
+              onFieldsChange={onFieldsChange}
+              size={240}
+              label={t<string>('checkout.productImage')}
+              purpose="product_image"
+            />
           </Form.Item>
         </Space>
       ) : (
@@ -138,7 +143,11 @@ const CheckoutProductFormItems = ({ isShow, onboardingMode = false }: FormItemsP
 
             <div style={{ display: 'flex', alignItems: 'center', paddingLeft: '32px', justifyContent: 'center' }}>
               <Form.Item name={['item', 'image']} noStyle>
-                <ImageUploader label={t<string>('checkout.productImage')} purpose="product_image" />
+                <ImageUploader
+                  onFieldsChange={onFieldsChange}
+                  label={t<string>('checkout.productImage')}
+                  purpose="product_image"
+                />
               </Form.Item>
             </div>
           </div>

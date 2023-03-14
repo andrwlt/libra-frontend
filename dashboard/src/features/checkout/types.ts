@@ -3,13 +3,13 @@ import { PreUploadImage } from 'types';
 
 export interface Brand {
   name?: string;
-  logo?: string | PreUploadImage;
+  logo?: string;
 }
 
 export interface LineItem {
   name: string;
   description?: string;
-  images: string[] | PreUploadImage[];
+  image: string;
   price: number | null;
 }
 
@@ -86,4 +86,5 @@ export interface DeleteCheckoutHookType extends DeleteCheckoutState {
 export interface FormItemsPropsType {
   onboardingMode?: boolean;
   isShow?: boolean;
+  onFieldsChange?: () => void;
 }

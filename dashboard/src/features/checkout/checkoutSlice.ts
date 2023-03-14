@@ -93,7 +93,7 @@ const initCheckout = {
   item: {
     name: '',
     price: null,
-    images: [],
+    image: '',
   },
   afterPayment: {
     redirectUrl: '',

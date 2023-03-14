@@ -12,9 +12,10 @@ interface ImageUploaderProps {
   size?: number;
   value?: string;
   purpose: string;
+  onFieldsChange?: () => void;
 }
 
-export default function ImageUploader({ label, onChange, value, purpose }: ImageUploaderProps) {
+export default function ImageUploader({ label, onChange, value, purpose, onFieldsChange }: ImageUploaderProps) {
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -59,6 +60,7 @@ export default function ImageUploader({ label, onChange, value, purpose }: Image
       const imageUrl = info.file?.response?.data?.url;
       setIsLoading(false);
       onChange?.(imageUrl);
+      onFieldsChange?.();
     }
   };
 
