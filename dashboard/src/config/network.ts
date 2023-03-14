@@ -4,5 +4,5 @@ export const NETWORKS = {
     endpoints: {
       rpc: 'wss://westend-rpc.polkadot.io',
     },
-  }
-}
+  },
+};

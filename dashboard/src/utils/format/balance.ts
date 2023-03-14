@@ -1,4 +1,4 @@
-import { ASSET_METADATA } from "config";
+import { ASSET_METADATA } from 'config';
 
 export function formatBalance(amount: number, asset: string) {
   const metadata = ASSET_METADATA[asset];
@@ -9,5 +9,5 @@ export function formatBalance(amount: number, asset: string) {
 export function toSmallestUnit(amount: number, asset: string) {
   const metadata = ASSET_METADATA[asset];
 
-  return metadata ? amount * (10 ** metadata.decimals) : amount;
+  return metadata ? amount * 10 ** metadata.decimals : amount;
 }
