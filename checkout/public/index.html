@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000"/>
+    <meta name="theme-color" content="#000000" />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
@@ -21,25 +21,10 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>Libra | Decentralized Payments System that empowers the next e-commerce</title>
-    <meta name="description" content="Decentralized Payments System that empowers the next e-commerce">
+    <meta name="description" content="Decentralized Payments System that empowers the next e-commerce" />
     <script>
-      window.checkout = {
-        id: '01ARZ3NDEKTSV4RRFFQ69G5FAV',
-        branding: {
-          name: 'Andrew',
-        },
-        item: {
-          name: 'Year-end party at somewhere',
-          description: '',
-          price: 10000000000,
-          images: [
-            'https://picsum.photos/300/400.webp',
-          ],
-        },
-        asset: 'WND',
-        payee: '5ERjkQVj8M7v5UVZQ8qTbZ2qb1o5TgNXq9tXt2BsWF9jBpDu',
-        status: 'active',
-      };      
+      const json = `{"id":"01gvd6cefwfjx4z5e9jc0wvtd9","active":true,"metadata":null,"branding":{"name":"Test"},"item":{"name":"Test","price":1000000000000,"description":"Dzung"},"asset":"wnd","payee":"5FurykSxW6tXacJ3PDWMZ3MDFdJMC2e9SNvYpFNbAej4hgFD","afterPayment":{"redirectUrl":""},"tenantId":"3e23af12-399d-41a0-b2d8-d41d0eb80ad2","created":"2023-03-13T09:56:18.064Z","updated":"2023-03-13T09:56:18.064Z"}`;
+      window.checkout = JSON.parse(json);
     </script>
   </head>
   <body>

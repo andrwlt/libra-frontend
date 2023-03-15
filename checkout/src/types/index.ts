@@ -3,26 +3,23 @@ export type Balance = number;
 export type Asset = string;
 
 export interface AssetMetadata {
-  network: string;
   symbol: string;
   decimals: number;
   logo: string;
-}
-
-export interface PreUploadImage {
-  name: string;
-  type: 'image/svg+xml' | 'image/jpeg' | 'image/png';
-  content: string; 
+  network: {
+    name: string;
+    rpc: string;
+  }
 }
 export interface Brand {
   name?: string;
-  logo?: string | PreUploadImage;
+  logo?: string;
 }
 
 export interface LineItem {
   name: string;
   description?: string;
-  images: string[] | PreUploadImage[];
+  image: string;
   price: Balance;
 }
 

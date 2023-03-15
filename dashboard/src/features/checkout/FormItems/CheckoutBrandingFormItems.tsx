@@ -8,8 +8,8 @@ const FormItem = Form.Item;
 const BrandingNameFormItem = ({ onboardingMode }: FormItemsPropsType) => {
   const { t } = useTranslation();
 
-  const placeholder = onboardingMode ? t('checkout.brandNamePlaceholderOnboading') : t('checkout.brandNamePlaceholder');
-  const label = onboardingMode ? t('checkout.brandNameLabelOnboading') : t('checkout.brandNameLabel');
+  const placeholder = onboardingMode ? t('checkout.brandNamePlaceholderOnboarding') : t('checkout.brandNamePlaceholder');
+  const label = onboardingMode ? t('checkout.brandNameLabelOnboarding') : t('checkout.brandNameLabel');
 
   return (
     <FormItem

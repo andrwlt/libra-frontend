@@ -10,7 +10,7 @@ import { ASSET_METADATA } from 'config';
 import PATHS from 'router/paths';
 import PageHeader from 'components/Common/PageHeader';
 import { useTranslation } from 'react-i18next';
-import { CheckoutReseponse as Checkout } from './types';
+import { CheckoutResponse as Checkout } from './types';
 import type { MenuProps } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 

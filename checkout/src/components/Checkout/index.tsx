@@ -8,8 +8,6 @@ import { createTransferTx, createConnection } from 'utils/substrate';
 import { Brand as BrandType, Checkout as CheckoutType } from 'types';
 import { NETWORKS } from 'config';
 
-import getImageUrl from 'utils/getImageUrl';
-
 const { Header, Content } = Layout;
 
 const { Title } = Typography;
@@ -35,7 +33,7 @@ function CheckoutLogo({ name, logo }: BrandType) {
   if (logo) {
     return (
       <LogoWrapper>
-        <LogoImage src={getImageUrl(logo)} alt="brand logo"/>
+        <LogoImage src={logo} alt="brand logo"/>
       </LogoWrapper>
     );
   }
@@ -124,6 +122,10 @@ export default function Checkout({ checkout }: CheckoutProps) {
 
       const response = await fetch(`${window.location.href}/pay`, {
         body: JSON.stringify({
+          from: account.address,
+          to: checkout.payee,
+          amount: checkout.item.price.toString(),
+          asset: checkout.asset,
           tx,
           email,
         }),

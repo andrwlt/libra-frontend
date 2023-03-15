@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { Image, Space, Typography, Avatar } from "antd";
-import getImageUrl from "utils/getImageUrl";
 
 import { LineItem, Asset } from "types";
 
@@ -23,9 +22,7 @@ export default function ProductInfo({
   product,
   asset,
 }: Props) {
-  const { name, description, price, images } = product;
-
-  const imageUrl = images[0] ? getImageUrl(images[0]) : '';
+  const { name, description, price, image } = product;
 
   const assetMetadata = ASSET_METADATA[asset];
 
@@ -46,7 +43,7 @@ export default function ProductInfo({
     }
     
     <ProductImage>
-      <Image src={imageUrl} preview={false}/>
+      <Image src={image} preview={false}/>
     </ProductImage>
   </Wrapper>
 }

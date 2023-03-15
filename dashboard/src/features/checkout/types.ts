@@ -10,7 +10,7 @@ export interface LineItem {
   name: string;
   description?: string;
   image: string;
-  price: number | null;
+  price: string | null;
 }
 
 export interface CheckoutType {
@@ -25,9 +25,9 @@ export interface CheckoutType {
 }
 
 interface LineItemResponse extends LineItem {
-  price: number;
+  price: string;
 }
-export interface CheckoutReseponse extends CheckoutType {
+export interface CheckoutResponse extends CheckoutType {
   id: string;
   item: LineItemResponse;
   active: boolean;
@@ -43,7 +43,7 @@ export interface CheckoutAPI {
 }
 
 export interface CheckoutListState {
-  checkouts: CheckoutReseponse[];
+  checkouts: CheckoutResponse[];
   getCheckoutsLoading: boolean;
   getCheckoutsFailed: any;
 }

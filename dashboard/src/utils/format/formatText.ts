@@ -1,4 +1,4 @@
-import { CheckoutReseponse } from 'features/checkout/types';
+import { CheckoutResponse } from 'features/checkout/types';
 import { formatBalance } from 'utils/format/balance';
 import dayjs from 'dayjs';
 
@@ -16,14 +16,12 @@ export const getCheckoutLink = (id: string) => {
   return `${process.env.REACT_APP_CHECKOUT_URL}/${id}`;
 };
 
-export const getCheckoutPrice = (checkout: CheckoutReseponse, assetMetadata: any) => {
+export const getCheckoutPrice = (checkout: CheckoutResponse, assetMetadata: any) => {
   const price = formatBalance(checkout.item.price, checkout.asset);
   const unit = assetMetadata ? assetMetadata.symbol : checkout.asset;
-  const formatedPrice = price.toLocaleString('en-US', {
-    style: 'decimal',
-  });
+  const formattedPrice = price.toLocaleString();
 
-  return `${formatedPrice} ${unit}`;
+  return `${formattedPrice} ${unit}`;
 };
 
 export const formatCreatedDate = (date: string) => {
