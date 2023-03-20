@@ -125,15 +125,15 @@ export default function Checkouts() {
 
   return (
     <div>
-      <StyledContainer>
-        <PageHeader title={t('checkouts')}>
-          {hasCheckout && (
-            <Button type="primary" onClick={goToCreateCheckout}>
-              <PlusOutlined /> {t('create')}
-            </Button>
-          )}
-        </PageHeader>
+      <PageHeader title={t('checkouts')}>
+        {hasCheckout && (
+          <Button type="primary" onClick={goToCreateCheckout}>
+            <PlusOutlined /> {t('create')}
+          </Button>
+        )}
+      </PageHeader>
 
+      <StyledContainer>
         <Card>
           {getCheckoutsLoading || hasCheckout ? (
             <Table size="middle" dataSource={checkouts} columns={columns} loading={getCheckoutsLoading} rowKey="id" />

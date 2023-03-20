@@ -94,25 +94,28 @@ export default function Payments() {
   };
 
   return (
-    <StyledContainer>
+    <div>
       <PageHeader title="Payments" />
-      <Card>
-        {getChargesLoading || charges.length > 0 ? (
-          <Table size="small" loading={getChargesLoading} columns={columns} dataSource={charges} rowKey="id" />
-        ) : (
-          <Result
-            style={{ maxWidth: '480px', margin: 'auto' }}
-            icon={<WalletOutlined />}
-            title={t('payment.paymentWillShowHere')}
-            subTitle={subTitle}
-            extra={[
-              <Button key="1" type="primary" onClick={hasCheckout ? goToCheckouts : goToCreateCheckout}>
-                {hasCheckout ? t('payment.getCheckoutLinks') : t('checkout.createCheckout')}
-              </Button>,
-            ]}
-          ></Result>
-        )}
-      </Card>
-    </StyledContainer>
+
+      <StyledContainer>
+        <Card>
+          {getChargesLoading || charges.length > 0 ? (
+            <Table size="small" loading={getChargesLoading} columns={columns} dataSource={charges} rowKey="id" />
+          ) : (
+            <Result
+              style={{ maxWidth: '480px', margin: 'auto' }}
+              icon={<WalletOutlined />}
+              title={t('payment.paymentWillShowHere')}
+              subTitle={subTitle}
+              extra={[
+                <Button key="1" type="primary" onClick={hasCheckout ? goToCheckouts : goToCreateCheckout}>
+                  {hasCheckout ? t('payment.getCheckoutLinks') : t('checkout.createCheckout')}
+                </Button>,
+              ]}
+            ></Result>
+          )}
+        </Card>
+      </StyledContainer>
+    </div>
   );
 }

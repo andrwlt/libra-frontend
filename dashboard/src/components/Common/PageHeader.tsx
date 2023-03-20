@@ -8,8 +8,8 @@ const Wrapper = styled.div`
   align-items: center;
   padding: 12px 24px 16px 24px;
   background-color: #fff;
-  margin-bottom: 12px;
-  border-radius: 6px;
+  // margin-bottom: 12px;
+  // border-radius: 6px;
 
   .ant-typography {
     line-height: 32px;
