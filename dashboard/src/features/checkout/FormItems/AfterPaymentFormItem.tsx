@@ -6,6 +6,7 @@ const AfterPaymentFormItem = () => {
   const { t } = useTranslation();
   return (
     <Form.Item
+      style={{ marginTop: 10 }}
       name={['afterPayment', 'redirectUrl']}
       label={t('checkout.redirectUrlLabel')}
       validateTrigger="onBlur"

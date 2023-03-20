@@ -1,6 +1,6 @@
 import { Button, Space, Typography, Modal, theme, FormInstance } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { useCheckout } from '../checkoutHooks';
 import { useTranslation } from 'react-i18next';
@@ -21,13 +21,14 @@ const ActionBarWraper = styled.div<WraperProps>`
   height: 56px;
   display: flex;
   align-items: center;
-  padding: 0 64px;
+  padding: 0 16px;
   background: ${(props) => props.token.colorBgBase};
   justify-content: space-between;
   border-bottom: solid 1px ${(props) => props.token.colorBorder};
 `;
 
 export function ActionBar({ onSubmitCheckout, loading, form }: ActionBarProps) {
+  const { id } = useParams();
   const { t } = useTranslation();
   const { token } = theme.useToken();
   const { checkout } = useCheckout();
@@ -67,7 +68,7 @@ export function ActionBar({ onSubmitCheckout, loading, form }: ActionBarProps) {
       <Space align="center">
         <Button onClick={handleBack} icon={<ArrowLeftOutlined />} />
         <Typography.Title style={{ margin: 0 }} level={5}>
-          {t('checkout.createCheckout')}
+          {id ? t('checkout.updateCheckout') : t('checkout.createCheckout')}
         </Typography.Title>
       </Space>
 

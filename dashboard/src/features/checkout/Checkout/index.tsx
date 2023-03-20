@@ -20,19 +20,18 @@ import { useDeboundCallback } from 'app/hooks';
 import { CheckoutType } from '../types';
 import { useTranslation } from 'react-i18next';
 
-type CheckoutFormWraperProps = {
+type CheckoutFormWrapperProps = {
   background: string;
   boxShadow: string;
 };
 
-const CheckoutFormWraper = styled.div<CheckoutFormWraperProps>`
-  height: calc(100vh - 120px);
+const CheckoutFormWrapper = styled.div<CheckoutFormWrapperProps>`
+  height: calc(100vh - 48px);
   display: flex;
   justify-content: flex-end;
   width: 40%;
-  padding: 0 64px;
+  padding: 20px 36px 64px 64px;
   background: ${(props) => props.background};
-  boxshadow: ${(props) => props.boxShadow};
 `;
 
 const PreviewContainer = styled.div`
@@ -43,7 +42,7 @@ const PreviewContainer = styled.div`
   padding: 0 64px;
 `;
 
-const CheckoutContentWraper = styled.div`
+const CheckoutContentWrapper = styled.div`
   display: flex;
 `;
 
@@ -128,11 +127,9 @@ const Checkout = () => {
     <div>
       <ActionBar form={form} loading={isSubmitLoading} onSubmitCheckout={handleSubmit} />
 
-      <CheckoutContentWraper>
-        <CheckoutFormWraper background={colorBgBase} boxShadow={boxShadow}>
-          <div style={{ width: '100%', maxWidth: '480px' }}>
-            <Typography.Title level={4}>{t('checkout.newCheckout')}</Typography.Title>
-
+      <CheckoutContentWrapper>
+        <CheckoutFormWrapper background={colorBgBase} boxShadow={boxShadow}>
+          <div style={{ width: '100%', maxWidth: '440px' }}>
             <Form
               disabled={getCheckoutLoading || isSubmitLoading}
               layout="vertical"
@@ -143,16 +140,16 @@ const Checkout = () => {
               <Tabs activeKey={activeStep} onChange={setActiveStep} items={items} />
             </Form>
           </div>
-        </CheckoutFormWraper>
+        </CheckoutFormWrapper>
 
         <PreviewContainer>
           <Typography.Title level={4}>{t('checkout.preview')}</Typography.Title>
 
-          <Preview style={{ margin: '0' }} width={600} height={400}>
+          <Preview style={{ margin: '0' }} width={690} height={540}>
             <CheckoutPreview previewingCheckout={previewingCheckout} />
           </Preview>
         </PreviewContainer>
-      </CheckoutContentWraper>
+      </CheckoutContentWrapper>
     </div>
   );
 };

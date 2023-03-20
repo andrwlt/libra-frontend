@@ -5,6 +5,9 @@ import { theme } from 'antd';
 const Wrapper = styled.div`
   margin-left: auto;
   margin-right: auto;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px 2px rgba(0, 0, 0, 0.1);
 `;
 
 const ColorDot = styled.div`
@@ -32,12 +35,12 @@ const PreviewBody = styled.div`
   height: calc(100% - 40px);
   background: #f7f7f7;
   border: solid 1px rgb(227, 219, 214);
-  border-radius: 0 0 6px 6px;
+
   box-sizing: border-box;
 `;
 
 const PreviewContent = styled.div`
-  zoom: 0.5;
+  zoom: 0.65;
   width: 100%;
   height: 100%;
 `;

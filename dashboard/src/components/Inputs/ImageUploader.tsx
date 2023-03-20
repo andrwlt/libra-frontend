@@ -9,13 +9,12 @@ import { useTranslation } from 'react-i18next';
 interface ImageUploaderProps {
   label?: string;
   onChange?: Function;
-  size?: number;
+  size?: string;
   value?: string;
   purpose: string;
-  onFieldsChange?: () => void;
 }
 
-export default function ImageUploader({ label, onChange, value, purpose, onFieldsChange }: ImageUploaderProps) {
+export default function ImageUploader({ label, onChange, value, purpose }: ImageUploaderProps) {
   const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -60,7 +59,6 @@ export default function ImageUploader({ label, onChange, value, purpose, onField
       const imageUrl = info.file?.response?.data?.url;
       setIsLoading(false);
       onChange?.(imageUrl);
-      onFieldsChange?.();
     }
   };
 

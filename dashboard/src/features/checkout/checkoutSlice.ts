@@ -140,7 +140,7 @@ export const authSlice = createSlice({
       })
       .addCase(getCheckouts.fulfilled, (state, { payload }) => {
         state.getCheckoutsLoading = false;
-        state.checkouts = payload;
+        state.checkouts = payload.data;
       })
       .addCase(getCheckouts.rejected, (state, { payload }) => {
         state.getCheckoutsLoading = false;

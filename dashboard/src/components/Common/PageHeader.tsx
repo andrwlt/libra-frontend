@@ -2,12 +2,14 @@ import styled from 'styled-components';
 import { Typography } from 'antd';
 import { ReactNode } from 'react';
 
-const Wraper = styled.div`
+const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-bottom: 32px;
-  height: 64px;
+  padding: 12px 24px 16px 24px;
+  background-color: #fff;
+  margin-bottom: 12px;
+  border-radius: 6px;
 
   .ant-typography {
     line-height: 32px;
@@ -16,13 +18,13 @@ const Wraper = styled.div`
 
 const PageHeader = ({ title, children }: { title: string; children?: ReactNode }) => {
   return (
-    <Wraper>
-      <Typography.Title style={{ margin: 0 }} level={3}>
+    <Wrapper>
+      <Typography.Title style={{ margin: 0, lineHeight: '40px' }} level={4}>
         {title}
       </Typography.Title>
 
       <div>{children}</div>
-    </Wraper>
+    </Wrapper>
   );
 };
 

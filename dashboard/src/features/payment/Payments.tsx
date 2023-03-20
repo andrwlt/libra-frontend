@@ -1,4 +1,3 @@
-import styled from 'styled-components';
 import { Table, Badge, theme, Card, Button, Result, Space, Avatar } from 'antd';
 import { WalletOutlined } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
@@ -12,6 +11,7 @@ import PageHeader from 'components/Common/PageHeader';
 import { useTranslation } from 'react-i18next';
 import { ASSET_METADATA } from 'config';
 import { formatBalance } from 'utils/format/balance';
+import { StyledContainer } from 'components/Common/Styled';
 
 const useChargeStatusColor = (status: string) => {
   const {
@@ -63,7 +63,10 @@ const columns: ColumnsType<ChargeDataType> = [
               {asset}
             </Avatar>
           )}
-          <span> { formatBalance(amount, asset)} {ASSET_METADATA[asset].symbol}</span>
+          <span>
+            {' '}
+            {formatBalance(amount, asset)} {ASSET_METADATA[asset].symbol}
+          </span>
         </Space>
       );
     },
@@ -71,25 +74,14 @@ const columns: ColumnsType<ChargeDataType> = [
   {
     key: 'description',
     title: 'Description',
-    render: ({ receiptEmail  }) => <a>{receiptEmail}</a>,
+    render: ({ receiptEmail }) => <span style={{ color: '#4096ff', cursor: 'pointer' }}>{receiptEmail}</span>,
   },
 ];
-
-const Wrapper = styled.div`
-  padding: 32px;
-  max-width: 1440px;
-  margin: auto;
-`;
 
 export default function Payments() {
   const { t } = useTranslation();
   const { charges, hasCheckout, getChargesLoading } = useCharges();
-  console.log(charges);
   const navigate = useNavigate();
-
-  const {
-    token: { boxShadow },
-  } = theme.useToken();
 
   const subTitle = hasCheckout ? t('payment.hasCheckoutSubtitle') : t('payment.hasNoCheckoutSubtitle');
 
@@ -102,13 +94,12 @@ export default function Payments() {
   };
 
   return (
-    <Wrapper>
+    <StyledContainer>
       <PageHeader title="Payments" />
-
-      {getChargesLoading || charges.length > 0 ? (
-        <Table style={{ boxShadow }} loading={getChargesLoading} columns={columns} dataSource={charges} rowKey="id" />
-      ) : (
-        <Card style={{ boxShadow }}>
+      <Card>
+        {getChargesLoading || charges.length > 0 ? (
+          <Table size="small" loading={getChargesLoading} columns={columns} dataSource={charges} rowKey="id" />
+        ) : (
           <Result
             style={{ maxWidth: '480px', margin: 'auto' }}
             icon={<WalletOutlined />}
@@ -120,8 +111,8 @@ export default function Payments() {
               </Button>,
             ]}
           ></Result>
-        </Card>
-      )}
-    </Wrapper>
+        )}
+      </Card>
+    </StyledContainer>
   );
 }

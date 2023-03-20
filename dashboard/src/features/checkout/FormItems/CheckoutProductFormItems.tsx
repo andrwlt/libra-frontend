@@ -53,7 +53,7 @@ const PriceInput = ({ value: smallestUnitPrice, onChange, onboardingMode }: Pric
 
   return (
     <InputNumber
-      min='0'
+      min="0"
       value={smallestUnitPrice && formatBalance(smallestUnitPrice, asset)}
       onChange={handleChange}
       placeholder={placeholder}
@@ -108,58 +108,47 @@ const CheckoutProductFormItems = ({ isShow, onboardingMode = false, onFieldsChan
   return (
     <>
       {onboardingMode ? (
-        <Space size="large" style={{ display: isShow ? '' : 'none' }}>
+        <Space size={40} style={{ display: isShow ? '' : 'none' }}>
           <div style={{ width: '320px' }}>
             <ProductNameFormItem onboardingMode />
 
             <FormItem label={t('checkout.whatIsPrice')} required>
-              <Input.Group compact>
+              <Space.Compact style={{ width: '100%' }}>
                 <ProductPriceFormItem onboardingMode />
 
                 <Form.Item name="asset" noStyle>
                   <AssetInput onboardingMode />
                 </Form.Item>
-              </Input.Group>
+              </Space.Compact>
             </FormItem>
           </div>
           <Form.Item name={['item', 'image']} noStyle>
-            <ImageUploader
-              onFieldsChange={onFieldsChange}
-              size={240}
-              label={t<string>('checkout.productImage')}
-              purpose="product_image"
-            />
+            <ImageUploader label={t<string>('checkout.productImage')} purpose="product_image" />
           </Form.Item>
         </Space>
       ) : (
         <>
-          <div style={{ display: 'flex' }}>
-            <div style={{ flexGrow: 1 }}>
-              <ProductNameFormItem />
+          <Form.Item
+            name={['item', 'image']}
+            style={{ display: 'flex', justifyContent: 'center', width: '100%', marginTop: 15, marginBottom: 10 }}
+            className="upload-image--large"
+          >
+            <ImageUploader label={t<string>('checkout.productImage')} purpose="product_image" />
+          </Form.Item>
 
-              <Form.Item label={t<string>('checkout.description')} name={['item', 'description']}>
-                <Input.TextArea placeholder={t<string>('checkout.descriptionPlaceholder')} />
-              </Form.Item>
-            </div>
+          <ProductNameFormItem />
 
-            <div style={{ display: 'flex', alignItems: 'center', paddingLeft: '32px', justifyContent: 'center' }}>
-              <Form.Item name={['item', 'image']} noStyle>
-                <ImageUploader
-                  onFieldsChange={onFieldsChange}
-                  label={t<string>('checkout.productImage')}
-                  purpose="product_image"
-                />
-              </Form.Item>
-            </div>
-          </div>
-
-          <div style={{ width: '100%', display: 'flex', paddingRight: '8px' }}>
+          <div style={{ width: '100%', display: 'flex' }}>
             <ProductPriceFormItem />
 
             <Form.Item label={t<string>('checkout.asset')} name="asset">
               <AssetInput />
             </Form.Item>
           </div>
+
+          <Form.Item label={t<string>('checkout.description')} name={['item', 'description']}>
+            <Input.TextArea rows={3} placeholder={t<string>('checkout.descriptionPlaceholder')} />
+          </Form.Item>
         </>
       )}
     </>
