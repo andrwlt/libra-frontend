@@ -50,16 +50,16 @@ export default function Checkouts() {
     {
       title: 'Price',
       key: 'Price',
-      render: (checkout: Checkout) => {
-        const assetMetadata = ASSET_METADATA[checkout.asset];
+      render: ({ item: { price }, asset }: Checkout) => {
+        const assetMetadata = ASSET_METADATA[asset];
         return (
           <Space align="center">
             {assetMetadata && (
               <Avatar src={assetMetadata.logo} size="small">
-                {checkout.asset}
+                {asset}
               </Avatar>
             )}
-            <span> {getCheckoutPrice(checkout, assetMetadata)}</span>
+            <span> {getCheckoutPrice({ price: price, asset: asset }, assetMetadata)}</span>
           </Space>
         );
       },

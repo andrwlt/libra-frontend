@@ -4,7 +4,7 @@ import { Image, Space, Avatar, Col } from 'antd';
 import { AssetMetadata } from 'types';
 import { LineItem } from 'features/checkout/types';
 import { ASSET_METADATA } from 'config';
-import { formatBalance } from 'utils/format/balance';
+import { getCheckoutPrice } from 'utils/format/formatText';
 import logo from 'assets/logo.svg';
 import { useTranslation } from 'react-i18next';
 
@@ -49,7 +49,7 @@ function ProductInfo({ product, asset }: Props) {
           </Avatar>
         )}
         <Typography.Title level={3} style={{ margin: '1rem 0' }}>
-          {price ? formatBalance(price, asset) : '0'} {asset}
+          {price ? getCheckoutPrice({ price, asset }, assetMetadata) : '0'} {asset}
         </Typography.Title>
       </Space>
 
