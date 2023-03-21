@@ -6,11 +6,13 @@ import {
   UpdateCheckoutState,
   CheckoutType,
   DeleteCheckoutState,
+  GetCheckoutsResponse,
 } from './types';
 import { createAppAsyncThunk } from 'app/hooks';
 import checkoutAPI from './checkoutAPI';
 import { RootState } from 'app/store';
 import { resetStore } from 'features/auth/authSlice';
+import { DEFAULT_LIMIT } from 'config';
 
 const addPayeeToCheckout = (checkout: CheckoutType, getState: () => RootState): CheckoutType => {
   const {
@@ -23,10 +25,38 @@ const addPayeeToCheckout = (checkout: CheckoutType, getState: () => RootState): 
   };
 };
 
-export const getCheckouts = createAppAsyncThunk('checkout/getCheckouts', async (_, { rejectWithValue }) => {
+export const getCheckouts = createAppAsyncThunk('checkout/getCheckouts', async (_, { rejectWithValue, getState }) => {
   try {
-    const response = await checkoutAPI.getCheckouts();
-    return response.data;
+    const {
+      checkout: { checkouts },
+    } = getState();
+
+    const beforeId = checkouts[0]?.id;
+    const afterId = checkouts[checkouts.length - 1]?.id;
+    const emptyResponse: GetCheckoutsResponse = { data: { data: [] } };
+
+    const prevCheckoutsRequest = beforeId ? checkoutAPI.getCheckouts({ beforeId }) : emptyResponse;
+    const currentCheckoutsRequest = checkoutAPI.getCheckouts({ afterId, limit: DEFAULT_LIMIT + 1 });
+
+    const [
+      {
+        data: { data: prevPageData },
+      },
+      {
+        data: { data: currentData },
+      },
+    ] = await Promise.all<GetCheckoutsResponse>([prevCheckoutsRequest, currentCheckoutsRequest]);
+
+    const hasNextPage = currentData.length > DEFAULT_LIMIT;
+    const currentCheckouts = hasNextPage ? currentData.filter((_, index) => index !== DEFAULT_LIMIT) : currentData;
+
+    return {
+      checkouts: currentCheckouts,
+      paging: {
+        hasPrevPage: !!prevPageData.length,
+        hasNextPage,
+      },
+    };
   } catch (err) {
     return rejectWithValue(err);
   }
@@ -106,6 +136,7 @@ const initialState: CheckoutState = {
   checkouts: [],
   getCheckoutsLoading: false,
   getCheckoutsFailed: undefined,
+  checkoutsPaging: { hasPrevPage: false, hasNextPage: false },
 
   checkout: initCheckout,
   getCheckoutLoading: false,
@@ -140,7 +171,8 @@ export const authSlice = createSlice({
       })
       .addCase(getCheckouts.fulfilled, (state, { payload }) => {
         state.getCheckoutsLoading = false;
-        state.checkouts = payload.data;
+        state.checkouts = payload.checkouts;
+        state.checkoutsPaging = payload.paging;
       })
       .addCase(getCheckouts.rejected, (state, { payload }) => {
         state.getCheckoutsLoading = false;
@@ -204,11 +236,12 @@ export const authSlice = createSlice({
 });
 
 export const selectCheckoutListState = ({
-  checkout: { checkouts, getCheckoutsLoading, getCheckoutsFailed },
+  checkout: { checkouts, getCheckoutsLoading, getCheckoutsFailed, checkoutsPaging },
 }: RootState): CheckoutListState => ({
   checkouts,
   getCheckoutsLoading,
   getCheckoutsFailed,
+  checkoutsPaging,
 });
 
 export const selectCheckoutDetailsState = ({

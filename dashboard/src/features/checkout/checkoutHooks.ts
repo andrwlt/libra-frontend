@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useCallback } from 'react';
 import { useAppSelector, useAppDispatch, useFailed, useSuccess } from 'app/hooks';
 import {
   getCheckouts,
@@ -33,13 +33,14 @@ export const useCheckouts = () => {
   const state = useAppSelector(selectCheckoutListState);
   const dispatch = useAppDispatch();
 
+  const fetchCheckouts = useCallback(() => dispatch(getCheckouts()), [dispatch]);
+
   useEffect(() => {
-    dispatch(getCheckouts());
-  }, [dispatch]);
+    fetchCheckouts();
+  }, [dispatch, fetchCheckouts]);
 
   useFailed(state.getCheckoutsFailed);
-
-  return state;
+  return { ...state, fetchCheckouts };
 };
 
 export const useCheckout = (id?: string) => {

@@ -34,8 +34,13 @@ export interface CheckoutResponse extends CheckoutType {
   created: string;
 }
 
+interface CheckoutParams {
+  limit?: number;
+  afterId?: string;
+  beforeId?: string;
+}
 export interface CheckoutAPI {
-  getCheckouts: () => AxiosPromise;
+  getCheckouts: (params?: CheckoutParams) => AxiosPromise;
   getCheckout: (id: string) => AxiosPromise;
   createCheckout: (checkout: CheckoutType) => AxiosPromise;
   updateCheckout: (checkout: CheckoutType) => AxiosPromise;
@@ -46,6 +51,10 @@ export interface CheckoutListState {
   checkouts: CheckoutResponse[];
   getCheckoutsLoading: boolean;
   getCheckoutsFailed: any;
+  checkoutsPaging: {
+    hasPrevPage: boolean;
+    hasNextPage: boolean;
+  };
 }
 
 export interface CheckoutDetailsState {
@@ -87,4 +96,10 @@ export interface FormItemsPropsType {
   onboardingMode?: boolean;
   isShow?: boolean;
   onFieldsChange?: () => void;
+}
+
+export interface GetCheckoutsResponse {
+  data: {
+    data: CheckoutResponse[];
+  };
 }
