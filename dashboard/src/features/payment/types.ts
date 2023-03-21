@@ -1,7 +1,12 @@
 import { AxiosPromise } from 'axios';
+interface PaymentParams {
+  limit?: number;
+  afterId?: string;
+  beforeId?: string;
+}
 
 export interface PaymentAPI {
-  getCharges: () => Promise<AxiosPromise>;
+  getCharges: (params?: PaymentParams) => AxiosPromise;
 }
 
 export interface Charge {
@@ -22,4 +27,14 @@ export interface GetChargesState {
   getChargesLoading: boolean;
   getChargesFailed: any;
   hasCheckout: boolean;
+  chargesPaging: {
+    hasPrevPage: boolean;
+    hasNextPage: boolean;
+  };
+}
+
+export interface GetChargesResponse {
+  data: {
+    data: Charge[];
+  };
 }

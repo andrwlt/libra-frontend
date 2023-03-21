@@ -54,6 +54,7 @@ export interface CheckoutListState {
   checkoutsPaging: {
     hasPrevPage: boolean;
     hasNextPage: boolean;
+    prevPageData: CheckoutResponse[];
   };
 }
 

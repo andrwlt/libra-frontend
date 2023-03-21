@@ -25,42 +25,78 @@ const addPayeeToCheckout = (checkout: CheckoutType, getState: () => RootState): 
   };
 };
 
-export const getCheckouts = createAppAsyncThunk('checkout/getCheckouts', async (_, { rejectWithValue, getState }) => {
-  try {
-    const {
-      checkout: { checkouts },
-    } = getState();
+export const getCheckouts = createAppAsyncThunk(
+  'checkout/getCheckouts',
+  async ({ deletedId }: { deletedId?: string }, { rejectWithValue, getState }) => {
+    try {
+      const {
+        checkout: {
+          checkouts,
+          checkoutsPaging: { prevPageData },
+        },
+      } = getState();
 
-    const beforeId = checkouts[0]?.id;
-    const afterId = checkouts[checkouts.length - 1]?.id;
-    const emptyResponse: GetCheckoutsResponse = { data: { data: [] } };
+      if (deletedId) {
+        const isDeletedLastItem = checkouts.length === 1;
+        const shouldDecreasePageNumber = isDeletedLastItem;
 
-    const prevCheckoutsRequest = beforeId ? checkoutAPI.getCheckouts({ beforeId }) : emptyResponse;
-    const currentCheckoutsRequest = checkoutAPI.getCheckouts({ afterId, limit: DEFAULT_LIMIT + 1 });
+        if (shouldDecreasePageNumber) {
+          // TODO
+        }
+        const afterIdDeleteCase = prevPageData[prevPageData.length - 1]?.id;
+        const {
+          data: { data: currentDataDeleteCase },
+        }: GetCheckoutsResponse = await checkoutAPI.getCheckouts({
+          afterId: afterIdDeleteCase,
+          limit: DEFAULT_LIMIT + 1,
+        });
+        const hasNextPage = currentDataDeleteCase.length > DEFAULT_LIMIT;
+        const currentCheckoutsDeleteCase = hasNextPage
+          ? currentDataDeleteCase.filter((_, index) => index !== DEFAULT_LIMIT)
+          : currentDataDeleteCase;
 
-    const [
-      {
-        data: { data: prevPageData },
-      },
-      {
-        data: { data: currentData },
-      },
-    ] = await Promise.all<GetCheckoutsResponse>([prevCheckoutsRequest, currentCheckoutsRequest]);
+        return {
+          checkouts: currentCheckoutsDeleteCase,
+          paging: {
+            hasPrevPage: true,
+            hasNextPage,
+            prevPageData: prevPageData,
+          },
+        };
+      } else {
+        const beforeId = checkouts[0]?.id;
+        const afterId = checkouts[checkouts.length - 1]?.id;
+        const emptyResponse: GetCheckoutsResponse = { data: { data: [] } };
 
-    const hasNextPage = currentData.length > DEFAULT_LIMIT;
-    const currentCheckouts = hasNextPage ? currentData.filter((_, index) => index !== DEFAULT_LIMIT) : currentData;
+        const prevCheckoutsRequest = beforeId ? checkoutAPI.getCheckouts({ beforeId }) : emptyResponse;
+        const currentCheckoutsRequest = checkoutAPI.getCheckouts({ afterId, limit: DEFAULT_LIMIT + 1 });
 
-    return {
-      checkouts: currentCheckouts,
-      paging: {
-        hasPrevPage: !!prevPageData.length,
-        hasNextPage,
-      },
-    };
-  } catch (err) {
-    return rejectWithValue(err);
-  }
-});
+        const [
+          {
+            data: { data: prevPageData },
+          },
+          {
+            data: { data: currentData },
+          },
+        ] = await Promise.all<GetCheckoutsResponse>([prevCheckoutsRequest, currentCheckoutsRequest]);
+
+        const hasNextPage = currentData.length > DEFAULT_LIMIT;
+        const currentCheckouts = hasNextPage ? currentData.filter((_, index) => index !== DEFAULT_LIMIT) : currentData;
+
+        return {
+          checkouts: currentCheckouts,
+          paging: {
+            hasPrevPage: !!prevPageData.length,
+            hasNextPage,
+            prevPageData: prevPageData,
+          },
+        };
+      }
+    } catch (err) {
+      return rejectWithValue(err);
+    }
+  },
+);
 
 export const getCheckoutDetails = createAppAsyncThunk(
   'checkout/getCheckoutDetails',
@@ -100,11 +136,11 @@ export const updateCheckout = createAppAsyncThunk(
 
 export const deleteCheckout = createAppAsyncThunk(
   'checkout/deleteCheckout',
-  async (id: string, { rejectWithValue, dispatch }) => {
+  async (deletedId: string, { rejectWithValue, dispatch }) => {
     try {
-      await checkoutAPI.deleteCheckout(id);
-      dispatch(getCheckouts());
-      return id;
+      await checkoutAPI.deleteCheckout(deletedId);
+      dispatch(getCheckouts({ deletedId }));
+      return deletedId;
     } catch (err) {
       return rejectWithValue(err);
     }
@@ -136,7 +172,7 @@ const initialState: CheckoutState = {
   checkouts: [],
   getCheckoutsLoading: false,
   getCheckoutsFailed: undefined,
-  checkoutsPaging: { hasPrevPage: false, hasNextPage: false },
+  checkoutsPaging: { hasPrevPage: false, hasNextPage: false, prevPageData: [] },
 
   checkout: initCheckout,
   getCheckoutLoading: false,

@@ -4,7 +4,6 @@ import { DEFAULT_LIMIT } from 'config';
 
 const checkoutAPI: CheckoutAPI = {
   getCheckouts({ limit = DEFAULT_LIMIT, afterId: after_id, beforeId: before_id }: any) {
-    console.log('limit', limit);
     return requester.get('/checkout', { params: { limit, after_id, before_id } } as any);
   },
 

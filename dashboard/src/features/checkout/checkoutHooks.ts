@@ -33,7 +33,7 @@ export const useCheckouts = () => {
   const state = useAppSelector(selectCheckoutListState);
   const dispatch = useAppDispatch();
 
-  const fetchCheckouts = useCallback(() => dispatch(getCheckouts()), [dispatch]);
+  const fetchCheckouts = useCallback(() => dispatch(getCheckouts({})), [dispatch]);
 
   useEffect(() => {
     fetchCheckouts();

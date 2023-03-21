@@ -19,4 +19,4 @@ export const ASSET_METADATA: Record<string, AssetMetadata> = {
 };
 
 export const LOGIN_MESSAGE = 'libra-checkout-login';
-export const DEFAULT_LIMIT = 10;
+export const DEFAULT_LIMIT = 2;
