@@ -14,10 +14,11 @@ i18n
     resources: {
       en: {
         translation: {
+          create: 'Create',
           dashboard: 'Dashboard',
           back: 'Back',
           next: 'Next',
-          save: 'save',
+          save: 'Save',
           logo: 'Logo',
           defaultErrorMessage: 'Something went wrong!',
           getExtensionsFailed: 'Get Extensions Failed',
@@ -28,6 +29,7 @@ i18n
           orShareItOn: 'or share it on',
           loading: 'Loading...',
           sessionExpired: 'Session is expired. Please login again!',
+          checkouts: 'Checkouts',
 
           asset: {
             wnd: 'WND',
@@ -61,10 +63,11 @@ i18n
 
           checkout: {
             createCheckout: 'Create checkout',
+            updateCheckout: 'Update Checkout',
             startSellingProduct: 'Start selling your product',
             toStartSellingProduct:
               'To start selling your product, first you need to create checkout page to receive payments from customers.',
-            newCheckout: 'New checkout',
+            newCheckout: 'Create a new checkout',
             product: 'Product',
             branding: 'Branding',
             afterPayment: 'After Payment',

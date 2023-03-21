@@ -4,11 +4,11 @@ import { Image, Space, Avatar, Col } from 'antd';
 import { AssetMetadata } from 'types';
 import { LineItem } from 'features/checkout/types';
 import { ASSET_METADATA } from 'config';
-import { formatBalance } from 'utils/format/balance';
+import { getCheckoutPrice } from 'utils/format/formatText';
 import logo from 'assets/logo.svg';
 import { useTranslation } from 'react-i18next';
 
-const CheckoutSummaryWraper = styled.div`
+const CheckoutSummaryWrapper = styled.div`
   width: 100%;
   max-width: 460px;
   padding: 32px;
@@ -39,25 +39,24 @@ function ProductInfo({ product, asset }: Props) {
   return (
     <Wrapper>
       <Typography.Title type="secondary" level={4} style={{ marginBottom: 0 }}>
-        {name}
+        {name || 'Product name'}
       </Typography.Title>
-      {!!price && (
-        <Space align="center">
-          {assetMetadata && (
-            <Avatar src={assetMetadata.logo} size="small">
-              {asset}
-            </Avatar>
-          )}
-          <Typography.Title level={3} style={{ margin: '1rem 0' }}>
-            {formatBalance(price, asset)} {asset}
-          </Typography.Title>
-        </Space>
-      )}
+
+      <Space align="center">
+        {assetMetadata && (
+          <Avatar src={assetMetadata.logo} size="small">
+            {asset}
+          </Avatar>
+        )}
+        <Typography.Title level={3} style={{ margin: '1rem 0' }}>
+          {price ? getCheckoutPrice({ price, asset }, assetMetadata) : '0'} {asset}
+        </Typography.Title>
+      </Space>
 
       {description && <Typography.Paragraph type="secondary">{description}</Typography.Paragraph>}
 
       <ProductImage>
-        <Image src={image} preview={false} />
+        <Image src={image} preview={false} style={{ maxWidth: 320, maxHeight: 320 }} />
       </ProductImage>
     </Wrapper>
   );
@@ -102,10 +101,10 @@ function FooterLinks() {
 const CheckoutSummary = ({ product, asset }: { product: LineItem; asset: string }) => {
   return (
     <Col span={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-      <CheckoutSummaryWraper>
+      <CheckoutSummaryWrapper>
         <ProductInfo product={product} asset={asset}></ProductInfo>
         <FooterLinks></FooterLinks>
-      </CheckoutSummaryWraper>
+      </CheckoutSummaryWrapper>
     </Col>
   );
 };

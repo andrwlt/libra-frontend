@@ -8,13 +8,15 @@ const FormItem = Form.Item;
 const BrandingNameFormItem = ({ onboardingMode }: FormItemsPropsType) => {
   const { t } = useTranslation();
 
-  const placeholder = onboardingMode ? t('checkout.brandNamePlaceholderOnboarding') : t('checkout.brandNamePlaceholder');
+  const placeholder = onboardingMode
+    ? t('checkout.brandNamePlaceholderOnboarding')
+    : t('checkout.brandNamePlaceholder');
   const label = onboardingMode ? t('checkout.brandNameLabelOnboarding') : t('checkout.brandNameLabel');
 
   return (
     <FormItem
       name={['branding', 'name']}
-      style={{ width: '320px' }}
+      style={{ width: onboardingMode ? '320px' : '100%' }}
       label={label}
       rules={[{ required: true, message: t<string>('checkout.brandNameIsRequired') }]}
     >
@@ -32,17 +34,22 @@ const CheckoutBrandingFormItems = ({ isShow, onboardingMode = false, onFieldsCha
       {onboardingMode ? (
         <Space size="large" style={{ display: isShow ? '' : 'none' }}>
           <Form.Item noStyle name={['branding', 'logo']}>
-            <ImageUploader size={240} label={label} purpose="brand_logo" onFieldsChange={onFieldsChange} />
+            <ImageUploader label={label} purpose="brand_logo" />
           </Form.Item>
 
-          <BrandingNameFormItem />
+          <BrandingNameFormItem onboardingMode />
         </Space>
       ) : (
         <>
-          <BrandingNameFormItem />
-          <Form.Item label="Logo" name={['branding', 'logo']}>
-            <ImageUploader label={label} purpose="brand_logo" onFieldsChange={onFieldsChange} />
+          <Form.Item
+            name={['branding', 'logo']}
+            style={{ display: 'flex', justifyContent: 'center', width: '100%', marginTop: 15, marginBottom: 10 }}
+            className="upload-image--large"
+          >
+            <ImageUploader label={label} purpose="brand_logo" />
           </Form.Item>
+
+          <BrandingNameFormItem />
         </>
       )}
     </>

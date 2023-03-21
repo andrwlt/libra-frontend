@@ -1,20 +1,20 @@
 @font-face {
-  font-family: "PxGrotesk";
-  src: url("/public/fonts/Px-Grotesk-Light.ttf") format("truetype");
+  font-family: 'PxGrotesk';
+  src: url('/public/fonts/Px-Grotesk-Light.ttf') format('truetype');
   font-weight: lighter;
   font-style: normal;
 }
 
 @font-face {
-  font-family: "PxGrotesk";
-  src: url("/public/fonts/Px-Grotesk-Regular.ttf") format("truetype");
+  font-family: 'PxGrotesk';
+  src: url('/public/fonts/Px-Grotesk-Regular.ttf') format('truetype');
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
-  font-family: "PxGrotesk";
-  src: url("/public/fonts/Px-Grotesk-Bold.ttf") format("truetype");
+  font-family: 'PxGrotesk';
+  src: url('/public/fonts/Px-Grotesk-Bold.ttf') format('truetype');
   font-weight: bold;
   font-style: normal;
 }
@@ -37,4 +37,22 @@ body {
   padding-left: 8px;
   margin: 0;
   width: calc(100% - 8px);
+}
+
+.color-link {
+  color: #1677ff;
+}
+
+.color-error {
+  color: #ff4d4f;
+}
+
+.ant-form .ant-upload-select {
+  width: 132px !important;
+  height: 132px !important;
+}
+
+.ant-form .upload-image--large .ant-upload-select {
+  width: 150px !important;
+  height: 150px !important;
 }

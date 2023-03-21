@@ -1,7 +1,6 @@
 import { useState } from 'react';
-import styled from 'styled-components';
-import { Button, Card, Result, Space, Avatar, theme, Popconfirm, Table, Tag, Dropdown } from 'antd';
-import { ShopOutlined, EllipsisOutlined } from '@ant-design/icons';
+import { Button, Card, Result, Space, Avatar, Popconfirm, Table, Tag, Dropdown } from 'antd';
+import { ShopOutlined, EllipsisOutlined, PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useCheckouts, useDeleteCheckout, useResetCheckout } from 'features/checkout/checkoutHooks';
 import { useNavigate } from 'react-router-dom';
 import CopyableField from 'components/Common/CopyableField';
@@ -13,12 +12,7 @@ import { useTranslation } from 'react-i18next';
 import { CheckoutResponse as Checkout } from './types';
 import type { MenuProps } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-
-const Wrapper = styled.div`
-  padding: 32px;
-  max-width: 1440px;
-  margin: auto;
-`;
+import { StyledContainer } from 'components/Common/Styled';
 
 export default function Checkouts() {
   const { t } = useTranslation();
@@ -26,9 +20,6 @@ export default function Checkouts() {
   const { checkouts, getCheckoutsLoading } = useCheckouts();
   const navigate = useNavigate();
   const { handleDeleteCheckout, deleteCheckoutLoading } = useDeleteCheckout();
-  const {
-    token: { boxShadow },
-  } = theme.useToken();
   useResetCheckout();
 
   const goToCreateCheckout = () => navigate(PATHS.checkout.create);
@@ -40,7 +31,7 @@ export default function Checkouts() {
     {
       title: 'Link URL',
       key: 'Link URL',
-      render: (checkout: Checkout) => <CopyableField text={getCheckoutLink(checkout.id)} />,
+      render: (checkout: Checkout) => <CopyableField style={{ minWidth: 320 }} text={getCheckoutLink(checkout.id)} />,
     },
     {
       title: 'Status',
@@ -59,16 +50,16 @@ export default function Checkouts() {
     {
       title: 'Price',
       key: 'Price',
-      render: (checkout: Checkout) => {
-        const assetMetadata = ASSET_METADATA[checkout.asset];
+      render: ({ item: { price }, asset }: Checkout) => {
+        const assetMetadata = ASSET_METADATA[asset];
         return (
           <Space align="center">
             {assetMetadata && (
               <Avatar src={assetMetadata.logo} size="small">
-                {checkout.asset}
+                {asset}
               </Avatar>
             )}
-            <span> {getCheckoutPrice(checkout, assetMetadata)}</span>
+            <span> {getCheckoutPrice({ price: price, asset: asset }, assetMetadata)}</span>
           </Space>
         );
       },
@@ -87,16 +78,16 @@ export default function Checkouts() {
         const items: MenuProps['items'] = [
           {
             label: (
-              <p className="checkout-table__action-item" onClick={() => goToEditCheckout(checkout.id)}>
-                Edit
+              <p className="checkout-table__action-item color-link" onClick={() => goToEditCheckout(checkout.id)}>
+                <EditOutlined style={{ marginRight: 5 }} /> Edit
               </p>
             ),
             key: 'Edit',
           },
           {
             label: (
-              <p className="checkout-table__action-item" onClick={() => setOpenedPopconfirm(checkout.id)}>
-                Delete
+              <p className="checkout-table__action-item color-error" onClick={() => setOpenedPopconfirm(checkout.id)}>
+                <DeleteOutlined color="error" style={{ marginRight: 5 }} /> Delete
               </p>
             ),
             key: 'Delete',
@@ -106,8 +97,10 @@ export default function Checkouts() {
           <Dropdown
             menu={{ items }}
             trigger={['click']}
-            overlayStyle={{ width: 150 }}
+            overlayStyle={{ width: 100 }}
             overlayClassName="checkout-table__actions"
+            placement="bottomRight"
+            arrow
           >
             <Popconfirm
               title={t('checkout.deleteCheckoutWarning')}
@@ -131,32 +124,34 @@ export default function Checkouts() {
   ];
 
   return (
-    <Wrapper>
-      <PageHeader title="Checkout">
+    <div>
+      <PageHeader title={t('checkouts')}>
         {hasCheckout && (
           <Button type="primary" onClick={goToCreateCheckout}>
-            {t('checkout.createCheckout')}
+            <PlusOutlined /> {t('create')}
           </Button>
         )}
       </PageHeader>
 
-      {getCheckoutsLoading || hasCheckout ? (
-        <Table dataSource={checkouts} columns={columns} loading={getCheckoutsLoading} rowKey="id" />
-      ) : (
-        <Card style={{ boxShadow }}>
-          <Result
-            style={{ maxWidth: '480px', margin: 'auto' }}
-            icon={<ShopOutlined />}
-            title={t('checkout.startSellingProduct')}
-            subTitle={t('checkout.toStartSellingProduct')}
-            extra={[
-              <Button key="create" type="primary" onClick={goToCreateCheckout}>
-                {t('checkout.createCheckout')}
-              </Button>,
-            ]}
-          ></Result>
+      <StyledContainer>
+        <Card>
+          {getCheckoutsLoading || hasCheckout ? (
+            <Table size="middle" dataSource={checkouts} columns={columns} loading={getCheckoutsLoading} rowKey="id" />
+          ) : (
+            <Result
+              style={{ maxWidth: '480px', margin: 'auto' }}
+              icon={<ShopOutlined />}
+              title={t('checkout.startSellingProduct')}
+              subTitle={t('checkout.toStartSellingProduct')}
+              extra={[
+                <Button key="1" type="primary" onClick={goToCreateCheckout}>
+                  <PlusOutlined /> {t('checkout.createCheckout')}
+                </Button>,
+              ]}
+            ></Result>
+          )}
         </Card>
-      )}
-    </Wrapper>
+      </StyledContainer>
+    </div>
   );
 }

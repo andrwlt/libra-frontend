@@ -1,10 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
-import { Input, Tooltip, Button } from 'antd';
+import { Input, Tooltip, Button, Space } from 'antd';
 import { CopyOutlined } from '@ant-design/icons';
 import ClipboardJS from 'clipboard';
 import { useTranslation } from 'react-i18next';
 
-export default function CopyableField({ text }: any) {
+export default function CopyableField({ text, style = { minWidth: 540 }, size = 'middle' }: any) {
   const { t } = useTranslation();
   const [copied, setCopied] = useState(false);
   const copyButtonRef = useRef<any>(null);
@@ -20,8 +20,9 @@ export default function CopyableField({ text }: any) {
   }, [copyButtonRef]);
 
   return (
-    <Input.Group compact>
+    <Space.Compact size={size} style={style}>
       <Input
+        size={size}
         readOnly
         style={{ width: 'calc(100% - 48px)', background: 'rgb(247, 250, 252)' }}
         value={text}
@@ -29,6 +30,7 @@ export default function CopyableField({ text }: any) {
       />
       <Tooltip title={copied ? t<string>('copied') : t<string>('copy')}>
         <Button
+          size={size}
           ref={copyButtonRef}
           data-clipboard-text={text}
           icon={<CopyOutlined />}
@@ -39,6 +41,6 @@ export default function CopyableField({ text }: any) {
           }}
         />
       </Tooltip>
-    </Input.Group>
+    </Space.Compact>
   );
 }

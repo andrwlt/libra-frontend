@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Typography, Row, Layout, theme, Skeleton } from 'antd';
+import { Typography, Row, Layout, theme } from 'antd';
 import CheckoutSummary from './CheckoutSummary';
 import PaymentSummary from './PaymentSummary';
 import { Brand as BrandType, CheckoutType } from 'features/checkout/types';
@@ -28,7 +28,7 @@ function BrandLogo({ name, logo }: BrandType) {
   );
 
   if (!name && !logo) {
-    content = <Skeleton.Button style={{ marginTop: '16px' }} active />;
+    content = 'Brand';
   }
 
   if (logo) {

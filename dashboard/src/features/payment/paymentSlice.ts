@@ -8,10 +8,14 @@ import { resetStore } from 'features/auth/authSlice';
 
 export const getCharges = createAppAsyncThunk('checkout/getCharges', async (_, { rejectWithValue }) => {
   try {
-    const [{ data: charges }, { data: checkouts }]: [any, any] = await Promise.all([
-      paymentAPI.getCharges(),
-      CheckoutAPI.getCheckouts(),
-    ]);
+    const [
+      {
+        data: { data: charges },
+      },
+      {
+        data: { data: checkouts },
+      },
+    ]: [any, any] = await Promise.all([paymentAPI.getCharges(), CheckoutAPI.getCheckouts()]);
 
     return {
       charges,
