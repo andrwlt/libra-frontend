@@ -150,7 +150,7 @@ export default function Checkouts() {
                 <Row justify="end" style={{ marginTop: 20 }}>
                   <Button
                     size="small"
-                    onClick={fetchCheckouts}
+                    onClick={() => fetchCheckouts({ isGoNext: false })}
                     disabled={!checkoutsPaging.hasPrevPage || getCheckoutsLoading}
                     style={{ marginRight: 10 }}
                   >
@@ -158,7 +158,7 @@ export default function Checkouts() {
                   </Button>{' '}
                   <Button
                     size="small"
-                    onClick={fetchCheckouts}
+                    onClick={() => fetchCheckouts()}
                     disabled={!checkoutsPaging.hasNextPage || getCheckoutsLoading}
                   >
                     Next

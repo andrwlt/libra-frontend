@@ -113,7 +113,7 @@ export default function Payments() {
                 <Row justify="end" style={{ marginTop: 20 }}>
                   <Button
                     size="small"
-                    onClick={fetchCharges}
+                    onClick={() => fetchCharges({ isNextPage: false })}
                     disabled={!chargesPaging.hasPrevPage || getChargesLoading}
                     style={{ marginRight: 10 }}
                   >
@@ -121,7 +121,7 @@ export default function Payments() {
                   </Button>{' '}
                   <Button
                     size="small"
-                    onClick={fetchCharges}
+                    onClick={() => fetchCharges()}
                     disabled={!chargesPaging.hasNextPage || getChargesLoading}
                   >
                     Next

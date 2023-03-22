@@ -13,6 +13,7 @@ import checkoutAPI from './checkoutAPI';
 import { RootState } from 'app/store';
 import { resetStore } from 'features/auth/authSlice';
 import { DEFAULT_LIMIT } from 'config';
+import { getPagingData } from 'utils/paging';
 
 const addPayeeToCheckout = (checkout: CheckoutType, getState: () => RootState): CheckoutType => {
   const {
@@ -27,70 +28,104 @@ const addPayeeToCheckout = (checkout: CheckoutType, getState: () => RootState): 
 
 export const getCheckouts = createAppAsyncThunk(
   'checkout/getCheckouts',
-  async ({ deletedId }: { deletedId?: string }, { rejectWithValue, getState }) => {
+  async ({ deletedId, isGoNext = true }: { deletedId?: string; isGoNext?: boolean }, { rejectWithValue, getState }) => {
     try {
       const {
         checkout: {
           checkouts,
-          checkoutsPaging: { prevPageData },
+          checkoutsPaging: { prevPageData, hasPrevPage },
         },
       } = getState();
 
+      // REFRESH AFTER DELETING
       if (deletedId) {
-        const isDeletedLastItem = checkouts.length === 1;
-        const shouldDecreasePageNumber = isDeletedLastItem;
+        const isDeletedTheOnlyOneRecord = checkouts.length === 1;
 
-        if (shouldDecreasePageNumber) {
-          // TODO
+        if (isDeletedTheOnlyOneRecord) {
+          // DELETE THE LAST ITEM OF AN USER
+          if (!hasPrevPage) {
+            return {
+              checkouts: [],
+              paging: {
+                hasNextPage: false,
+                hasPrevPage: false,
+                prevPageData: [],
+              },
+            };
+          }
+          // DELETE THE LAST ITEM OF CURRENT PAGE
+          else {
+            const beforeId = prevPageData[0].id;
+            const response = await checkoutAPI.getCheckouts({ beforeId });
+            const nextPrevPageData = response.data.data;
+            const nextHasPrevPage = nextPrevPageData.length;
+            return {
+              checkouts: prevPageData,
+              paging: {
+                hasPrevPage: nextHasPrevPage,
+                hasNextPage: false,
+                prevPageData: nextPrevPageData,
+              },
+            };
+          }
         }
-        const afterIdDeleteCase = prevPageData[prevPageData.length - 1]?.id;
-        const {
-          data: { data: currentDataDeleteCase },
-        }: GetCheckoutsResponse = await checkoutAPI.getCheckouts({
-          afterId: afterIdDeleteCase,
-          limit: DEFAULT_LIMIT + 1,
-        });
-        const hasNextPage = currentDataDeleteCase.length > DEFAULT_LIMIT;
-        const currentCheckoutsDeleteCase = hasNextPage
-          ? currentDataDeleteCase.filter((_, index) => index !== DEFAULT_LIMIT)
-          : currentDataDeleteCase;
+        // DELETE ONE ITEM IN MULTIPLE ITEMS
+        else {
+          const afterId = prevPageData[prevPageData.length - 1]?.id;
+          const response: GetCheckoutsResponse = await checkoutAPI.getCheckouts({
+            afterId,
+            limit: DEFAULT_LIMIT + 1,
+          });
+          const { data: nextCheckouts, hasNextPage } = getPagingData(response.data.data);
 
-        return {
-          checkouts: currentCheckoutsDeleteCase,
-          paging: {
-            hasPrevPage: true,
-            hasNextPage,
-            prevPageData: prevPageData,
-          },
-        };
-      } else {
-        const beforeId = checkouts[0]?.id;
-        const afterId = checkouts[checkouts.length - 1]?.id;
-        const emptyResponse: GetCheckoutsResponse = { data: { data: [] } };
+          return {
+            checkouts: nextCheckouts,
+            paging: {
+              hasNextPage,
+              hasPrevPage,
+              prevPageData,
+            },
+          };
+        }
+      }
+      // FETCH IN NORMAL CASE
+      else {
+        // GO TO NEXT PAGE
+        if (isGoNext) {
+          const afterId = checkouts[checkouts.length - 1]?.id;
 
-        const prevCheckoutsRequest = beforeId ? checkoutAPI.getCheckouts({ beforeId }) : emptyResponse;
-        const currentCheckoutsRequest = checkoutAPI.getCheckouts({ afterId, limit: DEFAULT_LIMIT + 1 });
+          const {
+            data: { data: nextPageData },
+          } = await checkoutAPI.getCheckouts({ afterId, limit: DEFAULT_LIMIT + 1 });
 
-        const [
-          {
-            data: { data: prevPageData },
-          },
-          {
-            data: { data: currentData },
-          },
-        ] = await Promise.all<GetCheckoutsResponse>([prevCheckoutsRequest, currentCheckoutsRequest]);
+          const { hasNextPage, data: nextCheckouts } = getPagingData(nextPageData);
 
-        const hasNextPage = currentData.length > DEFAULT_LIMIT;
-        const currentCheckouts = hasNextPage ? currentData.filter((_, index) => index !== DEFAULT_LIMIT) : currentData;
+          return {
+            checkouts: nextCheckouts,
+            paging: {
+              hasNextPage,
+              hasPrevPage: !!checkouts.length,
+              prevPageData: checkouts,
+            },
+          };
+        }
+        // GO TO PREV PAGE
+        else {
+          const beforeId = checkouts[0]?.id;
 
-        return {
-          checkouts: currentCheckouts,
-          paging: {
-            hasPrevPage: !!prevPageData.length,
-            hasNextPage,
-            prevPageData: prevPageData,
-          },
-        };
+          const {
+            data: { data: nextPrevPageData },
+          } = await checkoutAPI.getCheckouts({ beforeId });
+
+          return {
+            checkouts: prevPageData,
+            paging: {
+              hasNextPage: true,
+              hasPrevPage: nextPrevPageData.length,
+              prevPageData: nextPrevPageData,
+            },
+          };
+        }
       }
     } catch (err) {
       return rejectWithValue(err);

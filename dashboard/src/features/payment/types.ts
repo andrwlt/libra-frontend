@@ -30,11 +30,6 @@ export interface GetChargesState {
   chargesPaging: {
     hasPrevPage: boolean;
     hasNextPage: boolean;
-  };
-}
-
-export interface GetChargesResponse {
-  data: {
-    data: Charge[];
+    prevPageData: Charge[];
   };
 }

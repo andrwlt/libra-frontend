@@ -6,7 +6,7 @@ export const useCharges = () => {
   const state = useAppSelector(selectChargesState);
   const dispatch = useAppDispatch();
 
-  const fetchCharges = useCallback(() => dispatch(getCharges()), [dispatch]);
+  const fetchCharges = useCallback((params = {}) => dispatch(getCharges(params)), [dispatch]);
 
   useEffect(() => {
     fetchCharges();

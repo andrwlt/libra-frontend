@@ -3,8 +3,8 @@ import { CheckoutAPI } from './types';
 import { DEFAULT_LIMIT } from 'config';
 
 const checkoutAPI: CheckoutAPI = {
-  getCheckouts({ limit = DEFAULT_LIMIT, afterId: after_id, beforeId: before_id }: any) {
-    return requester.get('/checkout', { params: { limit, after_id, before_id } } as any);
+  getCheckouts({ limit = DEFAULT_LIMIT, ...rest }: any) {
+    return requester.get('/checkout', { params: { limit, ...rest } } as any);
   },
 
   getCheckout: (id) => {

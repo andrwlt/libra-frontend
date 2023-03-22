@@ -3,50 +3,80 @@ import paymentAPI from './paymentAPI';
 import CheckoutAPI from 'features/checkout/checkoutAPI';
 import { createAppAsyncThunk } from 'app/hooks';
 import { RootState } from 'app/store';
-import { GetChargesState, GetChargesResponse } from './types';
+import { GetChargesState } from './types';
 import { resetStore } from 'features/auth/authSlice';
 import { DEFAULT_LIMIT } from 'config';
+import { getPagingData } from 'utils/paging';
 
-export const getCharges = createAppAsyncThunk('checkout/getCharges', async (_, { rejectWithValue, getState }) => {
-  try {
-    const {
-      payment: { charges },
-    } = getState();
+export const getCharges = createAppAsyncThunk(
+  'checkout/getCharges',
+  async ({ isGoNext = false }: { isGoNext?: boolean }, { rejectWithValue, getState }) => {
+    try {
+      const {
+        payment: {
+          charges,
+          chargesPaging: { prevPageData },
+        },
+      } = getState();
 
-    const beforeId = charges[0]?.id;
-    const afterId = charges[charges.length - 1]?.id;
-    const emptyResponse: GetChargesResponse = { data: { data: [] } };
+      if (isGoNext) {
+        const afterId = charges[charges.length - 1]?.id;
 
-    const prevChargesRequest = beforeId ? paymentAPI.getCharges({ beforeId }) : emptyResponse;
-    const currentChargesRequest = paymentAPI.getCharges({ afterId, limit: DEFAULT_LIMIT + 1 });
+        const [
+          {
+            data: { data: nextPageData },
+          },
+          {
+            data: { data: checkouts },
+          },
+        ] = await Promise.all([
+          paymentAPI.getCharges({ afterId, limit: DEFAULT_LIMIT + 1 }),
+          CheckoutAPI.getCheckouts({}),
+        ]);
 
-    const [
-      {
-        data: { data: prevPageData },
-      },
-      {
-        data: { data: currentData },
-      },
-      {
-        data: { data: checkouts },
-      },
-    ] = await Promise.all<GetChargesResponse>([prevChargesRequest, currentChargesRequest, CheckoutAPI.getCheckouts({})]);
+        const { hasNextPage, data: nextCharges } = getPagingData(nextPageData);
 
-    const hasNextPage = currentData.length > DEFAULT_LIMIT;
-    const currentCharges = hasNextPage ? currentData.filter((_, index) => index !== DEFAULT_LIMIT) : currentData;
+        return {
+          charges: nextCharges,
+          hasCheckout: !!checkouts.length,
+          paging: {
+            hasNextPage,
+            hasPrevPage: !!charges.length,
+            prevPageData: charges,
+          },
+        };
+      }
+      // GO TO PREV PAGE
+      else {
+        const beforeId = charges[0]?.id;
 
-    return {
-      charges: currentCharges,
-      hasCheckout: !!checkouts.length,
-      paging: {
-        hasPrevPage: !!prevPageData.length,
-        hasNextPage,
-      },
-    };
-  } catch (err) {
-    return rejectWithValue(err);
-  }
-});
+        const [
+          {
+            data: { data: nextPrevPageData },
+          },
+          {
+            data: { data: checkouts },
+          },
+        ] = await Promise.all([
+          paymentAPI.getCharges({ beforeId, limit: DEFAULT_LIMIT }),
+          CheckoutAPI.getCheckouts({}),
+        ]);
+
+        return {
+          charges: prevPageData,
+          hasCheckout: !!checkouts.length,
+          paging: {
+            hasNextPage: true,
+            hasPrevPage: nextPrevPageData.length,
+            prevPageData: nextPrevPageData,
+          },
+        };
+      }
+    } catch (err) {
+      return rejectWithValue(err);
+    }
+  },
+);
 
 interface PaymentState extends GetChargesState {}
 
@@ -58,6 +88,7 @@ const initialState: PaymentState = {
   chargesPaging: {
     hasNextPage: false,
     hasPrevPage: false,
+    prevPageData: [],
   },
 };
 
