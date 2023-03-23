@@ -111,7 +111,7 @@ export const getCheckouts = createAppAsyncThunk(
         }
         // GO TO PREV PAGE
         else {
-          const beforeId = checkouts[0]?.id;
+          const beforeId = prevPageData[0]?.id;
 
           const {
             data: { data: nextPrevPageData },
@@ -194,7 +194,6 @@ const initCheckout = {
   item: {
     name: '',
     price: null,
-    image: '',
   },
   afterPayment: {
     redirectUrl: '',
@@ -293,7 +292,6 @@ export const authSlice = createSlice({
       .addCase(deleteCheckout.fulfilled, (state, { payload: deletedId }) => {
         state.deleteCheckoutLoading = false;
         state.deleteCheckoutSuccess = deletedId;
-        state.checkouts = state.checkouts.filter(({ id }) => id !== deletedId);
       })
       .addCase(deleteCheckout.rejected, (state, { payload }) => {
         state.deleteCheckoutLoading = false;

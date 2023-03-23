@@ -9,7 +9,7 @@ export interface Brand {
 export interface LineItem {
   name: string;
   description?: string;
-  image: string;
+  image?: string;
   price: string | null;
 }
 
