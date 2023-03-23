@@ -13,11 +13,18 @@ import {
   selectDeleteCheckoutState,
   deleteCheckout,
 } from 'features/checkout/checkoutSlice';
-import { CheckoutType, CreateCheckoutHookType, UpdateCheckoutHookType, DeleteCheckoutHookType } from './types';
+import { useTranslation } from 'react-i18next';
+import {
+  CreateCheckoutHookType,
+  UpdateCheckoutHookType,
+  DeleteCheckoutHookType,
+  CreatingCheckoutType,
+  UpdatingCheckoutType,
+} from './types';
+
 import { FormInstance } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import PATHS from 'router/paths';
-import { useTranslation } from 'react-i18next';
 
 export const useResetCheckout = () => {
   const dispatch = useAppDispatch();
@@ -63,7 +70,7 @@ export const useCreateCheckout = (onboardingMode = false): CreateCheckoutHookTyp
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const handleCreateCheckout = (checkout: CheckoutType) => {
+  const handleCreateCheckout = (checkout: CreatingCheckoutType) => {
     dispatch(createCheckout(checkout));
   };
 
@@ -85,7 +92,7 @@ export const useUpdateCheckout = (): UpdateCheckoutHookType => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const handleUpdateCheckout = (checkout: CheckoutType) => {
+  const handleUpdateCheckout = (checkout: UpdatingCheckoutType) => {
     dispatch(updateCheckout(checkout));
   };
 

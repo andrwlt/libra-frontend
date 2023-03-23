@@ -2,7 +2,8 @@ import styled from 'styled-components';
 import { Typography, Row, Layout, theme } from 'antd';
 import CheckoutSummary from './CheckoutSummary';
 import PaymentSummary from './PaymentSummary';
-import { Brand as BrandType, CheckoutType } from 'features/checkout/types';
+import { Brand as BrandType, CheckoutPreviewType } from 'features/checkout/types';
+
 import { ReactNode } from 'react';
 
 const { Header, Content } = Layout;
@@ -48,7 +49,7 @@ const FullHeightRow = styled(Row)`
   height: 100%;
 `;
 
-export default function CheckoutPreview({ previewingCheckout }: { previewingCheckout: CheckoutType }) {
+export default function CheckoutPreview({ previewingCheckout }: { previewingCheckout: CheckoutPreviewType }) {
   const { branding, item, asset } = previewingCheckout;
   const {
     token: { colorBgContainer, colorBorderSecondary },

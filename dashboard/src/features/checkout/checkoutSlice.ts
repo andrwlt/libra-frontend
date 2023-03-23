@@ -4,9 +4,12 @@ import {
   CheckoutDetailsState,
   CreateCheckoutState,
   UpdateCheckoutState,
-  CheckoutType,
   DeleteCheckoutState,
   GetCheckoutsResponse,
+  CreatingCheckoutType,
+  AddMoreInfo,
+  UpdatingCheckoutType,
+  CheckoutResponseAfterConvertingPrice,
 } from './types';
 import { createAppAsyncThunk } from 'app/hooks';
 import checkoutAPI from './checkoutAPI';
@@ -14,8 +17,9 @@ import { RootState } from 'app/store';
 import { resetStore } from 'features/auth/authSlice';
 import { DEFAULT_LIMIT } from 'config';
 import { getPagingData } from 'utils/paging';
+import { formatCheckoutToNumberPrice } from 'utils/format/balance';
 
-const addPayeeToCheckout = (checkout: CheckoutType, getState: () => RootState): CheckoutType => {
+const addPayeeToCheckout: AddMoreInfo = (checkout, getState) => {
   const {
     auth: { libraConnectedAccount },
   } = getState();
@@ -147,9 +151,9 @@ export const getCheckoutDetails = createAppAsyncThunk(
 
 export const createCheckout = createAppAsyncThunk(
   'checkout/createCheckout',
-  async (checkout: CheckoutType, { rejectWithValue, getState }) => {
+  async (checkout: CreatingCheckoutType, { rejectWithValue, getState }) => {
     try {
-      const response = await checkoutAPI.createCheckout(addPayeeToCheckout(checkout, getState));
+      const response = await checkoutAPI.createCheckout(addPayeeToCheckout<CreatingCheckoutType>(checkout, getState));
       return response.data;
     } catch (err) {
       return rejectWithValue(err);
@@ -159,9 +163,9 @@ export const createCheckout = createAppAsyncThunk(
 
 export const updateCheckout = createAppAsyncThunk(
   'checkout/updateCheckout',
-  async (checkout: CheckoutType, { rejectWithValue, getState }) => {
+  async (checkout: UpdatingCheckoutType, { rejectWithValue, getState }) => {
     try {
-      const response = await checkoutAPI.updateCheckout(addPayeeToCheckout(checkout, getState));
+      const response = await checkoutAPI.updateCheckout(addPayeeToCheckout<UpdatingCheckoutType>(checkout, getState));
       return response.data;
     } catch (err) {
       return rejectWithValue(err);
@@ -189,7 +193,8 @@ interface CheckoutState
     UpdateCheckoutState,
     DeleteCheckoutState {}
 
-const initCheckout = {
+const initCheckout: CheckoutResponseAfterConvertingPrice = {
+  id: '',
   branding: {},
   item: {
     name: '',
@@ -200,6 +205,8 @@ const initCheckout = {
   },
   payee: '',
   asset: 'wnd',
+  active: false,
+  created: '',
 };
 
 const initialState: CheckoutState = {
@@ -254,7 +261,7 @@ export const authSlice = createSlice({
       })
       .addCase(getCheckoutDetails.fulfilled, (state, { payload }) => {
         state.getCheckoutLoading = false;
-        state.checkout = payload;
+        state.checkout = formatCheckoutToNumberPrice(payload);
       })
       .addCase(getCheckoutDetails.rejected, (state, { payload }) => {
         state.getCheckoutLoading = false;

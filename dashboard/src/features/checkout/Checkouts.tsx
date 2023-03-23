@@ -9,7 +9,7 @@ import { ASSET_METADATA } from 'config';
 import PATHS from 'router/paths';
 import PageHeader from 'components/Common/PageHeader';
 import { useTranslation } from 'react-i18next';
-import { CheckoutResponse as Checkout } from './types';
+import { CheckoutResponseType as Checkout } from './types';
 import type { MenuProps } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { StyledContainer } from 'components/Common/Styled';
@@ -97,7 +97,7 @@ export default function Checkouts() {
           <Dropdown
             menu={{ items }}
             trigger={['click']}
-            overlayStyle={{ width: 100 }}
+            overlayStyle={{ width: 150 }}
             overlayClassName="checkout-table__actions"
             placement="bottomRight"
             arrow

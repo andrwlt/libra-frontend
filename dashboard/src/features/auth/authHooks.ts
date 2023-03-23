@@ -11,6 +11,7 @@ import {
   selectAuthHookState,
   resetStore,
   resetLoginState,
+  resetConnectedExtension,
 } from './authSlice';
 import { LoginHook, ConnectExtensionHook, AuthHookState, AccountType } from './types';
 import { EXTENSION_IDS } from 'config';
@@ -68,6 +69,16 @@ export const useConnectExtension = (onConnected: () => void): ConnectExtensionHo
   useFailed(state.connectExtensionFailed);
 
   return { ...state, handleConnectExtension };
+};
+
+export const useResetConnectedExtension = (open: boolean) => {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (!open) {
+      dispatch(resetConnectedExtension());
+    }
+  }, [dispatch, open]);
 };
 
 export const useLogout = (): (() => void) => {
