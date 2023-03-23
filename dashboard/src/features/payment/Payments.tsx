@@ -1,4 +1,4 @@
-import { Table, Badge, theme, Card, Button, Result, Space, Avatar } from 'antd';
+import { Table, Badge, theme, Card, Button, Result, Space, Avatar, Row } from 'antd';
 import { WalletOutlined } from '@ant-design/icons';
 import type { ColumnsType } from 'antd/es/table';
 import { Charge as ChargeDataType } from './types';
@@ -80,7 +80,7 @@ const columns: ColumnsType<ChargeDataType> = [
 
 export default function Payments() {
   const { t } = useTranslation();
-  const { charges, hasCheckout, getChargesLoading } = useCharges();
+  const { charges, hasCheckout, getChargesLoading, fetchCharges, chargesPaging } = useCharges();
   const navigate = useNavigate();
 
   const subTitle = hasCheckout ? t('payment.hasCheckoutSubtitle') : t('payment.hasNoCheckoutSubtitle');
@@ -99,8 +99,38 @@ export default function Payments() {
 
       <StyledContainer>
         <Card>
-          {getChargesLoading || charges.length > 0 ? (
-            <Table size="small" loading={getChargesLoading} columns={columns} dataSource={charges} rowKey="id" />
+          {getChargesLoading || charges.length ? (
+            <div>
+              <Table
+                size="small"
+                pagination={false}
+                loading={getChargesLoading}
+                columns={columns}
+                dataSource={charges}
+                rowKey="id"
+              />
+              {charges.length ? (
+                <Row justify="end" style={{ marginTop: 20 }}>
+                  <Button
+                    size="small"
+                    onClick={() => fetchCharges({ isNextPage: false })}
+                    disabled={!chargesPaging.hasPrevPage || getChargesLoading}
+                    style={{ marginRight: 10 }}
+                  >
+                    Previous
+                  </Button>{' '}
+                  <Button
+                    size="small"
+                    onClick={() => fetchCharges()}
+                    disabled={!chargesPaging.hasNextPage || getChargesLoading}
+                  >
+                    Next
+                  </Button>
+                </Row>
+              ) : (
+                ''
+              )}
+            </div>
           ) : (
             <Result
               style={{ maxWidth: '480px', margin: 'auto' }}

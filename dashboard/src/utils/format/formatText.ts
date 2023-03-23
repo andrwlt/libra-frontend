@@ -15,10 +15,10 @@ export const getCheckoutLink = (id: string) => {
   return `${process.env.REACT_APP_CHECKOUT_URL}/${id}`;
 };
 
-export const getCheckoutPrice = ({ price, asset }: { price: string; asset: string }, assetMetadata: any) => {
-  const nextPrice = formatBalance(price, asset);
+export const getCheckoutPrice = ({ price, asset }: { price: string | number; asset: string }, assetMetadata: any) => {
+  const nextPrice = typeof price !== 'number' ? formatBalance(price, asset) : price;
   const unit = assetMetadata ? assetMetadata.symbol : asset;
-  const formattedPrice = Number(nextPrice).toLocaleString('en-US', { style: 'decimal' });
+  const formattedPrice = nextPrice.toLocaleString('en-US', { style: 'decimal' });
 
   return `${formattedPrice} ${unit}`;
 };

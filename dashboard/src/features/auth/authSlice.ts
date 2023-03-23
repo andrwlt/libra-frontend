@@ -127,6 +127,10 @@ export const authSlice = createSlice({
       state.loginFailed = undefined;
       state.loginSuccess = undefined;
     },
+
+    resetConnectedExtension(state) {
+      state.connectedExtension = undefined;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -205,6 +209,6 @@ export const selectAuthHookState = ({ auth }: RootState): AuthHookState => {
   };
 };
 
-export const { logout, resetLoginState } = authSlice.actions;
+export const { logout, resetLoginState, resetConnectedExtension } = authSlice.actions;
 
 export default authSlice.reducer as Reducer<AuthState>;

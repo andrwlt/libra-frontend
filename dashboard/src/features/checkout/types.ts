@@ -1,55 +1,92 @@
 import { AxiosPromise } from 'axios';
-import { PreUploadImage } from 'types';
+import { RootState } from 'app/store';
 
 export interface Brand {
   name?: string;
   logo?: string;
 }
 
-export interface LineItem {
+interface CheckoutProductItemBase {
   name: string;
   description?: string;
-  image: string;
-  price: string | null;
+  image?: string;
 }
 
-export interface CheckoutType {
-  id?: string;
+export interface CheckoutProductItemStringPrice extends CheckoutProductItemBase {
+  price: string;
+}
+
+export interface CheckoutProductItemNumberPrice extends CheckoutProductItemBase {
+  price: number | null;
+}
+
+export interface CheckoutBaseType {
   branding: Brand;
-  payee: string;
   asset: string;
-  item: LineItem;
   afterPayment?: {
     redirectUrl: string;
   };
 }
 
-interface LineItemResponse extends LineItem {
-  price: string;
+export interface CheckoutPreviewType extends CheckoutBaseType {
+  item: CheckoutProductItemNumberPrice;
 }
-export interface CheckoutResponse extends CheckoutType {
+
+export interface CreatingCheckoutType extends CheckoutBaseType {
+  item: CheckoutProductItemStringPrice;
+}
+
+export interface UpdatingCheckoutType extends CheckoutProductItemStringPrice {
   id: string;
-  item: LineItemResponse;
+}
+
+export interface CheckoutResponseBase {
+  id: string;
+  branding: Brand;
+  payee: string;
+  asset: string;
+  afterPayment?: {
+    redirectUrl: string;
+  };
   active: boolean;
   created: string;
 }
 
+export interface CheckoutResponseType extends CheckoutResponseBase {
+  item: CheckoutProductItemStringPrice;
+}
+
+export interface CheckoutResponseAfterConvertingPrice extends CheckoutResponseBase {
+  item: CheckoutProductItemNumberPrice;
+}
+
+interface CheckoutParams {
+  limit?: number;
+  afterId?: string;
+  beforeId?: string;
+}
 export interface CheckoutAPI {
-  getCheckouts: () => AxiosPromise;
+  getCheckouts: (params?: CheckoutParams) => AxiosPromise;
   getCheckout: (id: string) => AxiosPromise;
-  createCheckout: (checkout: CheckoutType) => AxiosPromise;
-  updateCheckout: (checkout: CheckoutType) => AxiosPromise;
+  createCheckout: (checkout: CreatingCheckoutType) => AxiosPromise;
+  updateCheckout: (checkout: UpdatingCheckoutType) => AxiosPromise;
+
   deleteCheckout: (id: string) => AxiosPromise;
 }
 
 export interface CheckoutListState {
-  checkouts: CheckoutResponse[];
+  checkouts: CheckoutResponseType[];
   getCheckoutsLoading: boolean;
   getCheckoutsFailed: any;
+  checkoutsPaging: {
+    hasPrevPage: boolean;
+    hasNextPage: boolean;
+    prevPageData: CheckoutResponseType[];
+  };
 }
 
 export interface CheckoutDetailsState {
-  checkout: CheckoutType;
+  checkout: CheckoutResponseAfterConvertingPrice;
   getCheckoutLoading: boolean;
   getCheckoutFailed: any;
 }
@@ -62,7 +99,7 @@ export interface CreateCheckoutState {
 }
 
 export interface CreateCheckoutHookType extends CreateCheckoutState {
-  handleCreateCheckout: (checkout: CheckoutType) => void;
+  handleCreateCheckout: (checkout: CreatingCheckoutType) => void;
 }
 
 export interface UpdateCheckoutState {
@@ -72,7 +109,7 @@ export interface UpdateCheckoutState {
 }
 
 export interface UpdateCheckoutHookType extends UpdateCheckoutState {
-  handleUpdateCheckout: (checkout: CheckoutType) => void;
+  handleUpdateCheckout: (checkout: UpdatingCheckoutType) => void;
 }
 export interface DeleteCheckoutState {
   deleteCheckoutLoading: boolean;
@@ -88,3 +125,11 @@ export interface FormItemsPropsType {
   isShow?: boolean;
   onFieldsChange?: () => void;
 }
+
+export interface GetCheckoutsResponse {
+  data: {
+    data: CheckoutResponseType[];
+  };
+}
+
+export type AddMoreInfo = <T>(original: T, getState: () => RootState) => T;

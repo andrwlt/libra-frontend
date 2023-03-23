@@ -15,6 +15,7 @@ import Congratulation from './Congratulation';
 import { useDeboundCallback } from 'app/hooks';
 import { AccountType } from 'features/auth/types';
 import { useTranslation } from 'react-i18next';
+import { formatCheckoutToStringPrice } from 'utils/format/balance';
 
 const Header = styled.div`
   padding: 32px 64px;
@@ -85,7 +86,7 @@ export default function Onboarding() {
   const loginThenCreateCheckout = async (account: AccountType) => {
     setIsOpenSelectAccountModal(false);
     await handleLogin(account);
-    handleCreateCheckout(previewingCheckout);
+    handleCreateCheckout(formatCheckoutToStringPrice(previewingCheckout));
   };
 
   const step = steps[stepIndex];

@@ -1,9 +1,10 @@
 import requester from 'services/requester';
 import { CheckoutAPI } from './types';
+import { DEFAULT_LIMIT } from 'config';
 
 const checkoutAPI: CheckoutAPI = {
-  getCheckouts() {
-    return requester.get('/checkout');
+  getCheckouts({ limit = DEFAULT_LIMIT, ...rest }: any) {
+    return requester.get('/checkout', { params: { limit, ...rest } } as any);
   },
 
   getCheckout: (id) => {

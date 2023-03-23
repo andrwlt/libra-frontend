@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Button, Card, Result, Space, Avatar, Popconfirm, Table, Tag, Dropdown } from 'antd';
+import { Button, Card, Result, Space, Avatar, Popconfirm, Table, Tag, Dropdown, Row } from 'antd';
 import { ShopOutlined, EllipsisOutlined, PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useCheckouts, useDeleteCheckout, useResetCheckout } from 'features/checkout/checkoutHooks';
 import { useNavigate } from 'react-router-dom';
@@ -9,7 +9,7 @@ import { ASSET_METADATA } from 'config';
 import PATHS from 'router/paths';
 import PageHeader from 'components/Common/PageHeader';
 import { useTranslation } from 'react-i18next';
-import { CheckoutResponse as Checkout } from './types';
+import { CheckoutResponseType as Checkout } from './types';
 import type { MenuProps } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { StyledContainer } from 'components/Common/Styled';
@@ -17,7 +17,7 @@ import { StyledContainer } from 'components/Common/Styled';
 export default function Checkouts() {
   const { t } = useTranslation();
   const [openedPopconfirm, setOpenedPopconfirm] = useState('');
-  const { checkouts, getCheckoutsLoading } = useCheckouts();
+  const { checkouts, getCheckoutsLoading, checkoutsPaging, fetchCheckouts } = useCheckouts();
   const navigate = useNavigate();
   const { handleDeleteCheckout, deleteCheckoutLoading } = useDeleteCheckout();
   useResetCheckout();
@@ -97,7 +97,7 @@ export default function Checkouts() {
           <Dropdown
             menu={{ items }}
             trigger={['click']}
-            overlayStyle={{ width: 100 }}
+            overlayStyle={{ width: 150 }}
             overlayClassName="checkout-table__actions"
             placement="bottomRight"
             arrow
@@ -136,7 +136,36 @@ export default function Checkouts() {
       <StyledContainer>
         <Card>
           {getCheckoutsLoading || hasCheckout ? (
-            <Table size="middle" dataSource={checkouts} columns={columns} loading={getCheckoutsLoading} rowKey="id" />
+            <>
+              <Table
+                size="middle"
+                dataSource={checkouts}
+                columns={columns}
+                loading={getCheckoutsLoading}
+                pagination={false}
+                rowKey="id"
+              />
+
+              {hasCheckout && (
+                <Row justify="end" style={{ marginTop: 20 }}>
+                  <Button
+                    size="small"
+                    onClick={() => fetchCheckouts({ isGoNext: false })}
+                    disabled={!checkoutsPaging.hasPrevPage || getCheckoutsLoading}
+                    style={{ marginRight: 10 }}
+                  >
+                    Previous
+                  </Button>{' '}
+                  <Button
+                    size="small"
+                    onClick={() => fetchCheckouts()}
+                    disabled={!checkoutsPaging.hasNextPage || getCheckoutsLoading}
+                  >
+                    Next
+                  </Button>
+                </Row>
+              )}
+            </>
           ) : (
             <Result
               style={{ maxWidth: '480px', margin: 'auto' }}

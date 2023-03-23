@@ -2,7 +2,8 @@ import styled from 'styled-components';
 import { Typography } from 'antd';
 import { Image, Space, Avatar, Col } from 'antd';
 import { AssetMetadata } from 'types';
-import { LineItem } from 'features/checkout/types';
+import { CheckoutProductItemNumberPrice } from 'features/checkout/types';
+
 import { ASSET_METADATA } from 'config';
 import { getCheckoutPrice } from 'utils/format/formatText';
 import logo from 'assets/logo.svg';
@@ -27,7 +28,7 @@ const ProductImage = styled.div`
 `;
 
 interface Props {
-  product: LineItem | undefined;
+  product: CheckoutProductItemNumberPrice | undefined;
   asset: string;
 }
 
@@ -98,7 +99,7 @@ function FooterLinks() {
   );
 }
 
-const CheckoutSummary = ({ product, asset }: { product: LineItem; asset: string }) => {
+const CheckoutSummary = ({ product, asset }: { product: CheckoutProductItemNumberPrice; asset: string }) => {
   return (
     <Col span={12} style={{ display: 'flex', justifyContent: 'flex-end' }}>
       <CheckoutSummaryWrapper>

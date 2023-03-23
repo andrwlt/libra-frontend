@@ -1,6 +1,5 @@
 import { Input, InputNumber, Select, Form, Space } from 'antd';
 import ImageUploader from 'components/Inputs/ImageUploader';
-import { toSmallestUnit, formatBalance } from 'utils/format/balance';
 import { useTranslation } from 'react-i18next';
 import { FormItemsPropsType } from 'features/checkout/types';
 
@@ -15,18 +14,8 @@ interface AssetInputProps {
 const AssetInput = ({ onChange, value, onboardingMode }: AssetInputProps) => {
   const { t } = useTranslation();
 
-  const form = Form.useFormInstance();
-
-  const handleChange = (asset: string) => {
-    const prevAsset = form.getFieldValue('asset');
-    const prevSmallestUnitPrice = form.getFieldValue(['item', 'price']);
-    const nextSmallestUnitPrice = toSmallestUnit(formatBalance(prevSmallestUnitPrice, prevAsset), asset);
-
-    onChange?.(asset);
-    form.setFieldValue(['item', 'price'], nextSmallestUnitPrice);
-  };
   return (
-    <Select style={{ width: onboardingMode ? '88px' : '102px' }} value={value} onChange={handleChange}>
+    <Select style={{ width: onboardingMode ? '88px' : '102px' }} value={value} onChange={(val) => onChange?.(val)}>
       <Select.Option value="wnd">{t('asset.wnd')}</Select.Option>
       <Select.Option value="dot">{t('asset.dot')}</Select.Option>
     </Select>
@@ -35,27 +24,20 @@ const AssetInput = ({ onChange, value, onboardingMode }: AssetInputProps) => {
 
 interface PriceInputProps {
   onChange?: Function;
-  value?: string;
+  value?: number;
   onboardingMode?: boolean;
 }
 
-const PriceInput = ({ value: smallestUnitPrice, onChange, onboardingMode }: PriceInputProps) => {
+const PriceInput = ({ value, onChange, onboardingMode }: PriceInputProps) => {
   const { t } = useTranslation();
-  const form = Form.useFormInstance();
-  const asset = form.getFieldValue('asset');
-
-  const handleChange = (nextPrice: any) => {
-    const nextSmallestUnitPrice = toSmallestUnit(nextPrice, asset);
-    onChange?.(nextSmallestUnitPrice);
-  };
 
   const placeholder = onboardingMode ? t('checkout.pricePlaceholderOnboarding') : t('checkout.pricePlaceholder');
 
   return (
     <InputNumber
-      min="0"
-      value={smallestUnitPrice && formatBalance(smallestUnitPrice, asset)}
-      onChange={handleChange}
+      min={0}
+      value={value}
+      onChange={(val) => onChange?.(val)}
       placeholder={placeholder}
       style={{ width: onboardingMode ? 'calc(100% - 88px)' : '100%' }}
     />
@@ -74,8 +56,7 @@ const ProductPriceFormItem = ({ onboardingMode }: FormItemsPropsType) => {
       required
       rules={[
         { required: true, message: t<string>('checkout.productPriceIsRequired') },
-        // TODO: custom validation to ensure  value must be numberic
-        // { type: 'number', message: t<string>('checkout.productPriceMustBeNumber') },
+        { type: 'number', message: t<string>('checkout.productPriceMustBeNumber') },
       ]}
     >
       <PriceInput onboardingMode={onboardingMode} />

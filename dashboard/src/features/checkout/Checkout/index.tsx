@@ -17,8 +17,9 @@ import AfterPaymentFormItem from 'features/checkout/FormItems/AfterPaymentFormIt
 import type { TabsProps } from 'antd';
 import Preview from 'components/Checkout/Previewer';
 import { useDeboundCallback } from 'app/hooks';
-import { CheckoutType } from '../types';
+import { CheckoutPreviewType, CreatingCheckoutType, UpdatingCheckoutType } from '../types';
 import { useTranslation } from 'react-i18next';
+import { formatCheckoutToStringPrice } from 'utils/format/balance';
 
 type CheckoutFormWrapperProps = {
   background: string;
@@ -57,7 +58,7 @@ const Checkout = () => {
   const { handleCreateCheckout, createCheckoutLoading } = useCreateCheckout();
   const { handleUpdateCheckout, updateCheckoutLoading } = useUpdateCheckout();
 
-  const [previewingCheckout, setPreviewingCheckout] = useState<CheckoutType>(checkout);
+  const [previewingCheckout, setPreviewingCheckout] = useState<CheckoutPreviewType>(checkout);
   const [form] = Form.useForm();
 
   useReinitCheckoutForm(form, setPreviewingCheckout);
@@ -78,9 +79,9 @@ const Checkout = () => {
       .validateFields()
       .then((values) => {
         if (id) {
-          handleUpdateCheckout({ ...values, id });
+          handleUpdateCheckout(formatCheckoutToStringPrice({ ...values, id }) as UpdatingCheckoutType);
         } else {
-          handleCreateCheckout(values);
+          handleCreateCheckout(formatCheckoutToStringPrice({ ...values }) as CreatingCheckoutType);
         }
       })
       .catch((error) => {
