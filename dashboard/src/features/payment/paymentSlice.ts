@@ -10,7 +10,14 @@ import { getPagingData } from 'utils/paging';
 
 export const getCharges = createAppAsyncThunk(
   'checkout/getCharges',
-  async ({ isGoNext = false }: { isGoNext?: boolean }, { rejectWithValue, getState }) => {
+  async (
+    {
+      isGoNext = false,
+      isFilterChanged = false,
+      queryParams = {},
+    }: { isGoNext?: boolean; isFilterChanged?: boolean; queryParams?: any },
+    { rejectWithValue, getState },
+  ) => {
     try {
       const {
         payment: {
@@ -19,30 +26,30 @@ export const getCharges = createAppAsyncThunk(
         },
       } = getState();
 
-      if (isGoNext) {
-        const afterId = charges[charges.length - 1]?.id;
+      if (isGoNext || isFilterChanged) {
+        const afterId = isFilterChanged ? undefined : charges[charges.length - 1]?.id;
 
         const [
           {
-            data: { data: nextPageData },
+            data: { data: pageData },
           },
           {
             data: { data: checkouts },
           },
         ] = await Promise.all([
-          paymentAPI.getCharges({ afterId, limit: DEFAULT_LIMIT + 1 }),
+          paymentAPI.getCharges({ afterId, limit: DEFAULT_LIMIT + 1, ...queryParams }),
           CheckoutAPI.getCheckouts({}),
         ]);
 
-        const { hasNextPage, data: nextCharges } = getPagingData(nextPageData);
+        const { hasNextPage, data: chargesData } = getPagingData(pageData);
 
         return {
-          charges: nextCharges,
+          charges: chargesData,
           hasCheckout: !!checkouts.length,
           paging: {
             hasNextPage,
-            hasPrevPage: !!charges.length,
-            prevPageData: charges,
+            hasPrevPage: isFilterChanged ? false : !!charges.length,
+            prevPageData: isFilterChanged ? [] : charges,
           },
         };
       }
@@ -58,7 +65,7 @@ export const getCharges = createAppAsyncThunk(
             data: { data: checkouts },
           },
         ] = await Promise.all([
-          paymentAPI.getCharges({ beforeId, limit: DEFAULT_LIMIT }),
+          paymentAPI.getCharges({ beforeId, limit: DEFAULT_LIMIT, ...queryParams }),
           CheckoutAPI.getCheckouts({}),
         ]);
 
@@ -102,10 +109,25 @@ export const paymentSlice = createSlice({
         state.getChargesLoading = true;
         state.charges = [];
       })
-      .addCase(getCharges.fulfilled, (state, { payload }) => {
+      .addCase(getCharges.fulfilled, (state) => {
         state.getChargesLoading = false;
-        state.charges = payload.charges;
-        state.hasCheckout = payload.hasCheckout;
+        // state.charges = payload.charges;
+        // state.hasCheckout = payload.hasCheckout;
+        state.charges = [
+          {
+            id: '12345',
+            from: 'abc',
+            to: 'abcd',
+            amount: 123456,
+            asset: 'wnd',
+            description: 'test',
+            metadata: {},
+            hash: 'string',
+            created: '1231313131',
+            status: 'pending',
+          },
+        ];
+        state.hasCheckout = true;
       })
       .addCase(getCharges.rejected, (state, { payload }) => {
         state.getChargesLoading = false;
