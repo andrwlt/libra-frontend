@@ -1,12 +1,18 @@
+import { useState, useEffect, useMemo } from 'react';
 import { Button, Space, Row, Form, Col, Select, DatePicker } from 'antd';
 import { useSearchParams } from 'react-router-dom';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import type { Dayjs } from 'dayjs';
+import { useTranslation } from 'react-i18next';
+import { PAYMENT_STATUS, NULL_VALUE } from 'config';
+import { getExistProps } from 'utils/paging';
+import { useChargeParams } from 'features/payment/paymentHooks';
 
 dayjs.extend(utc);
 
 const { RangePicker } = DatePicker;
+const { Option } = Select;
 
 const rangePresets: {
   label: string;
@@ -18,55 +24,73 @@ const rangePresets: {
   { label: 'Last 90 Days', value: [dayjs().add(-90, 'd'), dayjs()] },
 ];
 
-const ChargesFilter = () => {
+const ChargesFilter = ({ isLoading }: { isLoading: boolean }) => {
+  const { t } = useTranslation();
   const [form] = Form.useForm();
-  let [searchParams, setSearchParams] = useSearchParams();
+  const [pickerKey, setPickerKey] = useState(1);
+  const [, setSearchParams] = useSearchParams();
+  const { status, createdGte, createdLte } = useChargeParams();
 
-  const status = searchParams.get('status');
-  const createdGte = searchParams.get('created[gte]');
-  const createdLte = searchParams.get('created[lte]');
+  const initialValues = useMemo(() => {
+    return { status: status ?? NULL_VALUE, created: createdGte && [dayjs(createdLte), dayjs(createdGte)] };
+  }, [createdGte, status, createdLte]);
 
-  const initialValues = {
-    status,
-    created: createdGte && [dayjs(createdLte), dayjs(createdGte)],
+  useEffect(() => {
+    form.resetFields();
+  }, [form, initialValues]);
+
+  const onFinish = () => {
+    const values = form.getFieldsValue();
+    setPickerKey(pickerKey + 1);
+
+    setSearchParams(
+      getExistProps({
+        status: values.status,
+        'created[gte]': values?.created?.[0]?.utc().format(),
+        'created[lte]': values?.created?.[1]?.utc().format(),
+      }),
+    );
   };
 
-  const onFinish = (values: any) => {
-    console.log('onFinish');
-    setSearchParams({
-      status: values.status,
-      'created[gte]': values.created[0]?.utc().format(),
-      'created[lte]': values.created[1]?.utc().format(),
-    });
+  const onReset = () => {
+    setSearchParams();
+    form.setFieldsValue({ status: NULL_VALUE, created: undefined });
   };
 
-  const onReset = () => setSearchParams();
+  const isFormChanged =
+    form.getFieldsValue(['status'])?.status === NULL_VALUE && !form.getFieldsValue(['created'])?.created;
 
   return (
-    <Form form={form} onFinish={onFinish} initialValues={initialValues}>
-      <Row justify="space-between" gutter={48} style={{ width: '100%', marginLeft: 0, marginRight: 0 }}>
+    <Form form={form} onFieldsChange={onFinish} initialValues={initialValues} disabled={isLoading}>
+      <Row justify="space-between" gutter={0} style={{ width: '100%', marginLeft: 0, marginRight: 0 }}>
         <Col span={6}>
           <Form.Item name="status" label="Status" style={{ marginBottom: 0 }}>
             <Select>
-              {['succeeded', 'pending', 'failed'].map((status) => (
-                <Select.Option value={status} key={status}>
-                  {status}
-                </Select.Option>
-              ))}
+              <Option value="null" key="null">
+                {t('payment.allStatus')}
+              </Option>
+              <Option value={PAYMENT_STATUS.PENDING} key="1">
+                {t('payment.pending')}
+              </Option>
+              <Option value={PAYMENT_STATUS.SUCCEEDED} key="2">
+                {t('payment.succeeded')}
+              </Option>
+              <Option value={PAYMENT_STATUS.FAILED} key="3">
+                {t('payment.failed')}
+              </Option>
             </Select>
           </Form.Item>
         </Col>
-        <Col span={11}>
+        <Col span={12}>
           <Form.Item name="created" label="Date Range" style={{ marginBottom: 0 }}>
-            <RangePicker presets={rangePresets} showTime />
+            <RangePicker key={pickerKey} presets={rangePresets} showTime />
           </Form.Item>
         </Col>
 
-        <Col span={5} style={{ display: 'flex', justifyContent: 'flex-end', paddingRight: 0 }}>
+        <Col span={2} style={{ display: 'flex', justifyContent: 'flex-end', paddingRight: 0 }}>
           <Space>
-            <Button onClick={onReset}>Reset</Button>
-            <Button type="primary" htmlType="submit">
-              Query
+            <Button disabled={isFormChanged || isLoading} onClick={onReset}>
+              Reset
             </Button>
           </Space>
         </Col>

@@ -24,7 +24,7 @@ export default function Payments() {
     navigate(PATHS.checkout.create);
   };
 
-  const shouldShowTable = getChargesLoading || charges.length;
+  const shouldShowTable = getChargesLoading || hasCheckout;
 
   return (
     <div>
@@ -33,7 +33,7 @@ export default function Payments() {
       <StyledContainer>
         {shouldShowTable ? (
           <Card style={{ marginBottom: 16 }}>
-            <ChargeFilter />
+            <ChargeFilter isLoading={getChargesLoading} />
           </Card>
         ) : (
           ''

@@ -18,7 +18,7 @@ export default function ChargeTable(props: any) {
         <Row justify="end" style={{ marginTop: 20 }}>
           <Button
             size="small"
-            onClick={() => fetchCharges({ isNextPage: false })}
+            onClick={() => fetchCharges({ isGoNext: false })}
             disabled={!chargesPaging.hasPrevPage || getChargesLoading}
             style={{ marginRight: 10 }}
           >

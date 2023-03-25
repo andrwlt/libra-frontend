@@ -12,7 +12,7 @@ export const getCharges = createAppAsyncThunk(
   'checkout/getCharges',
   async (
     {
-      isGoNext = false,
+      isGoNext = true,
       isFilterChanged = false,
       queryParams = {},
     }: { isGoNext?: boolean; isFilterChanged?: boolean; queryParams?: any },
@@ -55,7 +55,7 @@ export const getCharges = createAppAsyncThunk(
       }
       // GO TO PREV PAGE
       else {
-        const beforeId = charges[0]?.id;
+        const beforeId = prevPageData[0]?.id;
 
         const [
           {
@@ -107,27 +107,12 @@ export const paymentSlice = createSlice({
     builder
       .addCase(getCharges.pending, (state) => {
         state.getChargesLoading = true;
-        state.charges = [];
       })
-      .addCase(getCharges.fulfilled, (state) => {
+      .addCase(getCharges.fulfilled, (state, { payload }) => {
         state.getChargesLoading = false;
-        // state.charges = payload.charges;
-        // state.hasCheckout = payload.hasCheckout;
-        state.charges = [
-          {
-            id: '12345',
-            from: 'abc',
-            to: 'abcd',
-            amount: 123456,
-            asset: 'wnd',
-            description: 'test',
-            metadata: {},
-            hash: 'string',
-            created: '1231313131',
-            status: 'pending',
-          },
-        ];
-        state.hasCheckout = true;
+        state.charges = payload.charges;
+        state.hasCheckout = payload.hasCheckout;
+        state.chargesPaging = payload.paging;
       })
       .addCase(getCharges.rejected, (state, { payload }) => {
         state.getChargesLoading = false;
