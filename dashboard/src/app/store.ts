@@ -14,6 +14,7 @@ import {
 import authReducer, { AuthState } from 'features/auth/authSlice';
 import checkoutReducer from 'features/checkout/checkoutSlice';
 import paymentReducer from 'features/payment/paymentSlice';
+import webhookReducer from 'features/webhook/webhookSlice';
 import { setupInstantsInterceptor } from 'services/requester';
 
 const authPersistConfig: PersistConfig<AuthState> = {
@@ -27,6 +28,7 @@ const store = configureStore({
     auth: persistReducer<AuthState, any>(authPersistConfig, authReducer),
     checkout: checkoutReducer,
     payment: paymentReducer,
+    webhook: webhookReducer,
   },
 
   middleware: (getDefaultMiddleware) =>

@@ -56,3 +56,17 @@ body {
   width: 150px !important;
   height: 150px !important;
 }
+
+.libra-navbar-sub-menu .ant-menu-item:has(.active-link) {
+  color: #1677ff;
+  background-color: transparent;
+}
+
+.libra-navbar-sub-menu .ant-menu-item:has(.active-link)::after {
+  border-width: 2px;
+  border-bottom-color: #1677ff;
+}
+
+.libra-navbar-sub-menu .ant-menu-item:has(.active-link):hover {
+  color: #1677ff !important;
+}

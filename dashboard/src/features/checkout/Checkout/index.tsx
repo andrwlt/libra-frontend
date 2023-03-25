@@ -20,6 +20,7 @@ import { useDeboundCallback } from 'app/hooks';
 import { CheckoutPreviewType, CreatingCheckoutType, UpdatingCheckoutType } from '../types';
 import { useTranslation } from 'react-i18next';
 import { formatCheckoutToStringPrice } from 'utils/format/balance';
+import { FixedWrapper } from 'components/Common/Styled';
 
 type CheckoutFormWrapperProps = {
   background: string;
@@ -125,7 +126,7 @@ const Checkout = () => {
   ];
 
   return (
-    <div>
+    <FixedWrapper>
       <ActionBar form={form} loading={isSubmitLoading} onSubmitCheckout={handleSubmit} />
 
       <CheckoutContentWrapper>
@@ -151,7 +152,7 @@ const Checkout = () => {
           </Preview>
         </PreviewContainer>
       </CheckoutContentWrapper>
-    </div>
+    </FixedWrapper>
   );
 };
 

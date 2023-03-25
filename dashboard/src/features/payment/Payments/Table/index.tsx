@@ -1,19 +1,14 @@
 import { Table, Button, Row } from 'antd';
+import { useTranslation } from 'react-i18next';
 import columns from './columns';
 
 export default function ChargeTable(props: any) {
   const { charges, getChargesLoading, fetchCharges, chargesPaging } = props;
+  const { t } = useTranslation();
 
   return (
     <div>
-      <Table
-        size="small"
-        pagination={false}
-        loading={getChargesLoading}
-        columns={columns}
-        dataSource={charges}
-        rowKey="id"
-      />
+      <Table pagination={false} loading={getChargesLoading} columns={columns} dataSource={charges} rowKey="id" />
       {charges.length ? (
         <Row justify="end" style={{ marginTop: 20 }}>
           <Button
@@ -22,14 +17,14 @@ export default function ChargeTable(props: any) {
             disabled={!chargesPaging.hasPrevPage || getChargesLoading}
             style={{ marginRight: 10 }}
           >
-            Previous
+            {t('paging.previous')}
           </Button>{' '}
           <Button
             size="small"
             onClick={() => fetchCharges()}
             disabled={!chargesPaging.hasNextPage || getChargesLoading}
           >
-            Next
+            {t('paging.next')}
           </Button>
         </Row>
       ) : (

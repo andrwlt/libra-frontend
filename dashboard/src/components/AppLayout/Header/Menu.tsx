@@ -1,9 +1,10 @@
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Menu } from 'antd';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useLocation } from 'react-router-dom';
 import PATHS from 'router/paths';
 import { useTranslation } from 'react-i18next';
-import { ShopOutlined, WalletOutlined } from '@ant-design/icons';
+import { ShopOutlined, WalletOutlined, CodeOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 
 const MenuWrapper = styled.div`
@@ -35,6 +36,13 @@ const MenuWrapper = styled.div`
 
 const HeaderMenu = () => {
   const { t } = useTranslation();
+  const location = useLocation();
+  const [activeMenus, setActiveMenus] = useState<string[]>([]);
+
+  useEffect(() => {
+    const [, rootPath] = location.pathname.split('/');
+    setActiveMenus([rootPath]);
+  }, [location]);
 
   const getClassName = ({ isActive, isPending }: { isActive: boolean; isPending: boolean }) =>
     isPending ? 'pending-link' : isActive ? 'active-link' : 'not-active-link';
@@ -47,7 +55,7 @@ const HeaderMenu = () => {
         </NavLink>
       ),
       icon: <WalletOutlined />,
-      key: 'payments',
+      key: PATHS.payment.root,
     },
     {
       label: (
@@ -56,13 +64,37 @@ const HeaderMenu = () => {
         </NavLink>
       ),
       icon: <ShopOutlined />,
-      key: 'checkouts',
+      key: PATHS.checkout.root,
+    },
+    {
+      label: 'Developers',
+      key: 'developer',
+      icon: <CodeOutlined />,
+      popupClassName: 'libra-navbar-sub-menu',
+      children: [
+        {
+          label: (
+            <NavLink to={PATHS.developer.webhook.root} className={getClassName}>
+              {t('webhooks')}
+            </NavLink>
+          ),
+          key: 'webhooks',
+        },
+        {
+          label: (
+            <NavLink to={PATHS.developer.apiKey.root} className={getClassName}>
+              {t('apiKeys')}
+            </NavLink>
+          ),
+          key: 'apiKeys',
+        },
+      ],
     },
   ];
 
   return (
     <MenuWrapper>
-      <Menu style={{ borderBottom: 'none' }} mode="horizontal" items={menuItems}></Menu>
+      <Menu selectedKeys={activeMenus} style={{ borderBottom: 'none' }} mode="horizontal" items={menuItems}></Menu>
     </MenuWrapper>
   );
 };

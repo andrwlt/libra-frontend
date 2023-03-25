@@ -3,8 +3,15 @@ export interface AssetMetadata {
   symbol: string;
   logo: string;
 }
-export interface PreUploadImage {
-  name: string;
-  type: 'image/svg+xml' | 'image/jpeg' | 'image/png';
-  content: string;
+
+export interface Paging<T> {
+  hasPrevPage: boolean;
+  hasNextPage: boolean;
+  prevPageData: T[];
+}
+
+export interface GetListResponse<T> {
+  data: {
+    data: T[];
+  };
 }

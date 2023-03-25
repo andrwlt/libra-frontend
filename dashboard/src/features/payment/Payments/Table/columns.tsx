@@ -46,7 +46,6 @@ const columns: ColumnsType<ChargeDataType> = [
   {
     key: 'amount',
     title: 'Amount',
-    align: 'right',
     render: ({ asset, amount }) => {
       const assetMetadata = ASSET_METADATA[asset];
       return (

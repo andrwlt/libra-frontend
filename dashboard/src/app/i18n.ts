@@ -30,6 +30,32 @@ i18n
           loading: 'Loading...',
           sessionExpired: 'Session is expired. Please login again!',
           checkouts: 'Checkouts',
+          developers: 'Developers',
+          webhooks: 'Webhooks',
+          apiKeys: 'API Keys',
+          cancel: 'Cancel',
+
+          message: {
+            leavingPageWarningTitle: 'Leave page with unsaved changes?',
+            leavingPageWarningContent: 'Leaving this page will delete all unsaved changes.',
+            confirmLeavingPage: 'Leave Page',
+            stay: 'Stay',
+          },
+
+          paging: {
+            previous: 'Previous',
+            next: 'Next',
+          },
+
+          webhook: {
+            create: 'Create Webhook',
+            listen: 'Listen to Libra events',
+            endpointUrl: 'Endpoint URL',
+            selectEventsTitle: 'Select Events to listen to',
+            selectEvents: 'Select events',
+            selectEventToSend: 'Select events to send',
+            selectAllEvents: 'Select all events',
+          },
 
           asset: {
             wnd: 'WND',
@@ -62,7 +88,7 @@ i18n
             succeeded: 'Succeeded',
             pending: 'Pending',
             failed: 'Failed',
-            allStatus: 'All'
+            allStatus: 'All',
           },
 
           checkout: {
@@ -76,10 +102,6 @@ i18n
             branding: 'Branding',
             afterPayment: 'After Payment',
             preview: 'Preview',
-            leavingPageWarningTitle: 'Leave page with unsaved changes?',
-            leavingPageWarningContent: 'Leaving this page will delete all unsaved changes.',
-            confirmLeavingPage: 'Leave Page',
-            stay: 'Stay',
 
             redirectUrlLabel: 'Redirect URL',
             redirectUrlPlaceholder: 'Your website URL',
