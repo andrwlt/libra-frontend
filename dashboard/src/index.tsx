@@ -15,7 +15,7 @@ const container = document.getElementById('root')!;
 const root = createRoot(container);
 
 root.render(
-  <React.StrictMode>
+  <React.Fragment>
     <BrowserRouter>
       <ConfigProvider theme={theme}>
         <Provider store={store}>
@@ -25,7 +25,7 @@ root.render(
         </Provider>
       </ConfigProvider>
     </BrowserRouter>
-  </React.StrictMode>,
+  </React.Fragment>,
 );
 
 // If you want to start measuring performance in your app, pass a function

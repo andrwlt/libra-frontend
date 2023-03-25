@@ -10,7 +10,14 @@ import { getPagingData } from 'utils/paging';
 
 export const getCharges = createAppAsyncThunk(
   'checkout/getCharges',
-  async ({ isGoNext = false }: { isGoNext?: boolean }, { rejectWithValue, getState }) => {
+  async (
+    {
+      isGoNext = true,
+      isFilterChanged = false,
+      queryParams = {},
+    }: { isGoNext?: boolean; isFilterChanged?: boolean; queryParams?: any },
+    { rejectWithValue, getState },
+  ) => {
     try {
       const {
         payment: {
@@ -19,36 +26,36 @@ export const getCharges = createAppAsyncThunk(
         },
       } = getState();
 
-      if (isGoNext) {
-        const afterId = charges[charges.length - 1]?.id;
+      if (isGoNext || isFilterChanged) {
+        const afterId = isFilterChanged ? undefined : charges[charges.length - 1]?.id;
 
         const [
           {
-            data: { data: nextPageData },
+            data: { data: pageData },
           },
           {
             data: { data: checkouts },
           },
         ] = await Promise.all([
-          paymentAPI.getCharges({ afterId, limit: DEFAULT_LIMIT + 1 }),
+          paymentAPI.getCharges({ afterId, limit: DEFAULT_LIMIT + 1, ...queryParams }),
           CheckoutAPI.getCheckouts({}),
         ]);
 
-        const { hasNextPage, data: nextCharges } = getPagingData(nextPageData);
+        const { hasNextPage, data: chargesData } = getPagingData(pageData);
 
         return {
-          charges: nextCharges,
+          charges: chargesData,
           hasCheckout: !!checkouts.length,
           paging: {
             hasNextPage,
-            hasPrevPage: !!charges.length,
-            prevPageData: charges,
+            hasPrevPage: isFilterChanged ? false : !!charges.length,
+            prevPageData: isFilterChanged ? [] : charges,
           },
         };
       }
       // GO TO PREV PAGE
       else {
-        const beforeId = charges[0]?.id;
+        const beforeId = prevPageData[0]?.id;
 
         const [
           {
@@ -58,7 +65,7 @@ export const getCharges = createAppAsyncThunk(
             data: { data: checkouts },
           },
         ] = await Promise.all([
-          paymentAPI.getCharges({ beforeId, limit: DEFAULT_LIMIT }),
+          paymentAPI.getCharges({ beforeId, limit: DEFAULT_LIMIT, ...queryParams }),
           CheckoutAPI.getCheckouts({}),
         ]);
 
@@ -100,12 +107,12 @@ export const paymentSlice = createSlice({
     builder
       .addCase(getCharges.pending, (state) => {
         state.getChargesLoading = true;
-        state.charges = [];
       })
       .addCase(getCharges.fulfilled, (state, { payload }) => {
         state.getChargesLoading = false;
         state.charges = payload.charges;
         state.hasCheckout = payload.hasCheckout;
+        state.chargesPaging = payload.paging;
       })
       .addCase(getCharges.rejected, (state, { payload }) => {
         state.getChargesLoading = false;

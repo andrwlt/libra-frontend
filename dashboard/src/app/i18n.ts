@@ -59,6 +59,10 @@ i18n
             hasNoCheckoutSubtitle: 'To accept payments from your customers, you need to create a checkout first.',
             getCheckoutLinks: 'Get checkout links',
             paymentWillShowHere: 'Your received payments will show here',
+            succeeded: 'Succeeded',
+            pending: 'Pending',
+            failed: 'Failed',
+            allStatus: 'All'
           },
 
           checkout: {
