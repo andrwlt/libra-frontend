@@ -151,7 +151,7 @@ export const getCheckoutDetails = createAppAsyncThunk(
 
 export const createCheckout = createAppAsyncThunk(
   'checkout/createCheckout',
-  async (checkout: CreatingCheckoutType, { rejectWithValue, getState }) => {
+  async (checkout: CreatingCheckoutType, { rejectWithValue, getState,dispatch }) => {
     try {
       const response = await checkoutAPI.createCheckout(addPayeeToCheckout<CreatingCheckoutType>(checkout, getState));
       return response.data;

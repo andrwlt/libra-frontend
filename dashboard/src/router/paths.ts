@@ -20,8 +20,6 @@ const PATHS = {
   developer: {
     webhook: {
       root: '/developer/webhooks',
-      create: '/developer/webhooks/create',
-      edit: '/developer/webhooks/:id/edit',
     },
     apiKey: {
       root: '/developer/apiKeys',

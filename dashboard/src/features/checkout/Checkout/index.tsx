@@ -86,17 +86,16 @@ const Checkout = () => {
         }
       })
       .catch((error) => {
-        const firstError = error.errorFields[0];
-
-        if (firstError.name[0] === 'item' && activeStep !== PRODUCT_STEP_KEY) {
+        const errorStep = error.errorFields?.[0]?.name?.[0];
+        if (errorStep === 'item' && activeStep !== PRODUCT_STEP_KEY) {
           setActiveStep(PRODUCT_STEP_KEY);
         }
 
-        if (firstError.name[0] === 'branding' && activeStep !== BRANDING_STEP_KEY) {
+        if (errorStep === 'branding' && activeStep !== BRANDING_STEP_KEY) {
           setActiveStep(BRANDING_STEP_KEY);
         }
 
-        if (firstError.name[0] === 'afterPayment' && activeStep !== AFTER_PAYMENT_STEP_KEY) {
+        if (errorStep === 'afterPayment' && activeStep !== AFTER_PAYMENT_STEP_KEY) {
           setActiveStep(AFTER_PAYMENT_STEP_KEY);
         }
       });

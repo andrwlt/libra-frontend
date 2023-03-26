@@ -16,7 +16,7 @@ export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 type ReactToResult = <T extends { message?: string }>(
   result: T,
-  customMess?: string,
+  customMess?: string | React.MutableRefObject<string>,
   callback?: (success?: T) => any,
 ) => any;
 
@@ -26,9 +26,10 @@ export const useSuccess: ReactToResult = (success, customMess, callback) => {
   useEffect(() => {
     if (success) {
       if (customMess) {
+        const message = typeof customMess !== 'string' ? customMess.current : customMess;
         messageApi.open({
           type: 'success',
-          content: customMess,
+          content: message,
         });
       }
 

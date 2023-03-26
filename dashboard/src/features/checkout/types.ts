@@ -1,5 +1,6 @@
 import { AxiosPromise } from 'axios';
 import { RootState } from 'app/store';
+import { PagingParams, Paging } from 'types';
 
 export interface Brand {
   name?: string;
@@ -60,17 +61,11 @@ export interface CheckoutResponseAfterConvertingPrice extends CheckoutResponseBa
   item: CheckoutProductItemNumberPrice;
 }
 
-interface CheckoutParams {
-  limit?: number;
-  afterId?: string;
-  beforeId?: string;
-}
 export interface CheckoutAPI {
-  getCheckouts: (params?: CheckoutParams) => AxiosPromise;
+  getCheckouts: (params?: PagingParams) => AxiosPromise;
   getCheckout: (id: string) => AxiosPromise;
   createCheckout: (checkout: CreatingCheckoutType) => AxiosPromise;
   updateCheckout: (checkout: UpdatingCheckoutType) => AxiosPromise;
-
   deleteCheckout: (id: string) => AxiosPromise;
 }
 
@@ -78,11 +73,7 @@ export interface CheckoutListState {
   checkouts: CheckoutResponseType[];
   getCheckoutsLoading: boolean;
   getCheckoutsFailed: any;
-  checkoutsPaging: {
-    hasPrevPage: boolean;
-    hasNextPage: boolean;
-    prevPageData: CheckoutResponseType[];
-  };
+  checkoutsPaging: Paging<CheckoutResponseType>;
 }
 
 export interface CheckoutDetailsState {

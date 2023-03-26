@@ -1,17 +1,14 @@
 import { Navigate } from 'react-router-dom';
+import type { RouteObject } from 'react-router-dom';
 import SignIn from 'features/auth/SignIn';
 import PATHS from './paths';
 import Payments from 'features/payment/Payments';
 import DashboardLayout from 'components/AppLayout';
-import type { RouteObject } from 'react-router-dom';
 import Dashboard from 'features/dashboard/Dashboard';
 import Checkouts from 'features/checkout/Checkouts';
 import Checkout from 'features/checkout/Checkout';
 import Onboarding from 'features/checkout/Onboarding';
-
 import Webhooks from 'features/webhook/Webhooks';
-import CreateWebhook from 'features/webhook/CreateWebhook';
-
 import ApiKeys from 'features/apiKey/apiKeys';
 
 const routes: RouteObject[] = [
@@ -43,11 +40,6 @@ const routes: RouteObject[] = [
       {
         path: PATHS.developer.webhook.root,
         element: <Webhooks />,
-      },
-
-      {
-        path: PATHS.developer.webhook.create,
-        element: <CreateWebhook />,
       },
 
       {

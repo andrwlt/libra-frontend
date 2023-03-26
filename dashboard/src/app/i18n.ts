@@ -34,6 +34,7 @@ i18n
           webhooks: 'Webhooks',
           apiKeys: 'API Keys',
           cancel: 'Cancel',
+          description: 'Description',
 
           message: {
             leavingPageWarningTitle: 'Leave page with unsaved changes?',
@@ -55,6 +56,23 @@ i18n
             selectEvents: 'Select events',
             selectEventToSend: 'Select events to send',
             selectAllEvents: 'Select all events',
+            chargeCreated: 'Charge created',
+            chargeSucceeded: 'Charge succeeded',
+            chargeFailed: 'Charge failed',
+            form: {
+              descriptionPlaceholder: 'An optional description of what this webhook is used for',
+              eventsAreRequired: 'Please select events to listen to',
+              invalidUrl: 'Invalid URL: An explicit scheme (such as https) must be provided',
+            },
+
+            webhookCreatedSuccessfully: 'Webhook Created Successfully',
+            webhookUpdatedSuccessfully: 'Webhook Updated Successfully',
+            webhookDeletedSuccessfully: 'Webhook Deleted Successfully',
+            webhookDisabledSuccessfully: 'Webhook Disabled Successfully',
+            webhookEnabledSuccessfully: 'Webhook Enabled Successfully',
+            deleteWebhookWarning: 'Are you sure to delete this webhook?',
+            disableWebhookWarning: 'Are you sure to disable this webhook?',
+            enableWebhookWarning: 'Are you sure to enable this webhook?',
           },
 
           asset: {

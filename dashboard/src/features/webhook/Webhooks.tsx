@@ -1,34 +1,188 @@
+import { Fragment, useState } from 'react';
 import { StyledContainer } from 'components/Common/Styled';
 import PageHeader from 'components/Common/PageHeader';
+import Secret from 'components/Common/Secret';
 import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom';
-import { Card, Button, Table, Row } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
-import PATHS from 'router/paths';
+import { Card, Button, Table, Row, Popconfirm, Dropdown, Tag } from 'antd';
+import WebhookForm from './WebhookForm';
+import type { MenuProps } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import { useWebhooks } from './webhookHooks';
+import {
+  EllipsisOutlined,
+  PlusOutlined,
+  EditOutlined,
+  DeleteOutlined,
+  DisconnectOutlined,
+  LinkOutlined,
+} from '@ant-design/icons';
+import { useWebhooks, useDeleteWebhook, useResetWebhook, useUpdateWebhook } from 'features/webhook/webhookHooks';
+import { WebhookResponse } from './types';
 
 const Webhooks = () => {
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [openedPopconfirmDelete, setOpenedPopconfirmDelete] = useState('');
+  const [openedPopconfirmDisable, setOpenedPopconfirmDisable] = useState('');
   const { webhooks, getWebhooksLoading, fetchWebhooks, webhooksPaging } = useWebhooks();
-  const { t } = useTranslation();
-  const navigate = useNavigate();
 
-  const goToCreateWebhook = () => {
-    navigate(PATHS.developer.webhook.create);
+  const afterUpdatingSucceeded = () => {
+    setIsFormOpen(false);
+    setEditingWebhook(undefined);
+    setOpenedPopconfirmDisable('');
+  };
+
+  const afterDeleteSuccess = () => {
+    setOpenedPopconfirmDelete('');
+  };
+
+  const { updateWebhookLoading, handleUpdateWebhook } = useUpdateWebhook(afterUpdatingSucceeded);
+  const { handleDeleteWebhook, deleteWebhookLoading } = useDeleteWebhook(afterDeleteSuccess);
+  useResetWebhook();
+
+  const [editingWebhook, setEditingWebhook] = useState<WebhookResponse | undefined>(undefined);
+  const { t } = useTranslation();
+
+  const toggleWebhookStatus = (webhook: WebhookResponse) => {
+    const nextStatus = !webhook.active;
+
+    handleUpdateWebhook(
+      {
+        ...webhook,
+        active: nextStatus,
+      },
+      nextStatus,
+    );
   };
 
   const columns: ColumnsType<any> = [
     {
       title: 'URL',
-      key: 'URL',
+      key: 'url',
+      dataIndex: 'url',
+      render: (url) => <span style={{ fontWeight: 500 }}>{url}</span>,
     },
+
     {
       title: 'Status',
-      key: 'Status',
+      key: 'active',
+      dataIndex: 'active',
+      render: (active: boolean) => {
+        const text = active ? 'Active' : 'Deactivated';
+        const color = active ? 'success' : 'orange';
+        return <Tag color={color}>{text}</Tag>;
+      },
     },
+
     {
       title: 'Events',
       key: 'events',
+      dataIndex: 'events',
+      align: 'center',
+      render: (events: string[]) => <span>{events.length}</span>,
+    },
+
+    {
+      title: 'Secret',
+      key: 'secret',
+      dataIndex: 'secret',
+      render: (secret: string) => <Secret value={secret} />,
+    },
+    {
+      title: '',
+      width: 70,
+      render: (webhook: WebhookResponse) => {
+        const items: MenuProps['items'] = [
+          {
+            label: (
+              <p
+                className="styled-table__action-item color-link"
+                onClick={() => {
+                  setIsFormOpen(true);
+                  setEditingWebhook(webhook);
+                }}
+              >
+                <EditOutlined style={{ marginRight: 5 }} /> Edit
+              </p>
+            ),
+            key: 'Edit',
+          },
+
+          {
+            label: (
+              <p
+                className="styled-table__action-item color-link"
+                onClick={() => setOpenedPopconfirmDisable(webhook.id)}
+              >
+                {webhook.active ? (
+                  <Fragment>
+                    <DisconnectOutlined style={{ marginRight: 5 }} /> Disable
+                  </Fragment>
+                ) : (
+                  <Fragment>
+                    <LinkOutlined style={{ marginRight: 5 }} /> Enable
+                  </Fragment>
+                )}
+              </p>
+            ),
+            key: 'Disable',
+          },
+          {
+            label: (
+              <p
+                className="styled-table__action-item color-error"
+                onClick={() => setOpenedPopconfirmDelete(webhook.id)}
+              >
+                <DeleteOutlined color="error" style={{ marginRight: 5 }} /> Delete
+              </p>
+            ),
+            key: 'Delete',
+          },
+        ];
+        return (
+          <Dropdown
+            menu={{ items }}
+            trigger={['click']}
+            overlayStyle={{ width: 150 }}
+            overlayClassName="styled-table__actions"
+            placement="bottomRight"
+            arrow
+          >
+            {openedPopconfirmDelete ? (
+              <Popconfirm
+                title={t('webhook.deleteWebhookWarning')}
+                onConfirm={() => handleDeleteWebhook(webhook.id)}
+                okText="Delete"
+                cancelText="Cancel"
+                okButtonProps={{ loading: deleteWebhookLoading }}
+                cancelButtonProps={{ disabled: deleteWebhookLoading }}
+                open={openedPopconfirmDelete === webhook.id}
+                onCancel={() => setOpenedPopconfirmDelete('')}
+                destroyTooltipOnHide={true}
+              >
+                <Button size="small" type="text">
+                  <EllipsisOutlined />
+                </Button>
+              </Popconfirm>
+            ) : (
+              <Popconfirm
+                destroyTooltipOnHide={true}
+                title={webhook.active ? t('webhook.disableWebhookWarning') : t('webhook.enableWebhookWarning')}
+                onConfirm={() => toggleWebhookStatus(webhook)}
+                okText="Disable"
+                cancelText="Cancel"
+                okButtonProps={{ loading: updateWebhookLoading }}
+                cancelButtonProps={{ disabled: updateWebhookLoading }}
+                open={openedPopconfirmDisable === webhook.id}
+                onCancel={() => setOpenedPopconfirmDisable('')}
+              >
+                <Button size="small" type="text">
+                  <EllipsisOutlined />
+                </Button>
+              </Popconfirm>
+            )}
+          </Dropdown>
+        );
+      },
+      key: 'action',
     },
   ];
 
@@ -36,14 +190,14 @@ const Webhooks = () => {
     <div>
       <PageHeader title={t('webhooks')}>
         {' '}
-        <Button icon={<PlusOutlined />} type="primary" onClick={goToCreateWebhook}>
+        <Button onClick={() => setIsFormOpen(true)} icon={<PlusOutlined />} type="primary">
           {t('create')}
         </Button>
       </PageHeader>
 
       <StyledContainer>
         <Card>
-          <Table loading={getWebhooksLoading} dataSource={webhooks} columns={columns} rowKey="id" />
+          <Table pagination={false} loading={getWebhooksLoading} dataSource={webhooks} columns={columns} rowKey="id" />
           <Row justify="end" style={{ marginTop: 20 }}>
             <Button
               size="small"
@@ -63,6 +217,17 @@ const Webhooks = () => {
           </Row>
         </Card>
       </StyledContainer>
+
+      <WebhookForm
+        updateWebhookLoading={updateWebhookLoading}
+        handleUpdateWebhook={handleUpdateWebhook}
+        initialValues={editingWebhook}
+        isOpen={isFormOpen}
+        onClose={() => {
+          setIsFormOpen(false);
+          setEditingWebhook(undefined);
+        }}
+      />
     </div>
   );
 };
