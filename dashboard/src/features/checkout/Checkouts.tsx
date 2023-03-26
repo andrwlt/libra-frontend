@@ -154,14 +154,14 @@ export default function Checkouts() {
                     disabled={!checkoutsPaging.hasPrevPage || getCheckoutsLoading}
                     style={{ marginRight: 10 }}
                   >
-                    Previous
+                    {t('paging.previous')}
                   </Button>{' '}
                   <Button
                     size="small"
                     onClick={() => fetchCheckouts()}
                     disabled={!checkoutsPaging.hasNextPage || getCheckoutsLoading}
                   >
-                    Next
+                    {t('paging.next')}
                   </Button>
                 </Row>
               )}

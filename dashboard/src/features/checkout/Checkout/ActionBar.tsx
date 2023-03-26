@@ -1,9 +1,9 @@
 import { Button, Space, Typography, Modal, theme, FormInstance } from 'antd';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { useNavigate, useParams } from 'react-router-dom';
-import styled from 'styled-components';
 import { useCheckout } from '../checkoutHooks';
 import { useTranslation } from 'react-i18next';
+import { FixedHeader } from 'components/Common/Styled';
 
 const { confirm } = Modal;
 
@@ -12,20 +12,6 @@ interface ActionBarProps {
   loading?: boolean;
   form: FormInstance;
 }
-
-interface WraperProps {
-  token: any;
-}
-
-const ActionBarWraper = styled.div<WraperProps>`
-  height: 56px;
-  display: flex;
-  align-items: center;
-  padding: 0 16px;
-  background: ${(props) => props.token.colorBgBase};
-  justify-content: space-between;
-  border-bottom: solid 1px ${(props) => props.token.colorBorder};
-`;
 
 export function ActionBar({ onSubmitCheckout, loading, form }: ActionBarProps) {
   const { id } = useParams();
@@ -49,10 +35,10 @@ export function ActionBar({ onSubmitCheckout, loading, form }: ActionBarProps) {
 
     if (isFormChanged) {
       confirm({
-        title: t('checkout.leavingPageWarningTitle'),
-        content: t('checkout.leavingPageWarningContent'),
-        okText: t('checkout.confirmLeavingPage'),
-        cancelText: t('checkout.stay'),
+        title: t('message.leavingPageWarningTitle'),
+        content: t('message.leavingPageWarningContent'),
+        okText: t('message.confirmLeavingPage'),
+        cancelText: t('message.stay'),
         onOk() {
           navigate(-1);
         },
@@ -64,7 +50,7 @@ export function ActionBar({ onSubmitCheckout, loading, form }: ActionBarProps) {
   };
 
   return (
-    <ActionBarWraper token={token}>
+    <FixedHeader token={token}>
       <Space align="center">
         <Button onClick={handleBack} icon={<ArrowLeftOutlined />} />
         <Typography.Title style={{ margin: 0 }} level={5}>
@@ -75,6 +61,6 @@ export function ActionBar({ onSubmitCheckout, loading, form }: ActionBarProps) {
       <Button loading={loading} type="primary" onClick={onSubmitCheckout}>
         {t('save')}
       </Button>
-    </ActionBarWraper>
+    </FixedHeader>
   );
 }
