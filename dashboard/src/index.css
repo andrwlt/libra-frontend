@@ -27,15 +27,15 @@ body {
   margin: 0;
 }
 
-.checkout-table__actions .ant-dropdown-menu {
+.styled-table__actions .ant-dropdown-menu {
   padding: 8px 5px !important;
 }
 
-.checkout-table__actions .ant-dropdown-menu .ant-dropdown-menu-item {
+.styled-table__actions .ant-dropdown-menu .ant-dropdown-menu-item {
   padding: 0 !important;
 }
 
-.checkout-table__actions .ant-dropdown-menu .ant-dropdown-menu-item .checkout-table__action-item {
+.styled-table__actions .ant-dropdown-menu .ant-dropdown-menu-item .styled-table__action-item {
   margin: 0;
   padding: 5px 12px !important;
 }

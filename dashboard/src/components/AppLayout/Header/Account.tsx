@@ -53,7 +53,7 @@ const Account = () => {
   ];
 
   return (
-    <Dropdown overlayStyle={{ minWidth: 160 }} menu={{ items }} placement="bottomLeft">
+    <Dropdown overlayStyle={{ minWidth: 200 }} menu={{ items }} placement="bottomLeft">
       <Space align="center" size={8} style={{ cursor: 'pointer', paddingRight: 16 }}>
         <Identicon
           value={account?.address}

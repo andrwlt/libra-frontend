@@ -14,6 +14,7 @@ import type { MenuProps } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { StyledContainer } from 'components/Common/Styled';
 
+
 export default function Checkouts() {
   const { t } = useTranslation();
   const [openedPopconfirm, setOpenedPopconfirm] = useState('');
@@ -38,7 +39,7 @@ export default function Checkouts() {
       key: 'Status',
       render: ({ active }: Checkout) => {
         const text = active ? 'Active' : 'Deactivated';
-        const color = active ? 'success' : 'default';
+        const color = active ? 'success' : 'orange';
         return <Tag color={color}>{text}</Tag>;
       },
     },
@@ -78,7 +79,7 @@ export default function Checkouts() {
         const items: MenuProps['items'] = [
           {
             label: (
-              <p className="checkout-table__action-item color-link" onClick={() => goToEditCheckout(checkout.id)}>
+              <p className="styled-table__action-item color-link" onClick={() => goToEditCheckout(checkout.id)}>
                 <EditOutlined style={{ marginRight: 5 }} /> Edit
               </p>
             ),
@@ -86,7 +87,7 @@ export default function Checkouts() {
           },
           {
             label: (
-              <p className="checkout-table__action-item color-error" onClick={() => setOpenedPopconfirm(checkout.id)}>
+              <p className="styled-table__action-item color-error" onClick={() => setOpenedPopconfirm(checkout.id)}>
                 <DeleteOutlined color="error" style={{ marginRight: 5 }} /> Delete
               </p>
             ),
@@ -98,7 +99,7 @@ export default function Checkouts() {
             menu={{ items }}
             trigger={['click']}
             overlayStyle={{ width: 150 }}
-            overlayClassName="checkout-table__actions"
+            overlayClassName="styled-table__actions"
             placement="bottomRight"
             arrow
           >

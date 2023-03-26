@@ -15,3 +15,9 @@ export interface GetListResponse<T> {
     data: T[];
   };
 }
+
+export interface PagingParams {
+  limit?: number;
+  afterId?: string;
+  beforeId?: string;
+}

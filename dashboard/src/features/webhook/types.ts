@@ -1,15 +1,16 @@
-import { Paging } from 'types';
-
+import { Paging, PagingParams } from 'types';
+import { AxiosPromise } from 'axios';
 export interface WebhookBase {
   url: string;
-  secret: string;
+  description?: string;
   events: string[];
+  metadata?: any;
 }
 
 export interface WebhookResponse extends WebhookBase {
   id: string;
   active: boolean;
-  metadata?: any;
+  secret: string;
 }
 
 export interface WebhookListState {
@@ -21,4 +22,47 @@ export interface WebhookListState {
 
 export interface WebhooksHookType extends WebhookListState {
   fetchWebhooks: (params?: { isGoNext?: boolean }) => void;
+}
+
+export interface WebhookAPI {
+  getWebhooks: (params?: PagingParams) => AxiosPromise;
+  getWebhook: (id: string) => AxiosPromise;
+  createWebhook: (checkout: WebhookBase) => AxiosPromise;
+  updateWebhook: (checkout: WebhookResponse) => AxiosPromise;
+  deleteWebhook: (id: string) => AxiosPromise;
+}
+
+export interface CreateWebhookState {
+  createWebhookLoading: boolean;
+  createWebhookSuccess: any;
+  createWebhookFailed: any;
+}
+
+export interface CreateWebhookHook extends CreateWebhookState {
+  handleCreateWebhook: (webhook: WebhookBase) => void;
+}
+
+export interface UpdateWebhookState {
+  updateWebhookLoading: boolean;
+  updateWebhookSuccess: any;
+  updateWebhookFailed: any;
+}
+
+export interface UpdateWebhookHook extends UpdateWebhookState {
+  handleUpdateWebhook: (webhook: WebhookResponse, updatedStatus?: boolean) => void;
+}
+
+export interface UpdateWebhookState {
+  updateWebhookLoading: boolean;
+  updateWebhookSuccess: any;
+  updateWebhookFailed: any;
+}
+
+export interface DeleteWebhookState {
+  deleteWebhookLoading: boolean;
+  deleteWebhookSuccess: any;
+  deleteWebhookFailed: any;
+}
+export interface DeleteWebhookHook extends DeleteWebhookState {
+  handleDeleteWebhook: (id: string) => void;
 }
