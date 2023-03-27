@@ -1,14 +1,15 @@
 import { Table, Button, Row } from 'antd';
 import { useTranslation } from 'react-i18next';
 import columns from './columns';
+import Loading from 'components/Common/Loading';
 
 export default function ChargeTable(props: any) {
   const { charges, getChargesLoading, fetchCharges, chargesPaging } = props;
   const { t } = useTranslation();
 
   return (
-    <div>
-      <Table pagination={false} loading={getChargesLoading} columns={columns} dataSource={charges} rowKey="id" />
+    <Loading spinning={getChargesLoading}>
+      <Table pagination={false} columns={columns} dataSource={charges} rowKey="id" />
       {charges.length ? (
         <Row justify="end" style={{ marginTop: 20 }}>
           <Button
@@ -30,6 +31,6 @@ export default function ChargeTable(props: any) {
       ) : (
         ''
       )}
-    </div>
+    </Loading>
   );
 }

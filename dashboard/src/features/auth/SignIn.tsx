@@ -1,6 +1,6 @@
 import { useState } from 'react';
-import { Button, Typography, Spin, Card, theme as antdTheme } from 'antd';
-import { LoadingOutlined } from '@ant-design/icons';
+import { Button, Typography, Card, theme as antdTheme } from 'antd';
+import Loading from 'components/Common/Loading';
 import styled from 'styled-components';
 import logo from 'assets/logo.svg';
 import { useExtensions, useAuth, useLogin, useConnectExtension } from 'features/auth/authHooks';
@@ -44,9 +44,9 @@ export default function SignIn() {
 
   if (getExtensionsLoading || loginLoading) {
     return (
-      <SignInWrapper colorBgLayout={colorBgLayout}>
-        <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}></Spin>
-      </SignInWrapper>
+      <Loading size="large">
+        <SignInWrapper colorBgLayout={colorBgLayout}></SignInWrapper>
+      </Loading>
     );
   }
 
