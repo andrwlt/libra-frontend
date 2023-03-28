@@ -10,7 +10,6 @@ import {
   logout,
   selectAuthHookState,
   resetStore,
-  resetLoginState,
   resetConnectedExtension,
 } from './authSlice';
 import { LoginHook, ConnectExtensionHook, AuthHookState, AccountType } from './types';
@@ -41,12 +40,6 @@ export const useLogin = (): LoginHook => {
   };
 
   useFailed(state.loginFailed);
-
-  useEffect(() => {
-    return () => {
-      dispatch(resetLoginState());
-    };
-  }, [dispatch]);
 
   return { ...state, handleLogin };
 };

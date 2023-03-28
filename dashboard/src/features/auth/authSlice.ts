@@ -68,6 +68,10 @@ export const login = createAppAsyncThunk(
       }
     } catch (err) {
       return rejectWithValue(err);
+    } finally {
+      setTimeout(() => {
+        dispatch(resetLoginState());
+      }, 500);
     }
   },
 );
