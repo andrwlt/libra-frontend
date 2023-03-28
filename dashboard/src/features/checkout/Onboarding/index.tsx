@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import styled from 'styled-components';
 import Previewer from 'components/Checkout/Previewer';
 import CheckoutPreview from 'components/Checkout/CheckoutPreview';
@@ -40,11 +40,16 @@ export default function Onboarding() {
   const { checkoutURL, handleCreateCheckout, createCheckoutLoading } = useCreateCheckout(onboardingMode);
   const [previewingCheckout, setPreviewingCheckout] = useState(checkout);
   const [isOpenSelectAccountModal, setIsOpenSelectAccountModal] = useState(false);
-  const { handleLogin, loginLoading } = useLogin();
+  const { handleLogin, loginLoading, loginSuccess, loginFailed } = useLogin();
   const { handleConnectExtension, connectExtensionLoading, connectedExtension } = useConnectExtension(() => {
     setIsOpenSelectAccountModal(true);
   });
   const [stepIndex, setStepIndex] = useState(0);
+  const loginSuccessRef = useRef(null);
+  const loginFailedRef = useRef(null);
+
+  loginSuccessRef.current = loginSuccess;
+  loginFailedRef.current = loginFailed;
 
   const onFieldsChange = useDeboundCallback(() => {
     setPreviewingCheckout(form.getFieldsValue());
@@ -86,7 +91,10 @@ export default function Onboarding() {
   const loginThenCreateCheckout = async (account: AccountType) => {
     setIsOpenSelectAccountModal(false);
     await handleLogin(account);
-    handleCreateCheckout(formatCheckoutToStringPrice(previewingCheckout));
+
+    if (loginSuccessRef.current) {
+      handleCreateCheckout(formatCheckoutToStringPrice(previewingCheckout));
+    }
   };
 
   const step = steps[stepIndex];
@@ -127,6 +135,8 @@ export default function Onboarding() {
 
       <FullPageLoading
         isOpen={loginLoading || createCheckoutLoading}
+        hasFunnyQuote={loginLoading}
+        oldLoading={false}
         message={t('onboarding.creatingCheckoutPage') as string}
       />
 

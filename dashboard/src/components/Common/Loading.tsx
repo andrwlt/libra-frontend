@@ -1,7 +1,7 @@
-import { useMemo, useState, useEffect, memo, useRef } from 'react';
+import { useMemo, memo, useRef } from 'react';
 import { Spin, SpinProps } from 'antd';
 import { ReactNode } from 'react';
-import { useTranslation } from 'react-i18next';
+import i18next from 'app/i18n';
 
 function getRandomInt(min: number, max: number): number {
   min = Math.ceil(min);
@@ -9,45 +9,37 @@ function getRandomInt(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-const Loading = ({
-  children,
-  size,
-  spinning,
-  hasDelay = false,
-}: {
+interface LoadingProps {
   children?: ReactNode;
   size?: SpinProps['size'];
   spinning?: boolean;
   hasDelay?: boolean;
-}) => {
-  const { t } = useTranslation();
+}
 
-  const [delay, setDelay] = useState<any>(200);
-  const prevQuoteRef = useRef<any>(null);
+const getFunnyQuote = () => {
+  const quoteIndex = getRandomInt(0, 17);
+  return i18next.t(`funnyQuotes.${quoteIndex}`);
+};
+
+const Loading = ({ children, size, spinning = true }: LoadingProps) => {
+  const prevQuoteRef = useRef<any>();
 
   const quote = useMemo(() => {
     if (!spinning) {
       return prevQuoteRef.current;
     }
 
-    const quoteIndex = getRandomInt(0, 17);
-    const message = t(`funnyQuotes.${quoteIndex}`);
-    prevQuoteRef.current = message;
-
-    return message;
-  }, [t, spinning]);
-
-  useEffect(() => {
-    if (hasDelay) {
-      setDelay(undefined);
-    }
-  }, [hasDelay]);
+    prevQuoteRef.current = getFunnyQuote();
+    return prevQuoteRef.current;
+  }, [spinning]);
 
   return (
-    <Spin size={size} spinning={spinning} tip={quote} delay={delay}>
+    <Spin size={size} spinning={spinning} tip={quote}>
       {children}
     </Spin>
   );
 };
 
-export default memo(Loading);
+export default memo(Loading, (oldProps: LoadingProps, newProps: LoadingProps) => {
+  return oldProps.spinning === newProps.spinning;
+});

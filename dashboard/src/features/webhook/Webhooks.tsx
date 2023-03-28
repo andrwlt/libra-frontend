@@ -17,6 +17,8 @@ import {
 } from '@ant-design/icons';
 import { useWebhooks, useDeleteWebhook, useResetWebhook, useUpdateWebhook } from 'features/webhook/webhookHooks';
 import { WebhookResponse } from './types';
+import Loading from 'components/Common/Loading';
+
 
 const Webhooks = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -196,26 +198,28 @@ const Webhooks = () => {
       </PageHeader>
 
       <StyledContainer>
-        <Card>
-          <Table pagination={false} loading={getWebhooksLoading} dataSource={webhooks} columns={columns} rowKey="id" />
-          <Row justify="end" style={{ marginTop: 20 }}>
-            <Button
-              size="small"
-              onClick={() => fetchWebhooks({ isGoNext: false })}
-              disabled={!webhooksPaging.hasPrevPage || getWebhooksLoading}
-              style={{ marginRight: 10 }}
-            >
-              {t('paging.previous')}
-            </Button>{' '}
-            <Button
-              size="small"
-              onClick={() => fetchWebhooks()}
-              disabled={!webhooksPaging.hasNextPage || getWebhooksLoading}
-            >
-              {t('paging.next')}
-            </Button>
-          </Row>
-        </Card>
+        <Loading spinning={getWebhooksLoading}>
+          <Card>
+            <Table pagination={false} dataSource={webhooks} columns={columns} rowKey="id" />
+            <Row justify="end" style={{ marginTop: 20 }}>
+              <Button
+                size="small"
+                onClick={() => fetchWebhooks({ isGoNext: false })}
+                disabled={!webhooksPaging.hasPrevPage || getWebhooksLoading}
+                style={{ marginRight: 10 }}
+              >
+                {t('paging.previous')}
+              </Button>{' '}
+              <Button
+                size="small"
+                onClick={() => fetchWebhooks()}
+                disabled={!webhooksPaging.hasNextPage || getWebhooksLoading}
+              >
+                {t('paging.next')}
+              </Button>
+            </Row>
+          </Card>
+        </Loading>
       </StyledContainer>
 
       <WebhookForm

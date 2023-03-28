@@ -13,7 +13,7 @@ import { CheckoutResponseType as Checkout } from './types';
 import type { MenuProps } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { StyledContainer } from 'components/Common/Styled';
-
+import Loading from 'components/Common/Loading';
 
 export default function Checkouts() {
   const { t } = useTranslation();
@@ -137,15 +137,8 @@ export default function Checkouts() {
       <StyledContainer>
         <Card>
           {getCheckoutsLoading || hasCheckout ? (
-            <>
-              <Table
-                size="middle"
-                dataSource={checkouts}
-                columns={columns}
-                loading={getCheckoutsLoading}
-                pagination={false}
-                rowKey="id"
-              />
+            <Loading spinning={getCheckoutsLoading}>
+              <Table size="middle" dataSource={checkouts} columns={columns} pagination={false} rowKey="id" />
 
               {hasCheckout && (
                 <Row justify="end" style={{ marginTop: 20 }}>
@@ -166,7 +159,7 @@ export default function Checkouts() {
                   </Button>
                 </Row>
               )}
-            </>
+            </Loading>
           ) : (
             <Result
               style={{ maxWidth: '480px', margin: 'auto' }}

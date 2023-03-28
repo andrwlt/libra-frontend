@@ -70,3 +70,11 @@ body {
 .libra-navbar-sub-menu .ant-menu-item:has(.active-link):hover {
   color: #1677ff !important;
 }
+
+.ant-spin-text {
+  font-size: 15px !important;
+}
+
+.ant-spin-lg .ant-spin-text {
+  font-size: 17px !important;
+}
