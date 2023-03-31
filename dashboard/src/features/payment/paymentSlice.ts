@@ -3,10 +3,9 @@ import paymentAPI from './paymentAPI';
 import CheckoutAPI from 'features/checkout/checkoutAPI';
 import { createAppAsyncThunk } from 'app/hooks';
 import { RootState } from 'app/store';
-import { GetChargesState } from './types';
+import { Charge, GetChargesState } from './types';
 import { resetStore } from 'features/auth/authSlice';
-import { DEFAULT_LIMIT } from 'config';
-import { getPagingData } from 'utils/paging';
+import pagingHelper from 'utils/pagingHelper';
 
 export const getCharges = createAppAsyncThunk(
   'checkout/getCharges',
@@ -20,65 +19,38 @@ export const getCharges = createAppAsyncThunk(
   ) => {
     try {
       const {
-        payment: {
-          charges,
-          chargesPaging: { prevPageData },
-        },
+        payment: { charges, chargesPaging },
       } = getState();
 
-      if (isGoNext || isFilterChanged) {
-        const afterId = isFilterChanged ? undefined : charges[charges.length - 1]?.id;
+      const params = {
+        data: charges,
+        request: paymentAPI.getCharges,
+        searchParams: queryParams,
+        paging: chargesPaging,
+      };
 
-        const [
-          {
-            data: { data: pageData },
-          },
-          {
-            data: { data: checkouts },
-          },
-        ] = await Promise.all([
-          paymentAPI.getCharges({ afterId, limit: DEFAULT_LIMIT + 1, ...queryParams }),
-          CheckoutAPI.getCheckouts({}),
-        ]);
+      let pageDataPromise;
 
-        const { hasNextPage, data: chargesData } = getPagingData(pageData);
-
-        return {
-          charges: chargesData,
-          hasCheckout: !!checkouts.length,
-          paging: {
-            hasNextPage,
-            hasPrevPage: isFilterChanged ? false : !!charges.length,
-            prevPageData: isFilterChanged ? [] : charges,
-          },
-        };
+      if (isFilterChanged) {
+        pageDataPromise = pagingHelper.getFirstPage<Charge>(params);
+      } else if (isGoNext) {
+        pageDataPromise = pagingHelper.goNext<Charge>(params);
+      } else {
+        pageDataPromise = pagingHelper.goBack<Charge>(params);
       }
-      // GO TO PREV PAGE
-      else {
-        const beforeId = prevPageData[0]?.id;
 
-        const [
-          {
-            data: { data: nextPrevPageData },
-          },
-          {
-            data: { data: checkouts },
-          },
-        ] = await Promise.all([
-          paymentAPI.getCharges({ beforeId, limit: DEFAULT_LIMIT, ...queryParams }),
-          CheckoutAPI.getCheckouts({}),
-        ]);
+      const [
+        { data, paging },
+        {
+          data: { data: checkouts },
+        },
+      ] = await Promise.all([pageDataPromise, CheckoutAPI.getCheckouts({})]);
 
-        return {
-          charges: prevPageData,
-          hasCheckout: !!checkouts.length,
-          paging: {
-            hasNextPage: true,
-            hasPrevPage: nextPrevPageData.length,
-            prevPageData: nextPrevPageData,
-          },
-        };
-      }
+      return {
+        data,
+        paging,
+        hasCheckout: !!checkouts.length,
+      };
     } catch (err) {
       return rejectWithValue(err);
     }
@@ -110,7 +82,7 @@ export const paymentSlice = createSlice({
       })
       .addCase(getCharges.fulfilled, (state, { payload }) => {
         state.getChargesLoading = false;
-        state.charges = payload.charges;
+        state.charges = payload.data;
         state.hasCheckout = payload.hasCheckout;
         state.chargesPaging = payload.paging;
       })

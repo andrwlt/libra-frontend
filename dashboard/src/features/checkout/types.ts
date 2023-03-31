@@ -117,10 +117,4 @@ export interface FormItemsPropsType {
   onFieldsChange?: () => void;
 }
 
-export interface GetCheckoutsResponse {
-  data: {
-    data: CheckoutResponseType[];
-  };
-}
-
 export type AddMoreInfo = <T>(original: T, getState: () => RootState) => T;
