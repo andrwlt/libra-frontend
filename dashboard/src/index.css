@@ -78,3 +78,12 @@ body {
 .ant-spin-lg .ant-spin-text {
   font-size: 17px !important;
 }
+
+.relative-container {
+  position: relative !important;
+}
+
+.ant-table-thead > tr > th,
+.ant-table-thead > tr > td {
+  background-color: #fff !important;
+}

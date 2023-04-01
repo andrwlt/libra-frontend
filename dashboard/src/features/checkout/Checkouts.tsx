@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { Button, Card, Result, Space, Avatar, Popconfirm, Table, Tag, Dropdown, Row } from 'antd';
 import { ShopOutlined, EllipsisOutlined, PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useCheckouts, useDeleteCheckout, useResetCheckout } from 'features/checkout/checkoutHooks';
@@ -13,7 +13,7 @@ import { CheckoutResponseType as Checkout } from './types';
 import type { MenuProps } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { StyledContainer } from 'components/Common/Styled';
-import Loading from 'components/Common/Loading';
+import getTableLoaderProps from 'components/Common/TableLoader';
 
 export default function Checkouts() {
   const { t } = useTranslation();
@@ -137,8 +137,15 @@ export default function Checkouts() {
       <StyledContainer>
         <Card>
           {getCheckoutsLoading || hasCheckout ? (
-            <Loading spinning={getCheckoutsLoading}>
-              <Table size="middle" dataSource={checkouts} columns={columns} pagination={false} rowKey="id" />
+            <Fragment>
+              <Table
+                size="middle"
+                dataSource={checkouts}
+                columns={columns}
+                pagination={false}
+                rowKey="id"
+                {...getTableLoaderProps(getCheckoutsLoading)}
+              />
 
               {hasCheckout && (
                 <Row justify="end" style={{ marginTop: 20 }}>
@@ -159,7 +166,7 @@ export default function Checkouts() {
                   </Button>
                 </Row>
               )}
-            </Loading>
+            </Fragment>
           ) : (
             <Result
               style={{ maxWidth: '480px', margin: 'auto' }}

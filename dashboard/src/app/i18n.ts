@@ -35,6 +35,8 @@ i18n
           apiKeys: 'API Keys',
           cancel: 'Cancel',
           description: 'Description',
+          helpCenter: 'Help Center',
+          whatNew: 'What’s New',
 
           message: {
             leavingPageWarningTitle: 'Leave page with unsaved changes?',

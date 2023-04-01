@@ -8,6 +8,8 @@ import Dashboard from 'features/dashboard/Dashboard';
 import Checkouts from 'features/checkout/Checkouts';
 import Checkout from 'features/checkout/Checkout';
 import Onboarding from 'features/checkout/Onboarding';
+
+import Developers from 'components/Developers/Developers';
 import Webhooks from 'features/webhook/Webhooks';
 import ApiKeys from 'features/apiKey/apiKeys';
 
@@ -38,13 +40,19 @@ const routes: RouteObject[] = [
       },
 
       {
-        path: PATHS.developer.webhook.root,
-        element: <Webhooks />,
-      },
+        path: PATHS.developers.root,
+        element: <Developers />,
+        children: [
+          {
+            path: PATHS.developers.webhook.root,
+            element: <Webhooks />,
+          },
 
-      {
-        path: PATHS.developer.apiKey.root,
-        element: <ApiKeys />,
+          {
+            path: PATHS.developers.apiKey.root,
+            element: <ApiKeys />,
+          },
+        ],
       },
     ],
   },

@@ -18,7 +18,7 @@ import {
 import { useWebhooks, useDeleteWebhook, useResetWebhook, useUpdateWebhook } from 'features/webhook/webhookHooks';
 import { WebhookResponse } from './types';
 import Loading from 'components/Common/Loading';
-
+import getTableLoaderProps from 'components/Common/TableLoader';
 
 const Webhooks = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -198,28 +198,33 @@ const Webhooks = () => {
       </PageHeader>
 
       <StyledContainer>
-        <Loading spinning={getWebhooksLoading}>
-          <Card>
-            <Table pagination={false} dataSource={webhooks} columns={columns} rowKey="id" />
-            <Row justify="end" style={{ marginTop: 20 }}>
-              <Button
-                size="small"
-                onClick={() => fetchWebhooks({ isGoNext: false })}
-                disabled={!webhooksPaging.hasPrevPage || getWebhooksLoading}
-                style={{ marginRight: 10 }}
-              >
-                {t('paging.previous')}
-              </Button>{' '}
-              <Button
-                size="small"
-                onClick={() => fetchWebhooks()}
-                disabled={!webhooksPaging.hasNextPage || getWebhooksLoading}
-              >
-                {t('paging.next')}
-              </Button>
-            </Row>
-          </Card>
-        </Loading>
+        <Card>
+          <Table
+            pagination={false}
+            dataSource={webhooks}
+            columns={columns}
+            rowKey="id"
+            {...getTableLoaderProps(getWebhooksLoading)}
+          />
+
+          <Row justify="end" style={{ marginTop: 20 }}>
+            <Button
+              size="small"
+              onClick={() => fetchWebhooks({ isGoNext: false })}
+              disabled={!webhooksPaging.hasPrevPage || getWebhooksLoading}
+              style={{ marginRight: 10 }}
+            >
+              {t('paging.previous')}
+            </Button>{' '}
+            <Button
+              size="small"
+              onClick={() => fetchWebhooks()}
+              disabled={!webhooksPaging.hasNextPage || getWebhooksLoading}
+            >
+              {t('paging.next')}
+            </Button>
+          </Row>
+        </Card>
       </StyledContainer>
 
       <WebhookForm

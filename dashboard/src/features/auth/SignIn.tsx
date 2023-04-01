@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { Button, Typography, Card, theme as antdTheme } from 'antd';
-import Loading from 'components/Common/Loading';
 import styled from 'styled-components';
 import logo from 'assets/logo.svg';
 import { useExtensions, useAuth, useLogin, useConnectExtension } from 'features/auth/authHooks';
@@ -10,6 +9,7 @@ import { isTokenExpired } from 'utils/auth';
 import PATHS from 'router/paths';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import Loading from 'components/Common/Loading';
 
 type PropsType = {
   colorBgLayout: string;
@@ -21,7 +21,7 @@ const SignInWrapper = styled.div<PropsType>`
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: ${(props) => props.colorBgLayout};
+  // background-color: ${(props) => props.colorBgLayout};
 `;
 
 export default function SignIn() {
@@ -42,16 +42,9 @@ export default function SignIn() {
     return <Navigate to="/" />;
   }
 
-  if (getExtensionsLoading || loginLoading) {
-    return (
-      <Loading size="large">
-        <SignInWrapper colorBgLayout={colorBgLayout}></SignInWrapper>
-      </Loading>
-    );
-  }
-
   return (
-    <SignInWrapper colorBgLayout={colorBgLayout}>
+    <SignInWrapper colorBgLayout={colorBgLayout} className="test">
+      <Loading loading={getExtensionsLoading || loginLoading} isFullPage />
       <Card style={{ boxShadow, maxWidth: '480px', width: '100%', padding: '1rem' }}>
         <a href="https://golibra.xyz">
           <img src={logo} height={36} alt="Libra Logo"></img>

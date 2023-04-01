@@ -3,6 +3,7 @@ import { Layout, theme } from 'antd';
 import Logo from './Logo';
 import Menu from './Menu';
 import Account from './Account';
+import { Container, MenuInnerContainer, LogoWrapperXlOnly, LogoWrapperLgOnly } from '../Styled';
 
 const { Header } = Layout;
 
@@ -12,20 +13,17 @@ interface ThemeType {
 
 const StyledHeader = styled(Header)<ThemeType>`
   background: ${(props) => props.token.colorBgContainer} !important;
-  height: 48px !important;
-  line-height: 48px !important;
-  box-shadow: 0 1px 4px 0 rgba(0, 21, 41, 0.12);
+  height: 56px !important;
+  line-height: 56px !important;
+  box-shadow: rgb(231, 231, 231) 0px -1px 0px inset;
   transition: background 0.3s, width 0.2s;
   padding-inline: 0px !important;
   z-index: 20;
 `;
 
-const HeaderContent = styled.div`
+const FlexContainer = styled.div`
   display: flex;
   align-items: center;
-  padding-left: 16px;
-  width: 100%;
-  height: 100%;
 `;
 
 const LayoutHeader = () => {
@@ -33,11 +31,21 @@ const LayoutHeader = () => {
 
   return (
     <StyledHeader token={token}>
-      <HeaderContent>
-        <Logo />
-        <Menu />
-        <Account />
-      </HeaderContent>
+      <Container>
+        <FlexContainer>
+          <LogoWrapperXlOnly>
+            <Logo />
+          </LogoWrapperXlOnly>
+
+          <MenuInnerContainer>
+            <LogoWrapperLgOnly>
+              <Logo />
+            </LogoWrapperLgOnly>
+            <Menu />
+            <Account />
+          </MenuInnerContainer>
+        </FlexContainer>
+      </Container>
     </StyledHeader>
   );
 };

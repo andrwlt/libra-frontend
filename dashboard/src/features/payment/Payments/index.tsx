@@ -9,6 +9,7 @@ import { StyledContainer } from 'components/Common/Styled';
 import ChargeTable from './Table';
 import ChargeFilter from './Filter';
 
+
 export default function Payments() {
   const { t } = useTranslation();
   const { charges, hasCheckout, getChargesLoading, fetchCharges, chargesPaging } = useCharges();
