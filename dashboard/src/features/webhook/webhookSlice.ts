@@ -9,11 +9,9 @@ import {
 } from './types';
 import { createAppAsyncThunk } from 'app/hooks';
 import webhookAPI from './webhookAPI';
-import { DEFAULT_LIMIT } from 'config';
-import { getPagingData } from 'utils/paging';
 import { RootState } from 'app/store';
 import { resetStore } from 'features/auth/authSlice';
-import { GetListResponse } from 'types';
+import pagingHelper from 'utils/pagingHelper';
 
 export const getWebhooks = createAppAsyncThunk(
   'webhook/getWebhooks',
@@ -27,113 +25,26 @@ export const getWebhooks = createAppAsyncThunk(
   ) => {
     try {
       const {
-        webhook: {
-          webhooks,
-          webhooksPaging: { prevPageData, hasPrevPage },
-        },
+        webhook: { webhooks, webhooksPaging },
       } = getState();
 
+      const params = {
+        request: webhookAPI.getWebhooks,
+        data: webhooks,
+        paging: webhooksPaging,
+      };
+
       if (isRefreshCurrentPage) {
-        const afterId = prevPageData[prevPageData.length - 1]?.id;
-        const {
-          data: { data: nextPageData },
-        } = await webhookAPI.getWebhooks({ afterId, limit: DEFAULT_LIMIT + 1 });
-
-        const { hasNextPage, data: nextWebhooks } = getPagingData(nextPageData);
-
-        return {
-          webhooks: nextWebhooks,
-          paging: {
-            hasNextPage,
-            hasPrevPage: !!prevPageData.length,
-            prevPageData: prevPageData,
-          },
-        };
+        return await pagingHelper.refreshCurrentPage<WebhookResponse>(params);
       }
 
-      // REFRESH AFTER DELETING
       if (deletedId) {
-        const isDeletedTheOnlyOneRecord = webhooks.length === 1;
-
-        if (isDeletedTheOnlyOneRecord) {
-          // DELETE THE LAST ITEM OF AN USER
-          if (!hasPrevPage) {
-            return {
-              webhooks: [],
-              paging: {
-                hasNextPage: false,
-                hasPrevPage: false,
-                prevPageData: [],
-              },
-            };
-          }
-          // DELETE THE LAST ITEM OF CURRENT PAGE
-          else {
-            const beforeId = prevPageData[0].id;
-            const response = await webhookAPI.getWebhooks({ beforeId });
-            const nextPrevPageData = response.data.data;
-            const nextHasPrevPage = nextPrevPageData.length;
-            return {
-              webhooks: prevPageData,
-              paging: {
-                hasPrevPage: nextHasPrevPage,
-                hasNextPage: false,
-                prevPageData: nextPrevPageData,
-              },
-            };
-          }
-        }
-        // DELETE ONE ITEM IN MULTIPLE ITEMS
-        else {
-          const afterId = prevPageData[prevPageData.length - 1]?.id;
-          const response: GetListResponse<WebhookResponse> = await webhookAPI.getWebhooks({
-            afterId,
-            limit: DEFAULT_LIMIT + 1,
-          });
-          const { data: nextWebhooks, hasNextPage } = getPagingData(response.data.data);
-
-          return {
-            webhooks: nextWebhooks,
-            paging: {
-              hasNextPage,
-              hasPrevPage,
-              prevPageData,
-            },
-          };
-        }
+        return await pagingHelper.refreshAfterDeleting<WebhookResponse>(params);
       } else {
         if (isGoNext) {
-          const afterId = webhooks[webhooks.length - 1]?.id;
-
-          const {
-            data: { data: nextPageData },
-          } = await webhookAPI.getWebhooks({ afterId, limit: DEFAULT_LIMIT + 1 });
-
-          const { hasNextPage, data: nextWebhooks } = getPagingData(nextPageData);
-
-          return {
-            webhooks: nextWebhooks,
-            paging: {
-              hasNextPage,
-              hasPrevPage: !!webhooks.length,
-              prevPageData: webhooks,
-            },
-          };
+          return await pagingHelper.goNext<WebhookResponse>(params);
         } else {
-          const beforeId = prevPageData[0]?.id;
-
-          const {
-            data: { data: nextPrevPageData },
-          } = await webhookAPI.getWebhooks({ beforeId });
-
-          return {
-            webhooks: prevPageData,
-            paging: {
-              hasNextPage: true,
-              hasPrevPage: nextPrevPageData.length,
-              prevPageData: nextPrevPageData,
-            },
-          };
+          return await pagingHelper.goBack<WebhookResponse>(params);
         }
       }
     } catch (err) {
@@ -220,7 +131,7 @@ export const webhookSlice = createSlice({
       })
       .addCase(getWebhooks.fulfilled, (state, { payload }) => {
         state.getWebhooksLoading = false;
-        state.webhooks = payload.webhooks;
+        state.webhooks = payload.data;
         state.webhooksPaging = payload.paging;
       })
       .addCase(getWebhooks.rejected, (state, { payload }) => {

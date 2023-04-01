@@ -5,19 +5,18 @@ import {
   CreateCheckoutState,
   UpdateCheckoutState,
   DeleteCheckoutState,
-  GetCheckoutsResponse,
   CreatingCheckoutType,
   AddMoreInfo,
   UpdatingCheckoutType,
   CheckoutResponseAfterConvertingPrice,
+  CheckoutResponseType,
 } from './types';
 import { createAppAsyncThunk } from 'app/hooks';
 import checkoutAPI from './checkoutAPI';
 import { RootState } from 'app/store';
 import { resetStore } from 'features/auth/authSlice';
-import { DEFAULT_LIMIT } from 'config';
-import { getPagingData } from 'utils/paging';
 import { formatCheckoutToNumberPrice } from 'utils/format/balance';
+import pagingHelper from 'utils/pagingHelper';
 
 const addPayeeToCheckout: AddMoreInfo = (checkout, getState) => {
   const {
@@ -35,100 +34,18 @@ export const getCheckouts = createAppAsyncThunk(
   async ({ deletedId, isGoNext = true }: { deletedId?: string; isGoNext?: boolean }, { rejectWithValue, getState }) => {
     try {
       const {
-        checkout: {
-          checkouts,
-          checkoutsPaging: { prevPageData, hasPrevPage },
-        },
+        checkout: { checkouts, checkoutsPaging },
       } = getState();
 
-      // REFRESH AFTER DELETING
+      const params = { paging: checkoutsPaging, request: checkoutAPI.getCheckouts, data: checkouts };
+
       if (deletedId) {
-        const isDeletedTheOnlyOneRecord = checkouts.length === 1;
-
-        if (isDeletedTheOnlyOneRecord) {
-          // DELETE THE LAST ITEM OF AN USER
-          if (!hasPrevPage) {
-            return {
-              checkouts: [],
-              paging: {
-                hasNextPage: false,
-                hasPrevPage: false,
-                prevPageData: [],
-              },
-            };
-          }
-          // DELETE THE LAST ITEM OF CURRENT PAGE
-          else {
-            const beforeId = prevPageData[0].id;
-            const response = await checkoutAPI.getCheckouts({ beforeId });
-            const nextPrevPageData = response.data.data;
-            const nextHasPrevPage = nextPrevPageData.length;
-            return {
-              checkouts: prevPageData,
-              paging: {
-                hasPrevPage: nextHasPrevPage,
-                hasNextPage: false,
-                prevPageData: nextPrevPageData,
-              },
-            };
-          }
-        }
-        // DELETE ONE ITEM IN MULTIPLE ITEMS
-        else {
-          const afterId = prevPageData[prevPageData.length - 1]?.id;
-          const response: GetCheckoutsResponse = await checkoutAPI.getCheckouts({
-            afterId,
-            limit: DEFAULT_LIMIT + 1,
-          });
-          const { data: nextCheckouts, hasNextPage } = getPagingData(response.data.data);
-
-          return {
-            checkouts: nextCheckouts,
-            paging: {
-              hasNextPage,
-              hasPrevPage,
-              prevPageData,
-            },
-          };
-        }
-      }
-      // FETCH IN NORMAL CASE
-      else {
-        // GO TO NEXT PAGE
+        return await pagingHelper.refreshAfterDeleting<CheckoutResponseType>(params);
+      } else {
         if (isGoNext) {
-          const afterId = checkouts[checkouts.length - 1]?.id;
-
-          const {
-            data: { data: nextPageData },
-          } = await checkoutAPI.getCheckouts({ afterId, limit: DEFAULT_LIMIT + 1 });
-
-          const { hasNextPage, data: nextCheckouts } = getPagingData(nextPageData);
-
-          return {
-            checkouts: nextCheckouts,
-            paging: {
-              hasNextPage,
-              hasPrevPage: !!checkouts.length,
-              prevPageData: checkouts,
-            },
-          };
-        }
-        // GO TO PREV PAGE
-        else {
-          const beforeId = prevPageData[0]?.id;
-
-          const {
-            data: { data: nextPrevPageData },
-          } = await checkoutAPI.getCheckouts({ beforeId });
-
-          return {
-            checkouts: prevPageData,
-            paging: {
-              hasNextPage: true,
-              hasPrevPage: nextPrevPageData.length,
-              prevPageData: nextPrevPageData,
-            },
-          };
+          return await pagingHelper.goNext<CheckoutResponseType>(params);
+        } else {
+          return await pagingHelper.goBack<CheckoutResponseType>(params);
         }
       }
     } catch (err) {
@@ -151,7 +68,7 @@ export const getCheckoutDetails = createAppAsyncThunk(
 
 export const createCheckout = createAppAsyncThunk(
   'checkout/createCheckout',
-  async (checkout: CreatingCheckoutType, { rejectWithValue, getState,dispatch }) => {
+  async (checkout: CreatingCheckoutType, { rejectWithValue, getState, dispatch }) => {
     try {
       const response = await checkoutAPI.createCheckout(addPayeeToCheckout<CreatingCheckoutType>(checkout, getState));
       return response.data;
@@ -248,7 +165,7 @@ export const authSlice = createSlice({
       })
       .addCase(getCheckouts.fulfilled, (state, { payload }) => {
         state.getCheckoutsLoading = false;
-        state.checkouts = payload.checkouts;
+        state.checkouts = payload.data;
         state.checkoutsPaging = payload.paging;
       })
       .addCase(getCheckouts.rejected, (state, { payload }) => {
