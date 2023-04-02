@@ -2,7 +2,7 @@ import { useState, useRef } from 'react';
 import styled from 'styled-components';
 import Previewer from 'components/Checkout/Previewer';
 import CheckoutPreview from 'components/Checkout/CheckoutPreview';
-import FullPageLoading from 'components/Common/FullPageLoading';
+import Loading from 'components/Common/Loading';
 import Steps from './steps/Steps';
 import ConnectWallet from '../FormItems/ConnectWallet';
 import { theme, Button, Form } from 'antd';
@@ -133,10 +133,9 @@ export default function Onboarding() {
         </Previewer>
       </Content>
 
-      <FullPageLoading
-        isOpen={loginLoading || createCheckoutLoading}
-        hasFunnyQuote={loginLoading}
-        oldLoading={false}
+      <Loading
+        loading={loginLoading || createCheckoutLoading}
+        isFullPage
         message={t('onboarding.creatingCheckoutPage') as string}
       />
 

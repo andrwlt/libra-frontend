@@ -6,17 +6,18 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 28px 0;
-
+  margin-top: 0px;
+  margin-bottom: 20px;
+ 
   .ant-typography {
-    line-height: 32px;
+    line-height: 22px;
   }
 `;
 
-const PageHeader = ({ title, children }: { title: string; children?: ReactNode }) => {
+export const CardHeader = ({ title, children }: { title: string; children?: ReactNode }) => {
   return (
     <Wrapper>
-      <Typography.Title style={{ margin: 0, lineHeight: '32px', fontSize: 22 }} level={4}>
+      <Typography.Title style={{ margin: 0, lineHeight: '32px', fontSize: 18 }} level={5}>
         {title}
       </Typography.Title>
 
@@ -25,4 +26,4 @@ const PageHeader = ({ title, children }: { title: string; children?: ReactNode }
   );
 };
 
-export default PageHeader;
+export default CardHeader;

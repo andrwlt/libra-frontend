@@ -17,12 +17,13 @@ const PATHS = {
     edit: '/checkouts/:id/edit',
   },
 
-  developer: {
+  developers: {
+    root: '/developers',
     webhook: {
-      root: '/developer/webhooks',
+      root: '/developers/webhooks',
     },
     apiKey: {
-      root: '/developer/apiKeys',
+      root: '/developers/apiKeys',
     },
   },
 };

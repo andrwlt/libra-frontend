@@ -28,3 +28,21 @@ export const PAYMENT_STATUS = {
 };
 
 export const NULL_VALUE = 'null';
+
+const size = {
+  lg: 1200,
+  xl: 1680,
+};
+
+const device = {
+  lg: `(max-width: ${size.lg}px)`,
+};
+
+export const breakpoints = {
+  size,
+  device,
+  screen: {
+    xl: 'XL',
+    lg: 'LG',
+  },
+};

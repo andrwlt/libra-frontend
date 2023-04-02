@@ -1,15 +1,23 @@
-import { Table, Button, Row } from 'antd';
+import { Table, Button, Row, Spin } from 'antd';
 import { useTranslation } from 'react-i18next';
 import columns from './columns';
-import Loading from 'components/Common/Loading';
+import { Fragment } from 'react';
+import getTableLoaderProps from 'components/Common/TableLoader';
 
 export default function ChargeTable(props: any) {
   const { charges, getChargesLoading, fetchCharges, chargesPaging } = props;
   const { t } = useTranslation();
 
   return (
-    <Loading spinning={getChargesLoading}>
-      <Table pagination={false} columns={columns} dataSource={charges} rowKey="id" />
+    <Fragment>
+      <Table
+        pagination={false}
+        columns={columns}
+        dataSource={charges}
+        rowKey="id"
+        {...getTableLoaderProps(getChargesLoading)}
+      />
+
       {charges.length ? (
         <Row justify="end" style={{ marginTop: 20 }}>
           <Button
@@ -31,6 +39,6 @@ export default function ChargeTable(props: any) {
       ) : (
         ''
       )}
-    </Loading>
+    </Fragment>
   );
 }

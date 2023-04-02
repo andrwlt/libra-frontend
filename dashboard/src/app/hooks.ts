@@ -1,8 +1,9 @@
-import { useContext, useEffect, createContext, useRef } from 'react';
+import { useContext, useEffect, createContext, useRef, useState } from 'react';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import type { RootState, AppDispatch } from './store';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { useTranslation } from 'react-i18next';
+import { breakpoints } from 'config';
 
 export const NotifyContext = createContext<any>({});
 
@@ -64,4 +65,36 @@ export const useDeboundCallback = (callback: Function, timeout = 200) => {
   };
 
   return handleCallback;
+};
+
+export const useBreakpoint = () => {
+  const [breakpoint, setBreakPoint] = useState('');
+  const [windowSize, setWindowSize] = useState({
+    width: 0,
+    height: 0,
+  });
+
+  const handleResize = () => {
+    setWindowSize({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', handleResize);
+    handleResize();
+
+    if (0 < windowSize.width && windowSize.width <= breakpoints.size.lg) {
+      setBreakPoint(breakpoints.screen.lg);
+    }
+
+    if (windowSize.width > breakpoints.size.lg) {
+      setBreakPoint(breakpoints.screen.xl);
+    }
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, [windowSize.width]);
+
+  return breakpoint;
 };

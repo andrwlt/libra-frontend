@@ -62,7 +62,7 @@ export interface CheckoutResponseAfterConvertingPrice extends CheckoutResponseBa
 }
 
 export interface CheckoutAPI {
-  getCheckouts: (params?: PagingParams) => AxiosPromise;
+  getCheckouts: (params?: PagingParams) => Promise<any>;
   getCheckout: (id: string) => AxiosPromise;
   createCheckout: (checkout: CreatingCheckoutType) => AxiosPromise;
   updateCheckout: (checkout: UpdatingCheckoutType) => AxiosPromise;

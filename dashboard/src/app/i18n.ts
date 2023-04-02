@@ -35,6 +35,15 @@ i18n
           apiKeys: 'API Keys',
           cancel: 'Cancel',
           description: 'Description',
+          helpCenter: 'Help Center',
+          whatNew: 'What’s New',
+          disable: 'Disable',
+          enable: 'Enable',
+          edit: 'Edit',
+          delete: 'Delete',
+          update: 'Update',
+          reveal: 'Reveal',
+          hide: 'Hide',
 
           message: {
             leavingPageWarningTitle: 'Leave page with unsaved changes?',
@@ -50,6 +59,7 @@ i18n
 
           webhook: {
             create: 'Create Webhook',
+            update: 'Update Webhook',
             listen: 'Listen to Libra events',
             endpointUrl: 'Endpoint URL',
             selectEventsTitle: 'Select Events to listen to',
@@ -112,9 +122,6 @@ i18n
           checkout: {
             createCheckout: 'Create checkout',
             updateCheckout: 'Update Checkout',
-            startSellingProduct: 'Start selling your product',
-            toStartSellingProduct:
-              'To start selling your product, first you need to create checkout page to receive payments from customers.',
             newCheckout: 'Create a new checkout',
             product: 'Product',
             branding: 'Branding',
@@ -155,6 +162,10 @@ i18n
             checkoutUpdatedSuccessfully: 'Checkout Updated Successfully',
             checkoutDeletedSuccessfully: 'Checkout Deleted Successfully',
             deleteCheckoutWarning: 'Are you sure to delete this checkout?',
+            emptyTitle: 'Launching your crypto business has never been simpler',
+            emptyText:
+              'Checkout allows you to sell your digital products within minutes and receive payments directly to your wallet.',
+            createCheckoutNow: 'Create checkout now',
           },
 
           footer: {
@@ -188,7 +199,6 @@ i18n
             15: 'Just a sec, we’re optimizing your crypto journey',
             16: 'Unlocking the secrets of web3, standby',
             17: 'Fasten your seatbelts, we’re diving into the metaverse',
-           
           },
         },
       },

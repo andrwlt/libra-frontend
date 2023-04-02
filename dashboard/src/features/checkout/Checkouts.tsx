@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import { Fragment, useState } from 'react';
 import { Button, Card, Result, Space, Avatar, Popconfirm, Table, Tag, Dropdown, Row } from 'antd';
-import { ShopOutlined, EllipsisOutlined, PlusOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { ShopOutlined, EllipsisOutlined, PlusOutlined } from '@ant-design/icons';
 import { useCheckouts, useDeleteCheckout, useResetCheckout } from 'features/checkout/checkoutHooks';
 import { useNavigate } from 'react-router-dom';
 import CopyableField from 'components/Common/CopyableField';
@@ -13,7 +13,7 @@ import { CheckoutResponseType as Checkout } from './types';
 import type { MenuProps } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { StyledContainer } from 'components/Common/Styled';
-import Loading from 'components/Common/Loading';
+import getTableLoaderProps from 'components/Common/TableLoader';
 
 export default function Checkouts() {
   const { t } = useTranslation();
@@ -79,16 +79,17 @@ export default function Checkouts() {
         const items: MenuProps['items'] = [
           {
             label: (
-              <p className="styled-table__action-item color-link" onClick={() => goToEditCheckout(checkout.id)}>
-                <EditOutlined style={{ marginRight: 5 }} /> Edit
+              <p className="styled-table__action-item" onClick={() => goToEditCheckout(checkout.id)}>
+                Edit
               </p>
             ),
             key: 'Edit',
           },
+          { type: 'divider' },
           {
             label: (
               <p className="styled-table__action-item color-error" onClick={() => setOpenedPopconfirm(checkout.id)}>
-                <DeleteOutlined color="error" style={{ marginRight: 5 }} /> Delete
+                Delete
               </p>
             ),
             key: 'Delete',
@@ -137,8 +138,15 @@ export default function Checkouts() {
       <StyledContainer>
         <Card>
           {getCheckoutsLoading || hasCheckout ? (
-            <Loading spinning={getCheckoutsLoading}>
-              <Table size="middle" dataSource={checkouts} columns={columns} pagination={false} rowKey="id" />
+            <Fragment>
+              <Table
+                size="middle"
+                dataSource={checkouts}
+                columns={columns}
+                pagination={false}
+                rowKey="id"
+                {...getTableLoaderProps(getCheckoutsLoading)}
+              />
 
               {hasCheckout && (
                 <Row justify="end" style={{ marginTop: 20 }}>
@@ -159,16 +167,16 @@ export default function Checkouts() {
                   </Button>
                 </Row>
               )}
-            </Loading>
+            </Fragment>
           ) : (
             <Result
               style={{ maxWidth: '480px', margin: 'auto' }}
               icon={<ShopOutlined />}
-              title={t('checkout.startSellingProduct')}
-              subTitle={t('checkout.toStartSellingProduct')}
+              title={t('checkout.emptyTitle')}
+              subTitle={t('checkout.emptyText')}
               extra={[
-                <Button key="1" type="primary" onClick={goToCreateCheckout}>
-                  <PlusOutlined /> {t('checkout.createCheckout')}
+                <Button key="1" type="primary" onClick={goToCreateCheckout} icon={<PlusOutlined />}>
+                  {t('checkout.createCheckoutNow')}
                 </Button>,
               ]}
             ></Result>

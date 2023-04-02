@@ -166,6 +166,17 @@ export const authSlice = createSlice({
       .addCase(getCheckouts.fulfilled, (state, { payload }) => {
         state.getCheckoutsLoading = false;
         state.checkouts = payload.data;
+        // state.checkouts = [
+        //   {
+        //     id: '3121313',
+        //     item: { name: '4324324324', price: '4324' },
+        //     branding: { name: '432424' },
+        //     payee: '32131',
+        //     asset: '43242',
+        //     active: true,
+        //     created: '4324324',
+        //   },
+        // ];
         state.checkoutsPaging = payload.paging;
       })
       .addCase(getCheckouts.rejected, (state, { payload }) => {

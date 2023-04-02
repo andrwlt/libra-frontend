@@ -6,6 +6,13 @@ import { WebhookResponse } from './types';
 
 const FormItem = Form.Item;
 
+const allEvents = [
+  {
+    label: 'Charge',
+    events: ['charge.created', 'charge.succeeded', 'charge.failed'],
+  },
+];
+
 const defaultInitValues = {
   id: '',
   url: '',
@@ -45,9 +52,9 @@ const WebhookForm = (props: {
   return (
     <Modal
       width="550px"
-      okText={t('create')}
+      okText={initialValues.id ? t('update') : t('create')}
       open={isOpen}
-      title={t('webhook.create')}
+      title={initialValues.id ? t('webhook.update') : t('webhook.create')}
       onCancel={() => onClose()}
       okButtonProps={{
         loading: isLoading,
@@ -87,15 +94,52 @@ const WebhookForm = (props: {
           name="events"
         >
           <Select
+            // dropdownRender={() => (
+            //   <div
+            //     onMouseDown={(e) => {
+            //       e.preventDefault();
+            //       e.stopPropagation();
+            //     }}
+            //   >
+            //     {/* {menu} */}
+            //     {allEvents.map((group) => {
+            //       return (
+            //         <div key={group.label}>
+            //           <Typography.Text style={{ display: 'block' }} key={group.label + 1}>
+            //             {group.label}
+            //           </Typography.Text>
+            //           <Typography.Text
+            //             style={{ display: 'block' }}
+            //             key={group.label + 2}
+            //           >{`Select all ${group.label} events`}</Typography.Text>
+            //           <Space key={group.label} direction="vertical">
+            //             {group.events.map((event) => {
+            //               return <Typography.Text style={{ display: 'block' }}>{event}</Typography.Text>;
+            //             })}
+            //           </Space>
+            //         </div>
+            //       );
+            //     })}
+            //   </div>
+            // )}
             mode="multiple"
             style={{ width: '100%' }}
             placeholder={t('webhook.selectEventsTitle')}
-            options={[
-              { value: 'charge.created', label: t('webhook.chargeCreated') },
-              { value: 'charge.succeeded', label: t('webhook.chargeSucceeded') },
-              { value: 'charge.failed', label: t('webhook.chargeFailed') },
-            ]}
-          ></Select>
+          >
+            {allEvents.map((group) => {
+              return (
+                <Select.OptGroup key={group.label} label={group.label}>
+                  {group.events.map((event) => {
+                    return (
+                      <Select.Option key={event} value={event}>
+                        {event}
+                      </Select.Option>
+                    );
+                  })}
+                </Select.OptGroup>
+              );
+            })}
+          </Select>
         </FormItem>
       </Form>
     </Modal>
