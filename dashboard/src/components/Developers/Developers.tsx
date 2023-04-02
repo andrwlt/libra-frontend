@@ -1,12 +1,12 @@
 import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
-import { Menu } from 'antd';
+import { Menu, Typography } from 'antd';
 import { NavLink } from 'react-router-dom';
 import PATHS from 'router/paths';
 import { useTranslation } from 'react-i18next';
 import { ShopOutlined, WalletOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { MenuWrapper } from 'components/AppLayout/Header/Menu';
+import { MenuWrapper } from 'components/AppLayout/Styled';
 
 const DeveloperMenu = () => {
   const { t } = useTranslation();
@@ -43,27 +43,40 @@ const DeveloperMenu = () => {
 };
 
 const Wrapper = styled.div`
-  height: 46px !important;
-  line-height: 46px !important;
-  padding-inline: 0px !important;
-  display: flex;
-  justify-content: center;
-  width: 100%;
-
   .ant-menu {
-    background: rgb(250, 250, 250);
+    background: transparent;
     box-shadow: rgb(231, 231, 231) 0px -1px 0px inset;
+
+    .ant-menu-item:first-child {
+      margin-left: -16px;
+    }
+  }
+`;
+
+const PageHeader = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 28px;
+
+  .ant-typography {
+    line-height: 32px;
   }
 `;
 
 const Developers = () => {
+  const { t } = useTranslation();
+
   return (
-    <div>
-      <Wrapper>
-        <DeveloperMenu />
-      </Wrapper>
+    <Wrapper>
+      <PageHeader>
+        <Typography.Title style={{ margin: 0, lineHeight: '32px', fontSize: 22 }} level={4}>
+          {t('developers')}
+        </Typography.Title>
+      </PageHeader>{' '}
+      <DeveloperMenu />
       <Outlet />
-    </div>
+    </Wrapper>
   );
 };
 

@@ -1,3 +1,4 @@
+import { Card } from 'antd';
 import styled from 'styled-components';
 
 export const StyledContainer = styled.div``;
@@ -24,4 +25,11 @@ export const FixedHeader = styled.div<FixedHeaderProps>`
   background: ${(props) => props.token.colorBgBase};
   justify-content: space-between;
   border-bottom: solid 1px ${(props) => props.token.colorBorder};
+`;
+
+export const SubTableCard = styled(Card)`
+  .ant-card-body {
+    padding: 0;
+    padding-bottom: 20px;
+  }
 `;

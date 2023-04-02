@@ -1,10 +1,9 @@
-import { Dropdown, Space, Avatar, Typography } from 'antd';
+import { Dropdown, Space, Typography } from 'antd';
 import { useAuth, useLogout } from 'features/auth/authHooks';
 import Identicon from '@polkadot/react-identicon';
 import { truncate } from 'utils/format/formatText';
 import { useTranslation } from 'react-i18next';
 import type { MenuProps } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
 import styled from 'styled-components';
 import { useBreakpoint } from 'app/hooks';
 import { breakpoints } from 'config';
@@ -15,13 +14,17 @@ const StyledMenuItem = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
+
+  .ant-dropdown-menu-title-content {
+    display: block;
+  }
 `;
 
 const developerRoutes = ['webhooks', 'apiKeys', 'developers'];
 
 const Account = () => {
   const { t } = useTranslation();
-  const { account: realAccount } = useAuth();
+  const { account } = useAuth();
   const logout = useLogout();
   const screen = useBreakpoint();
   const navigate = useNavigate();
@@ -29,15 +32,18 @@ const Account = () => {
 
   const [, rootPath] = location.pathname.split('/');
   const isDeveloperActive = developerRoutes.includes(rootPath);
-  console.log('rootPath', rootPath);
 
-  const account = realAccount ?? { name: 'Hung Nguyen', address: '2193123982139218321938219' };
   const items: MenuProps['items'] = [
     {
       key: '1',
       label: (
         <StyledMenuItem style={{ cursor: 'auto' }}>
-          <Avatar style={{ backgroundColor: '#87d068' }} size={35} icon={<UserOutlined />} />
+          <Identicon
+            value={account?.address}
+            size={35}
+            theme="polkadot"
+            style={{ display: 'block', cursor: 'pointer' }}
+          />
           <div style={{ marginLeft: 10, display: 'flex', flexDirection: 'column' }}>
             <Typography.Text style={{ margin: 0 }}> {account?.name}</Typography.Text>
             <Typography.Text type="secondary" style={{ margin: 0 }}>
@@ -56,10 +62,8 @@ const Account = () => {
     {
       key: '2',
       label: (
-        <StyledMenuItem>
-          <Typography.Text style={{ margin: 0 }} onClick={() => navigate(PATHS.developers.webhook.root)}>
-            {t('developers')}
-          </Typography.Text>
+        <StyledMenuItem style={{ width: 170 }} onClick={() => navigate(PATHS.developers.webhook.root)}>
+          <Typography.Text style={{ margin: 0 }}>{t('developers')}</Typography.Text>
         </StyledMenuItem>
       ),
     },
@@ -104,14 +108,12 @@ const Account = () => {
       placement={screen === breakpoints.screen.xl ? 'bottom' : 'bottomRight'}
     >
       <Space align="center" size={8} style={{ cursor: 'pointer' }}>
-        <Avatar style={{ backgroundColor: '#87d068' }} size={35} icon={<UserOutlined />} />
-        {/* <Identicon
+        <Identicon
           value={account?.address}
-          size={24}
+          size={35}
           theme="polkadot"
           style={{ display: 'block', cursor: 'pointer' }}
         />
-        <span> {account?.name}</span> */}
       </Space>
     </Dropdown>
   );

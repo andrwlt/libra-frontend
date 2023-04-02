@@ -11,11 +11,11 @@ import { Container, InnerContainer } from './Styled';
 const DashboardLayout = () => {
   const { token } = useAuth();
 
-  // if (!token || isTokenExpired(token)) {
-  //   return <Navigate to={PATHS.auth.signIn} />;
-  // } else {
-  //   setAxiosToken(token);
-  // }
+  if (!token || isTokenExpired(token)) {
+    return <Navigate to={PATHS.auth.signIn} />;
+  } else {
+    setAxiosToken(token);
+  }
 
   return (
     <Layout style={{ minHeight: '100vh', background: 'rgb(250, 250, 250)' }}>

@@ -3,7 +3,6 @@ import { Typography } from 'antd';
 import { Image, Space, Avatar, Col } from 'antd';
 import { AssetMetadata } from 'types';
 import { CheckoutProductItemNumberPrice } from 'features/checkout/types';
-
 import { ASSET_METADATA } from 'config';
 import { getCheckoutPrice } from 'utils/format/formatText';
 import logo from 'assets/logo.svg';

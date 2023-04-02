@@ -48,3 +48,30 @@ export const LogoWrapperLgOnly = styled(LogoWrapper)`
     width: auto;
   }
 `;
+
+export const MenuWrapper = styled.div`
+  .ant-menu-item:has(.active-link) {
+    color: #1677ff;
+    background-color: transparent;
+
+    &::after {
+      border-width: 2px;
+      border-bottom-color: #1677ff;
+    }
+
+    &:hover {
+      color: #1677ff !important;
+    }
+  }
+
+  .ant-menu-item:has(.not-active-link) {
+    color: rgba(0, 0, 0, 0.88);
+
+    &::after {
+      border-width: 2px;
+      border-bottom-color: transparent;
+    }
+  }
+
+  margin-right: auto;
+`;

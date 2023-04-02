@@ -204,7 +204,7 @@ export const selectLoginState = ({ auth: { loginLoading, loginFailed, loginSucce
 };
 
 export const selectAuthHookState = ({ auth }: RootState): AuthHookState => {
-  const token = auth.accountDictionary[auth.libraConnectedAccount?.address] ?? 'Fake';
+  const token = auth.accountDictionary[auth.libraConnectedAccount?.address];
 
   return {
     token,

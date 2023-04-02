@@ -1,5 +1,5 @@
 import { Card, Button, Result } from 'antd';
-import { WalletOutlined } from '@ant-design/icons';
+import { WalletOutlined, PlusOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import PATHS from 'router/paths';
 import { useCharges } from 'features/payment/paymentHooks';
@@ -8,7 +8,6 @@ import { useTranslation } from 'react-i18next';
 import { StyledContainer } from 'components/Common/Styled';
 import ChargeTable from './Table';
 import ChargeFilter from './Filter';
-
 
 export default function Payments() {
   const { t } = useTranslation();
@@ -55,8 +54,13 @@ export default function Payments() {
               title={t('payment.paymentWillShowHere')}
               subTitle={subTitle}
               extra={[
-                <Button key="1" type="primary" onClick={hasCheckout ? goToCheckouts : goToCreateCheckout}>
-                  {hasCheckout ? t('payment.getCheckoutLinks') : t('checkout.createCheckout')}
+                <Button
+                  key="1"
+                  type="primary"
+                  onClick={hasCheckout ? goToCheckouts : goToCreateCheckout}
+                  icon={!hasCheckout && <PlusOutlined />}
+                >
+                  {hasCheckout ? t('payment.getCheckoutLinks') : t('checkout.createCheckoutNow')}
                 </Button>,
               ]}
             ></Result>
