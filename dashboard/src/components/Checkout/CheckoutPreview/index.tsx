@@ -1,72 +1,67 @@
 import styled from 'styled-components';
-import { Typography, Row, Layout, theme } from 'antd';
+import { Row, Layout, Col } from 'antd';
 import CheckoutSummary from './CheckoutSummary';
 import PaymentSummary from './PaymentSummary';
-import { Brand as BrandType, CheckoutPreviewType } from 'features/checkout/types';
+import { CheckoutPreviewType } from 'features/checkout/types';
+import { CheckoutBrand } from './CheckoutSummary';
 
-import { ReactNode } from 'react';
-
-const { Header, Content } = Layout;
-
-const { Title } = Typography;
-
-const LogoWrapper = styled.div`
-  height: 100%;
-  display: flex;
-  align-items: center;
-  padding-left: 14px;
-`;
-
-const LogoImage = styled.img`
-  height: 24px;
-`;
-
-function BrandLogo({ name, logo }: BrandType) {
-  let content: ReactNode = (
-    <Title style={{ margin: 0 }} level={5}>
-      {name}
-    </Title>
-  );
-
-  if (!name && !logo) {
-    content = 'Brand';
-  }
-
-  if (logo) {
-    content = <LogoImage src={logo} alt="brand logo" />;
-  }
-
-  return <LogoWrapper>{content}</LogoWrapper>;
-}
+const { Content } = Layout;
 
 const Wrapper = styled(Layout)`
   width: 100%;
   height: 100%;
   min-height: 100%;
+  background-color: #fff;
+  display: block;
 `;
 
-const FullHeightRow = styled(Row)`
-  height: 100%;
+const ContentWrapper = styled(Content)`
+  display: flex;
+  justify-content: center;
+
+  &::before {
+    animation-fill-mode: both;
+    background: #ffffff;
+    content: ' ';
+    height: 100%;
+    position: fixed;
+    right: 0;
+    top: 0;
+    transform-origin: right;
+    width: 50%;
+    box-shadow: 15px 0 30px 0 rgba(0, 0, 0, 0.18);
+  }
 `;
 
-export default function CheckoutPreview({ previewingCheckout }: { previewingCheckout: CheckoutPreviewType }) {
+const MainContent = styled(Row)`
+  height: 678px;
+  max-width: 920px;
+  width: 100%;
+  transform: translateY(max(48px, calc(50vh - 55%)));
+`;
+
+export default function CheckoutPreview({
+  previewingCheckout,
+  previewMode = true,
+}: {
+  previewingCheckout: CheckoutPreviewType;
+  previewMode?: boolean;
+}) {
   const { branding, item, asset } = previewingCheckout;
-  const {
-    token: { colorBgContainer, colorBorderSecondary },
-  } = theme.useToken();
 
   return (
     <Wrapper>
-      <Header style={{ background: colorBgContainer, borderBottom: `solid 1px ${colorBorderSecondary}` }}>
-        <BrandLogo name={branding?.name} logo={branding?.logo} />
-      </Header>
-
-      <Content>
-        <FullHeightRow>
-          <CheckoutSummary product={item} asset={asset} />
-          <PaymentSummary />
-        </FullHeightRow>
-      </Content>
+      <CheckoutBrand branding={branding} />
+      <ContentWrapper>
+        <MainContent justify="space-between">
+          <Col span={12}>
+            <CheckoutSummary product={item} asset={asset} previewMode={previewMode} />
+          </Col>
+          <Col span={12}>
+            <PaymentSummary />
+          </Col>
+        </MainContent>
+      </ContentWrapper>
     </Wrapper>
   );
 }

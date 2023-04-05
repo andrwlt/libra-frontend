@@ -24,7 +24,8 @@ export default function Payments() {
     navigate(PATHS.checkout.create);
   };
 
-  const shouldShowTable = getChargesLoading || hasCheckout;
+  const hasCharge = !!charges.length;
+  const shouldShowTable = getChargesLoading || hasCharge;
 
   return (
     <div>

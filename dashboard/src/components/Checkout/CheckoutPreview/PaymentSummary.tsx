@@ -1,6 +1,5 @@
-import styled from 'styled-components';
 import { useState } from 'react';
-import { Button, Typography, Space, theme, Form, Input, Col } from 'antd';
+import { Button, Typography, Space, theme, Form, Input } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import Identicon from '@polkadot/react-identicon';
 import { useTranslation } from 'react-i18next';
@@ -62,19 +61,8 @@ function PaymentAccount({ account, variant = 'default' }: AccountProps) {
   );
 }
 
-const PaymentSummaryWrapper = styled.div`
-  width: 100%;
-  max-width: 460px;
-  padding: 32px;
-  padding-left: 64px;
-`;
-
 export default function PaymentSummary() {
   const { t } = useTranslation();
-  const {
-    token: { colorBgContainer, colorBorderSecondary },
-  } = theme.useToken();
-
   const [paying, setPaying] = useState(false);
 
   const handlePay = async () => {
@@ -86,35 +74,30 @@ export default function PaymentSummary() {
   };
 
   return (
-    <Col
-      style={{
-        background: colorBgContainer,
-        borderLeft: `solid 1px ${colorBorderSecondary}`,
-      }}
-      span={12}
-    >
-      <PaymentSummaryWrapper>
-        <Typography.Title level={4}>{t('checkout.contactInformation')}</Typography.Title>
-        <Form layout="vertical">
-          <Form.Item label="Email" required>
-            <Input placeholder="john.doe@example.com" />
-          </Form.Item>
-        </Form>
+    <div style={{ width: 380, maxWidth: 380, marginLeft: 'auto' }}>
+      <Typography.Title level={4} style={{ marginBottom: 12 }}>
+        {t('checkout.contactInformation')}
+      </Typography.Title>
 
-        <div>
-          <Typography.Title level={4}>{t('checkout.paymentMethod')} </Typography.Title>
-          <PaymentAccount
-            variant="select"
-            account={{
-              name: 'Test Account',
-              address: '5ERjkQVj8M7v5UVZQ8qTbZ2qb1o5TgNXq9tXt2BsWF9jBpDu',
-            }}
-          />
-          <Button style={{ marginTop: '24px' }} type="primary" size="large" block loading={paying} onClick={handlePay}>
-            {t('checkout.pay')}
-          </Button>
-        </div>
-      </PaymentSummaryWrapper>
-    </Col>
+      <Form layout="vertical" requiredMark={false}>
+        <Form.Item label="Email" required>
+          <Input placeholder="john.doe@example.com" />
+        </Form.Item>
+      </Form>
+
+      <div>
+        <Typography.Title level={4}>{t('checkout.paymentMethod')} </Typography.Title>
+        <PaymentAccount
+          variant="select"
+          account={{
+            name: 'Test Account',
+            address: '5ERjkQVj8M7v5UVZQ8qTbZ2qb1o5TgNXq9tXt2BsWF9jBpDu',
+          }}
+        />
+        <Button style={{ marginTop: 32 }} type="primary" size="large" block loading={paying} onClick={handlePay}>
+          {t('checkout.pay')}
+        </Button>
+      </div>
+    </div>
   );
 }

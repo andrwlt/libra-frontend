@@ -16,7 +16,7 @@ const BrandingNameFormItem = ({ onboardingMode }: FormItemsPropsType) => {
   return (
     <FormItem
       name={['branding', 'name']}
-      style={{ width: onboardingMode ? '320px' : '100%' }}
+      style={{ width: onboardingMode ? '400px' : '100%' }}
       label={label}
       rules={[{ required: true, message: t<string>('checkout.brandNameIsRequired') }]}
     >
@@ -32,7 +32,7 @@ const CheckoutBrandingFormItems = ({ isShow, onboardingMode = false, onFieldsCha
   return (
     <>
       {onboardingMode ? (
-        <Space size="large" style={{ display: isShow ? '' : 'none' }}>
+        <Space size={60} style={{ display: isShow ? '' : 'none' }}>
           <Form.Item noStyle name={['branding', 'logo']}>
             <ImageUploader label={label} purpose="brand_logo" />
           </Form.Item>

@@ -29,6 +29,7 @@ const Content = styled.div`
   padding: 32px;
   margin-left: auto;
   margin-right: auto;
+  background-color: rgb(246, 248, 250) !important;
 `;
 
 export default function Onboarding() {
@@ -128,7 +129,7 @@ export default function Onboarding() {
       </Header>
 
       <Content style={{ background: colorBgLayout }}>
-        <Previewer>
+        <Previewer onboardingMode width={768}>
           <CheckoutPreview previewingCheckout={previewingCheckout} />
         </Previewer>
       </Content>

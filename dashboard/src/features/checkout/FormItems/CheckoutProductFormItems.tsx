@@ -89,8 +89,8 @@ const CheckoutProductFormItems = ({ isShow, onboardingMode = false, onFieldsChan
   return (
     <>
       {onboardingMode ? (
-        <Space size={40} style={{ display: isShow ? '' : 'none' }}>
-          <div style={{ width: '320px' }}>
+        <Space size={60} style={{ display: isShow ? '' : 'none' }}>
+          <div style={{ width: '400px' }}>
             <ProductNameFormItem onboardingMode />
 
             <FormItem label={t('checkout.whatIsPrice')} required>
