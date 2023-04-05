@@ -31,6 +31,15 @@ const HeaderMenu = () => {
       icon: <ShopOutlined />,
       key: PATHS.checkout.root,
     },
+    {
+      label: (
+        <NavLink to="/preview" className={getClassName}>
+          New Checkout UI
+        </NavLink>
+      ),
+      icon: <ShopOutlined />,
+      key: PATHS.checkout.root,
+    },
   ];
 
   return (

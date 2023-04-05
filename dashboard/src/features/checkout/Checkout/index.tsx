@@ -15,12 +15,13 @@ import CheckoutBrandingFormItems from 'features/checkout/FormItems/CheckoutBrand
 import CheckoutProductFormItems from 'features/checkout/FormItems/CheckoutProductFormItems';
 import AfterPaymentFormItem from 'features/checkout/FormItems/AfterPaymentFormItem';
 import type { TabsProps } from 'antd';
-import Preview from 'components/Checkout/Previewer';
+import Previewer from 'components/Checkout/Previewer';
 import { useDeboundCallback } from 'app/hooks';
 import { CheckoutPreviewType, CreatingCheckoutType, UpdatingCheckoutType } from '../types';
 import { useTranslation } from 'react-i18next';
 import { formatCheckoutToStringPrice } from 'utils/format/balance';
 import { FixedWrapper } from 'components/Common/Styled';
+import { breakpoints } from 'config';
 
 type CheckoutFormWrapperProps = {
   background: string;
@@ -32,16 +33,27 @@ const CheckoutFormWrapper = styled.div<CheckoutFormWrapperProps>`
   display: flex;
   justify-content: flex-end;
   width: 40%;
-  padding: 20px 36px 64px 64px;
+  padding: 20px 46px 64px 64px;
   background: ${(props) => props.background};
+
+  @media only screen and ${breakpoints.device.aboveLg} {
+    width: 35%;
+    padding-left: 24px;
+    padding-right: 36px;
+  }
 `;
 
 const PreviewContainer = styled.div`
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 120px);
+  height: calc(100vh - 56px);
   width: 60%;
-  padding: 0 64px;
+  padding: 0 48px;
+  background-color: rgb(246, 248, 250);
+
+  @media only screen and ${breakpoints.device.aboveLg} {
+    width: 65%;
+  }
 `;
 
 const CheckoutContentWrapper = styled.div`
@@ -144,11 +156,13 @@ const Checkout = () => {
         </CheckoutFormWrapper>
 
         <PreviewContainer>
-          <Typography.Title level={4}>{t('checkout.preview')}</Typography.Title>
+          <Typography.Title level={4} style={{ marginBottom: 30 }}>
+            {t('checkout.preview')}
+          </Typography.Title>
 
-          <Preview style={{ margin: '0' }} width={690} height={540}>
+          <Previewer style={{ margin: '0', marginTop: '30' }}>
             <CheckoutPreview previewingCheckout={previewingCheckout} />
-          </Preview>
+          </Previewer>
         </PreviewContainer>
       </CheckoutContentWrapper>
     </FixedWrapper>

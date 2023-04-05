@@ -5,54 +5,81 @@ import { theme } from 'antd';
 const Wrapper = styled.div`
   margin-left: auto;
   margin-right: auto;
-  border-radius: 6px;
+  border-radius: 8px;
   overflow: hidden;
-  box-shadow: 0 2px 10px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 20px 44px #32325d1f, 0 -1px 32px #32325d0f, 0 3px 12px #00000014;
+  background-color: #fff;
 `;
 
 const ColorDot = styled.div`
-  width: 12px;
-  height: 12px;
-  background: ${(props) => props.color || 'gray'};
-  margin-right: 8px;
+  width: 6px;
+  height: 6px;
+  background-color: #ecf2f7;
   border-radius: 50%;
+  margin-right: 4px;
+  display: inline-block;
+`;
+
+const FakeUrlBar = styled.div`
+  width: 60%;
+  height: 12px;
+  background: #ecf2f766;
+  border-radius: 6px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const PreviewHeader = styled.div`
   width: 100%;
-  height: 40px;
-  background: rgb(227, 219, 214);
-  border: solid 1px rgb(227, 219, 214);
-  border-radius: 6px 6px 0 0;
-  display: flex;
-  align-items: center;
-  padding: 0 32px;
-  box-sizing: border-box;
-`;
-
-const PreviewBody = styled.div`
+  height: 20px;
+  height: 20px;
   width: 100%;
-  height: calc(100% - 40px);
-  background: #f7f7f7;
-  border: solid 1px rgb(227, 219, 214);
-
-  box-sizing: border-box;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  background-color: #fff;
+  position: relative;
+  z-index: 1000;
 `;
 
 const PreviewContent = styled.div`
-  zoom: 0.65;
-  width: 100%;
-  height: 100%;
+  scale: 0.65;
+
+  height: 831px;
+  transform-origin: top left;
 `;
 
+const DotBoxWrapper = styled.div`
+  display: flex;
+  position: absolute;
+  left: 14px;
+`;
+
+const DotBox = () => {
+  return (
+    <DotBoxWrapper>
+      <ColorDot />
+      <ColorDot />
+      <ColorDot />
+    </DotBoxWrapper>
+  );
+};
 interface PreviewProps {
   width?: number;
   height?: number;
   children?: ReactNode;
   style?: Record<string, string>;
+  onboardingMode?: boolean;
 }
 
-export default function Preview({ width = 768, height = 540, children, style = {} }: PreviewProps) {
+export default function Previewer({
+  width = 690,
+  height = 560,
+  children,
+  style = {},
+  onboardingMode = false,
+}: PreviewProps) {
   const {
     token: { boxShadow },
   } = theme.useToken();
@@ -60,13 +87,12 @@ export default function Preview({ width = 768, height = 540, children, style = {
   return (
     <Wrapper style={{ width: `${width}px`, height: `${height}px`, boxShadow, ...style }}>
       <PreviewHeader>
-        <ColorDot color="rgb(255, 96, 87)" />
-        <ColorDot color="rgb(254, 188, 46)" />
-        <ColorDot color="rgb(43, 199, 64)" />
+        <DotBox />
+        <FakeUrlBar>
+          <p style={{ fontSize: 7, margin: 0, lineHeight: '11px' }}>{`checkout.libra.atscale.xyz`}</p>
+        </FakeUrlBar>
       </PreviewHeader>
-      <PreviewBody>
-        <PreviewContent>{children}</PreviewContent>
-      </PreviewBody>
+      <PreviewContent style={{ width: onboardingMode ? 1183 : 1062 }}>{children}</PreviewContent>
     </Wrapper>
   );
 }

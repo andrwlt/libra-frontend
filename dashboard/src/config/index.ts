@@ -31,10 +31,12 @@ export const NULL_VALUE = 'null';
 
 const size = {
   lg: 1200,
+  aboveLg: 1300,
   xl: 1680,
 };
 
 const device = {
+  aboveLg: `(max-width: ${size.aboveLg}px)`,
   lg: `(max-width: ${size.lg}px)`,
 };
 

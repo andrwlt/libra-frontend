@@ -34,6 +34,7 @@ const SelectAccountModal = (props: SelectAccountModalPropsType) => {
                 account={account}
                 onClick={() => {
                   onSelectAccount(account);
+                  onClose();
                 }}
               />
             ))}

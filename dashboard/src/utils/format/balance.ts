@@ -16,12 +16,14 @@ export function formatBalance(amount: string, asset: string): number {
 export function toSmallestUnit(amount: number, asset: string) {
   const metadata = ASSET_METADATA[asset];
 
+  let result = amount.toString();
+
   if (metadata) {
     const scale = JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(metadata.decimals));
-    return JSBI.multiply(JSBI.BigInt(amount), scale).toString();
+    result = JSBI.multiply(JSBI.BigInt(amount), scale).toString();
   }
 
-  return amount.toString();
+  return result;
 }
 
 export const formatCheckoutToNumberPrice = (checkout: CheckoutResponseType): CheckoutResponseAfterConvertingPrice => {
