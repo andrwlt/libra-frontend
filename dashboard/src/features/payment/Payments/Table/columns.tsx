@@ -2,8 +2,7 @@ import { Space, Avatar, Tag } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { Charge as ChargeDataType } from 'features/payment/types';
 import { ASSET_METADATA } from 'config';
-import { getCheckoutPrice, formatCreatedDate, truncate } from 'utils/format/formatText';
-import subscan from 'utils/subscan';
+import { getCheckoutPrice, formatCreatedDate } from 'utils/format/formatText';
 
 const getChargeStatusColor = (status: string) => {
   if (status === 'succeeded') {
@@ -51,7 +50,7 @@ const columns: ColumnsType<ChargeDataType> = [
   {
     key: 'description',
     title: 'Description',
-    render: ({ asset, from }) => <a href={subscan.getAccountUrl(asset, from)}>{truncate(from)}</a>,
+    dataIndex: 'description',
   },
 
   {

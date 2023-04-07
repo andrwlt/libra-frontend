@@ -124,7 +124,7 @@ const pagingHelper: PagingHelper = {
     if (isDeletedTheLastItem) {
       if (!hasPrevPage) {
         return {
-          data,
+          data: [],
           paging: {
             hasNextPage: false,
             hasPrevPage: false,

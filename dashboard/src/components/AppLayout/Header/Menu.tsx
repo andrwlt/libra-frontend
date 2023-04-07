@@ -38,7 +38,7 @@ const HeaderMenu = () => {
         </NavLink>
       ),
       icon: <ShopOutlined />,
-      key: PATHS.checkout.root,
+      key: '/preview',
     },
   ];
 

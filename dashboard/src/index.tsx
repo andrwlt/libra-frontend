@@ -20,7 +20,7 @@ root.render(
     <BrowserRouter>
       <ConfigProvider theme={theme}>
         <Provider store={store}>
-          <PersistGate loading={<Loading isFullPage/>} persistor={persistor}>
+          <PersistGate loading={<Loading isFullPage />} persistor={persistor}>
             <App />
           </PersistGate>
         </Provider>
