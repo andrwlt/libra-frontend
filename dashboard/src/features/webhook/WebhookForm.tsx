@@ -64,7 +64,7 @@ const WebhookForm = (props: {
         disabled: isLoading,
       }}
     >
-      <Form initialValues={initialValues} form={form} layout="vertical" style={{ marginTop: 20 }}>
+      <Form initialValues={initialValues} form={form} layout="vertical" style={{ marginTop: 20 }} disabled={isLoading}>
         <FormItem
           label={t('webhook.endpointUrl')}
           name="url"
@@ -93,39 +93,7 @@ const WebhookForm = (props: {
           rules={[{ required: true, type: 'array', message: t<string>('webhook.form.eventsAreRequired') }]}
           name="events"
         >
-          <Select
-            // dropdownRender={() => (
-            //   <div
-            //     onMouseDown={(e) => {
-            //       e.preventDefault();
-            //       e.stopPropagation();
-            //     }}
-            //   >
-            //     {/* {menu} */}
-            //     {allEvents.map((group) => {
-            //       return (
-            //         <div key={group.label}>
-            //           <Typography.Text style={{ display: 'block' }} key={group.label + 1}>
-            //             {group.label}
-            //           </Typography.Text>
-            //           <Typography.Text
-            //             style={{ display: 'block' }}
-            //             key={group.label + 2}
-            //           >{`Select all ${group.label} events`}</Typography.Text>
-            //           <Space key={group.label} direction="vertical">
-            //             {group.events.map((event) => {
-            //               return <Typography.Text style={{ display: 'block' }}>{event}</Typography.Text>;
-            //             })}
-            //           </Space>
-            //         </div>
-            //       );
-            //     })}
-            //   </div>
-            // )}
-            mode="multiple"
-            style={{ width: '100%' }}
-            placeholder={t('webhook.selectEventsTitle')}
-          >
+          <Select mode="multiple" style={{ width: '100%' }} placeholder={t('webhook.selectEventsTitle')}>
             {allEvents.map((group) => {
               return (
                 <Select.OptGroup key={group.label} label={group.label}>

@@ -4,7 +4,7 @@ import { Menu, Typography } from 'antd';
 import { NavLink } from 'react-router-dom';
 import PATHS from 'router/paths';
 import { useTranslation } from 'react-i18next';
-import { ShopOutlined, WalletOutlined } from '@ant-design/icons';
+import { WalletOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { MenuWrapper } from 'components/AppLayout/Styled';
 
@@ -23,15 +23,6 @@ const DeveloperMenu = () => {
       ),
       icon: <WalletOutlined />,
       key: PATHS.payment.root,
-    },
-    {
-      label: (
-        <NavLink to={PATHS.developers.apiKey.root} className={getClassName}>
-          {t('apiKeys')}
-        </NavLink>
-      ),
-      icon: <ShopOutlined />,
-      key: PATHS.checkout.root,
     },
   ];
 
