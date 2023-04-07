@@ -7,7 +7,6 @@ export function hasInjectedWeb3() {
 
 export const getExtensions = (): Extension[] => {
   const { injectedWeb3 }: any = window;
-
   if (!injectedWeb3) {
     return [];
   }

@@ -44,6 +44,11 @@ i18n
           update: 'Update',
           reveal: 'Reveal',
           hide: 'Hide',
+          close: 'Close',
+
+          auth: {
+            needCreatePolkadotAccount: 'You need a Polkadot account to sign up and start using Libra. Please open the extension and create one.',
+          },
 
           message: {
             leavingPageWarningTitle: 'Leave page with unsaved changes?',
@@ -117,6 +122,9 @@ i18n
             pending: 'Pending',
             failed: 'Failed',
             allStatus: 'All',
+            noPaymentHasCheckoutTitle: `It's happening…`,
+            noPaymentHasCheckoutSubTitle1: `Promote your checkout and start earning your first [Dot].`,
+            noPaymentHasCheckoutSubTitle2: `Please make sure to replace [Dot] with checkout's asset.`
           },
 
           checkout: {
