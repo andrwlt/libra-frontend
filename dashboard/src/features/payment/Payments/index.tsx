@@ -14,7 +14,14 @@ export default function Payments() {
   const { charges, hasCheckout, getChargesLoading, fetchCharges, chargesPaging } = useCharges();
   const navigate = useNavigate();
 
-  const subTitle = hasCheckout ? t('payment.hasCheckoutSubtitle') : t('payment.hasNoCheckoutSubtitle');
+  const subTitle = hasCheckout ? (
+    <>
+      <div>{t('payment.noPaymentHasCheckoutSubTitle1')}</div>
+      <div style={{ marginTop: 5 }}>{t('payment.noPaymentHasCheckoutSubTitle2')}</div>
+    </>
+  ) : (
+    t('payment.hasNoCheckoutSubtitle')
+  );
 
   const goToCheckouts = () => {
     navigate(PATHS.checkout.root);
@@ -52,7 +59,7 @@ export default function Payments() {
             <Result
               style={{ maxWidth: '480px', margin: 'auto' }}
               icon={<WalletOutlined />}
-              title={t('payment.paymentWillShowHere')}
+              title={hasCheckout ? t('payment.noPaymentHasCheckoutTitle') : t('payment.paymentWillShowHere')}
               subTitle={subTitle}
               extra={[
                 <Button

@@ -1,4 +1,4 @@
-import { Typography, Modal } from 'antd';
+import { Typography, Modal, Result, Button } from 'antd';
 import AccountOption from 'components/SelectAccountModal/AccountOption';
 import { AccountType } from 'features/auth/types';
 import { useTranslation } from 'react-i18next';
@@ -19,14 +19,19 @@ const SelectAccountModal = (props: SelectAccountModalPropsType) => {
   useResetConnectedExtension(open);
 
   return (
-    <Modal open={open} onCancel={onClose} footer={false}>
+    <Modal
+      open={open}
+      onCancel={onClose}
+      footer={false}
+      title={
+        <Typography.Title style={{ marginTop: 0, marginBottom: 20 }} level={4}>
+          {t('signIn.selectAnAccount')}
+        </Typography.Title>
+      }
+    >
       {connectExtensionLoading && t('loading')}
       {connectedExtension && connectedExtension.accounts.length > 0 && (
         <>
-          <Typography.Title style={{ marginTop: 0 }} level={3}>
-            {t('signIn.selectAnAccount')}
-          </Typography.Title>
-
           <div>
             {connectedExtension.accounts.map((account: AccountType) => (
               <AccountOption
@@ -40,6 +45,18 @@ const SelectAccountModal = (props: SelectAccountModalPropsType) => {
             ))}
           </div>
         </>
+      )}
+
+      {connectedExtension && connectedExtension.accounts.length === 0 && (
+        <Result
+          status="warning"
+          title={t('auth.needCreatePolkadotAccount')}
+          extra={
+            <Button type="primary" key="console" onClick={onClose}>
+              {t('close')}
+            </Button>
+          }
+        />
       )}
     </Modal>
   );
