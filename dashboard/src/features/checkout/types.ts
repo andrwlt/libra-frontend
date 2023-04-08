@@ -2,6 +2,18 @@ import { AxiosPromise } from 'axios';
 import { RootState } from 'app/store';
 import { PagingParams, Paging } from 'types';
 
+export const AFTER_PAYMENT_TYPE = {
+  MESSAGE: 'message',
+  REDIRECT: 'redirect',
+};
+
+export interface AfterPayment {
+  type: 'message' | 'redirect';
+  config: {
+    message?: string;
+    url?: string;
+  };
+}
 export interface Brand {
   name?: string;
   logo?: string;
@@ -24,9 +36,7 @@ export interface CheckoutProductItemNumberPrice extends CheckoutProductItemBase 
 export interface CheckoutBaseType {
   branding: Brand;
   asset: string;
-  afterPayment?: {
-    redirectUrl: string;
-  };
+  afterPayment?: AfterPayment;
 }
 
 export interface CheckoutPreviewType extends CheckoutBaseType {
@@ -46,9 +56,7 @@ export interface CheckoutResponseBase {
   branding: Brand;
   payee: string;
   asset: string;
-  afterPayment?: {
-    redirectUrl: string;
-  };
+  afterPayment?: AfterPayment;
   active: boolean;
   created: string;
 }

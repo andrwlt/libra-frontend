@@ -11,7 +11,7 @@ const Secret = ({ value }: any) => {
     setIsShow(!isShow);
   };
   return (
-    <div style={{ display: 'flex', alignItems: 'center', lineHeight: '32px' }}>
+    <div style={{ display: 'flex', alignItems: 'center', lineHeight: '24px' }}>
       {isShow ? (
         <Space>
           <Text style={{ margin: 0, cursor: 'pointer' }}>{value}</Text>

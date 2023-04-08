@@ -2,7 +2,7 @@ import { Card, Button, Result } from 'antd';
 import { WalletOutlined, PlusOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import PATHS from 'router/paths';
-import { useCharges } from 'features/payment/paymentHooks';
+import { useCharges, useChargeParams } from 'features/payment/paymentHooks';
 import PageHeader from 'components/Common/PageHeader';
 import { useTranslation } from 'react-i18next';
 import { StyledContainer } from 'components/Common/Styled';
@@ -12,6 +12,7 @@ import ChargeFilter from './Filter';
 export default function Payments() {
   const { t } = useTranslation();
   const { charges, hasCheckout, getChargesLoading, fetchCharges, chargesPaging } = useCharges();
+  const { status, createdLte, createdGte } = useChargeParams();
   const navigate = useNavigate();
 
   const subTitle = hasCheckout ? (
@@ -32,7 +33,7 @@ export default function Payments() {
   };
 
   const hasCharge = !!charges.length;
-  const shouldShowTable = getChargesLoading || hasCharge;
+  const shouldShowTable = getChargesLoading || hasCharge || (!hasCharge && (status || createdLte || createdGte));
 
   return (
     <div>
