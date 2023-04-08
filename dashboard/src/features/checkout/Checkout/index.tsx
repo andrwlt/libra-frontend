@@ -131,7 +131,7 @@ const Checkout = () => {
     {
       key: AFTER_PAYMENT_STEP_KEY,
       label: t('checkout.afterPayment'),
-      children: <AfterPaymentFormItem />,
+      children: <AfterPaymentFormItem  onFieldsChange={onFieldsChange}/>,
       forceRender: true,
     },
   ];
@@ -161,7 +161,10 @@ const Checkout = () => {
           </Typography.Title>
 
           <Previewer style={{ margin: '0', marginTop: '30' }}>
-            <CheckoutPreview previewingCheckout={previewingCheckout} />
+            <CheckoutPreview
+              previewingCheckout={previewingCheckout}
+              isShowAfterPayment={activeStep === AFTER_PAYMENT_STEP_KEY}
+            />
           </Previewer>
         </PreviewContainer>
       </CheckoutContentWrapper>

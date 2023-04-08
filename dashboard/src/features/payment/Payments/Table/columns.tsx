@@ -45,6 +45,7 @@ const columns: ColumnsType<ChargeDataType> = [
         </Space>
       );
     },
+    width: 400,
   },
 
   {
@@ -62,6 +63,7 @@ const columns: ColumnsType<ChargeDataType> = [
     key: 'created',
     title: 'Created',
     render: ({ created }) => <span>{formatCreatedDate(created)}</span>,
+    width: 200,
   },
 ];
 

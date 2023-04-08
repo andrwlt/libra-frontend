@@ -61,6 +61,7 @@ const Webhooks = () => {
       key: 'events',
       dataIndex: 'events',
       align: 'center',
+      width: 120,
       render: (events: string[]) => (
         <Popover
           placement="bottom"
@@ -86,6 +87,7 @@ const Webhooks = () => {
         const color = active ? 'success' : 'orange';
         return <Tag color={color}>{text}</Tag>;
       },
+      width: 120,
     },
 
     {
@@ -96,7 +98,7 @@ const Webhooks = () => {
     },
     {
       title: '',
-      width: 70,
+      width: 50,
       render: (webhook: WebhookResponse) => {
         const items: MenuProps['items'] = [
           {

@@ -32,7 +32,8 @@ export default function Checkouts() {
     {
       title: 'Link URL',
       key: 'Link URL',
-      render: (checkout: Checkout) => <CopyableField style={{ minWidth: 320 }} text={getCheckoutLink(checkout.id)} />,
+      render: (checkout: Checkout) => <CopyableField style={{ minWidth: 420 }} text={getCheckoutLink(checkout.id)} />,
+      width: 500,
     },
     {
       title: 'Status',
@@ -42,6 +43,7 @@ export default function Checkouts() {
         const color = active ? 'success' : 'orange';
         return <Tag color={color}>{text}</Tag>;
       },
+      width: 120,
     },
     {
       title: 'Name',
@@ -71,10 +73,11 @@ export default function Checkouts() {
       render: (checkout: Checkout) => {
         return formatCreatedDate(checkout.created);
       },
+      width: 200,
     },
     {
       title: '',
-      width: 70,
+      width: 50,
       render: (checkout: Checkout) => {
         const items: MenuProps['items'] = [
           {

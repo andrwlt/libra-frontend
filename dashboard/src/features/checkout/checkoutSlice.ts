@@ -118,7 +118,10 @@ const initCheckout: CheckoutResponseAfterConvertingPrice = {
     price: null,
   },
   afterPayment: {
-    redirectUrl: '',
+    type: 'message',
+    config: {
+      message: '',
+    },
   },
   payee: '',
   asset: 'wnd',

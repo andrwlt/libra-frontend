@@ -47,7 +47,8 @@ i18n
           close: 'Close',
 
           auth: {
-            needCreatePolkadotAccount: 'You need a Polkadot account to sign up and start using Libra. Please open the extension and create one.',
+            needCreatePolkadotAccount:
+              'You need a Polkadot account to sign up and start using Libra. Please open the extension and create one.',
           },
 
           message: {
@@ -124,7 +125,7 @@ i18n
             allStatus: 'All',
             noPaymentHasCheckoutTitle: `It's happening…`,
             noPaymentHasCheckoutSubTitle1: `Promote your checkout and start earning your first [Dot].`,
-            noPaymentHasCheckoutSubTitle2: `Please make sure to replace [Dot] with checkout's asset.`
+            noPaymentHasCheckoutSubTitle2: `Please make sure to replace [Dot] with checkout's asset.`,
           },
 
           checkout: {
@@ -136,7 +137,7 @@ i18n
             afterPayment: 'After Payment',
             preview: 'Preview',
 
-            redirectUrlLabel: 'Redirect URL',
+            redirectUrlLabel: 'Redirect customers to your website.',
             redirectUrlPlaceholder: 'Your website URL',
             invalidUrl: 'Invalid URL',
 
@@ -174,6 +175,12 @@ i18n
             emptyText:
               'Checkout allows you to sell your digital products within minutes and receive payments directly to your wallet.',
             createCheckoutNow: 'Create checkout now',
+            showConfirmationPage: 'Show confirmation page',
+            notShowConfirmationPage: `Don't Show confirmation page`,
+            replaceDefaultMess: 'Replace default with custom message',
+            thankForYourPayment: 'Thanks for your payment',
+            orderWillBeSent: 'An order summary will be sent to your email within minutes',
+            websiteWillBeShow: 'Your website will be shown after payment',
           },
 
           footer: {

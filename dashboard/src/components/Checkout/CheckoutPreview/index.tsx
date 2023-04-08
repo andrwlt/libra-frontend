@@ -1,9 +1,12 @@
 import styled from 'styled-components';
-import { Row, Layout, Col } from 'antd';
+import { Row, Layout, Typography, Col } from 'antd';
 import CheckoutSummary from './CheckoutSummary';
 import PaymentSummary from './PaymentSummary';
-import { CheckoutPreviewType } from 'features/checkout/types';
+import { AFTER_PAYMENT_TYPE, CheckoutPreviewType } from 'features/checkout/types';
 import { CheckoutBrand } from './CheckoutSummary';
+import AfterPaymentPreviewer from './AfterPaymentPreviewer';
+import { useTranslation } from 'react-i18next';
+import { GlobalOutlined } from '@ant-design/icons';
 
 const { Content } = Layout;
 
@@ -43,11 +46,27 @@ const MainContent = styled(Row)`
 export default function CheckoutPreview({
   previewingCheckout,
   previewMode = true,
+  isShowAfterPayment = false,
 }: {
   previewingCheckout: CheckoutPreviewType;
   previewMode?: boolean;
+  isShowAfterPayment?: boolean;
 }) {
-  const { branding, item, asset } = previewingCheckout;
+  const { t } = useTranslation();
+  const { branding, item, asset, afterPayment } = previewingCheckout;
+
+  if (isShowAfterPayment && afterPayment?.type === AFTER_PAYMENT_TYPE.REDIRECT) {
+    return (
+      <Wrapper style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <GlobalOutlined
+          style={{ fontSize: 35, marginBottom: 5, color: `rgba(0, 0, 0, 0.45)`, bottom: 30, position: 'relative' }}
+        />
+        <Typography.Title level={3} style={{ marginTop: 0, bottom: 30, position: 'relative' }} type="secondary">
+          {t('checkout.websiteWillBeShow')}
+        </Typography.Title>
+      </Wrapper>
+    );
+  }
 
   return (
     <Wrapper>
@@ -58,7 +77,11 @@ export default function CheckoutPreview({
             <CheckoutSummary product={item} asset={asset} previewMode={previewMode} />
           </Col>
           <Col span={12}>
-            <PaymentSummary />
+            {isShowAfterPayment && afterPayment ? (
+              <AfterPaymentPreviewer afterPayment={afterPayment} />
+            ) : (
+              <PaymentSummary />
+            )}
           </Col>
         </MainContent>
       </ContentWrapper>
