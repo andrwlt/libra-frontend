@@ -1,4 +1,4 @@
-import Checkout from 'components/Checkout';
+import Checkout from '@atscale/libra-mutual-checkout/src/components/Checkout';
 import styled from 'styled-components';
 
 const AppWrapper = styled.div`
@@ -9,7 +9,10 @@ const AppWrapper = styled.div`
 function App() {
   return (
     <AppWrapper className="App">
-      <Checkout checkout={(window as any).checkout}/>
+      <Checkout
+        previewMode={false}
+        previewingCheckout={(window as any).checkout}
+      ></Checkout>
     </AppWrapper>
   );
 }

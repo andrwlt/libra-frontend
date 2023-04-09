@@ -71,6 +71,10 @@ const CheckoutPreview = ({
     );
   }
 
+  const handlePaymentSuccess = () => {};
+
+  const handlePaymentFailed = () => {};
+
   return (
     <Wrapper>
       <CheckoutBrand branding={branding} loading={loading} />
@@ -83,7 +87,17 @@ const CheckoutPreview = ({
             {isShowAfterPayment && afterPayment ? (
               <AfterPaymentPreviewer afterPayment={afterPayment} />
             ) : (
-              <PaymentSummary />
+              <PaymentSummary
+                previewMode={previewMode}
+                payment={{
+                  payee: previewingCheckout.payee || '',
+                  amount: previewingCheckout.item.price || 0,
+                  asset: previewingCheckout.asset,
+                  productName: previewingCheckout.item.name,
+                }}
+                onPaymentSuccess={handlePaymentSuccess}
+                onPaymentFailed={handlePaymentFailed}
+              />
             )}
           </Col>
         </MainContent>

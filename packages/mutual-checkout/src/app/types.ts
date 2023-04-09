@@ -21,6 +21,14 @@ export interface AssetMetadata {
   decimals: number;
   symbol: string;
   logo: string;
+  network: {
+    name: string;
+    type: 'substrate';
+    config: {
+      ss58Prefix: number;
+      rpc: string;
+    };
+  };
 }
 
 interface CheckoutProductItemBase {
@@ -39,5 +47,6 @@ export const AFTER_PAYMENT_TYPE = {
 };
 
 export interface CheckoutPreviewType extends CheckoutBaseType {
+  payee?: string;
   item: CheckoutProductItemNumberPrice;
 }
