@@ -1,5 +1,6 @@
 {
   "name": "libra-ui-monorepo",
   "private": true,
-  "description": "Libra UI Mono Repo"
+  "description": "Libra UI Mono Repo",
+  "workspaces": ["packages/*"]
 }
