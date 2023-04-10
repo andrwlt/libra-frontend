@@ -50,6 +50,7 @@ export const getCharges = createAppAsyncThunk(
         data,
         paging,
         hasCheckout: !!checkouts.length,
+        firstCheckoutAsset: checkouts.length > 0 && checkouts[0].asset,
       };
     } catch (err) {
       return rejectWithValue(err);
@@ -64,6 +65,7 @@ const initialState: PaymentState = {
   getChargesFailed: undefined,
   getChargesLoading: false,
   hasCheckout: false,
+  firstCheckoutAsset: '',
   chargesPaging: {
     hasNextPage: false,
     hasPrevPage: false,
@@ -84,6 +86,7 @@ export const paymentSlice = createSlice({
         state.getChargesLoading = false;
         state.charges = payload.data;
         state.hasCheckout = payload.hasCheckout;
+        state.firstCheckoutAsset = payload.firstCheckoutAsset;
         state.chargesPaging = payload.paging;
       })
       .addCase(getCharges.rejected, (state, { payload }) => {
@@ -97,12 +100,13 @@ export const paymentSlice = createSlice({
 });
 
 export const selectChargesState = ({
-  payment: { charges, getChargesFailed, getChargesLoading, hasCheckout, chargesPaging },
+  payment: { charges, getChargesFailed, getChargesLoading, hasCheckout, firstCheckoutAsset, chargesPaging },
 }: RootState): GetChargesState => ({
   charges,
   getChargesFailed,
   getChargesLoading,
   hasCheckout,
+  firstCheckoutAsset,
   chargesPaging,
 });
 

@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import type { RouteObject } from 'react-router-dom';
 import SignIn from 'features/auth/SignIn';
@@ -14,44 +13,9 @@ import Developers from 'components/Developers/Developers';
 import Webhooks from 'features/webhook/Webhooks';
 import ApiKeys from 'features/apiKey/apiKeys';
 
-import { Checkout as CheckoutPreview } from '@atscale/libra-ui';
-
-const PreviewPage = () => {
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    setTimeout(() => setLoading(false), 1000);
-  }, []);
-  return (
-    <div style={{ width: '100vw', height: '100vh', backgroundColor: '#fff' }}>
-      <CheckoutPreview
-        loading={loading}
-        previewMode={false}
-        previewingCheckout={{
-          branding: {
-            logo: 'https://files.libra.atscale.xyz/file_01GX8W9Y5BGQXP3Y2G5SABGYM6',
-            name: 'Hollywood',
-          },
-          item: {
-            name: 'Gone with the win',
-            description: 'Just for test',
-            price: 1000,
-            image: 'https://files.libra.atscale.xyz/file_01GX8W9Y5BGQXP3Y2G5SABGYM6',
-          },
-          asset: 'wnd',
-        }}
-      />
-    </div>
-  );
-};
-
 const routes: RouteObject[] = [
   { path: PATHS.auth.signIn, element: <SignIn /> },
   { path: PATHS.onboard, element: <Onboarding /> },
-  {
-    path: '/preview',
-    element: <PreviewPage />,
-  },
   {
     path: PATHS.dashboard,
     element: <DashboardLayout />,
