@@ -8,6 +8,7 @@ import AfterPaymentPreviewer from './AfterPaymentPreviewer';
 import { useTranslation } from 'react-i18next';
 import { GlobalOutlined } from '@ant-design/icons';
 import '../../app/i18n';
+import { useState } from 'react';
 
 const { Content } = Layout;
 
@@ -57,6 +58,7 @@ const CheckoutPreview = ({
 }) => {
   const { t } = useTranslation();
   const { branding, item, asset, afterPayment } = previewingCheckout;
+  const [completed, setCompleted] = useState(false);
 
   if (isShowAfterPayment && afterPayment?.type === AFTER_PAYMENT_TYPE.REDIRECT) {
     return (
@@ -71,7 +73,14 @@ const CheckoutPreview = ({
     );
   }
 
-  const handlePaymentSuccess = () => {};
+  const handlePaymentSuccess = () => {
+    if (afterPayment && afterPayment.type === 'redirect' && afterPayment.config.url) {
+      window.location.href = afterPayment.config.url;
+      return;
+    }
+
+    setCompleted(true);
+  };
 
   const handlePaymentFailed = () => {};
 
@@ -84,7 +93,7 @@ const CheckoutPreview = ({
             <CheckoutSummary loading={loading} product={item} asset={asset} previewMode={previewMode} />
           </Col>
           <Col span={12}>
-            {isShowAfterPayment && afterPayment ? (
+            {(completed || isShowAfterPayment) && afterPayment ? (
               <AfterPaymentPreviewer afterPayment={afterPayment} />
             ) : (
               <PaymentSummary

@@ -75766,6 +75766,7 @@ instance.use(import_i18next_browser_languagedetector.default).use(import_react_i
     }
 });
 // src/components/Checkout/index.tsx
+var import_react9 = require("react");
 var import_jsx_runtime10 = require("react/jsx-runtime");
 var Content = import_antd8.Layout.Content;
 var Wrapper2 = (0, import_styled_components4.default)(import_antd8.Layout)(_templateObject7());
@@ -75775,6 +75776,7 @@ var CheckoutPreview = function(param) {
     var previewingCheckout = param.previewingCheckout, _param_previewMode = param.previewMode, previewMode = _param_previewMode === void 0 ? true : _param_previewMode, _param_isShowAfterPayment = param.isShowAfterPayment, isShowAfterPayment = _param_isShowAfterPayment === void 0 ? false : _param_isShowAfterPayment, _param_loading = param.loading, loading = _param_loading === void 0 ? false : _param_loading;
     var _ref = (0, import_react_i18next5.useTranslation)(), t2 = _ref.t;
     var branding = previewingCheckout.branding, item = previewingCheckout.item, asset = previewingCheckout.asset, afterPayment = previewingCheckout.afterPayment;
+    var _ref1 = _sliced_to_array((0, import_react9.useState)(false), 2), completed = _ref1[0], setCompleted = _ref1[1];
     if (isShowAfterPayment && (afterPayment === null || afterPayment === void 0 ? void 0 : afterPayment.type) === AFTER_PAYMENT_TYPE.REDIRECT) {
         return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(Wrapper2, {
             style: {
@@ -75805,7 +75807,13 @@ var CheckoutPreview = function(param) {
             ]
         });
     }
-    var handlePaymentSuccess = function() {};
+    var handlePaymentSuccess = function() {
+        if (afterPayment && afterPayment.type === "redirect" && afterPayment.config.url) {
+            window.location.href = afterPayment.config.url;
+            return;
+        }
+        setCompleted(true);
+    };
     var handlePaymentFailed = function() {};
     return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(Wrapper2, {
         children: [
@@ -75828,7 +75836,7 @@ var CheckoutPreview = function(param) {
                         }),
                         /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_antd8.Col, {
                             span: 12,
-                            children: isShowAfterPayment && afterPayment ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(AfterPaymentPreviewer_default, {
+                            children: (completed || isShowAfterPayment) && afterPayment ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(AfterPaymentPreviewer_default, {
                                 afterPayment: afterPayment
                             }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(PaymentSummary, {
                                 previewMode: previewMode,
