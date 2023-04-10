@@ -8,6 +8,7 @@ import { getSs58AddressByAsset } from '../../utils/address';
 import { ExtensionsProvider } from 'contexts/extensions';
 import { ASSET_METADATA } from '../../config';
 
+// TODO: Handle this at checkout page
 async function pay(payment: Payment, account: any, email: string) {
   const { payee, amount, asset, productName } = payment;
   const assetMetadata = ASSET_METADATA[asset];
@@ -29,7 +30,7 @@ async function pay(payment: Payment, account: any, email: string) {
     },
   });
 
-  if (response.status !== 200) {
+  if (response.status !== 200 && response.status !== 201) {
     throw new Error(response.statusText);
   }
 }
@@ -93,6 +94,7 @@ export default function PaymentSummary({
 
         try {
           await pay(payment, account, email);
+          onPaymentSuccess();
         } catch (err) {
           onPaymentFailed(err);
         }

@@ -20,7 +20,8 @@ i18n
           next: 'Next',
           save: 'Save',
           logo: 'Logo',
-          defaultErrorMessage: 'Something went wrong!',
+          defaultErrorMessage:
+            "Whoopsie! Looks like our dApp had one too many cups of coffee this morning. We're working on calming it down. Please try again later.",
           getExtensionsFailed: 'Get Extensions Failed',
           payments: 'Payments',
           checkoutLabel: 'Checkout',
