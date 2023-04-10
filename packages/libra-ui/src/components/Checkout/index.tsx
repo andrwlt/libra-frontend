@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Row, Layout, Typography, Col } from 'antd';
+import { Row, Layout, Typography, Col, message } from 'antd';
 import CheckoutSummary from './CheckoutSummary';
 import PaymentSummary from './PaymentSummary';
 import { AFTER_PAYMENT_TYPE, CheckoutPreviewType } from '../../app/types';
@@ -59,7 +59,9 @@ const CheckoutPreview = ({
   const { t } = useTranslation();
   const { branding, item, asset, afterPayment } = previewingCheckout;
   const [completed, setCompleted] = useState(false);
+  const [messageApi, contextHolder] = message.useMessage();
 
+  // TODO: handle this in the parent component (Previewer)
   if (isShowAfterPayment && afterPayment?.type === AFTER_PAYMENT_TYPE.REDIRECT) {
     return (
       <Wrapper style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -82,10 +84,13 @@ const CheckoutPreview = ({
     setCompleted(true);
   };
 
-  const handlePaymentFailed = () => {};
+  const handlePaymentFailed = () => {
+    messageApi.error(t('defaultErrorMessage'));
+  };
 
   return (
     <Wrapper>
+      {contextHolder}
       <CheckoutBrand branding={branding} loading={loading} />
       <ContentWrapper>
         <MainContent justify="space-between">
