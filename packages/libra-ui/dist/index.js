@@ -17564,6 +17564,55 @@ var import_antd8 = require("antd");
 // src/components/Checkout/CheckoutSummary.tsx
 var import_styled_components = __toESM(require("styled-components"));
 var import_antd = require("antd");
+// src/components/LibraLogo.tsx
+var import_jsx_runtime = require("react/jsx-runtime");
+function LibraLogo(param) {
+    var height = param.height, width = param.width, _param_fill = param.fill, fill = _param_fill === void 0 ? "rgb(30, 37, 53)" : _param_fill;
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("svg", {
+        height: height,
+        width: width,
+        fill: fill,
+        viewBox: "0 0 500 158.9",
+        children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("polygon", {
+                points: "236.37 40.29 220.82 40.29 220.82 132.35 280.22 132.35 280.22 117.13 236.47 117.13 236.37 40.29"
+            }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("rect", {
+                x: "289.68",
+                y: "62.3",
+                width: "14.79",
+                height: "70.05"
+            }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("rect", {
+                x: "289.4",
+                y: "36.93",
+                width: "15.35",
+                height: "15.41"
+            }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+                d: "M376.98,71.9c-2.47-3.17-5.61-5.71-9.34-7.55-3.74-1.85-8.14-2.79-13.09-2.79-5.66,0-10.54,1.1-14.52,3.28-3.02,1.65-5.6,3.86-7.69,6.6v-31.22h-14.79v92.32h14.79v-10.36c.89,1.87,3.27,6.04,7.66,8.63,3.75,2.22,8.51,3.29,14.55,3.29,4.99,0,9.41-.94,13.13-2.79,3.71-1.85,6.84-4.4,9.31-7.58,2.45-3.17,4.31-6.91,5.52-11.14,1.2-4.19,1.81-8.77,1.81-13.63,0-4.55-.57-11.45-1.81-15.84-1.21-4.29-3.07-8.06-5.52-11.2Zm-8.22,34.91c0,4.12-1.57,7.37-4.8,9.92-3.25,2.57-7.52,3.87-12.68,3.87-6.12,0-10.86-1.74-14.07-5.17-3.39-3.62-4.87-5.75-4.87-10.99v-10.99c0-5.33,1.64-9.79,4.87-13.27,3.21-3.45,7.94-5.2,14.07-5.2,5.16,0,9.43,1.31,12.68,3.9,3.23,2.57,4.8,5.82,4.8,9.95v17.98Z"
+            }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("polygon", {
+                points: "391.44 132.35 406.23 132.35 406.23 75.35 428.33 75.35 428.33 62.3 391.44 62.3 391.44 132.35"
+            }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+                d: "M489.52,119.37v-31.95c0-4.76-.82-9.59-2.13-12.61-1.42-3.26-3.46-5.97-6.06-8.06-2.57-2.07-5.63-3.63-9.1-4.66-3.43-1.02-7.19-1.53-11.16-1.53s-7.74,.59-11.2,1.75c-3.48,1.17-6.55,2.86-9.12,5.01-2.59,2.16-4.68,4.76-6.21,7.71-1.55,2.98-2.33,6.3-2.33,9.88v1h14.79v-1c0-2.2,.32-4.1,.94-5.65,.61-1.5,1.52-2.72,2.72-3.62,2.52-1.89,5.98-2.86,10.27-2.86,2.18,0,4.18,.21,5.95,.63,1.7,.41,3.16,1.11,4.35,2.09,1.18,.97,2.11,2.32,2.76,4,.67,1.73,1.01,3.97,1.01,6.66v2.95l-22.8,2.11c-7.14,.64-12.5,2.97-16.06,6.99-3.57,4.02-5.36,8.84-5.36,14.46,0,2.84,.51,5.56,1.54,8.17,1.03,2.61,2.48,4.85,4.36,6.73,2.11,2.15,4.6,3.78,7.48,4.87,2.88,1.1,6.11,1.65,9.68,1.65,5.35,0,9.95-1.22,13.8-3.67,3.84-2.45,6.75-6.21,8.72-11.29l.1,2.11,.23,11.11h23.66v-12.98h-10.84Zm-14.51-16.17c0,5.63-1.44,10.23-4.31,13.79-2.87,3.56-6.8,5.33-11.79,5.33-3.51,0-6.27-.67-8.26-2.01-2-1.34-2.99-3.44-2.99-6.32v-5.51c0-1.8,.29-3.21,.87-4.25,.58-1.04,2-1.64,4.28-1.8l22.21-2.05v2.82Z"
+            }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+                d: "M109.66,93.9c-.6-.13-.97-.29-1.13-.4-1.04-4.09,1.98-22.96,20.75-67.58l-14.13-5.94c-28.54,67.86-22.29,77.58-19.62,81.73,1.65,2.57,4.9,5.91,10.96,7.19,1.74,.37,3.59,.53,5.52,.53,16.48,0,38.61-12.15,42.77-14.88l-8.43-12.8c-7.86,5.18-28.25,13.93-36.68,12.15Z"
+            }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+                d: "M89.22,138.06c-16.71,6.89-30.75,7.34-41.74,1.32-29.16-15.97-14.36-84.2-2.46-118.05l-14.46-5.08c-1.69,4.81-10.3,30.2-13.86,58.16-5.17,40.69,2.7,67.07,23.41,78.41,7.98,4.37,16.36,6.07,24.6,6.07,28.57,0,55.32-20.54,56.76-21.66l-9.43-12.09c-.09,.07-9.66,7.48-22.82,12.91Z"
+            }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+                d: "M57.65,79.99c4.19-29.82,18.48-67.54,21.12-73.73L64.66,.25c-3.34,7.84-17.8,46.29-22.2,77.61l15.18,2.13Z"
+            }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("path", {
+                d: "M81.48,88.48C88.3,47.79,107.13,6.91,107.32,6.51L93.44,0c-.2,.42-19.92,43.24-27.08,85.95l15.12,2.53Z"
+            })
+        ]
+    });
+}
 // src/config/index.ts
 var APP_NAME = "libra-checkout";
 var ASSET_METADATA = {
@@ -17677,11 +17726,9 @@ var getCheckoutPrice = function(param, assetMetadata) {
     });
     return "".concat(formattedPrice, " ").concat(unit);
 };
-// src/assets/logo.svg
-var logo_default = "./logo-L3UN27DD.svg";
 // src/components/Checkout/CheckoutSummary.tsx
 var import_react_i18next = require("react-i18next");
-var import_jsx_runtime = require("react/jsx-runtime");
+var import_jsx_runtime2 = require("react/jsx-runtime");
 var _import_antd_Typography = import_antd.Typography, Paragraph = _import_antd_Typography.Paragraph, Link = _import_antd_Typography.Link;
 var ImageWrapper = import_styled_components.default.div(_templateObject());
 var ProductInfoWrapper = import_styled_components.default.div(_templateObject1());
@@ -17689,14 +17736,14 @@ var ProductInformation = function(param) {
     var product = param.product, asset = param.asset, loading = param.loading;
     var _ref = product || {}, name = _ref.name, description = _ref.description, price = _ref.price, image = _ref.image;
     var assetMetadata = ASSET_METADATA[asset];
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(ProductInfoWrapper, {
+    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(ProductInfoWrapper, {
         children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_antd.Skeleton, {
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Skeleton, {
                 active: true,
                 className: "product-name-skeleton",
                 paragraph: false,
                 loading: loading,
-                children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_antd.Typography.Title, {
+                children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Typography.Title, {
                     type: "secondary",
                     level: 4,
                     style: {
@@ -17706,22 +17753,22 @@ var ProductInformation = function(param) {
                     children: name || "Product name"
                 })
             }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_antd.Skeleton, {
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Skeleton, {
                 active: true,
                 className: "product-price-skeleton",
                 paragraph: false,
                 loading: loading,
-                children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_antd.Space, {
+                children: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_antd.Space, {
                     align: "center",
                     style: {
                         marginTop: 10
                     },
                     children: [
-                        assetMetadata && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_antd.Avatar, {
+                        assetMetadata && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Avatar, {
                             src: assetMetadata.logo,
                             children: asset
                         }),
-                        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_antd.Typography.Title, {
+                        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Typography.Title, {
                             level: 3,
                             style: {
                                 margin: 0,
@@ -17735,22 +17782,22 @@ var ProductInformation = function(param) {
                     ]
                 })
             }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_antd.Skeleton, {
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Skeleton, {
                 active: true,
                 className: "product-description-skeleton",
                 paragraph: false,
                 loading: loading,
-                children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_antd.Typography.Paragraph, {
+                children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Typography.Paragraph, {
                     type: "secondary",
                     children: description
                 })
             }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ImageWrapper, {
-                children: loading ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_antd.Skeleton.Avatar, {
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(ImageWrapper, {
+                children: loading ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Skeleton.Avatar, {
                     shape: "square",
                     active: true,
                     className: "product-image-skeleton"
-                }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_antd.Image, {
+                }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Image, {
                     src: image,
                     preview: false,
                     style: {
@@ -17765,33 +17812,31 @@ var ProductInformation = function(param) {
 var FooterLink = (0, import_styled_components.default)(Link)(_templateObject2());
 function FooterLinks() {
     var _ref = (0, import_react_i18next.useTranslation)(), t2 = _ref.t;
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_antd.Space, {
+    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_antd.Space, {
         children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Paragraph, {
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Paragraph, {
                 style: {
                     margin: 0
                 },
                 strong: true,
                 children: t2("footer.poweredBy")
             }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("img", {
-                src: logo_default,
-                height: 16,
-                alt: t2("footer.libraLogo")
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(LibraLogo, {
+                height: 18
             }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_antd.Divider, {
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Divider, {
                 type: "vertical",
                 style: {
                     height: 20
                 }
             }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(FooterLink, {
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(FooterLink, {
                 children: [
                     " ",
                     t2("footer.privacy")
                 ]
             }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FooterLink, {
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(FooterLink, {
                 children: t2("footer.terms")
             })
         ]
@@ -17800,18 +17845,18 @@ function FooterLinks() {
 var CheckoutSummaryWrapper = import_styled_components.default.div(_templateObject3());
 var CheckoutSummary = function(param) {
     var product = param.product, asset = param.asset, previewMode = param.previewMode, loading = param.loading;
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(CheckoutSummaryWrapper, {
+    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(CheckoutSummaryWrapper, {
         style: previewMode ? {
             maxHeight: 550
         } : {},
         children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ProductInformation, {
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(ProductInformation, {
                 product: product,
                 asset: asset,
                 loading: loading
             }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-                children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FooterLinks, {})
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", {
+                children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(FooterLinks, {})
             })
         ]
     });
@@ -19063,7 +19108,7 @@ GlobalOutlined2.displayName = "GlobalOutlined";
 var GlobalOutlined_default2 = /* @__PURE__ */ React4.forwardRef(GlobalOutlined2);
 // src/components/Account/AccountInfo.tsx
 var import_react_identicon = __toESM(require("@polkadot/react-identicon"));
-var import_jsx_runtime2 = require("react/jsx-runtime");
+var import_jsx_runtime3 = require("react/jsx-runtime");
 var _import_antd2_Typography = import_antd2.Typography, Paragraph2 = _import_antd2_Typography.Paragraph;
 function AccountInfo(param) {
     var account3 = param.account, _param_variant = param.variant, variant = _param_variant === void 0 ? "default" : _param_variant;
@@ -19083,7 +19128,7 @@ function AccountInfo(param) {
             border: "solid 1px ".concat(hovered ? colorPrimary : colorBorder)
         });
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", {
+    return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", {
         style: style,
         onMouseEnter: function() {
             return setHovered(true);
@@ -19092,27 +19137,27 @@ function AccountInfo(param) {
             return setHovered(false);
         },
         children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_antd2.Space, {
+            /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(import_antd2.Space, {
                 align: "center",
                 size: "middle",
                 children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_react_identicon.default, {
+                    /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_react_identicon.default, {
                         value: address,
                         size: 24,
                         theme: "substrate"
                     }),
-                    /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_antd2.Space, {
+                    /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(import_antd2.Space, {
                         direction: "vertical",
                         size: 4,
                         children: [
-                            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Paragraph2, {
+                            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(Paragraph2, {
                                 strong: true,
                                 style: {
                                     marginBottom: 0
                                 },
                                 children: name
                             }),
-                            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Paragraph2, {
+                            /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(Paragraph2, {
                                 style: {
                                     marginBottom: "0",
                                     fontSize: "12px"
@@ -19123,7 +19168,7 @@ function AccountInfo(param) {
                     })
                 ]
             }),
-            variant === "select" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(DownOutlined_default2, {
+            variant === "select" && /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(DownOutlined_default2, {
                 style: {
                     color: hovered ? colorPrimary : colorBorder
                 }
@@ -19135,7 +19180,7 @@ function AccountInfo(param) {
 var import_styled_components2 = __toESM(require("styled-components"));
 // src/contexts/extensions/index.tsx
 var import_react4 = __toESM(require("react"));
-var import_jsx_runtime3 = require("react/jsx-runtime");
+var import_jsx_runtime4 = require("react/jsx-runtime");
 var defaultExtensionsContext = {
     extensions: [],
     isReady: false
@@ -19183,7 +19228,7 @@ var ExtensionsProvider = function(param) {
             return clearInterval(retryInterval);
         };
     }, []);
-    return /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(ExtensionsContext.Provider, {
+    return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(ExtensionsContext.Provider, {
         value: {
             extensions: extensions,
             isReady: isReady3
@@ -19196,12 +19241,12 @@ var import_react6 = require("react");
 // src/components/Account/AccountSelect.tsx
 var import_antd3 = require("antd");
 var import_react5 = require("react");
-var import_jsx_runtime4 = require("react/jsx-runtime");
+var import_jsx_runtime5 = require("react/jsx-runtime");
 function getItems(accounts2) {
     return accounts2.map(function(account3) {
         return {
             key: account3.address,
-            label: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(AccountInfo, {
+            label: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(AccountInfo, {
                 account: account3
             })
         };
@@ -19221,7 +19266,7 @@ function AccountSelect(param) {
         selected
     ]);
     if (accounts2.length === 0) {
-        return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(import_antd3.Skeleton.Input, {
+        return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(import_antd3.Skeleton.Input, {
             active: true
         });
     }
@@ -19233,7 +19278,7 @@ function AccountSelect(param) {
         });
         setSelected(account3);
     };
-    return /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(import_antd3.Dropdown, {
+    return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(import_antd3.Dropdown, {
         trigger: [
             "click"
         ],
@@ -19241,18 +19286,18 @@ function AccountSelect(param) {
             items: items,
             onClick: handleSelect
         },
-        children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("a", {
+        children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("a", {
             onClick: function(e) {
                 return e.preventDefault();
             },
-            children: !selected ? /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(import_antd3.Button, {
+            children: !selected ? /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(import_antd3.Button, {
                 size: "large",
                 block: true,
                 children: [
                     " ",
                     "Select an account"
                 ]
-            }) : /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(AccountInfo, {
+            }) : /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(AccountInfo, {
                 variant: "select",
                 account: selected
             })
@@ -19269,7 +19314,7 @@ var isExtensionConnected = function(extensionId) {
 };
 // src/components/Account/index.tsx
 var import_antd4 = require("antd");
-var import_jsx_runtime5 = require("react/jsx-runtime");
+var import_jsx_runtime6 = require("react/jsx-runtime");
 var Wrapper = import_styled_components2.default.div(_templateObject4());
 function AccountConnection(param) {
     var onAccountConnected = param.onAccountConnected;
@@ -19341,13 +19386,13 @@ function AccountConnection(param) {
         }));
     };
     if (loading || !isReady3) {
-        return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(import_antd4.Skeleton, {
+        return /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_antd4.Skeleton, {
             active: true
         });
     }
     if (extension && !isExtensionConnected(extension.id)) {
-        return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(import_jsx_runtime5.Fragment, {
-            children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(import_antd4.Button, {
+        return /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_jsx_runtime6.Fragment, {
+            children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_antd4.Button, {
                 loading: loading,
                 disabled: loading,
                 size: "large",
@@ -19357,8 +19402,8 @@ function AccountConnection(param) {
             })
         });
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(Wrapper, {
-        children: /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(AccountSelect, {
+    return /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(Wrapper, {
+        children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(AccountSelect, {
             accounts: accounts2,
             onChange: handleAccountSelected
         })
@@ -71904,7 +71949,7 @@ function _createTransferTx() {
     return _createTransferTx.apply(this, arguments);
 }
 // src/components/Checkout/PaymentSummary.tsx
-var import_jsx_runtime6 = require("react/jsx-runtime");
+var import_jsx_runtime7 = require("react/jsx-runtime");
 function pay(payment, account3, email) {
     return _pay.apply(this, arguments);
 }
@@ -72051,63 +72096,63 @@ function PaymentSummary(param) {
             return _ref.apply(this, arguments);
         };
     }();
-    return /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", {
+    return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", {
         style: {
             width: 380,
             maxWidth: 380,
             marginLeft: "auto"
         },
         children: [
-            /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_antd5.Typography.Title, {
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_antd5.Typography.Title, {
                 level: 4,
                 style: {
                     marginBottom: 12
                 },
                 children: t2("checkout.contactInformation")
             }),
-            /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_antd5.Form, {
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_antd5.Form, {
                 layout: "vertical",
                 requiredMark: false,
-                children: /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(import_antd5.Form.Item, {
+                children: /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_antd5.Form.Item, {
                     label: "Email",
                     validateStatus: emailError ? "error" : void 0,
                     children: [
-                        /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_antd5.Input, {
+                        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_antd5.Input, {
                             value: email,
                             onInput: function(e) {
                                 setEmail(e.target.value);
                             },
                             placeholder: "john.doe@example.com"
                         }),
-                        emailError && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_antd5.Typography.Text, {
+                        emailError && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_antd5.Typography.Text, {
                             type: "danger",
                             children: emailError
                         })
                     ]
                 })
             }),
-            /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", {
+            /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", {
                 children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(import_antd5.Typography.Title, {
+                    /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_antd5.Typography.Title, {
                         level: 4,
                         children: [
                             t2("checkout.paymentMethod"),
                             " "
                         ]
                     }),
-                    previewMode && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(AccountInfo, {
+                    previewMode && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(AccountInfo, {
                         variant: "select",
                         account: {
                             name: "Test Account",
                             address: "5ERjkQVj8M7v5UVZQ8qTbZ2qb1o5TgNXq9tXt2BsWF9jBpDu"
                         }
                     }),
-                    !previewMode && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(ExtensionsProvider, {
-                        children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(AccountConnection, {
+                    !previewMode && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(ExtensionsProvider, {
+                        children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(AccountConnection, {
                             onAccountConnected: handleAccountConnected
                         })
                     }),
-                    (previewMode || !!account3) && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_antd5.Button, {
+                    (previewMode || !!account3) && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_antd5.Button, {
                         style: {
                             marginTop: 32
                         },
@@ -72132,7 +72177,7 @@ var AFTER_PAYMENT_TYPE = {
 var import_react8 = require("react");
 var import_styled_components3 = __toESM(require("styled-components"));
 var import_antd6 = require("antd");
-var import_jsx_runtime7 = require("react/jsx-runtime");
+var import_jsx_runtime8 = require("react/jsx-runtime");
 var Title = import_antd6.Typography.Title;
 var LogoBox = import_styled_components3.default.div(_templateObject5());
 var LogoWrapper = import_styled_components3.default.div(_templateObject6());
@@ -72140,23 +72185,23 @@ var CheckoutBrand = function(param) {
     var branding = param.branding, loading = param.loading;
     var name = branding.name, logo = branding.logo;
     var HasNoBrand = !logo && !name;
-    return /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(LogoBox, {
-        children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(LogoWrapper, {
-            children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_antd6.Skeleton, {
+    return /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(LogoBox, {
+        children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(LogoWrapper, {
+            children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_antd6.Skeleton, {
                 className: "brand-skeleton",
                 paragraph: false,
                 loading: loading,
                 active: true,
-                children: HasNoBrand ? "Brand" : /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_react8.Fragment, {
+                children: HasNoBrand ? "Brand" : /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(import_react8.Fragment, {
                     children: [
-                        logo && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("img", {
+                        logo && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("img", {
                             style: {
                                 height: 24
                             },
                             src: logo,
                             alt: "brand logo"
                         }),
-                        name && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Title, {
+                        name && /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Title, {
                             style: {
                                 margin: 0
                             },
@@ -72173,13 +72218,13 @@ var Brand_default = CheckoutBrand;
 // src/components/Checkout/AfterPaymentPreviewer.tsx
 var import_antd7 = require("antd");
 var import_react_i18next3 = require("react-i18next");
-var import_jsx_runtime8 = require("react/jsx-runtime");
+var import_jsx_runtime9 = require("react/jsx-runtime");
 var AfterPaymentPreviewer = function(param) {
     var afterPayment = param.afterPayment;
     var _afterPayment_config;
     var _ref = (0, import_react_i18next3.useTranslation)(), t2 = _ref.t;
     var message = (_afterPayment_config = afterPayment.config) === null || _afterPayment_config === void 0 ? void 0 : _afterPayment_config.message;
-    return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", {
+    return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", {
         style: {
             width: 380,
             maxWidth: 380,
@@ -72187,7 +72232,7 @@ var AfterPaymentPreviewer = function(param) {
         },
         children: [
             " ",
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_antd7.Result, {
+            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_antd7.Result, {
                 status: "success",
                 title: message || t2("checkout.thankForYourPayment"),
                 subTitle: !message && t2("checkout.orderWillBeSent")
@@ -75721,7 +75766,7 @@ instance.use(import_i18next_browser_languagedetector.default).use(import_react_i
     }
 });
 // src/components/Checkout/index.tsx
-var import_jsx_runtime9 = require("react/jsx-runtime");
+var import_jsx_runtime10 = require("react/jsx-runtime");
 var Content = import_antd8.Layout.Content;
 var Wrapper2 = (0, import_styled_components4.default)(import_antd8.Layout)(_templateObject7());
 var ContentWrapper = (0, import_styled_components4.default)(Content)(_templateObject8());
@@ -75731,14 +75776,14 @@ var CheckoutPreview = function(param) {
     var _ref = (0, import_react_i18next5.useTranslation)(), t2 = _ref.t;
     var branding = previewingCheckout.branding, item = previewingCheckout.item, asset = previewingCheckout.asset, afterPayment = previewingCheckout.afterPayment;
     if (isShowAfterPayment && (afterPayment === null || afterPayment === void 0 ? void 0 : afterPayment.type) === AFTER_PAYMENT_TYPE.REDIRECT) {
-        return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(Wrapper2, {
+        return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(Wrapper2, {
             style: {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center"
             },
             children: [
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(GlobalOutlined_default2, {
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(GlobalOutlined_default2, {
                     style: {
                         fontSize: 35,
                         marginBottom: 5,
@@ -75747,7 +75792,7 @@ var CheckoutPreview = function(param) {
                         position: "relative"
                     }
                 }),
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_antd8.Typography.Title, {
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_antd8.Typography.Title, {
                     level: 3,
                     style: {
                         marginTop: 0,
@@ -75762,30 +75807,30 @@ var CheckoutPreview = function(param) {
     }
     var handlePaymentSuccess = function() {};
     var handlePaymentFailed = function() {};
-    return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(Wrapper2, {
+    return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(Wrapper2, {
         children: [
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Brand_default, {
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Brand_default, {
                 branding: branding,
                 loading: loading
             }),
-            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(ContentWrapper, {
-                children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(MainContent, {
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(ContentWrapper, {
+                children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(MainContent, {
                     justify: "space-between",
                     children: [
-                        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_antd8.Col, {
+                        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_antd8.Col, {
                             span: 12,
-                            children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(CheckoutSummary_default, {
+                            children: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(CheckoutSummary_default, {
                                 loading: loading,
                                 product: item,
                                 asset: asset,
                                 previewMode: previewMode
                             })
                         }),
-                        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_antd8.Col, {
+                        /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_antd8.Col, {
                             span: 12,
-                            children: isShowAfterPayment && afterPayment ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(AfterPaymentPreviewer_default, {
+                            children: isShowAfterPayment && afterPayment ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(AfterPaymentPreviewer_default, {
                                 afterPayment: afterPayment
-                            }) : /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(PaymentSummary, {
+                            }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(PaymentSummary, {
                                 previewMode: previewMode,
                                 payment: {
                                     payee: previewingCheckout.payee || "",
@@ -75805,10 +75850,10 @@ var CheckoutPreview = function(param) {
 };
 var Checkout_default = CheckoutPreview;
 // src/contexts/index.tsx
-var import_jsx_runtime10 = require("react/jsx-runtime");
+var import_jsx_runtime11 = require("react/jsx-runtime");
 var LibraProviders = function(param) {
     var children = param.children;
-    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(ExtensionsProvider, {
+    return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(ExtensionsProvider, {
         children: children
     });
 };

@@ -1,9 +1,9 @@
 import styled from 'styled-components';
 import { Image, Space, Avatar, Typography, Divider, Skeleton } from 'antd';
 import { AssetMetadata, CheckoutProductItemNumberPrice } from '../../app/types';
+import LibraLogo from 'components/LibraLogo';
 import { ASSET_METADATA } from '../../config';
 import { getCheckoutPrice } from '../../utils';
-import logo from '../../assets/logo.svg';
 import { useTranslation } from 'react-i18next';
 
 const { Paragraph, Link } = Typography;
@@ -114,7 +114,7 @@ function FooterLinks() {
       <Paragraph style={{ margin: 0 }} strong>
         {t('footer.poweredBy')}
       </Paragraph>
-      <img src={logo} height={16} alt={t<string>('footer.libraLogo')} />
+      <LibraLogo height={18}></LibraLogo>
 
       <Divider type="vertical" style={{ height: 20 }} />
 
