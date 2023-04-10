@@ -124,8 +124,7 @@ i18n
             failed: 'Failed',
             allStatus: 'All',
             noPaymentHasCheckoutTitle: `It's happening…`,
-            noPaymentHasCheckoutSubTitle1: `Promote your checkout and start earning your first [Dot].`,
-            noPaymentHasCheckoutSubTitle2: `Please make sure to replace [Dot] with checkout's asset.`,
+            noPaymentHasCheckoutSubTitle: 'Promote your checkout and start earning your first {{asset}}.',
           },
 
           checkout: {

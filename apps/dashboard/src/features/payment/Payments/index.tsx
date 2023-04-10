@@ -11,14 +11,13 @@ import ChargeFilter from './Filter';
 
 export default function Payments() {
   const { t } = useTranslation();
-  const { charges, hasCheckout, getChargesLoading, fetchCharges, chargesPaging } = useCharges();
+  const { charges, hasCheckout, firstCheckoutAsset, getChargesLoading, fetchCharges, chargesPaging } = useCharges();
   const { status, createdLte, createdGte } = useChargeParams();
   const navigate = useNavigate();
 
   const subTitle = hasCheckout ? (
     <>
-      <div>{t('payment.noPaymentHasCheckoutSubTitle1')}</div>
-      <div style={{ marginTop: 5 }}>{t('payment.noPaymentHasCheckoutSubTitle2')}</div>
+      <div>{t('payment.noPaymentHasCheckoutSubTitle', { asset: firstCheckoutAsset.toUpperCase() })}</div>
     </>
   ) : (
     t('payment.hasNoCheckoutSubtitle')
