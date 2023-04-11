@@ -91,7 +91,9 @@ export const deleteWebhook = createAppAsyncThunk(
   },
 );
 
-interface WebhookState extends WebhookListState, CreateWebhookState, UpdateWebhookState, DeleteWebhookState {}
+interface WebhookState extends WebhookListState, CreateWebhookState, UpdateWebhookState, DeleteWebhookState {
+  isFirstLoad: boolean;
+}
 
 const initialState: WebhookState = {
   webhooks: [],
@@ -102,6 +104,7 @@ const initialState: WebhookState = {
     hasPrevPage: false,
     prevPageData: [],
   },
+  isFirstLoad: true,
 
   createWebhookLoading: false,
   createWebhookSuccess: undefined,
@@ -133,10 +136,12 @@ export const webhookSlice = createSlice({
         state.getWebhooksLoading = false;
         state.webhooks = payload.data;
         state.webhooksPaging = payload.paging;
+        state.isFirstLoad = false
       })
       .addCase(getWebhooks.rejected, (state, { payload }) => {
         state.getWebhooksLoading = false;
         state.getWebhooksFailed = payload;
+        state.isFirstLoad = false
       })
 
       .addCase(createWebhook.pending, (state) => {
@@ -214,6 +219,8 @@ export const selectDeleteWebhookState = ({
   deleteWebhookLoading,
   deleteWebhookSuccess,
 });
+
+export const selectFirstLoadState = ({ webhook: { isFirstLoad } }: RootState) => isFirstLoad;
 
 export const { resetWebhook } = webhookSlice.actions;
 

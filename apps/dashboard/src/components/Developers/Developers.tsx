@@ -7,6 +7,8 @@ import { useTranslation } from 'react-i18next';
 import { WalletOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { MenuWrapper } from 'components/AppLayout/Styled';
+import { useFirstLoad } from 'features/webhook/webhookHooks';
+import Loading from 'components/Common/Loading';
 
 const DeveloperMenu = () => {
   const { t } = useTranslation();
@@ -57,6 +59,7 @@ const PageHeader = styled.div`
 
 const Developers = () => {
   const { t } = useTranslation();
+  const isFirstLoad = useFirstLoad();
 
   return (
     <Wrapper>
@@ -67,6 +70,7 @@ const Developers = () => {
       </PageHeader>{' '}
       <DeveloperMenu />
       <Outlet />
+      <Loading isContentPage loading={isFirstLoad} />
     </Wrapper>
   );
 };

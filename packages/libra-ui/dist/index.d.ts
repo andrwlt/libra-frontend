@@ -24,13 +24,13 @@ interface CheckoutProductItemBase {
 interface CheckoutProductItemNumberPrice extends CheckoutProductItemBase {
     price: number | null;
 }
-interface CheckoutPreviewType extends CheckoutBaseType {
+interface CheckoutType extends CheckoutBaseType {
     payee?: string;
     item: CheckoutProductItemNumberPrice;
 }
 
-declare const CheckoutPreview: ({ previewingCheckout, previewMode, isShowAfterPayment, loading, }: {
-    previewingCheckout: CheckoutPreviewType;
+declare const CheckoutPreview: ({ checkoutData, previewMode, isShowAfterPayment, loading, }: {
+    checkoutData: CheckoutType;
     previewMode?: boolean | undefined;
     isShowAfterPayment?: boolean | undefined;
     loading?: boolean | undefined;

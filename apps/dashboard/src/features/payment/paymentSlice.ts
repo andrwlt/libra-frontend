@@ -66,6 +66,7 @@ const initialState: PaymentState = {
   getChargesLoading: false,
   hasCheckout: false,
   firstCheckoutAsset: '',
+  isFirstLoad: true,
   chargesPaging: {
     hasNextPage: false,
     hasPrevPage: false,
@@ -76,7 +77,11 @@ const initialState: PaymentState = {
 export const paymentSlice = createSlice({
   name: 'payment',
   initialState,
-  reducers: {},
+  reducers: {
+    resetPayments() {
+      return initialState;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getCharges.pending, (state) => {
@@ -88,10 +93,12 @@ export const paymentSlice = createSlice({
         state.hasCheckout = payload.hasCheckout;
         state.firstCheckoutAsset = payload.firstCheckoutAsset;
         state.chargesPaging = payload.paging;
+        state.isFirstLoad = false;
       })
       .addCase(getCharges.rejected, (state, { payload }) => {
         state.getChargesLoading = false;
         state.getChargesFailed = payload;
+        state.isFirstLoad = false;
       })
       .addCase(resetStore, () => {
         return initialState;
@@ -100,7 +107,15 @@ export const paymentSlice = createSlice({
 });
 
 export const selectChargesState = ({
-  payment: { charges, getChargesFailed, getChargesLoading, hasCheckout, firstCheckoutAsset, chargesPaging },
+  payment: {
+    charges,
+    getChargesFailed,
+    getChargesLoading,
+    hasCheckout,
+    firstCheckoutAsset,
+    chargesPaging,
+    isFirstLoad,
+  },
 }: RootState): GetChargesState => ({
   charges,
   getChargesFailed,
@@ -108,6 +123,9 @@ export const selectChargesState = ({
   hasCheckout,
   firstCheckoutAsset,
   chargesPaging,
+  isFirstLoad,
 });
+
+export const { resetPayments } = paymentSlice.actions;
 
 export default paymentSlice.reducer as Reducer<PaymentState>;

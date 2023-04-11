@@ -14,6 +14,7 @@ interface LoadingProps {
   message?: string;
   loading?: boolean;
   isFullPage?: boolean;
+  isContentPage?: boolean;
 }
 
 const FullPageWrapper = styled.div`
@@ -40,6 +41,15 @@ const LoadingWrapper = styled.div`
   align-items: center;
 `;
 
+const PageContentLoadingWrapper = styled(FullPageWrapper)`
+  height: calc(100vh - 56px);
+  top: 56px;
+
+  .ant-space {
+    margin-bottom: 100px;
+  }
+`;
+
 const LoaderContainer = styled.div`
   .ant-spin-spinning {
     display: flex;
@@ -59,7 +69,7 @@ const FULL_PAGE_ICON_SIZE = 25;
 const NORMAL_TEXT_FONT_SIZE = 15;
 const FULL_PAGE_TEXT_FONT_SIZE = 17;
 
-const Loading = ({ loading = true, isFullPage, message }: LoadingProps) => {
+const Loading = ({ loading = true, isFullPage, isContentPage, message }: LoadingProps) => {
   const {
     token: { colorBgBase, colorTextTertiary },
   } = theme.useToken();
@@ -74,19 +84,28 @@ const Loading = ({ loading = true, isFullPage, message }: LoadingProps) => {
     return prevQuoteRef.current;
   }, [loading]);
 
+  const style = { background: colorBgBase };
+
   const loadingContent = (
     <LoaderContainer>
       <Space align="center">
         <Spin
           indicator={
             <Loading3QuartersOutlined
-              style={{ fontSize: isFullPage ? FULL_PAGE_ICON_SIZE : NORMAL_ICON_SIZE, color: colorTextTertiary }}
+              style={{
+                fontSize: isFullPage || isContentPage ? FULL_PAGE_ICON_SIZE : NORMAL_ICON_SIZE,
+                color: colorTextTertiary,
+              }}
               spin
             />
           }
         />
         <Typography.Paragraph
-          style={{ margin: 0, marginLeft: 7, fontSize: isFullPage ? FULL_PAGE_TEXT_FONT_SIZE : NORMAL_TEXT_FONT_SIZE }}
+          style={{
+            margin: 0,
+            marginLeft: 7,
+            fontSize: isFullPage || isContentPage ? FULL_PAGE_TEXT_FONT_SIZE : NORMAL_TEXT_FONT_SIZE,
+          }}
           type="secondary"
         >
           {message ?? quote}
@@ -99,10 +118,14 @@ const Loading = ({ loading = true, isFullPage, message }: LoadingProps) => {
     return null;
   }
 
+  if (isContentPage) {
+    return <PageContentLoadingWrapper style={style}>{loadingContent}</PageContentLoadingWrapper>;
+  }
+
   return isFullPage ? (
-    <FullPageWrapper style={{ background: colorBgBase }}>{loadingContent}</FullPageWrapper>
+    <FullPageWrapper style={style}>{loadingContent}</FullPageWrapper>
   ) : (
-    <LoadingWrapper style={{ background: colorBgBase }}>{loadingContent}</LoadingWrapper>
+    <LoadingWrapper style={style}>{loadingContent}</LoadingWrapper>
   );
 };
 

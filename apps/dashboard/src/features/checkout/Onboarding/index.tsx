@@ -130,7 +130,7 @@ export default function Onboarding() {
 
       <Content style={{ background: colorBgLayout }}>
         <Previewer onboardingMode width={768}>
-          <CheckoutPreview previewingCheckout={previewingCheckout} />
+          <CheckoutPreview checkoutData={previewingCheckout} />
         </Previewer>
       </Content>
 

@@ -134,6 +134,7 @@ const initialState: CheckoutState = {
   getCheckoutsLoading: false,
   getCheckoutsFailed: undefined,
   checkoutsPaging: { hasPrevPage: false, hasNextPage: false, prevPageData: [] },
+  isFirstLoad: true,
 
   checkout: initCheckout,
   getCheckoutLoading: false,
@@ -170,10 +171,12 @@ export const authSlice = createSlice({
         state.getCheckoutsLoading = false;
         state.checkouts = payload.data;
         state.checkoutsPaging = payload.paging;
+        state.isFirstLoad = false;
       })
       .addCase(getCheckouts.rejected, (state, { payload }) => {
         state.getCheckoutsLoading = false;
         state.getCheckoutsFailed = payload;
+        state.isFirstLoad = false;
       })
 
       .addCase(getCheckoutDetails.pending, (state) => {
@@ -232,12 +235,13 @@ export const authSlice = createSlice({
 });
 
 export const selectCheckoutListState = ({
-  checkout: { checkouts, getCheckoutsLoading, getCheckoutsFailed, checkoutsPaging },
+  checkout: { checkouts, getCheckoutsLoading, getCheckoutsFailed, checkoutsPaging, isFirstLoad },
 }: RootState): CheckoutListState => ({
   checkouts,
   getCheckoutsLoading,
   getCheckoutsFailed,
   checkoutsPaging,
+  isFirstLoad,
 });
 
 export const selectCheckoutDetailsState = ({

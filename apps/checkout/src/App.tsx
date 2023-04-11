@@ -10,7 +10,7 @@ const AppWrapper = styled.div`
 function App() {
   return (
     <AppWrapper className="App">
-      <Checkout previewMode={false} previewingCheckout={(window as any).checkout}></Checkout>
+      <Checkout previewMode={false} checkoutData={(window as any).checkout}></Checkout>
     </AppWrapper>
   );
 }

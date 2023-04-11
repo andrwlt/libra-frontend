@@ -28,6 +28,7 @@ export interface GetChargesState {
   getChargesFailed: any;
   hasCheckout: boolean;
   firstCheckoutAsset: string;
+  isFirstLoad: boolean;
   chargesPaging: {
     hasPrevPage: boolean;
     hasNextPage: boolean;
