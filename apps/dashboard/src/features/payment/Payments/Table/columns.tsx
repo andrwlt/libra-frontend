@@ -45,13 +45,14 @@ const columns: ColumnsType<ChargeDataType> = [
         </Space>
       );
     },
-    width: 400,
+    width: 300,
   },
 
   {
     key: 'description',
     title: 'Description',
     dataIndex: 'description',
+    className:'charge-description'
   },
 
   {

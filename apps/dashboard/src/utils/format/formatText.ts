@@ -18,7 +18,10 @@ export const getCheckoutLink = (id: string) => {
 export const getCheckoutPrice = ({ price, asset }: { price: string | number; asset: string }, assetMetadata: any) => {
   const nextPrice = typeof price !== 'number' ? formatBalance(price, asset) : price;
   const unit = assetMetadata ? assetMetadata.symbol : asset;
-  const formattedPrice = nextPrice.toLocaleString('en-US', { style: 'decimal' });
+  const formattedPrice = nextPrice.toLocaleString('en-US', {
+    style: 'decimal',
+    maximumFractionDigits: assetMetadata.decimals,
+  });
 
   return `${formattedPrice} ${unit}`;
 };
