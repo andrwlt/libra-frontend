@@ -2,6 +2,7 @@ import { Input, InputNumber, Select, Form, Space } from 'antd';
 import ImageUploader from 'components/Inputs/ImageUploader';
 import { useTranslation } from 'react-i18next';
 import { FormItemsPropsType } from 'features/checkout/types';
+import { ASSET_METADATA } from 'config';
 
 const FormItem = Form.Item;
 
@@ -54,9 +55,24 @@ const ProductPriceFormItem = ({ onboardingMode }: FormItemsPropsType) => {
       style={{ flexGrow: 1, paddingRight: '32px' }}
       name={['item', 'price']}
       required
+      dependencies={['asset']}
       rules={[
         { required: true, message: t<string>('checkout.productPriceIsRequired') },
         { type: 'number', message: t<string>('checkout.productPriceMustBeNumber') },
+        ({ getFieldValue }) => ({
+          validator(_, value) {
+            const asset = getFieldValue(['asset']);
+
+            const { decimals } = ASSET_METADATA[asset];
+            const smallestPrice = 1 / Math.pow(10, decimals);
+
+            if (value < smallestPrice) {
+              return Promise.reject(new Error('checkout.priceTooSmall'));
+            }
+
+            return Promise.resolve();
+          },
+        }),
       ]}
     >
       <PriceInput onboardingMode={onboardingMode} />

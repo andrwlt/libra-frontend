@@ -180,6 +180,7 @@ i18n
             thankForYourPayment: 'Thanks for your payment',
             orderWillBeSent: 'An order summary will be sent to your email within minutes',
             websiteWillBeShow: 'Your website will be shown after payment',
+            priceTooSmall: 'Price is too small'
           },
 
           footer: {

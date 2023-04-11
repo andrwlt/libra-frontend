@@ -87,3 +87,10 @@ body {
 .ant-table-thead > tr > td {
   background-color: #fff !important;
 }
+
+.charge-description {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 400px;
+}

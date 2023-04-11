@@ -8,7 +8,7 @@ function toReverseArray(str: string) {
   return reverseArray;
 }
 
-const getZeroLength = (stringNumber: string) => {
+const getDecimalsShouldBeDecrease = (stringNumber: string) => {
   const reversedArray = toReverseArray(stringNumber);
   let count = 0;
 
@@ -31,11 +31,17 @@ export function formatBalance(amount: string, asset: string): number {
   }
 
   const { decimals } = metadata;
-  const zeroLength = getZeroLength(amount);
+  const decimalsShouldBeDecrease = getDecimalsShouldBeDecrease(amount);
 
-  if (zeroLength < metadata.decimals) {
-    const nextAmount = amount.slice(0, amount.length - zeroLength);
-    const nextDecimals = decimals - zeroLength;
+  if (decimalsShouldBeDecrease < metadata.decimals) {
+    const nextAmount = amount.slice(0, amount.length - decimalsShouldBeDecrease);
+    const nextDecimals = decimals - decimalsShouldBeDecrease;
+
+    const isUnderOne = nextAmount.length <= nextDecimals;
+
+    if (isUnderOne) {
+      return Number(nextAmount) / Math.pow(10, Number(nextDecimals));
+    }
 
     // Incase nextAmount still too big
     const intNumberPart = nextAmount.slice(0, nextDecimals);
