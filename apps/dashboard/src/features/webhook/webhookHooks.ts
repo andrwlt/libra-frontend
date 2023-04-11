@@ -10,6 +10,7 @@ import {
   deleteWebhook,
   selectDeleteWebhookState,
   resetWebhook,
+  selectFirstLoadState,
 } from './webhookSlice';
 import {
   CreateWebhookHook,
@@ -111,4 +112,9 @@ export const useResetWebhook = () => {
       dispatch(resetWebhook());
     };
   }, [dispatch]);
+};
+
+export const useFirstLoad = () => {
+  const isFirstLoad = useAppSelector(selectFirstLoadState);
+  return isFirstLoad;
 };

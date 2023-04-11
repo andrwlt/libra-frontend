@@ -82,6 +82,7 @@ export interface CheckoutListState {
   getCheckoutsLoading: boolean;
   getCheckoutsFailed: any;
   checkoutsPaging: Paging<CheckoutResponseType>;
+  isFirstLoad: boolean
 }
 
 export interface CheckoutDetailsState {

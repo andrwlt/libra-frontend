@@ -8,10 +8,19 @@ import { useTranslation } from 'react-i18next';
 import { StyledContainer } from 'components/Common/Styled';
 import ChargeTable from './Table';
 import ChargeFilter from './Filter';
+import Loading from 'components/Common/Loading';
 
 export default function Payments() {
   const { t } = useTranslation();
-  const { charges, hasCheckout, firstCheckoutAsset, getChargesLoading, fetchCharges, chargesPaging } = useCharges();
+  const {
+    charges,
+    hasCheckout,
+    firstCheckoutAsset,
+    getChargesLoading,
+    fetchCharges,
+    chargesPaging,
+    isFirstLoad,
+  } = useCharges();
   const { status, createdLte, createdGte } = useChargeParams();
   const navigate = useNavigate();
 
@@ -37,7 +46,6 @@ export default function Payments() {
   return (
     <div>
       <PageHeader title="Payments" />
-
       <StyledContainer>
         {shouldShowTable ? (
           <Card style={{ marginBottom: 16 }}>
@@ -75,6 +83,7 @@ export default function Payments() {
           )}
         </Card>
       </StyledContainer>
+      <Loading isContentPage loading={isFirstLoad} />
     </div>
   );
 }

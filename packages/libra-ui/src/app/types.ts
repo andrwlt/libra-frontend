@@ -41,12 +41,8 @@ export interface CheckoutProductItemNumberPrice extends CheckoutProductItemBase 
   price: number | null;
 }
 
-export const AFTER_PAYMENT_TYPE = {
-  MESSAGE: 'message',
-  REDIRECT: 'redirect',
-};
 
-export interface CheckoutPreviewType extends CheckoutBaseType {
+export interface CheckoutType extends CheckoutBaseType {
   payee?: string;
   item: CheckoutProductItemNumberPrice;
 }

@@ -1,12 +1,11 @@
 import styled from 'styled-components';
-import { Row, Layout, Typography, Col, message } from 'antd';
+import { Row, Layout, Col, message } from 'antd';
 import CheckoutSummary from './CheckoutSummary';
 import PaymentSummary from './PaymentSummary';
-import { AFTER_PAYMENT_TYPE, CheckoutPreviewType } from '../../app/types';
+import { CheckoutType } from '../../app/types';
 import CheckoutBrand from './Brand';
 import AfterPaymentPreviewer from './AfterPaymentPreviewer';
 import { useTranslation } from 'react-i18next';
-import { GlobalOutlined } from '@ant-design/icons';
 import '../../app/i18n';
 import { useState } from 'react';
 
@@ -46,34 +45,20 @@ const MainContent = styled(Row)`
 `;
 
 const CheckoutPreview = ({
-  previewingCheckout,
+  checkoutData,
   previewMode = true,
   isShowAfterPayment = false,
   loading = false,
 }: {
-  previewingCheckout: CheckoutPreviewType;
+  checkoutData: CheckoutType;
   previewMode?: boolean;
   isShowAfterPayment?: boolean;
   loading?: boolean;
 }) => {
   const { t } = useTranslation();
-  const { branding, item, asset, afterPayment } = previewingCheckout;
+  const { branding, item, asset, afterPayment } = checkoutData;
   const [completed, setCompleted] = useState(false);
   const [messageApi, contextHolder] = message.useMessage();
-
-  // TODO: handle this in the parent component (Previewer)
-  if (isShowAfterPayment && afterPayment?.type === AFTER_PAYMENT_TYPE.REDIRECT) {
-    return (
-      <Wrapper style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <GlobalOutlined
-          style={{ fontSize: 35, marginBottom: 5, color: `rgba(0, 0, 0, 0.45)`, bottom: 30, position: 'relative' }}
-        />
-        <Typography.Title level={3} style={{ marginTop: 0, bottom: 30, position: 'relative' }} type="secondary">
-          {t('checkout.websiteWillBeShow')}
-        </Typography.Title>
-      </Wrapper>
-    );
-  }
 
   const handlePaymentSuccess = () => {
     if (afterPayment && afterPayment.type === 'redirect' && afterPayment.config.url) {
@@ -104,10 +89,10 @@ const CheckoutPreview = ({
               <PaymentSummary
                 previewMode={previewMode}
                 payment={{
-                  payee: previewingCheckout.payee || '',
-                  amount: previewingCheckout.item.price || 0,
-                  asset: previewingCheckout.asset,
-                  productName: previewingCheckout.item.name,
+                  payee: checkoutData.payee || '',
+                  amount: checkoutData.item.price || 0,
+                  asset: checkoutData.asset,
+                  productName: checkoutData.item.name,
                 }}
                 onPaymentSuccess={handlePaymentSuccess}
                 onPaymentFailed={handlePaymentFailed}

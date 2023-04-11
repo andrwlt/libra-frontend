@@ -22,6 +22,8 @@ import { useTranslation } from 'react-i18next';
 import { formatCheckoutToStringPrice } from 'utils/format/balance';
 import { FixedWrapper } from 'components/Common/Styled';
 import { breakpoints } from 'config';
+import { AFTER_PAYMENT_TYPE } from 'features/checkout/types';
+import RedirectPreviewer from 'components/Checkout/RedirectPreviewer';
 
 type CheckoutFormWrapperProps = {
   background: string;
@@ -136,6 +138,10 @@ const Checkout = () => {
     },
   ];
 
+  const isShowAfterPayment = activeStep === AFTER_PAYMENT_STEP_KEY;
+  const isRedirectType = previewingCheckout?.afterPayment?.type === AFTER_PAYMENT_TYPE.REDIRECT;
+  const showRedirectPreviewer = isShowAfterPayment && isRedirectType;
+
   return (
     <FixedWrapper>
       <ActionBar form={form} loading={isSubmitLoading} onSubmitCheckout={handleSubmit} />
@@ -161,11 +167,15 @@ const Checkout = () => {
           </Typography.Title>
 
           <Previewer style={{ margin: '0', marginTop: '30' }}>
-            <CheckoutPreview
-              loading={getCheckoutLoading}
-              previewingCheckout={previewingCheckout}
-              isShowAfterPayment={activeStep === AFTER_PAYMENT_STEP_KEY}
-            />
+            {showRedirectPreviewer ? (
+              <RedirectPreviewer />
+            ) : (
+              <CheckoutPreview
+                loading={getCheckoutLoading}
+                checkoutData={previewingCheckout}
+                isShowAfterPayment={isShowAfterPayment}
+              />
+            )}
           </Previewer>
         </PreviewContainer>
       </CheckoutContentWrapper>

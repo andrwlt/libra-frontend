@@ -14,11 +14,12 @@ import type { MenuProps } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { StyledContainer } from 'components/Common/Styled';
 import getTableLoaderProps from 'components/Common/TableLoader';
+import Loading from 'components/Common/Loading';
 
 export default function Checkouts() {
   const { t } = useTranslation();
   const [openedPopconfirm, setOpenedPopconfirm] = useState('');
-  const { checkouts, getCheckoutsLoading, checkoutsPaging, fetchCheckouts } = useCheckouts();
+  const { checkouts, getCheckoutsLoading, checkoutsPaging, fetchCheckouts, isFirstLoad } = useCheckouts();
   const navigate = useNavigate();
   const { handleDeleteCheckout, deleteCheckoutLoading } = useDeleteCheckout();
   useResetCheckout();
@@ -137,7 +138,6 @@ export default function Checkouts() {
           </Button>
         )}
       </PageHeader>
-
       <StyledContainer>
         <Card>
           {getCheckoutsLoading || hasCheckout ? (
@@ -186,6 +186,7 @@ export default function Checkouts() {
           )}
         </Card>
       </StyledContainer>
+      <Loading isContentPage loading={isFirstLoad} />
     </div>
   );
 }
