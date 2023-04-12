@@ -25,8 +25,6 @@ export const useExtensions = (revalidate: boolean = false) => {
     }
   }, [dispatch, revalidate, state.extensions.length]);
 
-  useFailed(state.getExtensionsFailed);
-
   return state;
 };
 
