@@ -21,7 +21,6 @@ i18n
           save: 'Save',
           logo: 'Logo',
           defaultErrorMessage: 'Something went wrong!',
-          getExtensionsFailed: 'Get Extensions Failed',
           payments: 'Payments',
           checkoutLabel: 'Checkout',
           copied: 'Copied',
@@ -49,8 +48,9 @@ i18n
           auth: {
             needCreatePolkadotAccount:
               'You need a Polkadot account to sign up and start using Libra.',
-
-            closeAndCreateOne: 'Close to create one'
+            closeAndCreateOne: 'Close to create one',
+            needToInstallExtension: 'You need to install supported extension to start using Libra.',
+            preferExtension: 'There is an awesome extension we prefer.'
           },
 
           message: {

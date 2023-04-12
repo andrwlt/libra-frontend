@@ -4,7 +4,6 @@ import { LOGIN_MESSAGE } from 'config';
 import { hasInjectedWeb3, getExtensions } from './authUtils';
 import { GET_EXTENSIONS_MAX_RETRY, GET_EXTENSIONS_INTERVAL_DURATION } from 'config';
 import { AuthAPI } from './types';
-import i18next from 'app/i18n';
 
 export const publicInstants = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
@@ -32,7 +31,7 @@ const authAPI: AuthAPI = {
 
         if (++retryCounter === GET_EXTENSIONS_MAX_RETRY) {
           clearInterval(retryInterval);
-          reject({ message: i18next.t('getExtensionsFailed') });
+          reject(new Error());
         }
       }, GET_EXTENSIONS_INTERVAL_DURATION);
     });
