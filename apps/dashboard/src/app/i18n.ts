@@ -48,7 +48,9 @@ i18n
 
           auth: {
             needCreatePolkadotAccount:
-              'You need a Polkadot account to sign up and start using Libra. Please open the extension and create one.',
+              'You need a Polkadot account to sign up and start using Libra.',
+
+            closeAndCreateOne: 'Close to create one'
           },
 
           message: {
