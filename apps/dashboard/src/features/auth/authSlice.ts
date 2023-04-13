@@ -16,11 +16,12 @@ import { setAxiosToken, removeAxiosToken } from 'services/requester';
 export interface AuthState extends ExtensionState, ConnectExtensionState, LoginState, AuthPersitState {}
 
 const initialState: AuthState = {
-  accountDictionary: {},
+  token: undefined,
   libraConnectedAccount: undefined,
   loginLoading: false,
   loginFailed: undefined,
   loginSuccess: undefined,
+  refreshToken: undefined,
 
   extensions: [],
   getExtensionsLoading: true,
@@ -57,8 +58,13 @@ export const login = createAppAsyncThunk(
           message: LOGIN_MESSAGE,
         });
 
+        const { accessToken, refreshToken } = response.data;
+
+        setAxiosToken(accessToken);
+
         return {
-          accessToken: response.data.accessToken,
+          accessToken,
+          refreshToken,
           account,
         };
       }
@@ -135,18 +141,22 @@ export const authSlice = createSlice({
     resetConnectedExtension(state) {
       state.connectedExtension = undefined;
     },
+
+    updateToken(state, { payload: { accessToken } }) {
+      state.token = accessToken;
+    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(login.pending, (state) => {
         state.loginLoading = true;
       })
-      .addCase(login.fulfilled, (state, { payload: { accessToken, account } }) => {
+      .addCase(login.fulfilled, (state, { payload: { accessToken, account, refreshToken } }) => {
         state.loginLoading = false;
         state.libraConnectedAccount = account;
-        state.accountDictionary[account.address] = accessToken;
+        state.token = accessToken;
         state.loginSuccess = accessToken;
-        setAxiosToken(accessToken);
+        state.refreshToken = refreshToken;
       })
       .addCase(login.rejected, (state, action) => {
         state.loginLoading = false;
@@ -203,16 +213,16 @@ export const selectLoginState = ({ auth: { loginLoading, loginFailed, loginSucce
   };
 };
 
-export const selectAuthHookState = ({ auth }: RootState): AuthHookState => {
-  const token = auth.accountDictionary[auth.libraConnectedAccount?.address];
-
+export const selectAuthHookState = ({
+  auth: { token, loginLoading, libraConnectedAccount },
+}: RootState): AuthHookState => {
   return {
     token,
-    loginLoading: auth.loginLoading,
-    account: auth.libraConnectedAccount,
+    loginLoading: loginLoading,
+    account: libraConnectedAccount,
   };
 };
 
-export const { logout, resetLoginState, resetConnectedExtension } = authSlice.actions;
+export const { logout, resetLoginState, resetConnectedExtension, updateToken } = authSlice.actions;
 
 export default authSlice.reducer as Reducer<AuthState>;

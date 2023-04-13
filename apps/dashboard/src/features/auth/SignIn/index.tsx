@@ -5,7 +5,6 @@ import logo from 'assets/logo.svg';
 import { useExtensions, useAuth, useLogin, useConnectExtension } from 'features/auth/authHooks';
 import SelectAccountModal from 'components/SelectAccountModal';
 import { Navigate } from 'react-router-dom';
-import { isTokenExpired } from 'utils/auth';
 import PATHS from 'router/paths';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
@@ -39,7 +38,7 @@ export default function SignIn() {
     token: { colorBgLayout, boxShadow },
   } = antdTheme.useToken();
 
-  if (token && !isTokenExpired(token)) {
+  if (token) {
     return <Navigate to="/" />;
   }
 

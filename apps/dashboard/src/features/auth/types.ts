@@ -59,10 +59,9 @@ export interface LoginHook extends LoginState {
 }
 
 export interface AuthPersitState {
-  accountDictionary: {
-    [accountAddress: string]: string;
-  };
+  token: string | undefined;
   libraConnectedAccount: any;
+  refreshToken: undefined | string;
 }
 
 export interface AuthHookState {
