@@ -1,48 +1,10 @@
 import axios from 'axios';
-import { isTokenExpired } from 'utils/auth';
-import { logout, resetStore } from 'features/auth/authSlice';
-import { message } from 'antd';
+import memoizedRefreshToken from './refreshToken';
 import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore';
-import i18next from 'app/i18n';
-
-const selectToken = (store: ToolkitStore) => {
-  const { accountDictionary, account } = store.getState().auth;
-  const token = accountDictionary?.[account?.address];
-
-  return token;
-};
 
 const instants = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
 });
-
-let hasLogout = false;
-
-export const setupInstantsInterceptor = (store: ToolkitStore) => {
-  instants.interceptors.request.use(
-    async (config) => {
-      const token = selectToken(store);
-      if (token && isTokenExpired(token)) {
-        if (!hasLogout) {
-          hasLogout = true;
-          store.dispatch(resetStore());
-          store.dispatch(logout());
-          message.open({ type: 'error', content: i18next.t('sessionExpired') });
-
-          setTimeout(() => {
-            hasLogout = false;
-          }, 1000);
-        }
-
-        throw new axios.Cancel('');
-      }
-      return config;
-    },
-    (error) => {
-      return Promise.reject(error);
-    },
-  );
-};
 
 export function setAxiosToken(token: string) {
   instants.defaults.headers.common.Authorization = 'Bearer ' + token;
@@ -51,5 +13,34 @@ export function setAxiosToken(token: string) {
 export function removeAxiosToken() {
   instants.defaults.headers.common.Authorization = '';
 }
+
+export const setupInstantsInterceptor = (store: ToolkitStore) => {
+  instants.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+      const config = error?.config;
+
+      const isAuthError = error?.response?.status === 401 || error?.response?.status === 403;
+
+      if (isAuthError && !config?.sent) {
+        config.sent = true;
+
+        const result = await memoizedRefreshToken(store);
+
+        if (result?.accessToken) {
+          config.headers = {
+            ...config.headers,
+            authorization: `Bearer ${result.accessToken}`,
+          };
+          setAxiosToken(result.accessToken);
+        }
+
+        return axios(config);
+      }
+
+      return Promise.reject(error);
+    },
+  );
+};
 
 export default instants;

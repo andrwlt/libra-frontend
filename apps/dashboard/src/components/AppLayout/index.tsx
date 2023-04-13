@@ -3,7 +3,6 @@ import { Layout } from 'antd';
 import Header from 'components/AppLayout/Header';
 import { Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from 'features/auth/authHooks';
-import { isTokenExpired } from 'utils/auth';
 import PATHS from 'router/paths';
 import { setAxiosToken } from 'services/requester';
 import { Container, InnerContainer } from './Styled';
@@ -11,7 +10,7 @@ import { Container, InnerContainer } from './Styled';
 const DashboardLayout = () => {
   const { token } = useAuth();
 
-  if (!token || isTokenExpired(token)) {
+  if (!token) {
     return <Navigate to={PATHS.auth.signIn} />;
   } else {
     setAxiosToken(token);

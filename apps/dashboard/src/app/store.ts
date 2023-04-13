@@ -20,7 +20,7 @@ import { setupInstantsInterceptor } from 'services/requester';
 const authPersistConfig: PersistConfig<AuthState> = {
   key: 'auth',
   storage: storage,
-  whitelist: ['accountDictionary', 'libraConnectedAccount'],
+  whitelist: ['token', 'libraConnectedAccount', 'refreshToken'],
 };
 
 const store = configureStore({
