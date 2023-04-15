@@ -44,13 +44,14 @@ i18n
           reveal: 'Reveal',
           hide: 'Hide',
           close: 'Close',
+          developerModeIsForPartnerOnly:
+            'Currently, this feature is for our partners only. Please contact us for more details.',
 
           auth: {
-            needCreatePolkadotAccount:
-              'You need a Polkadot account to sign up and start using Libra.',
+            needCreatePolkadotAccount: 'You need a Polkadot account to sign up and start using Libra.',
             closeAndCreateOne: 'Close to create one',
             needToInstallExtension: 'You need to install supported extension to start using Libra.',
-            preferExtension: 'There is an awesome extension we prefer.'
+            preferExtension: 'There is an awesome extension we prefer.',
           },
 
           message: {
@@ -182,7 +183,7 @@ i18n
             thankForYourPayment: 'Thanks for your payment',
             orderWillBeSent: 'An order summary will be sent to your email within minutes',
             websiteWillBeShow: 'Your website will be shown after payment',
-            priceTooSmall: 'Price is too small'
+            priceTooSmall: 'Price is too small',
           },
 
           footer: {
