@@ -1,4 +1,5 @@
-import { Dropdown, Space, Typography } from 'antd';
+import { Fragment, useState } from 'react';
+import { Dropdown, Space, Typography, Modal, Result, Button } from 'antd';
 import { useAuth, useLogout } from 'features/auth/authHooks';
 import Identicon from '@polkadot/react-identicon';
 import { truncate } from 'utils/format/formatText';
@@ -7,8 +8,8 @@ import type { MenuProps } from 'antd';
 import styled from 'styled-components';
 import { useBreakpoint } from 'app/hooks';
 import { breakpoints } from 'config';
-import { useNavigate, useLocation } from 'react-router-dom';
-import PATHS from 'router/paths';
+import { useLocation } from 'react-router-dom';
+import { SmileOutlined } from '@ant-design/icons';
 
 const StyledMenuItem = styled.div`
   display: flex;
@@ -27,8 +28,8 @@ const Account = () => {
   const { account } = useAuth();
   const logout = useLogout();
   const screen = useBreakpoint();
-  const navigate = useNavigate();
   const location = useLocation();
+  const [isDeveloperInfoModalOpen, setIsDeveloperInfoModalOpen] = useState(false);
 
   const [, rootPath] = location.pathname.split('/');
   const isDeveloperActive = developerRoutes.includes(rootPath);
@@ -62,7 +63,7 @@ const Account = () => {
     {
       key: '2',
       label: (
-        <StyledMenuItem style={{ width: 170 }} onClick={() => navigate(PATHS.developers.webhook.root)}>
+        <StyledMenuItem style={{ width: 170 }} onClick={() => setIsDeveloperInfoModalOpen(true)}>
           <Typography.Text style={{ margin: 0 }}>{t('developers')}</Typography.Text>
         </StyledMenuItem>
       ),
@@ -102,20 +103,34 @@ const Account = () => {
   ];
 
   return (
-    <Dropdown
-      overlayStyle={{ minWidth: 150 }}
-      menu={{ items, selectedKeys: isDeveloperActive ? ['2'] : [] }}
-      placement={screen === breakpoints.screen.xl ? 'bottom' : 'bottomRight'}
-    >
-      <Space align="center" size={8} style={{ cursor: 'pointer' }}>
-        <Identicon
-          value={account?.address}
-          size={35}
-          theme="polkadot"
-          style={{ display: 'block', cursor: 'pointer' }}
+    <Fragment>
+      <Dropdown
+        overlayStyle={{ minWidth: 150 }}
+        menu={{ items, selectedKeys: isDeveloperActive ? ['2'] : [] }}
+        placement={screen === breakpoints.screen.xl ? 'bottom' : 'bottomRight'}
+      >
+        <Space align="center" size={8} style={{ cursor: 'pointer' }}>
+          <Identicon
+            value={account?.address}
+            size={35}
+            theme="polkadot"
+            style={{ display: 'block', cursor: 'pointer' }}
+          />
+        </Space>
+      </Dropdown>
+      <Modal width={560} open={isDeveloperInfoModalOpen} onCancel={() => setIsDeveloperInfoModalOpen(false)} footer={false}>
+        <Result
+          style={{ padding: '24px 28px' }}
+          icon={<SmileOutlined />}
+          title={t('developerModeIsForPartnerOnly')}
+          extra={
+            <Button type="primary" key="console" onClick={() => setIsDeveloperInfoModalOpen(false)}>
+              {t('close')}
+            </Button>
+          }
         />
-      </Space>
-    </Dropdown>
+      </Modal>
+    </Fragment>
   );
 };
 
