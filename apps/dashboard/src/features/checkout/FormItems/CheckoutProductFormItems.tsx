@@ -3,6 +3,7 @@ import ImageUploader from 'components/Inputs/ImageUploader';
 import { useTranslation } from 'react-i18next';
 import { FormItemsPropsType } from 'features/checkout/types';
 import { ASSET_METADATA } from 'config';
+import { LOCALE_WORKSPACE } from 'app/i18n';
 
 const FormItem = Form.Item;
 
@@ -13,12 +14,12 @@ interface AssetInputProps {
 }
 
 const AssetInput = ({ onChange, value, onboardingMode }: AssetInputProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(LOCALE_WORKSPACE.LAYOUT);
 
   return (
     <Select style={{ width: onboardingMode ? '88px' : '102px' }} value={value} onChange={(val) => onChange?.(val)}>
-      <Select.Option value="wnd">{t('asset.wnd')}</Select.Option>
-      <Select.Option value="dot">{t('asset.dot')}</Select.Option>
+      <Select.Option value="wnd">{t('wnd')}</Select.Option>
+      <Select.Option value="dot">{t('dot')}</Select.Option>
     </Select>
   );
 };
@@ -30,9 +31,9 @@ interface PriceInputProps {
 }
 
 const PriceInput = ({ value, onChange, onboardingMode }: PriceInputProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
 
-  const placeholder = onboardingMode ? t('checkout.pricePlaceholderOnboarding') : t('checkout.pricePlaceholder');
+  const placeholder = onboardingMode ? t('pricePlaceholderOnboarding') : t('pricePlaceholder');
 
   return (
     <InputNumber
@@ -46,7 +47,7 @@ const PriceInput = ({ value, onChange, onboardingMode }: PriceInputProps) => {
 };
 
 const ProductPriceFormItem = ({ onboardingMode }: FormItemsPropsType) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
 
   return (
     <Form.Item
@@ -57,8 +58,8 @@ const ProductPriceFormItem = ({ onboardingMode }: FormItemsPropsType) => {
       required
       dependencies={['asset']}
       rules={[
-        { required: true, message: t<string>('checkout.productPriceIsRequired') },
-        { type: 'number', message: t<string>('checkout.productPriceMustBeNumber') },
+        { required: true, message: t<string>('productPriceIsRequired') },
+        { type: 'number', message: t<string>('productPriceMustBeNumber') },
         ({ getFieldValue }) => ({
           validator(_, value) {
             const asset = getFieldValue(['asset']);
@@ -67,7 +68,7 @@ const ProductPriceFormItem = ({ onboardingMode }: FormItemsPropsType) => {
             const smallestPrice = 1 / Math.pow(10, decimals);
 
             if (value < smallestPrice) {
-              return Promise.reject(new Error('checkout.priceTooSmall'));
+              return Promise.reject(new Error('priceTooSmall'));
             }
 
             return Promise.resolve();
@@ -81,17 +82,17 @@ const ProductPriceFormItem = ({ onboardingMode }: FormItemsPropsType) => {
 };
 
 const ProductNameFormItem = ({ onboardingMode }: FormItemsPropsType) => {
-  const { t } = useTranslation();
-  const label = onboardingMode ? t('checkout.productNameLabelOnboarding') : t('checkout.productNameLabel');
+  const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
+  const label = onboardingMode ? t('productNameLabelOnboarding') : t('productNameLabel');
   const placeholder = onboardingMode
-    ? t('checkout.productNamePlaceholderOnboarding')
-    : t('checkout.productNamePlaceholder');
+    ? t('productNamePlaceholderOnboarding')
+    : t('productNamePlaceholder');
 
   return (
     <FormItem
       name={['item', 'name']}
       label={label}
-      rules={[{ required: true, message: t<string>('checkout.productNameIsRequired') }]}
+      rules={[{ required: true, message: t<string>('productNameIsRequired') }]}
       required
     >
       <Input placeholder={placeholder} />
@@ -100,7 +101,7 @@ const ProductNameFormItem = ({ onboardingMode }: FormItemsPropsType) => {
 };
 
 const CheckoutProductFormItems = ({ isShow, onboardingMode = false, onFieldsChange }: FormItemsPropsType) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
 
   return (
     <>
@@ -109,7 +110,7 @@ const CheckoutProductFormItems = ({ isShow, onboardingMode = false, onFieldsChan
           <div style={{ width: '400px' }}>
             <ProductNameFormItem onboardingMode />
 
-            <FormItem label={t('checkout.whatIsPrice')} required>
+            <FormItem label={t('whatIsPrice')} required>
               <Space.Compact style={{ width: '100%' }}>
                 <ProductPriceFormItem onboardingMode />
 
@@ -120,7 +121,7 @@ const CheckoutProductFormItems = ({ isShow, onboardingMode = false, onFieldsChan
             </FormItem>
           </div>
           <Form.Item name={['item', 'image']} noStyle>
-            <ImageUploader label={t<string>('checkout.productImage')} purpose="product_image" />
+            <ImageUploader label={t<string>('productImage')} purpose="product_image" />
           </Form.Item>
         </Space>
       ) : (
@@ -130,7 +131,7 @@ const CheckoutProductFormItems = ({ isShow, onboardingMode = false, onFieldsChan
             style={{ display: 'flex', justifyContent: 'center', width: '100%', marginTop: 15, marginBottom: 10 }}
             className="upload-image--large"
           >
-            <ImageUploader label={t<string>('checkout.productImage')} purpose="product_image" />
+            <ImageUploader label={t<string>('productImage')} purpose="product_image" />
           </Form.Item>
 
           <ProductNameFormItem />
@@ -138,13 +139,13 @@ const CheckoutProductFormItems = ({ isShow, onboardingMode = false, onFieldsChan
           <div style={{ width: '100%', display: 'flex' }}>
             <ProductPriceFormItem />
 
-            <Form.Item label={t<string>('checkout.asset')} name="asset">
+            <Form.Item label={t<string>('asset')} name="asset">
               <AssetInput />
             </Form.Item>
           </div>
 
-          <Form.Item label={t<string>('checkout.description')} name={['item', 'description']}>
-            <Input.TextArea rows={3} placeholder={t<string>('checkout.descriptionPlaceholder')} />
+          <Form.Item label={t<string>('description')} name={['item', 'description']}>
+            <Input.TextArea rows={3} placeholder={t<string>('descriptionPlaceholder')} />
           </Form.Item>
         </>
       )}

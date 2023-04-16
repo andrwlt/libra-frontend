@@ -9,9 +9,11 @@ import { StyledContainer } from 'components/Common/Styled';
 import ChargeTable from './Table';
 import ChargeFilter from './Filter';
 import Loading from 'components/Common/Loading';
+import { LOCALE_WORKSPACE } from 'app/i18n';
 
 export default function Payments() {
-  const { t } = useTranslation();
+  const { t } = useTranslation(LOCALE_WORKSPACE.PAYMENT);
+  const { t: tWording } = useTranslation(LOCALE_WORKSPACE.WORDING);
   const {
     charges,
     hasCheckout,
@@ -21,15 +23,16 @@ export default function Payments() {
     chargesPaging,
     isFirstLoad,
   } = useCharges();
+
   const { status, createdLte, createdGte } = useChargeParams();
   const navigate = useNavigate();
 
   const subTitle = hasCheckout ? (
     <>
-      <div>{t('payment.noPaymentHasCheckoutSubTitle', { asset: firstCheckoutAsset.toUpperCase() })}</div>
+      <div>{tWording('noPaymentHasCheckoutSubTitle', { asset: firstCheckoutAsset.toUpperCase() })}</div>
     </>
   ) : (
-    t('payment.hasNoCheckoutSubtitle')
+    tWording('hasPaymentNoCheckoutSubtitle')
   );
 
   const goToCheckouts = () => {
@@ -67,7 +70,7 @@ export default function Payments() {
             <Result
               style={{ maxWidth: '480px', margin: 'auto' }}
               icon={<WalletOutlined />}
-              title={hasCheckout ? t('payment.noPaymentHasCheckoutTitle') : t('payment.paymentWillShowHere')}
+              title={hasCheckout ? tWording('noPaymentHasCheckoutTitle') : tWording('paymentWillShowHere')}
               subTitle={subTitle}
               extra={[
                 <Button
@@ -76,7 +79,7 @@ export default function Payments() {
                   onClick={hasCheckout ? goToCheckouts : goToCreateCheckout}
                   icon={!hasCheckout && <PlusOutlined />}
                 >
-                  {hasCheckout ? t('payment.getCheckoutLinks') : t('checkout.createCheckoutNow')}
+                  {hasCheckout ? t('getCheckoutLinks') : t('createCheckoutNow')}
                 </Button>,
               ]}
             ></Result>

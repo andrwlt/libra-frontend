@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useCheckout } from '../checkoutHooks';
 import { useTranslation } from 'react-i18next';
 import { FixedHeader } from 'components/Common/Styled';
+import { LOCALE_WORKSPACE } from 'app/i18n';
 
 const { confirm } = Modal;
 
@@ -15,7 +16,8 @@ interface ActionBarProps {
 
 export function ActionBar({ onSubmitCheckout, loading, form }: ActionBarProps) {
   const { id } = useParams();
-  const { t } = useTranslation();
+  const { t: tLayout } = useTranslation(LOCALE_WORKSPACE.LAYOUT);
+  const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
   const { token } = theme.useToken();
   const { checkout } = useCheckout();
 
@@ -35,10 +37,10 @@ export function ActionBar({ onSubmitCheckout, loading, form }: ActionBarProps) {
 
     if (isFormChanged) {
       confirm({
-        title: t('message.leavingPageWarningTitle'),
-        content: t('message.leavingPageWarningContent'),
-        okText: t('message.confirmLeavingPage'),
-        cancelText: t('message.stay'),
+        title: tLayout('leavingPageWarningTitle'),
+        content: tLayout('leavingPageWarningContent'),
+        okText: tLayout('confirmLeavingPage'),
+        cancelText: tLayout('stay'),
         onOk() {
           navigate(-1);
         },
@@ -54,12 +56,12 @@ export function ActionBar({ onSubmitCheckout, loading, form }: ActionBarProps) {
       <Space align="center">
         <Button onClick={handleBack} icon={<ArrowLeftOutlined />} />
         <Typography.Title style={{ margin: 0 }} level={5}>
-          {id ? t('checkout.updateCheckout') : t('checkout.createCheckout')}
+          {id ? t('updateCheckout') : t('createCheckout')}
         </Typography.Title>
       </Space>
 
       <Button loading={loading} type="primary" onClick={onSubmitCheckout}>
-        {t('save')}
+        {tLayout('save')}
       </Button>
     </FixedHeader>
   );

@@ -3,6 +3,7 @@ import { Modal, Form, Input, Select } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useCreateWebhook } from './webhookHooks';
 import { WebhookResponse } from './types';
+import { LOCALE_WORKSPACE } from 'app/i18n';
 
 const FormItem = Form.Item;
 
@@ -46,15 +47,14 @@ const WebhookForm = (props: {
       }
     });
   };
-  const { t } = useTranslation();
-
+  const { t } = useTranslation(LOCALE_WORKSPACE.WEBHOOK);
   const isLoading = createWebhookLoading || updateWebhookLoading;
   return (
     <Modal
       width="550px"
       okText={initialValues.id ? t('update') : t('create')}
       open={isOpen}
-      title={initialValues.id ? t('webhook.update') : t('webhook.create')}
+      title={initialValues.id ? t('update') : t('create')}
       onCancel={() => onClose()}
       okButtonProps={{
         loading: isLoading,
@@ -66,7 +66,7 @@ const WebhookForm = (props: {
     >
       <Form initialValues={initialValues} form={form} layout="vertical" style={{ marginTop: 20 }} disabled={isLoading}>
         <FormItem
-          label={t('webhook.endpointUrl')}
+          label={t('endpointUrl')}
           name="url"
           validateTrigger={['onChange', 'onBlur']}
           rules={[
@@ -76,7 +76,7 @@ const WebhookForm = (props: {
                 // eslint-disable-next-line
                 /^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/,
               ),
-              message: t<string>('webhook.form.invalidUrl'),
+              message: t<string>('invalidUrl'),
               validateTrigger: ['onBlur'],
             },
           ]}
@@ -85,15 +85,15 @@ const WebhookForm = (props: {
         </FormItem>
 
         <FormItem label={t('description')} name="description">
-          <Input.TextArea placeholder={t<string>('webhook.form.descriptionPlaceholder')} rows={2} />
+          <Input.TextArea placeholder={t<string>('descriptionPlaceholder')} rows={2} />
         </FormItem>
 
         <FormItem
-          label={t('webhook.selectEvents')}
-          rules={[{ required: true, type: 'array', message: t<string>('webhook.form.eventsAreRequired') }]}
+          label={t('selectEvents')}
+          rules={[{ required: true, type: 'array', message: t<string>('eventsAreRequired') }]}
           name="events"
         >
-          <Select mode="multiple" style={{ width: '100%' }} placeholder={t('webhook.selectEventsTitle')}>
+          <Select mode="multiple" style={{ width: '100%' }} placeholder={t('selectEventsTitle')}>
             {allEvents.map((group) => {
               return (
                 <Select.OptGroup key={group.label} label={group.label}>

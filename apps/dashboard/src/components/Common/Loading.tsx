@@ -1,8 +1,9 @@
 import { useMemo, memo, useRef } from 'react';
-import i18next from 'app/i18n';
 import styled from 'styled-components';
 import { Loading3QuartersOutlined } from '@ant-design/icons';
 import { Space, Spin, Typography, theme } from 'antd';
+import { useTranslation } from 'react-i18next';
+import { LOCALE_WORKSPACE } from 'app/i18n/index';
 
 function getRandomInt(min: number, max: number): number {
   min = Math.ceil(min);
@@ -58,9 +59,25 @@ const LoaderContainer = styled.div`
   }
 `;
 
-export const getFunnyQuote = () => {
-  const quoteIndex = getRandomInt(0, 17);
-  return i18next.t(`funnyQuotes.${quoteIndex}`);
+const useFunnyQuote = (loading: boolean) => {
+  const prevQuoteRef = useRef<any>();
+  const { t } = useTranslation(LOCALE_WORKSPACE.FUNNY_QUOTES);
+
+  const quote = useMemo(() => {
+    const getFunnyQuote = () => {
+      const quoteIndex = getRandomInt(0, 17);
+      return t(`${quoteIndex}`);
+    };
+
+    if (!loading) {
+      return prevQuoteRef.current;
+    }
+
+    prevQuoteRef.current = getFunnyQuote();
+    return prevQuoteRef.current;
+  }, [loading, t]);
+
+  return quote;
 };
 
 const NORMAL_ICON_SIZE = 20;
@@ -73,16 +90,7 @@ const Loading = ({ loading = true, isFullPage, isContentPage, message }: Loading
   const {
     token: { colorBgBase, colorTextTertiary },
   } = theme.useToken();
-  const prevQuoteRef = useRef<any>();
-
-  const quote = useMemo(() => {
-    if (!loading) {
-      return prevQuoteRef.current;
-    }
-
-    prevQuoteRef.current = getFunnyQuote();
-    return prevQuoteRef.current;
-  }, [loading]);
+  const quote = useFunnyQuote(loading);
 
   const style = { background: colorBgBase };
 

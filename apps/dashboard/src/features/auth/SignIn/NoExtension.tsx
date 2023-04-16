@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { Typography, Space } from 'antd';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { LOCALE_WORKSPACE } from 'app/i18n';
 
 const Wrapper = styled.div`
   position: fixed;
@@ -45,7 +46,7 @@ const ExtensionLink = styled.a`
 
 const NoExtension = () => {
   const [icon, setIcon] = useState(icon2);
-  const { t } = useTranslation();
+  const { t } = useTranslation(LOCALE_WORKSPACE.WORDING);
 
   const changeIcon = () => {
     setIcon(icon === icon2 ? icon1 : icon2);
@@ -55,9 +56,9 @@ const NoExtension = () => {
       <Content>
         <Image src={icon} onClick={changeIcon} />
         <Typography.Title style={{ display: 'block', marginTop: 10 }} level={3}>
-          {t('auth.needToInstallExtension')}
+          {t('noExtensionTitle')}
         </Typography.Title>
-        <Typography.Text style={{ display: 'block', fontSize: 18 }}>{t('auth.preferExtension')}</Typography.Text>
+        <Typography.Text style={{ display: 'block', fontSize: 18 }}>{t('preferExtension')}</Typography.Text>
 
         <Space style={{ marginTop: 50 }}>
           <ExtensionLink href="https://polkadot.js.org/extension/" target="_blank">

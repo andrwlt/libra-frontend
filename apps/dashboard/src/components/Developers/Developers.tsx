@@ -9,9 +9,10 @@ import type { MenuProps } from 'antd';
 import { MenuWrapper } from 'components/AppLayout/Styled';
 import { useFirstLoad } from 'features/webhook/webhookHooks';
 import Loading from 'components/Common/Loading';
+import { LOCALE_WORKSPACE } from 'app/i18n';
 
 const DeveloperMenu = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(LOCALE_WORKSPACE.LAYOUT);
 
   const getClassName = ({ isActive, isPending }: { isActive: boolean; isPending: boolean }) =>
     isPending ? 'pending-link' : isActive ? 'active-link' : 'not-active-link';
@@ -58,7 +59,7 @@ const PageHeader = styled.div`
 `;
 
 const Developers = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(LOCALE_WORKSPACE.LAYOUT);
   const isFirstLoad = useFirstLoad();
 
   return (

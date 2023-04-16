@@ -4,6 +4,7 @@ import type { RootState, AppDispatch } from './store';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { useTranslation } from 'react-i18next';
 import { breakpoints } from 'config';
+import { LOCALE_WORKSPACE } from './i18n';
 
 export const NotifyContext = createContext<any>({});
 
@@ -42,7 +43,7 @@ export const useSuccess: ReactToResult = (success, customMess, callback) => {
 
 export const useFailed: ReactToResult = (error, customMess, callback) => {
   const messageApi = useContext(NotifyContext);
-  const { t } = useTranslation();
+  const { t } = useTranslation(LOCALE_WORKSPACE.LAYOUT);
 
   useEffect(() => {
     if (error) {

@@ -1,6 +1,6 @@
 import { useEffect, useCallback, useMemo } from 'react';
 import { useAppSelector, useAppDispatch, useFailed } from 'app/hooks';
-import { selectChargesState, getCharges,resetPayments } from './paymentSlice';
+import { selectChargesState, getCharges, resetPayments } from './paymentSlice';
 import { useSearchParams } from 'react-router-dom';
 
 export const useChargeParams = () => {
@@ -29,11 +29,13 @@ export const useCharges = () => {
 
   useEffect(() => {
     fetchCharges({ isFilterChanged: true });
-
-    return ()=>{
-      dispatch(resetPayments())
-    }
   }, [dispatch, fetchCharges, queryParams]);
+
+  useEffect(() => {
+    return () => {
+      dispatch(resetPayments());
+    };
+  }, [dispatch]);
 
   useFailed(state.getChargesFailed);
 

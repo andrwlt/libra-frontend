@@ -16,6 +16,7 @@ import { useDeboundCallback } from 'app/hooks';
 import { AccountType } from 'features/auth/types';
 import { useTranslation } from 'react-i18next';
 import { formatCheckoutToStringPrice } from 'utils/format/balance';
+import { LOCALE_WORKSPACE } from 'app/i18n';
 
 const Header = styled.div`
   padding: 32px 64px;
@@ -33,7 +34,7 @@ const Content = styled.div`
 `;
 
 export default function Onboarding() {
-  const { t } = useTranslation();
+  const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
   const [form] = Form.useForm();
   const { checkout } = useCheckout();
 
@@ -83,7 +84,7 @@ export default function Onboarding() {
       name: 'Add your wallet',
       nextAction: (
         <Button loading={connectExtensionLoading} type="primary" onClick={handleConnectExtension}>
-          {t('onboarding.connectWallet')}
+          {t('connectWallet')}
         </Button>
       ),
     },
@@ -137,7 +138,7 @@ export default function Onboarding() {
       <Loading
         loading={loginLoading || createCheckoutLoading}
         isFullPage
-        message={t('onboarding.creatingCheckoutPage') as string}
+        message={t('creatingCheckoutPage') as string}
       />
 
       <SelectAccountModal

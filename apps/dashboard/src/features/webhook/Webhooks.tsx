@@ -12,6 +12,7 @@ import { useWebhooks, useDeleteWebhook, useResetWebhook, useUpdateWebhook } from
 import { WebhookResponse } from './types';
 import getTableLoaderProps from 'components/Common/TableLoader';
 import { SubTableCard } from 'components/Common/Styled';
+import { LOCALE_WORKSPACE } from 'app/i18n';
 
 const Webhooks = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -34,8 +35,8 @@ const Webhooks = () => {
   useResetWebhook();
 
   const [editingWebhook, setEditingWebhook] = useState<WebhookResponse | undefined>(undefined);
-  const { t } = useTranslation();
-
+  const { t } = useTranslation(LOCALE_WORKSPACE.WEBHOOK);
+  const { t: tLayout } = useTranslation(LOCALE_WORKSPACE.LAYOUT);
   const toggleWebhookStatus = (webhook: WebhookResponse) => {
     const nextStatus = !webhook.active;
 
@@ -50,14 +51,14 @@ const Webhooks = () => {
 
   const columns: ColumnsType<any> = [
     {
-      title: 'URL',
+      title: t('url'),
       key: 'url',
       dataIndex: 'url',
       render: (url) => <span style={{ fontWeight: 500, opacity: 0.7 }}>{url}</span>,
     },
 
     {
-      title: 'Events',
+      title: t('events'),
       key: 'events',
       dataIndex: 'events',
       align: 'center',
@@ -79,7 +80,7 @@ const Webhooks = () => {
     },
 
     {
-      title: 'Status',
+      title: t('status'),
       key: 'active',
       dataIndex: 'active',
       render: (active: boolean) => {
@@ -91,7 +92,7 @@ const Webhooks = () => {
     },
 
     {
-      title: 'Secret',
+      title: t('secret'),
       key: 'secret',
       dataIndex: 'secret',
       render: (secret: string) => <Secret value={secret} />,
@@ -110,7 +111,7 @@ const Webhooks = () => {
                   setEditingWebhook(webhook);
                 }}
               >
-                {t('edit')}
+                {tLayout('edit')}
               </p>
             ),
             key: 'Edit',
@@ -131,7 +132,7 @@ const Webhooks = () => {
                 className="styled-table__action-item color-error"
                 onClick={() => setOpenedPopconfirmDelete(webhook.id)}
               >
-                {t('delete')}
+                {tLayout('delete')}
               </p>
             ),
             key: 'Delete',
@@ -148,10 +149,10 @@ const Webhooks = () => {
           >
             {openedPopconfirmDelete ? (
               <Popconfirm
-                title={t('webhook.deleteWebhookWarning')}
+                title={t('deleteWebhookWarning')}
                 onConfirm={() => handleDeleteWebhook(webhook.id)}
-                okText={t('delete')}
-                cancelText={t('cancel')}
+                okText={tLayout('delete')}
+                cancelText={tLayout('cancel')}
                 okButtonProps={{ loading: deleteWebhookLoading }}
                 cancelButtonProps={{ disabled: deleteWebhookLoading }}
                 open={openedPopconfirmDelete === webhook.id}
@@ -163,10 +164,10 @@ const Webhooks = () => {
             ) : (
               <Popconfirm
                 destroyTooltipOnHide={true}
-                title={webhook.active ? t('webhook.disableWebhookWarning') : t('webhook.enableWebhookWarning')}
+                title={webhook.active ? t('disableWebhookWarning') : t('enableWebhookWarning')}
                 onConfirm={() => toggleWebhookStatus(webhook)}
-                okText={webhook.active ? t('disable') : t('enable')}
-                cancelText={t('cancel')}
+                okText={webhook.active ? tLayout('disable') : tLayout('enable')}
+                cancelText={tLayout('cancel')}
                 okButtonProps={{ loading: updateWebhookLoading }}
                 cancelButtonProps={{ disabled: updateWebhookLoading }}
                 open={openedPopconfirmDisable === webhook.id}
@@ -186,10 +187,10 @@ const Webhooks = () => {
     <div>
       <StyledContainer>
         <div style={{ padding: 20 }}>
-          <CardHeader title={t('webhooks')}>
+          <CardHeader title={tLayout('webhooks')}>
             {' '}
             <Button onClick={() => setIsFormOpen(true)} icon={<PlusOutlined />} type="primary">
-              {t('create')}
+              {tLayout('create')}
             </Button>
           </CardHeader>
           <SubTableCard style={{ padding: 0 }} bordered={false}>
@@ -208,14 +209,14 @@ const Webhooks = () => {
                 disabled={!webhooksPaging.hasPrevPage || getWebhooksLoading}
                 style={{ marginRight: 10 }}
               >
-                {t('paging.previous')}
+                {tLayout('previous')}
               </Button>{' '}
               <Button
                 size="small"
                 onClick={() => fetchWebhooks()}
                 disabled={!webhooksPaging.hasNextPage || getWebhooksLoading}
               >
-                {t('paging.next')}
+                {tLayout('next')}
               </Button>
             </Row>
           </SubTableCard>

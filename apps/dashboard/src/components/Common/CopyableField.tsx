@@ -3,9 +3,10 @@ import { Input, Tooltip, Button, Space } from 'antd';
 import { CopyOutlined } from '@ant-design/icons';
 import ClipboardJS from 'clipboard';
 import { useTranslation } from 'react-i18next';
+import { LOCALE_WORKSPACE } from 'app/i18n';
 
 export default function CopyableField({ text, style = { minWidth: 540 }, size = 'middle' }: any) {
-  const { t } = useTranslation();
+  const { t } = useTranslation(LOCALE_WORKSPACE.LAYOUT);
   const [copied, setCopied] = useState(false);
   const copyButtonRef = useRef<any>(null);
 

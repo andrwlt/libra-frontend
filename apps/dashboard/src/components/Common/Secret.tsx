@@ -1,11 +1,12 @@
 import { useState } from 'react';
 import { Button, Space, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
+import { LOCALE_WORKSPACE } from 'app/i18n';
 
 const { Text } = Typography;
 
 const Secret = ({ value }: any) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(LOCALE_WORKSPACE.LAYOUT);
   const [isShow, setIsShow] = useState(false);
   const toggleShow = () => {
     setIsShow(!isShow);

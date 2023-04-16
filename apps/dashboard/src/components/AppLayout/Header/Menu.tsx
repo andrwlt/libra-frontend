@@ -5,9 +5,10 @@ import { useTranslation } from 'react-i18next';
 import { ShopOutlined, WalletOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { MenuWrapper } from 'components/AppLayout/Styled';
+import { LOCALE_WORKSPACE } from 'app/i18n';
 
 const HeaderMenu = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(LOCALE_WORKSPACE.LAYOUT);
 
   const getClassName = ({ isActive, isPending }: { isActive: boolean; isPending: boolean }) =>
     isPending ? 'pending-link' : isActive ? 'active-link' : 'not-active-link';
@@ -25,7 +26,7 @@ const HeaderMenu = () => {
     {
       label: (
         <NavLink to={PATHS.checkout.root} className={getClassName}>
-          {t('checkoutLabel')}
+          {t('checkout')}
         </NavLink>
       ),
       icon: <ShopOutlined />,
