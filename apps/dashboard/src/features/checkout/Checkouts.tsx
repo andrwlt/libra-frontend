@@ -15,9 +15,13 @@ import type { ColumnsType } from 'antd/es/table';
 import { StyledContainer } from 'components/Common/Styled';
 import getTableLoaderProps from 'components/Common/TableLoader';
 import Loading from 'components/Common/Loading';
+import { LOCALE_WORKSPACE } from 'app/i18n';
 
 export default function Checkouts() {
-  const { t } = useTranslation();
+  const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
+  const { t: tLayout } = useTranslation(LOCALE_WORKSPACE.LAYOUT);
+  const { t: tWording } = useTranslation(LOCALE_WORKSPACE.WORDING);
+
   const [openedPopconfirm, setOpenedPopconfirm] = useState('');
   const { checkouts, getCheckoutsLoading, checkoutsPaging, fetchCheckouts, isFirstLoad } = useCheckouts();
   const navigate = useNavigate();
@@ -31,13 +35,13 @@ export default function Checkouts() {
 
   const columns: ColumnsType<Checkout> = [
     {
-      title: 'Link URL',
+      title: t('linkURL'),
       key: 'Link URL',
       render: (checkout: Checkout) => <CopyableField style={{ minWidth: 420 }} text={getCheckoutLink(checkout.id)} />,
       width: 500,
     },
     {
-      title: 'Status',
+      title: t('status'),
       key: 'Status',
       render: ({ active }: Checkout) => {
         const text = active ? 'Active' : 'Deactivated';
@@ -47,12 +51,12 @@ export default function Checkouts() {
       width: 120,
     },
     {
-      title: 'Name',
+      title: t('name'),
       key: 'Name',
       render: ({ item: { name } }: Checkout) => name,
     },
     {
-      title: 'Price',
+      title: t('price'),
       key: 'Price',
       render: ({ item: { price }, asset }: Checkout) => {
         const assetMetadata = ASSET_METADATA[asset];
@@ -69,7 +73,7 @@ export default function Checkouts() {
       },
     },
     {
-      title: 'Created',
+      title: t('created'),
       key: 'Created',
       render: (checkout: Checkout) => {
         return formatCreatedDate(checkout.created);
@@ -84,7 +88,7 @@ export default function Checkouts() {
           {
             label: (
               <p className="styled-table__action-item" onClick={() => goToEditCheckout(checkout.id)}>
-                Edit
+                {tLayout('edit')}
               </p>
             ),
             key: 'Edit',
@@ -93,7 +97,7 @@ export default function Checkouts() {
           {
             label: (
               <p className="styled-table__action-item color-error" onClick={() => setOpenedPopconfirm(checkout.id)}>
-                Delete
+                {tLayout('delete')}
               </p>
             ),
             key: 'Delete',
@@ -109,7 +113,7 @@ export default function Checkouts() {
             arrow
           >
             <Popconfirm
-              title={t('checkout.deleteCheckoutWarning')}
+              title={t('deleteCheckoutWarning')}
               onConfirm={() => handleDeleteCheckout(checkout.id)}
               okText="Delete"
               cancelText="Cancel"
@@ -131,10 +135,10 @@ export default function Checkouts() {
 
   return (
     <div>
-      <PageHeader title={t('checkouts')}>
+      <PageHeader title={tLayout('checkouts')}>
         {hasCheckout && (
           <Button type="primary" onClick={goToCreateCheckout}>
-            <PlusOutlined /> {t('create')}
+            <PlusOutlined /> {tLayout('create')}
           </Button>
         )}
       </PageHeader>
@@ -159,14 +163,14 @@ export default function Checkouts() {
                     disabled={!checkoutsPaging.hasPrevPage || getCheckoutsLoading}
                     style={{ marginRight: 10 }}
                   >
-                    {t('paging.previous')}
+                    {tLayout('previous')}
                   </Button>{' '}
                   <Button
                     size="small"
                     onClick={() => fetchCheckouts()}
                     disabled={!checkoutsPaging.hasNextPage || getCheckoutsLoading}
                   >
-                    {t('paging.next')}
+                    {tLayout('next')}
                   </Button>
                 </Row>
               )}
@@ -175,11 +179,11 @@ export default function Checkouts() {
             <Result
               style={{ maxWidth: '480px', margin: 'auto' }}
               icon={<ShopOutlined />}
-              title={t('checkout.emptyTitle')}
-              subTitle={t('checkout.emptyText')}
+              title={tWording('noCheckoutTitle')}
+              subTitle={tWording('noCheckoutText')}
               extra={[
                 <Button key="1" type="primary" onClick={goToCreateCheckout} icon={<PlusOutlined />}>
-                  {t('checkout.createCheckoutNow')}
+                  {t('createCheckoutNow')}
                 </Button>,
               ]}
             ></Result>

@@ -3,6 +3,7 @@ import CurrentStep from './CurrentStep';
 import Logo from 'components/Common/Logo';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
+import { LOCALE_WORKSPACE } from 'app/i18n';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -12,7 +13,7 @@ const Wrapper = styled.div`
 `;
 
 export default function Steps({ style, children, step, setStepIndex, numberOfSteps }: any) {
-  const { t } = useTranslation();
+  const { t } = useTranslation(LOCALE_WORKSPACE.LAYOUT);
 
   return (
     <Wrapper style={style}>

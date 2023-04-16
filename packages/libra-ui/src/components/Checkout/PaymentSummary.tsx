@@ -107,7 +107,7 @@ export default function PaymentSummary({
   return (
     <div style={{ width: 380, maxWidth: 380, marginLeft: 'auto' }}>
       <Typography.Title level={4} style={{ marginBottom: 12 }}>
-        {t('checkout.contactInformation')}
+        {t('contactInformation')}
       </Typography.Title>
 
       <Form layout="vertical" requiredMark={false}>
@@ -124,7 +124,7 @@ export default function PaymentSummary({
       </Form>
 
       <div>
-        <Typography.Title level={4}>{t('checkout.paymentMethod')} </Typography.Title>
+        <Typography.Title level={4}>{t('paymentMethod')} </Typography.Title>
 
         {previewMode && (
           <AccountInfo
@@ -144,7 +144,7 @@ export default function PaymentSummary({
 
         {(previewMode || !!account) && (
           <Button style={{ marginTop: 32 }} type="primary" size="large" block loading={paying} onClick={handlePay}>
-            {t('checkout.pay')}
+            {t('pay')}
           </Button>
         )}
       </div>

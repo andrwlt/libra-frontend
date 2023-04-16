@@ -11,8 +11,8 @@ const AfterPaymentPreviewer = ({ afterPayment }: { afterPayment: AfterPayment })
       {' '}
       <Result
         status="success"
-        title={message || t('checkout.thankForYourPayment')}
-        subTitle={!message && t('checkout.orderWillBeSent')}
+        title={message || t('thankForYourPayment')}
+        subTitle={!message && t('orderWillBeSent')}
       />
     </div>
   );

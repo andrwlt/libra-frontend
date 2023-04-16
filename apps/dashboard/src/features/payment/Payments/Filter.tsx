@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { PAYMENT_STATUS, NULL_VALUE } from 'config';
 import { getExistProps } from 'utils/paging';
 import { useChargeParams } from 'features/payment/paymentHooks';
+import { LOCALE_WORKSPACE } from 'app/i18n';
 
 dayjs.extend(utc);
 
@@ -25,7 +26,7 @@ const rangePresets: {
 ];
 
 const ChargesFilter = ({ isLoading }: { isLoading: boolean }) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(LOCALE_WORKSPACE.PAYMENT);
   const [form] = Form.useForm();
   const [pickerKey, setPickerKey] = useState(1);
   const [, setSearchParams] = useSearchParams();
@@ -67,16 +68,16 @@ const ChargesFilter = ({ isLoading }: { isLoading: boolean }) => {
           <Form.Item name="status" label="Status" style={{ marginBottom: 0 }}>
             <Select>
               <Option value="null" key="null">
-                {t('payment.allStatus')}
+                {t('allStatus')}
               </Option>
               <Option value={PAYMENT_STATUS.PENDING} key="1">
-                {t('payment.pending')}
+                {t('pending')}
               </Option>
               <Option value={PAYMENT_STATUS.SUCCEEDED} key="2">
-                {t('payment.succeeded')}
+                {t('succeeded')}
               </Option>
               <Option value={PAYMENT_STATUS.FAILED} key="3">
-                {t('payment.failed')}
+                {t('failed')}
               </Option>
             </Select>
           </Form.Item>

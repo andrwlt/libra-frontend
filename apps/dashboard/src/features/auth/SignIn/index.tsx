@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Loading from 'components/Common/Loading';
 import NoExtension from './NoExtension';
+import { LOCALE_WORKSPACE } from 'app/i18n';
 
 type PropsType = {
   colorBgLayout: string;
@@ -32,7 +33,7 @@ export default function SignIn() {
   });
   const { token } = useAuth();
   const { loginLoading, handleLogin } = useLogin();
-  const { t } = useTranslation();
+  const { t } = useTranslation(LOCALE_WORKSPACE.AUTH);
 
   const {
     token: { colorBgLayout, boxShadow },
@@ -52,10 +53,10 @@ export default function SignIn() {
           <a href="https://golibra.xyz">
             <img src={logo} height={36} alt="Libra Logo"></img>
           </a>
-          <Typography.Title level={3}>{t('signIn.login')}</Typography.Title>
+          <Typography.Title level={3}>{t('login')}</Typography.Title>
 
           <Typography.Title style={{ fontWeight: 'normal', marginTop: '-4px' }} type="secondary" level={5}>
-            {t('signIn.continueToLibra')}
+            {t('continueToLibra')}
           </Typography.Title>
 
           <Button
@@ -66,11 +67,11 @@ export default function SignIn() {
             block
             onClick={handleConnectExtension}
           >
-            {t('signIn.continueWithWallet')}
+            {t('continueWithWallet')}
           </Button>
 
           <Typography.Paragraph type="secondary" style={{ marginTop: '16px' }}>
-            {t('signIn.newToLibra')} <Link to={PATHS.onboard}> {t('signIn.tryNow')}</Link>
+            {t('newToLibra')} <Link to={PATHS.onboard}> {t('tryNow')}</Link>
           </Typography.Paragraph>
         </Card>
       )}

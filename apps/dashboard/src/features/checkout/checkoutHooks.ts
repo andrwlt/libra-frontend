@@ -25,6 +25,7 @@ import {
 import { FormInstance } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import PATHS from 'router/paths';
+import { LOCALE_WORKSPACE } from 'app/i18n';
 
 export const useResetCheckout = () => {
   const dispatch = useAppDispatch();
@@ -65,7 +66,7 @@ export const useCheckout = (id?: string) => {
 };
 
 export const useCreateCheckout = (onboardingMode = false): CreateCheckoutHookType => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
   const state = useAppSelector(selectCreateCheckoutState);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -74,7 +75,7 @@ export const useCreateCheckout = (onboardingMode = false): CreateCheckoutHookTyp
     dispatch(createCheckout(checkout));
   };
 
-  const successMess = onboardingMode ? '' : t('checkout.checkoutCreatedSuccessfully');
+  const successMess = onboardingMode ? '' : t('checkoutCreatedSuccessfully');
   const successCallback = onboardingMode ? () => {} : () => navigate(PATHS.checkout.root);
 
   useSuccess(state.createCheckoutSuccess, successMess, successCallback);
@@ -87,7 +88,7 @@ export const useCreateCheckout = (onboardingMode = false): CreateCheckoutHookTyp
 };
 
 export const useUpdateCheckout = (): UpdateCheckoutHookType => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
   const state = useAppSelector(selectUpdateCheckoutState);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -96,7 +97,7 @@ export const useUpdateCheckout = (): UpdateCheckoutHookType => {
     dispatch(updateCheckout(checkout));
   };
 
-  const message = t('checkout.checkoutUpdatedSuccessfully');
+  const message = t('checkoutUpdatedSuccessfully');
 
   useSuccess(state.updateCheckoutSuccess, message, () => navigate(PATHS.checkout.root));
   useFailed(state.updateCheckoutFailed);
@@ -119,7 +120,7 @@ export const useReinitCheckoutForm = (form: FormInstance, update: Function) => {
 };
 
 export const useDeleteCheckout = (): DeleteCheckoutHookType => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
   const state = useAppSelector(selectDeleteCheckoutState);
   const dispatch = useAppDispatch();
 
@@ -127,7 +128,7 @@ export const useDeleteCheckout = (): DeleteCheckoutHookType => {
     dispatch(deleteCheckout(id));
   };
 
-  const message = t('checkout.checkoutDeletedSuccessfully');
+  const message = t('checkoutDeletedSuccessfully');
 
   useSuccess(state.deleteCheckoutSuccess, message);
   useFailed(state.deleteCheckoutFailed);

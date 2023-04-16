@@ -4,6 +4,7 @@ import { Divider, Space } from 'antd';
 import ShareButton from 'components/ShareURL/ShareButton';
 import CopyableField from 'components/Common/CopyableField';
 import { useTranslation } from 'react-i18next';
+import { LOCALE_WORKSPACE } from 'app/i18n';
 
 const Wrapper = styled.div`
   width: 100%;
@@ -16,7 +17,7 @@ interface SharableURLProps {
 }
 
 export default function SharableURL({ url }: SharableURLProps) {
-  const { t } = useTranslation();
+  const { t } = useTranslation(LOCALE_WORKSPACE.LAYOUT);
   return (
     <Wrapper>
       <CopyableField text={url} />

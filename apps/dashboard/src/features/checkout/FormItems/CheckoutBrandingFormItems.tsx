@@ -2,23 +2,24 @@ import { Input, Form, Space } from 'antd';
 import ImageUploader from 'components/Inputs/ImageUploader';
 import { useTranslation } from 'react-i18next';
 import { FormItemsPropsType } from 'features/checkout/types';
+import { LOCALE_WORKSPACE } from 'app/i18n';
 
 const FormItem = Form.Item;
 
 const BrandingNameFormItem = ({ onboardingMode }: FormItemsPropsType) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
 
   const placeholder = onboardingMode
-    ? t('checkout.brandNamePlaceholderOnboarding')
-    : t('checkout.brandNamePlaceholder');
-  const label = onboardingMode ? t('checkout.brandNameLabelOnboarding') : t('checkout.brandNameLabel');
+    ? t('brandNamePlaceholderOnboarding')
+    : t('brandNamePlaceholder');
+  const label = onboardingMode ? t('brandNameLabelOnboarding') : t('brandNameLabel');
 
   return (
     <FormItem
       name={['branding', 'name']}
       style={{ width: onboardingMode ? '400px' : '100%' }}
       label={label}
-      rules={[{ required: true, message: t<string>('checkout.brandNameIsRequired') }]}
+      rules={[{ required: true, message: t<string>('brandNameIsRequired') }]}
     >
       <Input placeholder={placeholder} />
     </FormItem>
@@ -26,8 +27,8 @@ const BrandingNameFormItem = ({ onboardingMode }: FormItemsPropsType) => {
 };
 
 const CheckoutBrandingFormItems = ({ isShow, onboardingMode = false, onFieldsChange }: FormItemsPropsType) => {
-  const { t } = useTranslation();
-  const label = t('checkout.brandLogo');
+  const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
+  const label = t('brandLogo');
 
   return (
     <>

@@ -6,6 +6,7 @@ import Logo from 'components/Common/Logo';
 import PATHS from 'router/paths';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { LOCALE_WORKSPACE } from 'app/i18n';
 
 const { Title } = Typography;
 
@@ -14,7 +15,8 @@ interface Props {
 }
 
 export default function Congratulation({ checkoutURL }: Props) {
-  const { t } = useTranslation();
+  const { t } = useTranslation(LOCALE_WORKSPACE.LAYOUT);
+  const { t: tWording } = useTranslation(LOCALE_WORKSPACE.WORDING);
 
   useEffect(() => {
     const confetti = new Confetti();
@@ -46,9 +48,9 @@ export default function Congratulation({ checkoutURL }: Props) {
       </div>
       <div style={{ maxWidth: '540px', height: 'auto' }}>
         <Title level={2} style={{ marginTop: 0 }}>
-          {t('onboarding.congratulation')}
+          {tWording('congratulation')}
         </Title>
-        <Title level={5}>{t('onboarding.useUrl')}</Title>
+        <Title level={5}>{tWording('useUrl')}</Title>
         <SharableURL url={checkoutURL} />
       </div>
     </div>

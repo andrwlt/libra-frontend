@@ -5,6 +5,7 @@ import { UploadRequestOption as RcCustomRequestOptions } from 'rc-upload/lib/int
 import { useState } from 'react';
 import requester from 'services/requester';
 import { useTranslation } from 'react-i18next';
+import { LOCALE_WORKSPACE } from 'app/i18n';
 
 interface ImageUploaderProps {
   label?: string;
@@ -15,7 +16,7 @@ interface ImageUploaderProps {
 }
 
 export default function ImageUploader({ label, onChange, value, purpose }: ImageUploaderProps) {
-  const { t } = useTranslation();
+  const { t } = useTranslation(LOCALE_WORKSPACE.LAYOUT);
   const [isLoading, setIsLoading] = useState(false);
 
   const uploadImage = async (options: RcCustomRequestOptions) => {
@@ -39,12 +40,12 @@ export default function ImageUploader({ label, onChange, value, purpose }: Image
     const isImage = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/svg+xml';
 
     if (!isImage) {
-      message.error(t('imageUploader.fileTypeWarning'));
+      message.error(t('fileTypeWarning'));
     }
 
     const isLt2M = file.size / 1024 / 1024 < 2;
     if (!isLt2M) {
-      message.error(t('imageUploader.fileSizeWarning'));
+      message.error(t('fileSizeWarning'));
     }
 
     return isImage && isLt2M;

@@ -10,6 +10,7 @@ import { useBreakpoint } from 'app/hooks';
 import { breakpoints } from 'config';
 import { useLocation } from 'react-router-dom';
 import { SmileOutlined } from '@ant-design/icons';
+import { LOCALE_WORKSPACE } from 'app/i18n';
 
 const StyledMenuItem = styled.div`
   display: flex;
@@ -24,7 +25,9 @@ const StyledMenuItem = styled.div`
 const developerRoutes = ['webhooks', 'apiKeys', 'developers'];
 
 const Account = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(LOCALE_WORKSPACE.LAYOUT);
+  const { t: tWording } = useTranslation(LOCALE_WORKSPACE.WORDING);
+
   const { account } = useAuth();
   const logout = useLogout();
   const screen = useBreakpoint();
@@ -95,7 +98,7 @@ const Account = () => {
         <StyledMenuItem onClick={() => logout()}>
           <Typography.Text style={{ margin: 0 }} type="danger">
             {' '}
-            {t('signIn.logout')}
+            {t('logout')}
           </Typography.Text>
         </StyledMenuItem>
       ),
@@ -118,11 +121,16 @@ const Account = () => {
           />
         </Space>
       </Dropdown>
-      <Modal width={560} open={isDeveloperInfoModalOpen} onCancel={() => setIsDeveloperInfoModalOpen(false)} footer={false}>
+      <Modal
+        width={560}
+        open={isDeveloperInfoModalOpen}
+        onCancel={() => setIsDeveloperInfoModalOpen(false)}
+        footer={false}
+      >
         <Result
           style={{ padding: '24px 28px' }}
           icon={<SmileOutlined />}
-          title={t('developerModeIsForPartnerOnly')}
+          title={tWording('developerModeIsForPartnerOnly')}
           extra={
             <Button type="primary" key="console" onClick={() => setIsDeveloperInfoModalOpen(false)}>
               {t('close')}

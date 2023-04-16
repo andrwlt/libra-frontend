@@ -112,14 +112,14 @@ function FooterLinks() {
   return (
     <Space>
       <Paragraph style={{ margin: 0 }} strong>
-        {t('footer.poweredBy')}
+        {t('poweredBy')}
       </Paragraph>
       <LibraLogo height={18}></LibraLogo>
 
       <Divider type="vertical" style={{ height: 20 }} />
 
-      <FooterLink> {t('footer.privacy')}</FooterLink>
-      <FooterLink>{t('footer.terms')}</FooterLink>
+      <FooterLink> {t('privacy')}</FooterLink>
+      <FooterLink>{t('terms')}</FooterLink>
     </Space>
   );
 }

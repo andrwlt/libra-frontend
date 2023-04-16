@@ -1,0 +1,52 @@
+const layout = {
+  create: 'Create',
+  dashboard: 'Dashboard',
+  back: 'Back',
+  next: 'Next',
+  save: 'Save',
+  logo: 'Logo',
+  defaultErrorMessage: 'Something went wrong!',
+  payments: 'Payments',
+  checkout: 'Checkout',
+  copied: 'Copied',
+  copy: 'Copy',
+  orShareItOn: 'or share it on',
+  loading: 'Loading...',
+  checkouts: 'Checkouts',
+  developers: 'Developers',
+  webhooks: 'Webhooks',
+  apiKeys: 'API Keys',
+  cancel: 'Cancel',
+  description: 'Description',
+  helpCenter: 'Help Center',
+  whatNew: 'What’s New',
+  disable: 'Disable',
+  enable: 'Enable',
+  edit: 'Edit',
+  delete: 'Delete',
+  update: 'Update',
+  reveal: 'Reveal',
+  hide: 'Hide',
+  close: 'Close',
+
+  leavingPageWarningTitle: 'Leave page with unsaved changes?',
+  leavingPageWarningContent: 'Leaving this page will delete all unsaved changes.',
+  confirmLeavingPage: 'Leave Page',
+  stay: 'Stay',
+  previous: 'Previous',
+
+  wnd: 'WND',
+  dot: 'DOT',
+
+  poweredBy: 'Powered by',
+  libraLogo: 'Libra Logo',
+  privacy: 'Privacy',
+  terms: 'Terms',
+
+  fileTypeWarning: 'You can only upload SVG/PNG/JPG file!',
+  fileSizeWarning: 'Image must smaller than 2MB!',
+
+  logout: 'Log Out',
+};
+
+export default layout;

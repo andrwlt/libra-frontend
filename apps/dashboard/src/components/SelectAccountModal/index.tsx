@@ -4,6 +4,7 @@ import { AccountType } from 'features/auth/types';
 import { useTranslation } from 'react-i18next';
 import { useResetConnectedExtension } from 'features/auth/authHooks';
 import { SmileOutlined } from '@ant-design/icons';
+import { LOCALE_WORKSPACE } from 'app/i18n';
 
 type SelectAccountModalPropsType = {
   open: boolean;
@@ -14,12 +15,14 @@ type SelectAccountModalPropsType = {
 };
 
 const SelectAccountModal = (props: SelectAccountModalPropsType) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(LOCALE_WORKSPACE.AUTH);
   const { open, onClose, onSelectAccount, connectExtensionLoading, connectedExtension } = props;
 
   useResetConnectedExtension(open);
 
   const hasNoAccount = connectedExtension && connectedExtension.accounts.length === 0;
+
+  const { t: tWording } = useTranslation(LOCALE_WORKSPACE.WORDING);
 
   return (
     <Modal
@@ -29,7 +32,7 @@ const SelectAccountModal = (props: SelectAccountModalPropsType) => {
       title={
         !hasNoAccount && (
           <Typography.Title style={{ marginTop: 0, marginBottom: 20 }} level={4}>
-            {t('signIn.selectAnAccount')}
+            {t('selectAnAccount')}
           </Typography.Title>
         )
       }
@@ -55,10 +58,10 @@ const SelectAccountModal = (props: SelectAccountModalPropsType) => {
       {connectedExtension && connectedExtension.accounts.length === 0 && (
         <Result
           icon={<SmileOutlined />}
-          title={t('auth.needCreatePolkadotAccount')}
+          title={tWording('noAccountTitle')}
           extra={
             <Button type="primary" key="console" onClick={onClose}>
-              {t('auth.closeAndCreateOne')}
+              {tWording('noAccountBtnText')}
             </Button>
           }
         />

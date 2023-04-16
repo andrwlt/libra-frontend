@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 import { Typography, theme } from 'antd';
 import { useTranslation } from 'react-i18next';
+import { LOCALE_WORKSPACE } from 'app/i18n';
 
 const { Title } = Typography;
 
@@ -13,7 +14,7 @@ interface CurrentStepProps {
 }
 
 const CurrentStep = ({ title, subtitle, canBack = true, onBack }: CurrentStepProps) => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(LOCALE_WORKSPACE.LAYOUT);
   const [backButtonHovered, setBackButtonHovered] = useState(false);
   const {
     token: { colorTextHeading, colorTextSecondary },

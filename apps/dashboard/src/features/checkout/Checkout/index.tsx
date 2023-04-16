@@ -24,6 +24,7 @@ import { FixedWrapper } from 'components/Common/Styled';
 import { breakpoints } from 'config';
 import { AFTER_PAYMENT_TYPE } from 'features/checkout/types';
 import RedirectPreviewer from 'components/Checkout/RedirectPreviewer';
+import { LOCALE_WORKSPACE } from 'app/i18n';
 
 type CheckoutFormWrapperProps = {
   background: string;
@@ -67,7 +68,7 @@ const BRANDING_STEP_KEY = 'branding';
 const AFTER_PAYMENT_STEP_KEY = 'afterPayment';
 
 const Checkout = () => {
-  const { t } = useTranslation();
+  const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
   const { id } = useParams();
   const { checkout, getCheckoutLoading } = useCheckout(id);
   const { handleCreateCheckout, createCheckoutLoading } = useCreateCheckout();
@@ -121,18 +122,18 @@ const Checkout = () => {
     {
       forceRender: true,
       key: PRODUCT_STEP_KEY,
-      label: t('checkout.product'),
+      label: t('product'),
       children: <CheckoutProductFormItems />,
     },
     {
       key: BRANDING_STEP_KEY,
-      label: t('checkout.branding'),
+      label: t('branding'),
       children: <CheckoutBrandingFormItems />,
       forceRender: true,
     },
     {
       key: AFTER_PAYMENT_STEP_KEY,
-      label: t('checkout.afterPayment'),
+      label: t('afterPayment'),
       children: <AfterPaymentFormItem onFieldsChange={onFieldsChange} />,
       forceRender: true,
     },
@@ -163,7 +164,7 @@ const Checkout = () => {
 
         <PreviewContainer>
           <Typography.Title level={4} style={{ marginBottom: 30 }}>
-            {t('checkout.preview')}
+            {t('preview')}
           </Typography.Title>
 
           <Previewer style={{ margin: '0', marginTop: '30' }}>
