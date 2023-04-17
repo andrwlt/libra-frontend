@@ -16,6 +16,19 @@ interface CheckoutBaseType {
     asset: string;
     afterPayment?: AfterPayment;
 }
+interface AssetMetadata {
+    decimals: number;
+    symbol: string;
+    logo: string;
+    network: {
+        name: string;
+        type: 'substrate';
+        config: {
+            ss58Prefix: number;
+            rpc: string;
+        };
+    };
+}
 interface CheckoutProductItemBase {
     name: string;
     description?: string;
@@ -41,4 +54,6 @@ interface Props {
 }
 declare const LibraProviders: ({ children }: Props) => JSX.Element;
 
-export { CheckoutPreview as Checkout, LibraProviders };
+declare const ASSET_METADATA: Record<string, AssetMetadata>;
+
+export { ASSET_METADATA, CheckoutPreview as Checkout, LibraProviders };

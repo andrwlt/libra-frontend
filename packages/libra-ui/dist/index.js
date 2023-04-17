@@ -17550,6 +17550,9 @@ var require_bytes2 = __commonJS({
 // src/index.tsx
 var src_exports = {};
 __export(src_exports, {
+    ASSET_METADATA: function() {
+        return ASSET_METADATA;
+    },
     Checkout: function() {
         return Checkout_default;
     },
@@ -17619,7 +17622,7 @@ var ASSET_METADATA = {
     dot: {
         decimals: 10,
         symbol: "DOT",
-        logo: "https://s2.coinmarketcap.com/static/img/coins/64x64/6636.png",
+        logo: "https://raw.githubusercontent.com/paritytech/polkadot-staking-dashboard/master/src/img/dot_icon.svg",
         network: {
             name: "Polkadot",
             type: "substrate",
@@ -17638,7 +17641,7 @@ var ASSET_METADATA = {
             type: "substrate",
             config: {
                 ss58Prefix: 2,
-                rpc: "wss://apps-rpc.polkadot.io"
+                rpc: "wss://kusama-rpc.polkadot.io"
             }
         }
     },
@@ -75633,6 +75636,7 @@ var LibraProviders = function(param) {
 };
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
+    ASSET_METADATA: ASSET_METADATA,
     Checkout: Checkout,
     LibraProviders: LibraProviders
 }); /*! Bundled license information:

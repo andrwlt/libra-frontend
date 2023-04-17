@@ -2,7 +2,7 @@ import { Input, InputNumber, Select, Form, Space } from 'antd';
 import ImageUploader from 'components/Inputs/ImageUploader';
 import { useTranslation } from 'react-i18next';
 import { FormItemsPropsType } from 'features/checkout/types';
-import { ASSET_METADATA } from 'config';
+import { ASSET_METADATA } from '@atscale/libra-ui';
 import { LOCALE_WORKSPACE } from 'app/i18n';
 
 const FormItem = Form.Item;
