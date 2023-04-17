@@ -5,7 +5,7 @@ import { useCheckouts, useDeleteCheckout, useResetCheckout } from 'features/chec
 import { useNavigate } from 'react-router-dom';
 import CopyableField from 'components/Common/CopyableField';
 import { getCheckoutLink, getCheckoutPrice, formatCreatedDate } from 'utils/format/formatText';
-import { ASSET_METADATA } from 'config';
+import { ASSET_METADATA } from '@atscale/libra-ui';
 import PATHS from 'router/paths';
 import PageHeader from 'components/Common/PageHeader';
 import { useTranslation } from 'react-i18next';

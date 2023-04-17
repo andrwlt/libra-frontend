@@ -1,5 +1,5 @@
 import { AssetMetadata } from 'types';
-import { ASSET_METADATA } from 'config';
+import { ASSET_METADATA } from '@atscale/libra-ui';
 
 export function getAssetMetadata(symbol: string): AssetMetadata {
   const metadata = ASSET_METADATA[symbol];

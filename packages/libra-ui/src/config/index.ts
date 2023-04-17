@@ -6,7 +6,7 @@ export const ASSET_METADATA: Record<string, AssetMetadata> = {
   dot: {
     decimals: 10,
     symbol: 'DOT',
-    logo: 'https://s2.coinmarketcap.com/static/img/coins/64x64/6636.png',
+    logo: 'https://raw.githubusercontent.com/paritytech/polkadot-staking-dashboard/master/src/img/dot_icon.svg',
     network: {
       name: 'Polkadot',
       type: 'substrate',
@@ -25,7 +25,7 @@ export const ASSET_METADATA: Record<string, AssetMetadata> = {
       type: 'substrate',
       config: {
         ss58Prefix: 2,
-        rpc: 'wss://apps-rpc.polkadot.io',
+        rpc: 'wss://kusama-rpc.polkadot.io',
       },
     },
   },

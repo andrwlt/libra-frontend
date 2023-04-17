@@ -1,7 +1,7 @@
 import axios from 'axios';
 import mem from 'mem';
 import { ToolkitStore } from '@reduxjs/toolkit/dist/configureStore';
-import { logout, updateToken } from 'features/auth/authSlice';
+import { logout, resetStore, updateToken } from 'features/auth/authSlice';
 
 export const refreshInstant = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
@@ -22,6 +22,7 @@ const refreshTokenFn = async (store: ToolkitStore) => {
     return data;
   } catch (error) {
     store.dispatch(logout());
+    store.dispatch(resetStore());
   }
 };
 

@@ -3,7 +3,7 @@ import { Fragment } from 'react';
 import getTableLoaderProps from 'components/Common/TableLoader';
 import type { ColumnsType } from 'antd/es/table';
 import { Charge as ChargeDataType } from 'features/payment/types';
-import { ASSET_METADATA } from 'config';
+import { ASSET_METADATA } from '@atscale/libra-ui';
 import { getCheckoutPrice, formatCreatedDate } from 'utils/format/formatText';
 import { useTranslation } from 'react-i18next';
 import { LOCALE_WORKSPACE } from 'app/i18n';

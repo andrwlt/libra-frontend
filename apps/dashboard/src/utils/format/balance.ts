@@ -1,4 +1,4 @@
-import { ASSET_METADATA } from 'config';
+import { ASSET_METADATA } from '@atscale/libra-ui';
 import { CheckoutResponseAfterConvertingPrice, CheckoutResponseType } from 'features/checkout/types';
 import JSBI from 'jsbi';
 
