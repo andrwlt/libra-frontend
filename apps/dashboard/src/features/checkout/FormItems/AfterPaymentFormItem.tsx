@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Form, Input, Radio, Checkbox, Row } from 'antd';
 import { useTranslation } from 'react-i18next';
-import { AFTER_PAYMENT_TYPE } from 'features/checkout/types';
+import { AFTER_PAYMENT_TYPE, initMessageAfterPayment, initRedirectAfterPayment } from 'config';
 import { useCheckout } from 'features/checkout/checkoutHooks';
 import { LOCALE_WORKSPACE } from 'app/i18n';
 
@@ -36,10 +36,10 @@ const AfterPaymentFormItem = ({ onFieldsChange }: { onFieldsChange: () => void }
   const onAfterPaymentTypeChange = (type: string) => {
     const originType = checkout.afterPayment?.type;
     if (type === REDIRECT) {
-      form.setFieldValue(['afterPayment'], originType === REDIRECT ? checkout.afterPayment : undefined);
+      form.setFieldValue(['afterPayment'], originType === REDIRECT ? checkout.afterPayment : initRedirectAfterPayment);
     } else {
       const shouldReInit = originType === MESSAGE;
-      form.setFieldValue(['afterPayment'], shouldReInit ? checkout.afterPayment : undefined);
+      form.setFieldValue(['afterPayment'], shouldReInit ? checkout.afterPayment : initMessageAfterPayment);
 
       if (shouldReInit && checkout.afterPayment?.config?.message) {
         setIsCustomMessage(true);
@@ -99,7 +99,7 @@ const AfterPaymentFormItem = ({ onFieldsChange }: { onFieldsChange: () => void }
               validateTrigger="onBlur"
               rules={[{ type: 'url', message: t<string>('invalidUrl') }]}
             >
-              <Input placeholder='https://'></Input>
+              <Input placeholder="https://"></Input>
             </Form.Item>
           )}
         </Row>

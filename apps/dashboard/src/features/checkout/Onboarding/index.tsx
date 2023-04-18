@@ -17,6 +17,7 @@ import { AccountType } from 'features/auth/types';
 import { useTranslation } from 'react-i18next';
 import { formatCheckoutToStringPrice } from 'utils/format/balance';
 import { LOCALE_WORKSPACE } from 'app/i18n';
+import { initMessageAfterPayment } from 'config';
 
 const Header = styled.div`
   padding: 32px 64px;
@@ -95,7 +96,9 @@ export default function Onboarding() {
     await handleLogin(account);
 
     if (loginSuccessRef.current) {
-      handleCreateCheckout(formatCheckoutToStringPrice(previewingCheckout));
+      handleCreateCheckout(
+        formatCheckoutToStringPrice({ ...previewingCheckout, afterPayment: initMessageAfterPayment }),
+      );
     }
   };
 

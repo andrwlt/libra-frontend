@@ -22,7 +22,7 @@ import { useTranslation } from 'react-i18next';
 import { formatCheckoutToStringPrice } from 'utils/format/balance';
 import { FixedWrapper } from 'components/Common/Styled';
 import { breakpoints } from 'config';
-import { AFTER_PAYMENT_TYPE } from 'features/checkout/types';
+import { AFTER_PAYMENT_TYPE } from 'config';
 import RedirectPreviewer from 'components/Checkout/RedirectPreviewer';
 import { LOCALE_WORKSPACE } from 'app/i18n';
 
@@ -94,10 +94,16 @@ const Checkout = () => {
     form
       .validateFields()
       .then((values) => {
+        let { afterPayment } = values;
+
+        if (afterPayment.type === AFTER_PAYMENT_TYPE.MESSAGE && !afterPayment.config) {
+          afterPayment.config = { message: '' };
+        }
+
         if (id) {
-          handleUpdateCheckout(formatCheckoutToStringPrice({ ...values, id }) as UpdatingCheckoutType);
+          handleUpdateCheckout(formatCheckoutToStringPrice({ ...values, afterPayment, id }) as UpdatingCheckoutType);
         } else {
-          handleCreateCheckout(formatCheckoutToStringPrice({ ...values }) as CreatingCheckoutType);
+          handleCreateCheckout(formatCheckoutToStringPrice({ ...values, afterPayment }) as CreatingCheckoutType);
         }
       })
       .catch((error) => {

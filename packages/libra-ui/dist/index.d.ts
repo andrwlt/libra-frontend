@@ -19,6 +19,7 @@ interface CheckoutBaseType {
 interface AssetMetadata {
     decimals: number;
     symbol: string;
+    code: string;
     logo: string;
     network: {
         name: string;
@@ -67,4 +68,4 @@ declare const priceFormatHelper: {
     }, assetMetadata: any) => string;
 };
 
-export { ASSET_METADATA, CheckoutPreview as Checkout, LibraProviders, priceFormatHelper };
+export { ASSET_METADATA, AssetMetadata, CheckoutPreview as Checkout, LibraProviders, priceFormatHelper };

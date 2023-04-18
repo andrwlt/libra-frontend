@@ -34,3 +34,22 @@ export const breakpoints = {
     lg: 'LG',
   },
 };
+
+export const AFTER_PAYMENT_TYPE = {
+  MESSAGE: 'message',
+  REDIRECT: 'redirect',
+};
+
+export const initRedirectAfterPayment = {
+  type: AFTER_PAYMENT_TYPE.REDIRECT,
+  config: {
+    url: '',
+  },
+};
+
+export const initMessageAfterPayment = {
+  type: AFTER_PAYMENT_TYPE.MESSAGE,
+  config: {
+    message: '',
+  },
+};

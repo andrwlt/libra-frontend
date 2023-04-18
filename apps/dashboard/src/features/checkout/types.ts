@@ -2,10 +2,6 @@ import { AxiosPromise } from 'axios';
 import { RootState } from 'app/store';
 import { PagingParams, Paging } from 'types';
 
-export const AFTER_PAYMENT_TYPE = {
-  MESSAGE: 'message',
-  REDIRECT: 'redirect',
-};
 
 export interface AfterPayment {
   type: 'message' | 'redirect';
