@@ -1,4 +1,3 @@
-import { formatBalance } from 'utils/format/balance';
 import dayjs from 'dayjs';
 
 export const shortStr = (str: string) => `${str.slice(0, 6)}...${str.slice(-4)}`;
@@ -13,17 +12,6 @@ export function truncate(address: string, config?: { start: number; end: number 
 
 export const getCheckoutLink = (id: string) => {
   return `${process.env.REACT_APP_CHECKOUT_URL}/${id}`;
-};
-
-export const getCheckoutPrice = ({ price, asset }: { price: string | number; asset: string }, assetMetadata: any) => {
-  const nextPrice = typeof price !== 'number' ? formatBalance(price, asset) : price;
-  const unit = assetMetadata ? assetMetadata.symbol : asset;
-  const formattedPrice = nextPrice.toLocaleString('en-US', {
-    style: 'decimal',
-    maximumFractionDigits: assetMetadata.decimals,
-  });
-
-  return `${formattedPrice} ${unit}`;
 };
 
 export const formatCreatedDate = (date: string) => {

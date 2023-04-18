@@ -56,4 +56,15 @@ declare const LibraProviders: ({ children }: Props) => JSX.Element;
 
 declare const ASSET_METADATA: Record<string, AssetMetadata>;
 
-export { ASSET_METADATA, CheckoutPreview as Checkout, LibraProviders };
+declare function formatBalance(amount: string, asset: string): number;
+declare function toSmallestUnit(originAmount: number, asset: string): string;
+declare const priceFormatHelper: {
+    formatBalance: typeof formatBalance;
+    toSmallestUnit: typeof toSmallestUnit;
+    getCheckoutPrice: ({ price, asset }: {
+        price: string | number;
+        asset: string;
+    }, assetMetadata: any) => string;
+};
+
+export { ASSET_METADATA, CheckoutPreview as Checkout, LibraProviders, priceFormatHelper };

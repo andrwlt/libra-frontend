@@ -41,7 +41,7 @@ const AfterPaymentFormItem = ({ onFieldsChange }: { onFieldsChange: () => void }
       const shouldReInit = originType === MESSAGE;
       form.setFieldValue(['afterPayment'], shouldReInit ? checkout.afterPayment : undefined);
 
-      if (shouldReInit && checkout.afterPayment?.config.message) {
+      if (shouldReInit && checkout.afterPayment?.config?.message) {
         setIsCustomMessage(true);
       }
     }

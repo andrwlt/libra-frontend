@@ -17558,6 +17558,9 @@ __export(src_exports, {
     },
     LibraProviders: function() {
         return LibraProviders;
+    },
+    priceFormatHelper: function() {
+        return priceFormatHelper;
     }
 });
 module.exports = __toCommonJS(src_exports);
@@ -17673,7 +17676,7 @@ function toReverseArray(str) {
     var reverseArray = splitString.reverse();
     return reverseArray;
 }
-var getZeroLength = function(stringNumber) {
+var getDecimalsShouldBeDecrease = function(stringNumber) {
     var reversedArray = toReverseArray(stringNumber);
     var count = 0;
     var _iteratorNormalCompletion = true, _didIteratorError = false, _iteratorError = undefined;
@@ -17707,10 +17710,14 @@ function formatBalance(amount, asset) {
         return Number(amount);
     }
     var decimals = metadata.decimals;
-    var zeroLength = getZeroLength(amount);
-    if (zeroLength < metadata.decimals) {
-        var nextAmount = amount.slice(0, amount.length - zeroLength);
-        var nextDecimals = decimals - zeroLength;
+    var decimalsShouldBeDecrease = getDecimalsShouldBeDecrease(amount);
+    if (decimalsShouldBeDecrease < metadata.decimals) {
+        var nextAmount = amount.slice(0, amount.length - decimalsShouldBeDecrease);
+        var nextDecimals = decimals - decimalsShouldBeDecrease;
+        var isUnderOne = nextAmount.length <= nextDecimals;
+        if (isUnderOne) {
+            return Number(nextAmount) / Math.pow(10, Number(nextDecimals));
+        }
         var intNumberPart = nextAmount.slice(0, nextDecimals);
         var decimalNumberPart = nextAmount.slice(nextDecimals, nextAmount.length);
         var decimalNumber = Number(decimalNumberPart) / Math.pow(10, Number(decimalNumberPart.length));
@@ -17720,14 +17727,36 @@ function formatBalance(amount, asset) {
     var result = import_jsbi.default.divide(import_jsbi.default.BigInt(amount), scale).toString();
     return Number(result);
 }
+function toSmallestUnit(originAmount, asset) {
+    var metadata = ASSET_METADATA[asset];
+    var amount = originAmount;
+    var decimals = metadata === null || metadata === void 0 ? void 0 : metadata.decimals;
+    if (!Number.isInteger(amount)) {
+        var decimalLength = amount.toString().split(".")[1].length;
+        decimals = decimals - decimalLength;
+        amount = amount * Math.pow(10, decimalLength);
+    }
+    var stringNumber = amount.toString();
+    if (metadata) {
+        var scale = import_jsbi.default.exponentiate(import_jsbi.default.BigInt(10), import_jsbi.default.BigInt(decimals));
+        stringNumber = import_jsbi.default.multiply(import_jsbi.default.BigInt(amount), scale).toString();
+    }
+    return stringNumber;
+}
 var getCheckoutPrice = function(param, assetMetadata) {
     var price = param.price, asset = param.asset;
     var nextPrice = typeof price !== "number" ? formatBalance(price, asset) : price;
     var unit = assetMetadata ? assetMetadata.symbol : asset;
     var formattedPrice = nextPrice.toLocaleString("en-US", {
-        style: "decimal"
+        style: "decimal",
+        maximumFractionDigits: assetMetadata.decimals
     });
     return "".concat(formattedPrice, " ").concat(unit);
+};
+var priceFormatHelper = {
+    formatBalance: formatBalance,
+    toSmallestUnit: toSmallestUnit,
+    getCheckoutPrice: getCheckoutPrice
 };
 // src/components/Checkout/CheckoutSummary.tsx
 var import_react_i18next = require("react-i18next");
@@ -75638,7 +75667,8 @@ var LibraProviders = function(param) {
 0 && (module.exports = {
     ASSET_METADATA: ASSET_METADATA,
     Checkout: Checkout,
-    LibraProviders: LibraProviders
+    LibraProviders: LibraProviders,
+    priceFormatHelper: priceFormatHelper
 }); /*! Bundled license information:
 
 classnames/index.js:

@@ -58,8 +58,6 @@ const ProductPriceFormItem = ({ onboardingMode }: FormItemsPropsType) => {
       required
       dependencies={['asset']}
       rules={[
-        { required: true, message: t<string>('productPriceIsRequired') },
-        { type: 'number', message: t<string>('productPriceMustBeNumber') },
         ({ getFieldValue }) => ({
           validator(_, value) {
             const asset = getFieldValue(['asset']);
@@ -67,13 +65,15 @@ const ProductPriceFormItem = ({ onboardingMode }: FormItemsPropsType) => {
             const { decimals } = ASSET_METADATA[asset];
             const smallestPrice = 1 / Math.pow(10, decimals);
 
-            if (value < smallestPrice) {
-              return Promise.reject(new Error('priceTooSmall'));
+            if (value === 0 || (value && value < smallestPrice)) {
+              return Promise.reject(new Error(t<string>('priceTooSmall')));
             }
 
             return Promise.resolve();
           },
         }),
+        { required: true, message: t<string>('productPriceIsRequired') },
+        { type: 'number', message: t<string>('productPriceMustBeNumber') },
       ]}
     >
       <PriceInput onboardingMode={onboardingMode} />
@@ -84,9 +84,7 @@ const ProductPriceFormItem = ({ onboardingMode }: FormItemsPropsType) => {
 const ProductNameFormItem = ({ onboardingMode }: FormItemsPropsType) => {
   const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
   const label = onboardingMode ? t('productNameLabelOnboarding') : t('productNameLabel');
-  const placeholder = onboardingMode
-    ? t('productNamePlaceholderOnboarding')
-    : t('productNamePlaceholder');
+  const placeholder = onboardingMode ? t('productNamePlaceholderOnboarding') : t('productNamePlaceholder');
 
   return (
     <FormItem

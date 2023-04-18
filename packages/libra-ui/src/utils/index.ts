@@ -7,7 +7,7 @@ function toReverseArray(str: string) {
   return reverseArray;
 }
 
-const getZeroLength = (stringNumber: string) => {
+const getDecimalsShouldBeDecrease = (stringNumber: string) => {
   const reversedArray = toReverseArray(stringNumber);
   let count = 0;
 
@@ -22,7 +22,7 @@ const getZeroLength = (stringNumber: string) => {
   return count;
 };
 
-export function formatBalance(amount: string, asset: string): number {
+function formatBalance(amount: string, asset: string): number {
   const metadata = ASSET_METADATA[asset];
 
   if (!metadata) {
@@ -30,11 +30,17 @@ export function formatBalance(amount: string, asset: string): number {
   }
 
   const { decimals } = metadata;
-  const zeroLength = getZeroLength(amount);
+  const decimalsShouldBeDecrease = getDecimalsShouldBeDecrease(amount);
 
-  if (zeroLength < metadata.decimals) {
-    const nextAmount = amount.slice(0, amount.length - zeroLength);
-    const nextDecimals = decimals - zeroLength;
+  if (decimalsShouldBeDecrease < metadata.decimals) {
+    const nextAmount = amount.slice(0, amount.length - decimalsShouldBeDecrease);
+    const nextDecimals = decimals - decimalsShouldBeDecrease;
+
+    const isUnderOne = nextAmount.length <= nextDecimals;
+
+    if (isUnderOne) {
+      return Number(nextAmount) / Math.pow(10, Number(nextDecimals));
+    }
 
     // Incase nextAmount still too big
     const intNumberPart = nextAmount.slice(0, nextDecimals);
@@ -50,10 +56,40 @@ export function formatBalance(amount: string, asset: string): number {
   return Number(result);
 }
 
+function toSmallestUnit(originAmount: number, asset: string) {
+  const metadata = ASSET_METADATA[asset];
+  let amount = originAmount;
+  let decimals = metadata?.decimals;
+
+  if (!Number.isInteger(amount)) {
+    const decimalLength = amount.toString().split('.')[1].length;
+    decimals = decimals - decimalLength;
+    amount = amount * Math.pow(10, decimalLength);
+  }
+
+  let stringNumber = amount.toString();
+
+  if (metadata) {
+    const scale = JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(decimals));
+    stringNumber = JSBI.multiply(JSBI.BigInt(amount), scale).toString();
+  }
+
+  return stringNumber;
+}
+
 export const getCheckoutPrice = ({ price, asset }: { price: string | number; asset: string }, assetMetadata: any) => {
   const nextPrice = typeof price !== 'number' ? formatBalance(price, asset) : price;
   const unit = assetMetadata ? assetMetadata.symbol : asset;
-  const formattedPrice = nextPrice.toLocaleString('en-US', { style: 'decimal' });
+  const formattedPrice = nextPrice.toLocaleString('en-US', {
+    style: 'decimal',
+    maximumFractionDigits: assetMetadata.decimals,
+  });
 
   return `${formattedPrice} ${unit}`;
+};
+
+export const priceFormatHelper = {
+  formatBalance,
+  toSmallestUnit,
+  getCheckoutPrice,
 };
