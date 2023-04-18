@@ -23,6 +23,7 @@ const refreshTokenFn = async (store: ToolkitStore) => {
   } catch (error) {
     store.dispatch(logout());
     store.dispatch(resetStore());
+    window.location.reload();
   }
 };
 

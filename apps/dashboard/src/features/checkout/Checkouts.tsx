@@ -4,7 +4,7 @@ import { ShopOutlined, EllipsisOutlined, PlusOutlined } from '@ant-design/icons'
 import { useCheckouts, useDeleteCheckout, useResetCheckout } from 'features/checkout/checkoutHooks';
 import { useNavigate } from 'react-router-dom';
 import CopyableField from 'components/Common/CopyableField';
-import { getCheckoutLink, getCheckoutPrice, formatCreatedDate } from 'utils/format/formatText';
+import { getCheckoutLink, formatCreatedDate } from 'utils/format/formatText';
 import { ASSET_METADATA } from '@atscale/libra-ui';
 import PATHS from 'router/paths';
 import PageHeader from 'components/Common/PageHeader';
@@ -16,6 +16,7 @@ import { StyledContainer } from 'components/Common/Styled';
 import getTableLoaderProps from 'components/Common/TableLoader';
 import Loading from 'components/Common/Loading';
 import { LOCALE_WORKSPACE } from 'app/i18n';
+import { priceFormatHelper } from '@atscale/libra-ui';
 
 export default function Checkouts() {
   const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
@@ -67,7 +68,7 @@ export default function Checkouts() {
                 {asset}
               </Avatar>
             )}
-            <span> {getCheckoutPrice({ price: price, asset: asset }, assetMetadata)}</span>
+            <span> {priceFormatHelper.getCheckoutPrice({ price: price, asset: asset }, assetMetadata)}</span>
           </Space>
         );
       },
