@@ -20,6 +20,7 @@ export interface CheckoutBaseType {
 export interface AssetMetadata {
   decimals: number;
   symbol: string;
+  code: string;
   logo: string;
   network: {
     name: string;

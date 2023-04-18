@@ -3,6 +3,7 @@ import ImageUploader from 'components/Inputs/ImageUploader';
 import { useTranslation } from 'react-i18next';
 import { FormItemsPropsType } from 'features/checkout/types';
 import { ASSET_METADATA } from '@atscale/libra-ui';
+import type { AssetMetadata } from '@atscale/libra-ui';
 import { LOCALE_WORKSPACE } from 'app/i18n';
 
 const FormItem = Form.Item;
@@ -14,12 +15,11 @@ interface AssetInputProps {
 }
 
 const AssetInput = ({ onChange, value, onboardingMode }: AssetInputProps) => {
-  const { t } = useTranslation(LOCALE_WORKSPACE.LAYOUT);
-
   return (
     <Select style={{ width: onboardingMode ? '88px' : '102px' }} value={value} onChange={(val) => onChange?.(val)}>
-      <Select.Option value="wnd">{t('wnd')}</Select.Option>
-      <Select.Option value="dot">{t('dot')}</Select.Option>
+      {Object.values(ASSET_METADATA).map((asset: AssetMetadata) => {
+        return <Select.Option value={asset.code}>{asset.symbol}</Select.Option>;
+      })}
     </Select>
   );
 };

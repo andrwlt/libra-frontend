@@ -17625,6 +17625,7 @@ var ASSET_METADATA = {
     dot: {
         decimals: 10,
         symbol: "DOT",
+        code: "dot",
         logo: "https://raw.githubusercontent.com/paritytech/polkadot-staking-dashboard/master/src/img/dot_icon.svg",
         network: {
             name: "Polkadot",
@@ -17638,6 +17639,7 @@ var ASSET_METADATA = {
     ksm: {
         decimals: 12,
         symbol: "KSM",
+        code: "ksm",
         logo: "https://raw.githubusercontent.com/paritytech/polkadot-staking-dashboard/master/src/img/kusama_icon.svg",
         network: {
             name: "Kusama",
@@ -17651,6 +17653,7 @@ var ASSET_METADATA = {
     wnd: {
         decimals: 12,
         symbol: "WND",
+        code: "wnd",
         logo: "https://raw.githubusercontent.com/paritytech/polkadot-staking-dashboard/master/src/img/westend_icon.svg",
         network: {
             name: "Westend",
