@@ -33,9 +33,10 @@ export const setupInstantsInterceptor = (store: ToolkitStore) => {
             authorization: `Bearer ${result.accessToken}`,
           };
           setAxiosToken(result.accessToken);
+          return axios(config);
         }
 
-        return axios(config);
+        return new Promise(() => {});
       }
 
       return Promise.reject(error);
