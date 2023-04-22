@@ -2,7 +2,6 @@ import icon from 'assets/web-setting.png';
 import polkadotIcon from 'assets/polkadot.png';
 import styled from 'styled-components';
 import { Typography, Space } from 'antd';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LOCALE_WORKSPACE } from 'app/i18n';
 
