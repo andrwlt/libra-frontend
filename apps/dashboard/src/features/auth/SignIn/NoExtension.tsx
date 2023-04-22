@@ -1,5 +1,4 @@
-import icon1 from 'assets/outdated-1.png';
-import icon2 from 'assets/outdated-2.svg';
+import icon from 'assets/web-setting.png';
 import polkadotIcon from 'assets/polkadot.png';
 import styled from 'styled-components';
 import { Typography, Space } from 'antd';
@@ -26,8 +25,8 @@ const Content = styled.div`
 `;
 
 const Image = styled.img`
-  width: 350px;
-  height: 350px;
+  width: 300px;
+  height: 300px;
 `;
 
 const ExtensionImage = styled.img`
@@ -45,16 +44,12 @@ const ExtensionLink = styled.a`
 `;
 
 const NoExtension = () => {
-  const [icon, setIcon] = useState(icon2);
   const { t } = useTranslation(LOCALE_WORKSPACE.WORDING);
 
-  const changeIcon = () => {
-    setIcon(icon === icon2 ? icon1 : icon2);
-  };
   return (
     <Wrapper>
       <Content>
-        <Image src={icon} onClick={changeIcon} />
+        <Image src={icon} />
         <Typography.Title style={{ display: 'block', marginTop: 10 }} level={3}>
           {t('noExtensionTitle')}
         </Typography.Title>

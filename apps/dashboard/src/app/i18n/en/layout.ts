@@ -28,7 +28,8 @@ const layout = {
   reveal: 'Reveal',
   hide: 'Hide',
   close: 'Close',
-
+  ok: 'OK',
+  
   leavingPageWarningTitle: 'Leave page with unsaved changes?',
   leavingPageWarningContent: 'Leaving this page will delete all unsaved changes.',
   confirmLeavingPage: 'Leave Page',
