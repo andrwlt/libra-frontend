@@ -1,5 +1,5 @@
 import { Fragment, useState } from 'react';
-import { Dropdown, Space, Typography, Modal, Result, Button } from 'antd';
+import { Dropdown, Space, Typography, Modal, Button, Row } from 'antd';
 import { useAuth, useLogout } from 'features/auth/authHooks';
 import Identicon from '@polkadot/react-identicon';
 import { truncate } from 'utils/format/formatText';
@@ -9,7 +9,7 @@ import styled from 'styled-components';
 import { useBreakpoint } from 'app/hooks';
 import { breakpoints } from 'config';
 import { useLocation } from 'react-router-dom';
-import { SmileOutlined } from '@ant-design/icons';
+import { ExperimentTwoTone } from '@ant-design/icons';
 import { LOCALE_WORKSPACE } from 'app/i18n';
 
 const StyledMenuItem = styled.div`
@@ -122,21 +122,33 @@ const Account = () => {
         </Space>
       </Dropdown>
       <Modal
-        width={560}
+        width={416}
         open={isDeveloperInfoModalOpen}
         onCancel={() => setIsDeveloperInfoModalOpen(false)}
         footer={false}
       >
-        <Result
-          style={{ padding: '24px 28px' }}
-          icon={<SmileOutlined />}
-          title={tWording('developerModeIsForPartnerOnly')}
-          extra={
+        <div>
+          <Space align="center" size={12}>
+            <ExperimentTwoTone style={{ fontSize: 21, position: 'relative', top: '1.5px' }} />
+            <Typography.Title style={{ margin: 0, fontSize: 16 }} level={5}>
+              {tWording('experienceFeature')}
+            </Typography.Title>
+          </Space>
+
+          <Row style={{ marginTop: 8, paddingLeft: 33 }}>
+            <Typography.Text>{tWording('developerModeIsForPartnerOnly')}</Typography.Text>
+          </Row>
+
+          <Row style={{ paddingLeft: 33 }}>
+            <Typography.Text>{tWording('contactUsForMoreDetails')}</Typography.Text>
+          </Row>
+
+          <Row justify="end" style={{ marginTop: 12 }}>
             <Button type="primary" key="console" onClick={() => setIsDeveloperInfoModalOpen(false)}>
-              {t('close')}
+              {t('ok')}
             </Button>
-          }
-        />
+          </Row>
+        </div>
       </Modal>
     </Fragment>
   );

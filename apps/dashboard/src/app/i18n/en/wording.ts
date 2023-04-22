@@ -5,8 +5,9 @@ const en = {
   noExtensionTitle: 'You need to install supported extension to start using Libra.',
   preferExtension: 'There is an awesome extension we prefer.',
 
-  developerModeIsForPartnerOnly:
-    'Currently, this feature is for our partners only. Please contact us for more details.',
+  experienceFeature: 'Experience Feature',
+  developerModeIsForPartnerOnly: 'Currently, this feature is for our partners only.',
+  contactUsForMoreDetails: 'Please contact us for more details.',
 
   toCreateCheckoutLink: `To create your checkout link, please connect your wallet as sign up your Libra account. This will allow you to
     access all the features and benefits of our platform.`,
@@ -21,7 +22,7 @@ const en = {
   noPaymentHasCheckoutSubTitle: 'Promote your checkout and start earning your first {{asset}}.',
   noPaymentHasCheckoutTitle: `It's happening…`,
   paymentWillShowHere: 'Your received payments will show here',
-  
+
   greatJob: `Great job! You're almost done.`,
 };
 
