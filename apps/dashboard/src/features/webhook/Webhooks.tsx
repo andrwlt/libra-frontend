@@ -12,13 +12,15 @@ import { useWebhooks, useDeleteWebhook, useResetWebhook, useUpdateWebhook } from
 import { WebhookResponse } from './types';
 import getTableLoaderProps from 'components/Common/TableLoader';
 import { SubTableCard } from 'components/Common/Styled';
+import { usePageChange, useURLQueryParams } from 'app/hooks';
 import { LOCALE_WORKSPACE } from 'app/i18n';
 
 const Webhooks = () => {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [openedPopconfirmDelete, setOpenedPopconfirmDelete] = useState('');
   const [openedPopconfirmDisable, setOpenedPopconfirmDisable] = useState('');
-  const { webhooks, getWebhooksLoading, fetchWebhooks, webhooksPaging } = useWebhooks();
+  const { webhooks, getWebhooksLoading, webhooksPaging, refreshCurrentPage } = useWebhooks();
+  const { onGoBack, onGoNext, goToFirstPage } = usePageChange(webhooksPaging);
 
   const afterUpdatingSucceeded = () => {
     setIsFormOpen(false);
@@ -26,12 +28,30 @@ const Webhooks = () => {
     setOpenedPopconfirmDisable('');
   };
 
+  const { beforeId, afterId } = useURLQueryParams();
+
+  const refreshData = () => {
+    const isInFirstPage = !beforeId && !afterId;
+    if (isInFirstPage) {
+      refreshCurrentPage();
+    } else {
+      goToFirstPage();
+    }
+  };
+
   const afterDeleteSuccess = () => {
     setOpenedPopconfirmDelete('');
+    refreshData();
+  };
+
+  const afterCreatingSucceeded = () => {
+    setIsFormOpen(false);
+    refreshData();
   };
 
   const { updateWebhookLoading, handleUpdateWebhook } = useUpdateWebhook(afterUpdatingSucceeded);
   const { handleDeleteWebhook, deleteWebhookLoading } = useDeleteWebhook(afterDeleteSuccess);
+
   useResetWebhook();
 
   const [editingWebhook, setEditingWebhook] = useState<WebhookResponse | undefined>(undefined);
@@ -203,21 +223,17 @@ const Webhooks = () => {
             />
 
             <Row justify="end" style={{ marginTop: 20, paddingRight: 20 }}>
-              <Button
-                size="small"
-                onClick={() => fetchWebhooks({ isGoNext: false })}
-                disabled={!webhooksPaging.hasPrevPage || getWebhooksLoading}
-                style={{ marginRight: 10 }}
-              >
-                {tLayout('previous')}
-              </Button>{' '}
-              <Button
-                size="small"
-                onClick={() => fetchWebhooks()}
-                disabled={!webhooksPaging.hasNextPage || getWebhooksLoading}
-              >
-                {tLayout('next')}
-              </Button>
+              {webhooksPaging.hasPrevPage && (
+                <Button size="small" onClick={onGoBack} disabled={getWebhooksLoading} style={{ marginRight: 10 }}>
+                  {tLayout('previous')}
+                </Button>
+              )}
+
+              {webhooksPaging.hasNextPage && (
+                <Button size="small" onClick={onGoNext} disabled={getWebhooksLoading}>
+                  {tLayout('next')}
+                </Button>
+              )}
             </Row>
           </SubTableCard>
         </div>
@@ -232,6 +248,7 @@ const Webhooks = () => {
           setIsFormOpen(false);
           setEditingWebhook(undefined);
         }}
+        afterCreatingSucceeded={afterCreatingSucceeded}
       />
     </div>
   );

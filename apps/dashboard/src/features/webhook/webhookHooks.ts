@@ -1,5 +1,5 @@
-import { useEffect, useCallback, useRef } from 'react';
-import { useAppSelector, useAppDispatch, useFailed, useSuccess } from 'app/hooks';
+import { useEffect, useRef } from 'react';
+import { useAppSelector, useAppDispatch, useFailed, useSuccess, useURLQueryParams } from 'app/hooks';
 import {
   selectWebhookListState,
   selectCreateWebhookState,
@@ -16,25 +16,28 @@ import {
   CreateWebhookHook,
   WebhookBase,
   WebhookResponse,
-  WebhooksHookType,
+  UseWebhooksReturnType,
   UpdateWebhookHook,
   DeleteWebhookHook,
 } from './types';
 import { useTranslation } from 'react-i18next';
 import { LOCALE_WORKSPACE } from 'app/i18n';
 
-export const useWebhooks = (): WebhooksHookType => {
+export const useWebhooks = (): UseWebhooksReturnType => {
+  const params = useURLQueryParams();
   const state = useAppSelector(selectWebhookListState);
   const dispatch = useAppDispatch();
 
-  const fetchWebhooks = useCallback((param = {}) => dispatch(getWebhooks(param)), [dispatch]);
-
   useEffect(() => {
-    fetchWebhooks();
-  }, [dispatch, fetchWebhooks]);
+    dispatch(getWebhooks(params));
+  }, [dispatch, params]);
+
+  const refreshCurrentPage = () => {
+    dispatch(getWebhooks(params));
+  };
 
   useFailed(state.getWebhooksFailed);
-  return { ...state, fetchWebhooks };
+  return { ...state, refreshCurrentPage };
 };
 
 export const useCreateWebhook = (callback: () => void): CreateWebhookHook => {

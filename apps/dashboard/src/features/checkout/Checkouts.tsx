@@ -17,6 +17,7 @@ import getTableLoaderProps from 'components/Common/TableLoader';
 import Loading from 'components/Common/Loading';
 import { LOCALE_WORKSPACE } from 'app/i18n';
 import { priceFormatHelper } from '@atscale/libra-ui';
+import { usePageChange, useURLQueryParams } from 'app/hooks';
 
 export default function Checkouts() {
   const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
@@ -24,9 +25,23 @@ export default function Checkouts() {
   const { t: tWording } = useTranslation(LOCALE_WORKSPACE.WORDING);
 
   const [openedPopconfirm, setOpenedPopconfirm] = useState('');
-  const { checkouts, getCheckoutsLoading, checkoutsPaging, fetchCheckouts, isFirstLoad } = useCheckouts();
+  const { checkouts, getCheckoutsLoading, checkoutsPaging, isFirstLoad, refreshCurrentPage } = useCheckouts();
+  const { onGoBack, onGoNext, goToFirstPage } = usePageChange(checkoutsPaging);
   const navigate = useNavigate();
-  const { handleDeleteCheckout, deleteCheckoutLoading } = useDeleteCheckout();
+  const { beforeId, afterId } = useURLQueryParams();
+
+  const afterDeleteSuccess = () => {
+    setOpenedPopconfirm('');
+    const isInFirstPage = !beforeId && !afterId;
+    if (isInFirstPage) {
+      refreshCurrentPage();
+    } else {
+      goToFirstPage();
+    }
+  };
+
+  const { handleDeleteCheckout, deleteCheckoutLoading } = useDeleteCheckout(afterDeleteSuccess);
+
   useResetCheckout();
 
   const goToCreateCheckout = () => navigate(PATHS.checkout.create);
@@ -158,21 +173,16 @@ export default function Checkouts() {
 
               {hasCheckout && (
                 <Row justify="end" style={{ marginTop: 20 }}>
-                  <Button
-                    size="small"
-                    onClick={() => fetchCheckouts({ isGoNext: false })}
-                    disabled={!checkoutsPaging.hasPrevPage || getCheckoutsLoading}
-                    style={{ marginRight: 10 }}
-                  >
-                    {tLayout('previous')}
-                  </Button>{' '}
-                  <Button
-                    size="small"
-                    onClick={() => fetchCheckouts()}
-                    disabled={!checkoutsPaging.hasNextPage || getCheckoutsLoading}
-                  >
-                    {tLayout('next')}
-                  </Button>
+                  {checkoutsPaging.hasPrevPage && (
+                    <Button size="small" onClick={onGoBack} disabled={getCheckoutsLoading}>
+                      {tLayout('previous')}
+                    </Button>
+                  )}
+                  {checkoutsPaging.hasNextPage && (
+                    <Button style={{ marginLeft: 10 }} size="small" onClick={onGoNext} disabled={getCheckoutsLoading}>
+                      {tLayout('next')}
+                    </Button>
+                  )}
                 </Row>
               )}
             </Fragment>

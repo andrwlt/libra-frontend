@@ -16,7 +16,7 @@ import CheckoutProductFormItems from 'features/checkout/FormItems/CheckoutProduc
 import AfterPaymentFormItem from 'features/checkout/FormItems/AfterPaymentFormItem';
 import type { TabsProps } from 'antd';
 import Previewer from 'components/Checkout/Previewer';
-import { useDeboundCallback } from 'app/hooks';
+import { useDebounceCallback } from 'app/hooks';
 import { CheckoutPreviewType, CreatingCheckoutType, UpdatingCheckoutType } from '../types';
 import { useTranslation } from 'react-i18next';
 import { formatCheckoutToStringPrice } from 'utils/format/balance';
@@ -80,7 +80,7 @@ const Checkout = () => {
   useReinitCheckoutForm(form, setPreviewingCheckout);
   useResetCheckout();
 
-  const onFieldsChange = useDeboundCallback(() => {
+  const onFieldsChange = useDebounceCallback(() => {
     setPreviewingCheckout(form.getFieldsValue());
   });
 

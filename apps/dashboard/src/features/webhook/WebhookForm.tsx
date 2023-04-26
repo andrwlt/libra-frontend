@@ -28,10 +28,18 @@ const WebhookForm = (props: {
   initialValues: WebhookResponse | undefined;
   updateWebhookLoading: boolean;
   handleUpdateWebhook: Function;
+  afterCreatingSucceeded: () => void;
 }) => {
   const [form] = Form.useForm();
-  const { isOpen, onClose, initialValues = defaultInitValues, updateWebhookLoading, handleUpdateWebhook } = props;
-  const { createWebhookLoading, handleCreateWebhook } = useCreateWebhook(onClose);
+  const {
+    isOpen,
+    onClose,
+    initialValues = defaultInitValues,
+    updateWebhookLoading,
+    handleUpdateWebhook,
+    afterCreatingSucceeded,
+  } = props;
+  const { createWebhookLoading, handleCreateWebhook } = useCreateWebhook(afterCreatingSucceeded);
 
   useEffect(() => {
     form.resetFields();

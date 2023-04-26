@@ -1,10 +1,12 @@
-import { useContext, useEffect, createContext, useRef, useState } from 'react';
+import { useContext, useEffect, createContext, useRef, useState, useMemo } from 'react';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 import type { RootState, AppDispatch } from './store';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { useTranslation } from 'react-i18next';
-import { breakpoints } from 'config';
+import { breakpoints, PAGING_PARAM } from 'config';
 import { LOCALE_WORKSPACE } from './i18n';
+import { useSearchParams } from 'react-router-dom';
+import { PagingState } from 'types';
 
 export const NotifyContext = createContext<any>({});
 
@@ -57,7 +59,7 @@ export const useFailed: ReactToResult = (error, customMess, callback) => {
   }, [error]);
 };
 
-export const useDeboundCallback = (callback: Function, timeout = 200) => {
+export const useDebounceCallback = (callback: Function, timeout = 200) => {
   const timeoutRef = useRef<any>(null);
 
   const handleCallback = () => {
@@ -98,4 +100,61 @@ export const useBreakpoint = () => {
   }, [windowSize.width]);
 
   return breakpoint;
+};
+
+export const useURLQueryParams = (extraParams?: string[]) => {
+  const [searchParams] = useSearchParams();
+
+  const beforeId = searchParams.get('beforeId') ?? undefined;
+  const afterId = searchParams.get('afterId') ?? undefined;
+
+  const urlQueryParams = useMemo(() => {
+    return (extraParams || []).reduce(
+      (params, extraParamKey) => ({
+        ...params,
+        [extraParamKey]: searchParams.get(extraParamKey),
+      }),
+      { beforeId, afterId },
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [beforeId, afterId, searchParams]);
+
+  return urlQueryParams;
+};
+
+const { BEFORE_ID, AFTER_ID } = PAGING_PARAM;
+
+export const usePageChange = (pagingState: PagingState) => {
+  const [, setSearchParams] = useSearchParams();
+  const { nextRequestAfterId, nextRequestBeforeId } = pagingState;
+
+  const onGoNext = () => {
+    if (nextRequestAfterId) {
+      setSearchParams((params) => {
+        params.delete(BEFORE_ID);
+        params.set(AFTER_ID, nextRequestAfterId);
+        return params;
+      });
+    }
+  };
+
+  const onGoBack = () => {
+    if (nextRequestBeforeId) {
+      setSearchParams((params) => {
+        params.delete(AFTER_ID);
+        params.set(BEFORE_ID, nextRequestBeforeId);
+        return params;
+      });
+    }
+  };
+
+  const goToFirstPage = () => {
+    setSearchParams((params) => {
+      params.delete(AFTER_ID);
+      params.delete(BEFORE_ID);
+      return params;
+    });
+  };
+
+  return { onGoNext, onGoBack, goToFirstPage };
 };

@@ -12,41 +12,14 @@ import webhookAPI from './webhookAPI';
 import { RootState } from 'app/store';
 import { resetStore } from 'features/auth/authSlice';
 import pagingHelper from 'utils/pagingHelper';
+import { GetListPayload } from 'types';
 
 export const getWebhooks = createAppAsyncThunk(
   'webhook/getWebhooks',
-  async (
-    {
-      deletedId,
-      isGoNext = true,
-      isRefreshCurrentPage = false,
-    }: { deletedId?: string; isGoNext?: boolean; isRefreshCurrentPage?: boolean },
-    { rejectWithValue, getState },
-  ) => {
+  async (searchParams: GetListPayload, { rejectWithValue, getState }) => {
     try {
-      const {
-        webhook: { webhooks, webhooksPaging },
-      } = getState();
-
-      const params = {
-        request: webhookAPI.getWebhooks,
-        data: webhooks,
-        paging: webhooksPaging,
-      };
-
-      if (isRefreshCurrentPage) {
-        return await pagingHelper.refreshCurrentPage<WebhookResponse>(params);
-      }
-
-      if (deletedId) {
-        return await pagingHelper.refreshAfterDeleting<WebhookResponse>(params);
-      } else {
-        if (isGoNext) {
-          return await pagingHelper.goNext<WebhookResponse>(params);
-        } else {
-          return await pagingHelper.goBack<WebhookResponse>(params);
-        }
-      }
+      const params = { request: webhookAPI.getWebhooks, searchParams };
+      return await pagingHelper.fetchData<WebhookResponse>(params);
     } catch (err) {
       return rejectWithValue(err);
     }
@@ -58,7 +31,7 @@ export const createWebhook = createAppAsyncThunk(
   async (webhook: WebhookBase, { rejectWithValue, dispatch }) => {
     try {
       const response = await webhookAPI.createWebhook(webhook);
-      await dispatch(getWebhooks({ isRefreshCurrentPage: true }));
+
       return response.data;
     } catch (err) {
       return rejectWithValue(err);
@@ -83,7 +56,6 @@ export const deleteWebhook = createAppAsyncThunk(
   async (deletedId: string, { rejectWithValue, dispatch }) => {
     try {
       await webhookAPI.deleteWebhook(deletedId);
-      dispatch(getWebhooks({ deletedId }));
       return deletedId;
     } catch (err) {
       return rejectWithValue(err);
@@ -102,7 +74,6 @@ const initialState: WebhookState = {
   webhooksPaging: {
     hasNextPage: false,
     hasPrevPage: false,
-    prevPageData: [],
   },
   isFirstLoad: true,
 
@@ -136,12 +107,12 @@ export const webhookSlice = createSlice({
         state.getWebhooksLoading = false;
         state.webhooks = payload.data;
         state.webhooksPaging = payload.paging;
-        state.isFirstLoad = false
+        state.isFirstLoad = false;
       })
       .addCase(getWebhooks.rejected, (state, { payload }) => {
         state.getWebhooksLoading = false;
         state.getWebhooksFailed = payload;
-        state.isFirstLoad = false
+        state.isFirstLoad = false;
       })
 
       .addCase(createWebhook.pending, (state) => {

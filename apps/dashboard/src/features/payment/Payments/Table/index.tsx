@@ -9,9 +9,11 @@ import { useTranslation } from 'react-i18next';
 import { LOCALE_WORKSPACE } from 'app/i18n';
 import ChargeStatus from './ChargeStatus';
 import { priceFormatHelper } from '@atscale/libra-ui';
+import { usePageChange } from 'app/hooks';
 
 export default function ChargeTable(props: any) {
-  const { charges, getChargesLoading, fetchCharges, chargesPaging } = props;
+  const { charges, getChargesLoading, chargesPaging } = props;
+  const { onGoBack, onGoNext } = usePageChange(chargesPaging);
   const { t } = useTranslation(LOCALE_WORKSPACE.LAYOUT);
   const { t: tPayment } = useTranslation(LOCALE_WORKSPACE.PAYMENT);
 
@@ -68,21 +70,17 @@ export default function ChargeTable(props: any) {
 
       {charges.length ? (
         <Row justify="end" style={{ marginTop: 20 }}>
-          <Button
-            size="small"
-            onClick={() => fetchCharges({ isGoNext: false })}
-            disabled={!chargesPaging.hasPrevPage || getChargesLoading}
-            style={{ marginRight: 10 }}
-          >
-            {t('previous')}
-          </Button>{' '}
-          <Button
-            size="small"
-            onClick={() => fetchCharges()}
-            disabled={!chargesPaging.hasNextPage || getChargesLoading}
-          >
-            {t('next')}
-          </Button>
+          {chargesPaging.hasPrevPage && (
+            <Button size="small" onClick={onGoBack} disabled={getChargesLoading} style={{ marginRight: 10 }}>
+              {t('previous')}
+            </Button>
+          )}
+
+          {chargesPaging.hasNextPage && (
+            <Button size="small" onClick={onGoNext} disabled={getChargesLoading}>
+              {t('next')}
+            </Button>
+          )}
         </Row>
       ) : (
         ''
