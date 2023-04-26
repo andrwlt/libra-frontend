@@ -7,7 +7,7 @@ export const ASSET_METADATA: Record<string, AssetMetadata> = {
     decimals: 10,
     symbol: 'DOT',
     code: 'dot',
-    logo: 'https://raw.githubusercontent.com/paritytech/polkadot-staking-dashboard/master/src/img/dot_icon.svg',
+    logo: 'https://raw.githubusercontent.com/paritytech/polkadot-staking-dashboard/main/src/img/polkadot_icon.svg',
     network: {
       name: 'Polkadot',
       type: 'substrate',
