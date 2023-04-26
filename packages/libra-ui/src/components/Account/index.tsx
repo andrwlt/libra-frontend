@@ -12,10 +12,11 @@ const Wrapper = styled.div`
 `;
 
 interface AccountConnectionProps {
+  network: any;
   onAccountConnected: Function;
 }
 
-export default function AccountConnection({ onAccountConnected }: AccountConnectionProps) {
+export default function AccountConnection({ network, onAccountConnected }: AccountConnectionProps) {
   const { extensions, isReady } = useExtensions();
   const [extension, setExtension] = useState<any>();
   const [accounts, setAccounts] = useState<any>([]);

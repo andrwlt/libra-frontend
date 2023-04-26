@@ -6784,12 +6784,12 @@ var require_W3CWebSocket = __commonJS({
             this._readyState = CLOSED;
             this.dispatchEvent(createCloseEvent(code, reason || ""));
         };
-        var onMessage = function onMessage(message2) {
-            if (message2.utf8Data) {
-                this.dispatchEvent(createMessageEvent(message2.utf8Data));
-            } else if (message2.binaryData) {
+        var onMessage = function onMessage(message) {
+            if (message.utf8Data) {
+                this.dispatchEvent(createMessageEvent(message.utf8Data));
+            } else if (message.binaryData) {
                 if (this.binaryType === "arraybuffer") {
-                    var buffer = message2.binaryData;
+                    var buffer = message.binaryData;
                     var arraybuffer = new ArrayBuffer(buffer.length);
                     var view = new Uint8Array(arraybuffer);
                     for(var i = 0, len = buffer.length; i < len; ++i){
@@ -10982,10 +10982,10 @@ var require_NotFoundError = __commonJS({
         exports.NotFoundError = void 0;
         var createErrorClass_1 = require_createErrorClass();
         exports.NotFoundError = createErrorClass_1.createErrorClass(function(_super) {
-            return function NotFoundErrorImpl(message2) {
+            return function NotFoundErrorImpl(message) {
                 _super(this);
                 this.name = "NotFoundError";
-                this.message = message2;
+                this.message = message;
             };
         });
     }
@@ -11000,10 +11000,10 @@ var require_SequenceError = __commonJS({
         exports.SequenceError = void 0;
         var createErrorClass_1 = require_createErrorClass();
         exports.SequenceError = createErrorClass_1.createErrorClass(function(_super) {
-            return function SequenceErrorImpl(message2) {
+            return function SequenceErrorImpl(message) {
                 _super(this);
                 this.name = "SequenceError";
-                this.message = message2;
+                this.message = message;
             };
         });
     }
@@ -18761,19 +18761,19 @@ var gray = presetPalettes.grey;
 var import_react2 = __toESM(require("react"));
 // ../../node_modules/rc-util/es/warning.js
 var warned = {};
-function warning(valid, message2) {
+function warning(valid, message) {
     if (process.env.NODE_ENV !== "production" && !valid && console !== void 0) {
-        console.error("Warning: ".concat(message2));
+        console.error("Warning: ".concat(message));
     }
 }
-function call(method, valid, message2) {
-    if (!valid && !warned[message2]) {
-        method(false, message2);
-        warned[message2] = true;
+function call(method, valid, message) {
+    if (!valid && !warned[message]) {
+        method(false, message);
+        warned[message] = true;
     }
 }
-function warningOnce(valid, message2) {
-    call(warning, valid, message2);
+function warningOnce(valid, message) {
+    call(warning, valid, message);
 }
 var warning_default = warningOnce;
 // ../../node_modules/rc-util/es/Dom/canUseDom.js
@@ -18896,8 +18896,8 @@ function updateCSS(css, key) {
     return newNode;
 }
 // ../../node_modules/@ant-design/icons/es/utils.js
-function warning2(valid, message2) {
-    warning_default(valid, "[@ant-design/icons] ".concat(message2));
+function warning2(valid, message) {
+    warning_default(valid, "[@ant-design/icons] ".concat(message));
 }
 function isIconDefinition(target) {
     return _typeof(target) === "object" && typeof target.name === "string" && typeof target.theme === "string" && (_typeof(target.icon) === "object" || typeof target.icon === "function");
@@ -19320,7 +19320,7 @@ var import_antd4 = require("antd");
 var import_jsx_runtime6 = require("react/jsx-runtime");
 var Wrapper = import_styled_components2.default.div(_templateObject4());
 function AccountConnection(param) {
-    var onAccountConnected = param.onAccountConnected;
+    var network = param.network, onAccountConnected = param.onAccountConnected;
     var _useExtensions = useExtensions(), extensions = _useExtensions.extensions, isReady3 = _useExtensions.isReady;
     var _ref = _sliced_to_array((0, import_react6.useState)(), 2), extension = _ref[0], setExtension = _ref[1];
     var _ref1 = _sliced_to_array((0, import_react6.useState)([]), 2), accounts2 = _ref1[0], setAccounts = _ref1[1];
@@ -19487,13 +19487,13 @@ function arrayFlatten(arrays) {
     return output4;
 }
 // ../../node_modules/@polkadot/util/assert.js
-function assert(condition, message2) {
+function assert(condition, message) {
     if (!condition) {
-        throw new Error(isFunction(message2) ? message2() : message2);
+        throw new Error(isFunction(message) ? message() : message);
     }
 }
-function assertReturn(value1, message2) {
-    assert(value1 !== void 0 && value1 !== null, message2);
+function assertReturn(value1, message) {
+    assert(value1 !== void 0 && value1 !== null, message);
     return value1;
 }
 function assertUnreachable(x) {
@@ -20884,9 +20884,9 @@ var USE_ENDOMORPHISM = CURVE.a === _0n2;
 var ShaError = /*#__PURE__*/ function(Error1) {
     _inherits(ShaError, Error1);
     var _super = _create_super(ShaError);
-    function ShaError(message2) {
+    function ShaError(message) {
         _class_call_check(this, ShaError);
-        return _super.call(this, message2);
+        return _super.call(this, message);
     }
     return ShaError;
 }(_wrap_native_super(Error));
@@ -21788,7 +21788,7 @@ var utils = {
     }),
     hmacSha256: function() {
         var _ref = _async_to_generator(function(key) {
-            var _len, messages, _key, ckey, message2, buffer, createHmac, hash3;
+            var _len, messages, _key, ckey, message, buffer, createHmac, hash3;
             var _arguments = arguments;
             return __generator(this, function(_state) {
                 switch(_state.label){
@@ -21813,10 +21813,10 @@ var utils = {
                         ];
                     case 1:
                         ckey = _state.sent();
-                        message2 = concatBytes.apply(void 0, _to_consumable_array(messages));
+                        message = concatBytes.apply(void 0, _to_consumable_array(messages));
                         return [
                             4,
-                            crypto2.web.subtle.sign("HMAC", ckey, message2)
+                            crypto2.web.subtle.sign("HMAC", ckey, message)
                         ];
                     case 2:
                         buffer = _state.sent();
@@ -22797,8 +22797,8 @@ var Hash = /*#__PURE__*/ function() {
     return Hash;
 }();
 function wrapConstructor(hashConstructor) {
-    var hashC = function(message2) {
-        return hashConstructor().update(toBytes(message2)).digest();
+    var hashC = function(message) {
+        return hashConstructor().update(toBytes(message)).digest();
     };
     var tmp = hashConstructor();
     hashC.outputLen = tmp.outputLen;
@@ -26482,18 +26482,18 @@ var RpcError = /*#__PURE__*/ function(Error1) {
     _inherits(RpcError, Error1);
     var _super = _create_super(RpcError);
     function RpcError() {
-        var message2 = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : "", code = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : UNKNOWN, data = arguments.length > 2 ? arguments[2] : void 0;
+        var message = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : "", code = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : UNKNOWN, data = arguments.length > 2 ? arguments[2] : void 0;
         _class_call_check(this, RpcError);
         var _this;
         _this = _super.call(this);
-        extend(_assert_this_initialized(_this), "message", String(message2));
+        extend(_assert_this_initialized(_this), "message", String(message));
         extend(_assert_this_initialized(_this), "name", _this.constructor.name);
         extend(_assert_this_initialized(_this), "data", data);
         extend(_assert_this_initialized(_this), "code", code);
         if (isFunction(Error.captureStackTrace)) {
             Error.captureStackTrace(_assert_this_initialized(_this), _this.constructor);
         } else {
-            var stack = new Error(message2).stack;
+            var stack = new Error(message).stack;
             stack && extend(_assert_this_initialized(_this), "stack", stack);
         }
         return _this;
@@ -26517,8 +26517,8 @@ function formatErrorData(data) {
 }
 function checkError(error2) {
     if (error2) {
-        var code = error2.code, data = error2.data, message2 = error2.message;
-        throw new RpcError("".concat(code, ": ").concat(message2).concat(formatErrorData(data)), code, data);
+        var code = error2.code, data = error2.data, message = error2.message;
+        throw new RpcError("".concat(code, ": ").concat(message).concat(formatErrorData(data)), code, data);
     }
 }
 var _id;
@@ -26949,15 +26949,15 @@ var WsProvider = /*#__PURE__*/ function() {
         });
         Object.defineProperty(this, _onSocketMessage, {
             writable: true,
-            value: function(message2) {
+            value: function(message) {
                 l.debug(function() {
                     return [
                         "received",
-                        message2.data
+                        message.data
                     ];
                 });
-                _classPrivateFieldBase(_this, _stats)[_stats].total.bytesRecv += message2.data.length;
-                var response = JSON.parse(message2.data);
+                _classPrivateFieldBase(_this, _stats)[_stats].total.bytesRecv += message.data.length;
+                var response = JSON.parse(message.data);
                 return isUndefined(response.method) ? _classPrivateFieldBase(_this, _onSocketMessageResult)[_onSocketMessageResult](response) : _classPrivateFieldBase(_this, _onSocketMessageSubscribe)[_onSocketMessageSubscribe](response);
             }
         });
@@ -34028,12 +34028,12 @@ function compareSet(a, b) {
 }
 // ../../node_modules/@polkadot/types-codec/utils/decodeU8a.js
 function formatFailure(registry, fn, result, param, u8a, i, count, Type2, key) {
-    var message2 = param.message;
+    var message = param.message;
     var type = "";
     try {
         type = ": ".concat(new Type2(registry).toRawType());
     } catch (e) {}
-    return "".concat(fn, ": failed at ").concat(u8aToHex(u8a.subarray(0, 16)), "…").concat(key ? " on ".concat(key) : "", " (index ").concat(i + 1, "/").concat(count, ")").concat(type, ":: ").concat(message2);
+    return "".concat(fn, ": failed at ").concat(u8aToHex(u8a.subarray(0, 16)), "…").concat(key ? " on ".concat(key) : "", " (index ").concat(i + 1, "/").concat(count, ")").concat(type, ":: ").concat(message);
 }
 function decodeU8a(registry, result, u8a, param) {
     var _param = _sliced_to_array(param, 2), Types = _param[0], keys2 = _param[1];
@@ -46556,11 +46556,11 @@ function validateTypes(registry, throwError, types2) {
         return !registry.hasType(type) && !registry.isLookupType(type);
     }).sort();
     if (missing.length !== 0) {
-        var message2 = "Unknown types found, no types for ".concat(missing.join(", "));
+        var message = "Unknown types found, no types for ".concat(missing.join(", "));
         if (throwError) {
-            throw new Error(message2);
+            throw new Error(message);
         } else {
-            l5.warn(message2);
+            l5.warn(message);
         }
     }
     return types2;
@@ -71886,6 +71886,7 @@ function getSs58AddressByAsset(address, asset) {
     return encodeAddress2(address, metadata.network.config.ss58Prefix);
 }
 // src/utils/substrate.ts
+var import_jsbi2 = __toESM(require("jsbi"));
 var connections = {};
 function createConnection(rpc18) {
     return _createConnection.apply(this, arguments);
@@ -71920,12 +71921,43 @@ function _createConnection() {
     });
     return _createConnection.apply(this, arguments);
 }
+function getBalance2(rpc18, account3, asset) {
+    return _getBalance2.apply(this, arguments);
+}
+function _getBalance2() {
+    _getBalance2 = _async_to_generator(function(rpc18, account3, asset) {
+        var connection, raw, data;
+        return __generator(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    return [
+                        4,
+                        createConnection(rpc18)
+                    ];
+                case 1:
+                    connection = _state.sent();
+                    return [
+                        4,
+                        connection.query.system.account(getSs58AddressByAsset(account3, asset))
+                    ];
+                case 2:
+                    raw = _state.sent();
+                    data = raw.toJSON().data;
+                    return [
+                        2,
+                        data.free
+                    ];
+            }
+        });
+    });
+    return _getBalance2.apply(this, arguments);
+}
 function createTransferTx(rpc18, account3, to, amount, asset) {
     return _createTransferTx.apply(this, arguments);
 }
 function _createTransferTx() {
     _createTransferTx = _async_to_generator(function(rpc18, account3, to, amount, asset) {
-        var connection, signed;
+        var connection, tx, existentialDeposit, _ref, balance, paymentInfo, requiredBalance, signed;
         return __generator(this, function(_state) {
             switch(_state.label){
                 case 0:
@@ -71936,11 +71968,30 @@ function _createTransferTx() {
                 case 1:
                     connection = _state.sent();
                     connection.setSigner(account3.signer);
+                    tx = connection.tx.balances.transferKeepAlive(getSs58AddressByAsset(to, asset), amount);
+                    existentialDeposit = connection.consts.balances.existentialDeposit.toString();
                     return [
                         4,
-                        connection.tx.balances.transfer(getSs58AddressByAsset(to, asset), amount).signAsync(getSs58AddressByAsset(account3.address, asset))
+                        Promise.all([
+                            getBalance2(rpc18, account3.address, asset),
+                            tx.paymentInfo(getSs58AddressByAsset(account3.address, asset))
+                        ])
                     ];
                 case 2:
+                    _ref = _sliced_to_array.apply(void 0, [
+                        _state.sent(),
+                        2
+                    ]), balance = _ref[0], paymentInfo = _ref[1];
+                    requiredBalance = import_jsbi2.default.add(import_jsbi2.default.BigInt(amount), import_jsbi2.default.BigInt(existentialDeposit));
+                    requiredBalance = import_jsbi2.default.add(import_jsbi2.default.BigInt(paymentInfo.partialFee), requiredBalance);
+                    if (import_jsbi2.default.LT(import_jsbi2.default.BigInt(balance), requiredBalance)) {
+                        throw Error("InsufficientBalance");
+                    }
+                    return [
+                        4,
+                        tx.signAsync(getSs58AddressByAsset(account3.address, asset))
+                    ];
+                case 3:
                     signed = _state.sent();
                     return [
                         2,
@@ -71958,17 +72009,25 @@ function pay(payment, account3, email) {
 }
 function _pay() {
     _pay = _async_to_generator(function(payment, account3, email) {
-        var payee, amount, asset, productName, assetMetadata, tx, response;
+        var payee, amount, asset, productName, assetMetadata, tx, response, err;
         return __generator(this, function(_state) {
             switch(_state.label){
                 case 0:
                     payee = payment.payee, amount = payment.amount, asset = payment.asset, productName = payment.productName;
                     assetMetadata = ASSET_METADATA[asset];
+                    _state.label = 1;
+                case 1:
+                    _state.trys.push([
+                        1,
+                        4,
+                        ,
+                        5
+                    ]);
                     return [
                         4,
                         createTransferTx(assetMetadata.network.config.rpc, account3, payee, amount, asset)
                     ];
-                case 1:
+                case 2:
                     tx = _state.sent();
                     return [
                         4,
@@ -71988,11 +72047,19 @@ function _pay() {
                             }
                         })
                     ];
-                case 2:
+                case 3:
                     response = _state.sent();
                     if (response.status !== 200 && response.status !== 201) {
                         throw new Error(response.statusText);
                     }
+                    return [
+                        3,
+                        5
+                    ];
+                case 4:
+                    err = _state.sent();
+                    throw err;
+                case 5:
                     return [
                         2
                     ];
@@ -72002,12 +72069,13 @@ function _pay() {
     return _pay.apply(this, arguments);
 }
 function PaymentSummary(param) {
-    var _param_previewMode = param.previewMode, previewMode = _param_previewMode === void 0 ? true : _param_previewMode, payment = param.payment, onPaymentSuccess = param.onPaymentSuccess, onPaymentFailed = param.onPaymentFailed;
+    var _param_previewMode = param.previewMode, previewMode = _param_previewMode === void 0 ? true : _param_previewMode, payment = param.payment, onPaymentSuccess = param.onPaymentSuccess;
     var _ref = (0, import_react_i18next2.useTranslation)(), t2 = _ref.t;
     var _ref1 = _sliced_to_array((0, import_react7.useState)(false), 2), paying = _ref1[0], setPaying = _ref1[1];
     var _ref2 = _sliced_to_array((0, import_react7.useState)(null), 2), account3 = _ref2[0], setAccount = _ref2[1];
     var _ref3 = _sliced_to_array((0, import_react7.useState)(""), 2), email = _ref3[0], setEmail = _ref3[1];
     var _ref4 = _sliced_to_array((0, import_react7.useState)(""), 2), emailError = _ref4[0], setEmailError = _ref4[1];
+    var _ref5 = _sliced_to_array((0, import_react7.useState)(""), 2), paymentError = _ref5[0], setPaymentError = _ref5[1];
     (0, import_react7.useEffect)(function() {
         var assetMetadata = ASSET_METADATA[payment.asset];
         createConnection(assetMetadata.network.config.rpc);
@@ -72026,6 +72094,7 @@ function PaymentSummary(param) {
         };
     }();
     var validateEmail = function() {
+        setEmailError("");
         if (!email) {
             setEmailError("Email is required.");
             return false;
@@ -72055,6 +72124,7 @@ function PaymentSummary(param) {
                             6
                         ];
                     case 1:
+                        setPaymentError("");
                         if (!validateEmail()) return [
                             3,
                             6
@@ -72081,7 +72151,16 @@ function PaymentSummary(param) {
                         ];
                     case 4:
                         err = _state.sent();
-                        onPaymentFailed(err);
+                        switch(err.message){
+                            case "Cancelled":
+                                setPaymentError("");
+                                break;
+                            case "InsufficientBalance":
+                                setPaymentError(t2("insufficientBalanceError") || "Insufficient balance");
+                                break;
+                            default:
+                                setPaymentError(t2("defaultErrorMessage") || "Something went wrong");
+                        }
                         return [
                             3,
                             5
@@ -72153,12 +72232,14 @@ function PaymentSummary(param) {
                     }),
                     !previewMode && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(ExtensionsProvider, {
                         children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(AccountConnection, {
+                            network: ASSET_METADATA[payment.asset].network,
                             onAccountConnected: handleAccountConnected
                         })
                     }),
                     (previewMode || !!account3) && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_antd5.Button, {
                         style: {
-                            marginTop: 32
+                            marginTop: 32,
+                            marginBottom: 8
                         },
                         type: "primary",
                         size: "large",
@@ -72166,6 +72247,10 @@ function PaymentSummary(param) {
                         loading: paying,
                         onClick: handlePay,
                         children: t2("pay")
+                    }),
+                    paymentError && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_antd5.Typography.Text, {
+                        type: "danger",
+                        children: paymentError
                     })
                 ]
             })
@@ -72222,7 +72307,7 @@ var AfterPaymentPreviewer = function(param) {
     var afterPayment = param.afterPayment;
     var _afterPayment_config;
     var _ref = (0, import_react_i18next3.useTranslation)(), t2 = _ref.t;
-    var message2 = (_afterPayment_config = afterPayment.config) === null || _afterPayment_config === void 0 ? void 0 : _afterPayment_config.message;
+    var message = (_afterPayment_config = afterPayment.config) === null || _afterPayment_config === void 0 ? void 0 : _afterPayment_config.message;
     return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", {
         style: {
             width: 380,
@@ -72233,15 +72318,13 @@ var AfterPaymentPreviewer = function(param) {
             " ",
             /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_antd7.Result, {
                 status: "success",
-                title: message2 || t2("thankForYourPayment"),
-                subTitle: !message2 && t2("orderWillBeSent")
+                title: message || t2("thankForYourPayment"),
+                subTitle: !message && t2("orderWillBeSent")
             })
         ]
     });
 };
 var AfterPaymentPreviewer_default = AfterPaymentPreviewer;
-// src/components/Checkout/index.tsx
-var import_react_i18next5 = require("react-i18next");
 // ../../node_modules/@babel/runtime/helpers/esm/classCallCheck.js
 function _classCallCheck(instance2, Constructor) {
     if (!_instanceof(instance2, Constructor)) {
@@ -75585,6 +75668,7 @@ instance.use(import_i18next_browser_languagedetector.default).use(import_react_i
                 privacy: "Privacy",
                 terms: "Terms",
                 defaultErrorMessage: "Whoopsie! Looks like our dApp had one too many cups of coffee this morning. We're working on calming it down. Please try again later.",
+                insufficientBalanceError: "Oops! It seems your balance is not sufficient to process the payment.",
                 contactInformation: "Contact information",
                 paymentMethod: "Payment method",
                 pay: "Pay"
@@ -75601,10 +75685,8 @@ var ContentWrapper = (0, import_styled_components4.default)(Content)(_templateOb
 var MainContent = (0, import_styled_components4.default)(import_antd8.Row)(_templateObject9());
 var CheckoutPreview = function(param) {
     var checkoutData = param.checkoutData, _param_previewMode = param.previewMode, previewMode = _param_previewMode === void 0 ? true : _param_previewMode, _param_isShowAfterPayment = param.isShowAfterPayment, isShowAfterPayment = _param_isShowAfterPayment === void 0 ? false : _param_isShowAfterPayment, _param_loading = param.loading, loading = _param_loading === void 0 ? false : _param_loading;
-    var _ref = (0, import_react_i18next5.useTranslation)(), t2 = _ref.t;
     var branding = checkoutData.branding, item = checkoutData.item, asset = checkoutData.asset, afterPayment = checkoutData.afterPayment;
-    var _ref1 = _sliced_to_array((0, import_react9.useState)(false), 2), completed = _ref1[0], setCompleted = _ref1[1];
-    var _import_antd8_message_useMessage = _sliced_to_array(import_antd8.message.useMessage(), 2), messageApi = _import_antd8_message_useMessage[0], contextHolder = _import_antd8_message_useMessage[1];
+    var _ref = _sliced_to_array((0, import_react9.useState)(false), 2), completed = _ref[0], setCompleted = _ref[1];
     var handlePaymentSuccess = function() {
         if (afterPayment && afterPayment.type === "redirect" && afterPayment.config.url) {
             window.location.href = afterPayment.config.url;
@@ -75612,12 +75694,8 @@ var CheckoutPreview = function(param) {
         }
         setCompleted(true);
     };
-    var handlePaymentFailed = function() {
-        messageApi.error(t2("defaultErrorMessage"));
-    };
     return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(Wrapper2, {
         children: [
-            contextHolder,
             /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Brand_default, {
                 branding: branding,
                 loading: loading
@@ -75647,8 +75725,7 @@ var CheckoutPreview = function(param) {
                                     asset: checkoutData.asset,
                                     productName: checkoutData.item.name
                                 },
-                                onPaymentSuccess: handlePaymentSuccess,
-                                onPaymentFailed: handlePaymentFailed
+                                onPaymentSuccess: handlePaymentSuccess
                             })
                         })
                     ]

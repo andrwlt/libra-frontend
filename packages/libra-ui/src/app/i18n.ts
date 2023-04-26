@@ -22,6 +22,7 @@ i18n
           terms: 'Terms',
           defaultErrorMessage:
             "Whoopsie! Looks like our dApp had one too many cups of coffee this morning. We're working on calming it down. Please try again later.",
+          insufficientBalanceError: 'Oops! It seems your balance is not sufficient to process the payment.',
           contactInformation: 'Contact information',
           paymentMethod: 'Payment method',
           pay: 'Pay',

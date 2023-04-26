@@ -12,26 +12,31 @@ import { ASSET_METADATA } from '../../config';
 async function pay(payment: Payment, account: any, email: string) {
   const { payee, amount, asset, productName } = payment;
   const assetMetadata = ASSET_METADATA[asset];
-  const tx = await createTransferTx(assetMetadata.network.config.rpc, account, payee, amount, asset);
 
-  const response = await fetch(`${window.location.href}/pay`, {
-    body: JSON.stringify({
-      from: getSs58AddressByAsset(account.address, asset),
-      to: getSs58AddressByAsset(payee, asset),
-      description: `${email} + ${productName}`,
-      amount,
-      asset,
-      tx,
-      email,
-    }),
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  try {
+    const tx = await createTransferTx(assetMetadata.network.config.rpc, account, payee, amount, asset);
 
-  if (response.status !== 200 && response.status !== 201) {
-    throw new Error(response.statusText);
+    const response = await fetch(`${window.location.href}/pay`, {
+      body: JSON.stringify({
+        from: getSs58AddressByAsset(account.address, asset),
+        to: getSs58AddressByAsset(payee, asset),
+        description: `${email} + ${productName}`,
+        amount,
+        asset,
+        tx,
+        email,
+      }),
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (response.status !== 200 && response.status !== 201) {
+      throw new Error(response.statusText);
+    }
+  } catch (err) {
+    throw err;
   }
 }
 
@@ -46,18 +51,18 @@ export default function PaymentSummary({
   previewMode = true,
   payment,
   onPaymentSuccess,
-  onPaymentFailed,
 }: {
   previewMode: boolean;
   payment: Payment;
   onPaymentSuccess: Function;
-  onPaymentFailed: Function;
 }) {
   const { t } = useTranslation();
   const [paying, setPaying] = useState(false);
   const [account, setAccount] = useState(null);
   const [email, setEmail] = useState<string>('');
   const [emailError, setEmailError] = useState<string>('');
+  const [paymentError, setPaymentError] = useState<string>('');
+
   useEffect(() => {
     const assetMetadata = ASSET_METADATA[payment.asset];
     // Preload network connection to improve speed.
@@ -69,6 +74,8 @@ export default function PaymentSummary({
   };
 
   const validateEmail = () => {
+    setEmailError('');
+
     if (!email) {
       setEmailError('Email is required.');
       return false;
@@ -89,14 +96,24 @@ export default function PaymentSummary({
         setPaying(false);
       }, 1000);
     } else {
+      setPaymentError('');
+
       if (validateEmail()) {
         setPaying(true);
-
         try {
           await pay(payment, account, email);
           onPaymentSuccess();
-        } catch (err) {
-          onPaymentFailed(err);
+        } catch (err: any) {
+          switch (err.message) {
+            case 'Cancelled':
+              setPaymentError('');
+              break;
+            case 'InsufficientBalance':
+              setPaymentError(t('insufficientBalanceError') || 'Insufficient balance');
+              break;
+            default:
+              setPaymentError(t('defaultErrorMessage') || 'Something went wrong');
+          }
         }
 
         setPaying(false);
@@ -138,15 +155,27 @@ export default function PaymentSummary({
 
         {!previewMode && (
           <ExtensionsProvider>
-            <AccountConnection onAccountConnected={handleAccountConnected}></AccountConnection>
+            <AccountConnection
+              network={ASSET_METADATA[payment.asset].network}
+              onAccountConnected={handleAccountConnected}
+            ></AccountConnection>
           </ExtensionsProvider>
         )}
 
         {(previewMode || !!account) && (
-          <Button style={{ marginTop: 32 }} type="primary" size="large" block loading={paying} onClick={handlePay}>
+          <Button
+            style={{ marginTop: 32, marginBottom: 8 }}
+            type="primary"
+            size="large"
+            block
+            loading={paying}
+            onClick={handlePay}
+          >
             {t('pay')}
           </Button>
         )}
+
+        {paymentError && <Typography.Text type="danger">{paymentError}</Typography.Text>}
       </div>
     </div>
   );
