@@ -1,16 +1,40 @@
 import { DEFAULT_LIMIT, NULL_VALUE } from 'config';
+import { PagingState } from 'types';
 
-export const getPagingData = (data: any[]) => {
-  const hasNextPage = data.length > DEFAULT_LIMIT;
-  const currentPageData = hasNextPage ? data.slice(0, -1) : data;
+const getLastItemId = (data: any[]) => data[data.length - 1]?.id;
+const getFirstItemId = (data: any[]) => data[0]?.id;
 
-  return { data: currentPageData, hasNextPage };
-};
+export const getPagingData = (hasOneMoreRecordData: any[], params: any): { paging: PagingState; data: any[] } => {
+  let hasNextPage, hasPrevPage, data, nextPageFirstId, prevPageLastId, nextRequestAfterId, nextRequestBeforeId;
 
-export const getPrevPagingData = (data: any[]) => {
-  const currentPageData = data.slice(-DEFAULT_LIMIT);
-  const prevPageData = data.slice(0, data.length - DEFAULT_LIMIT);
-  return { data: currentPageData, prevPageData, hasPrevPage: !!prevPageData.length };
+  if (params.beforeId) {
+    hasPrevPage = hasOneMoreRecordData.length > DEFAULT_LIMIT;
+    hasNextPage = true;
+    data = hasOneMoreRecordData.slice(-DEFAULT_LIMIT);
+    prevPageLastId = hasNextPage && getFirstItemId(hasOneMoreRecordData);
+    nextPageFirstId = params.beforeId;
+  } else {
+    hasPrevPage = !!params.afterId;
+    hasNextPage = hasOneMoreRecordData.length > DEFAULT_LIMIT;
+    data = hasOneMoreRecordData.slice(0, DEFAULT_LIMIT);
+    prevPageLastId = params.afterId;
+    nextPageFirstId = hasNextPage && getLastItemId(hasOneMoreRecordData);
+  }
+
+  nextRequestAfterId = hasNextPage && getLastItemId(data);
+  nextRequestBeforeId = hasPrevPage && getFirstItemId(data);
+
+  return {
+    data,
+    paging: {
+      hasNextPage,
+      hasPrevPage,
+      nextPageFirstId,
+      prevPageLastId,
+      nextRequestAfterId,
+      nextRequestBeforeId,
+    },
+  };
 };
 
 export const getExistProps = (item: any) => {

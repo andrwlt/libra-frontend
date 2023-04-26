@@ -3,48 +3,28 @@ import paymentAPI from './paymentAPI';
 import CheckoutAPI from 'features/checkout/checkoutAPI';
 import { createAppAsyncThunk } from 'app/hooks';
 import { RootState } from 'app/store';
-import { Charge, GetChargesState } from './types';
+import { GetChargesState, GetChargesPayload } from './types';
 import { resetStore } from 'features/auth/authSlice';
-import pagingHelper from 'utils/pagingHelper';
+import { LIMIT_PLUS_1 } from 'config';
+import { getPagingData } from 'utils/paging';
 
 export const getCharges = createAppAsyncThunk(
   'checkout/getCharges',
-  async (
-    {
-      isGoNext = true,
-      isFilterChanged = false,
-      queryParams = {},
-    }: { isGoNext?: boolean; isFilterChanged?: boolean; queryParams?: any },
-    { rejectWithValue, getState },
-  ) => {
+  async (searchParams: GetChargesPayload, { rejectWithValue, getState }) => {
     try {
-      const {
-        payment: { charges, chargesPaging },
-      } = getState();
-
-      const params = {
-        data: charges,
-        request: paymentAPI.getCharges,
-        searchParams: queryParams,
-        paging: chargesPaging,
-      };
-
-      let pageDataPromise;
-
-      if (isFilterChanged) {
-        pageDataPromise = pagingHelper.getFirstPage<Charge>(params);
-      } else if (isGoNext) {
-        pageDataPromise = pagingHelper.goNext<Charge>(params);
-      } else {
-        pageDataPromise = pagingHelper.goBack<Charge>(params);
-      }
-
       const [
-        { data, paging },
+        {
+          data: { data: hasMoreOneRecordData },
+        },
         {
           data: { data: checkouts },
         },
-      ] = await Promise.all([pageDataPromise, CheckoutAPI.getCheckouts({})]);
+      ] = await Promise.all([
+        paymentAPI.getCharges({ limit: LIMIT_PLUS_1, ...searchParams }),
+        CheckoutAPI.getCheckouts({}),
+      ]);
+
+      const { data, paging } = getPagingData(hasMoreOneRecordData, searchParams);
 
       return {
         data,
@@ -70,7 +50,6 @@ const initialState: PaymentState = {
   chargesPaging: {
     hasNextPage: false,
     hasPrevPage: false,
-    prevPageData: [],
   },
 };
 

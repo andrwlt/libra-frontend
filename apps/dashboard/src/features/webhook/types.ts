@@ -1,4 +1,4 @@
-import { Paging, PagingParams } from 'types';
+import { PagingState, BasePagingParams } from 'types';
 import { AxiosPromise } from 'axios';
 export interface WebhookBase {
   url: string;
@@ -17,15 +17,15 @@ export interface WebhookListState {
   webhooks: WebhookResponse[];
   getWebhooksLoading: boolean;
   getWebhooksFailed: any;
-  webhooksPaging: Paging<WebhookResponse>;
+  webhooksPaging: PagingState;
 }
 
-export interface WebhooksHookType extends WebhookListState {
-  fetchWebhooks: (params?: { isGoNext?: boolean }) => void;
+export interface UseWebhooksReturnType extends WebhookListState {
+  refreshCurrentPage: () => void;
 }
 
 export interface WebhookAPI {
-  getWebhooks: (params?: PagingParams) => AxiosPromise;
+  getWebhooks: (params?: BasePagingParams) => AxiosPromise;
   getWebhook: (id: string) => AxiosPromise;
   createWebhook: (checkout: WebhookBase) => AxiosPromise;
   updateWebhook: (checkout: WebhookResponse) => AxiosPromise;

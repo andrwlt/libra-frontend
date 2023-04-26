@@ -1,5 +1,5 @@
-import { useEffect, useCallback } from 'react';
-import { useAppSelector, useAppDispatch, useFailed, useSuccess } from 'app/hooks';
+import { useEffect } from 'react';
+import { useAppSelector, useAppDispatch, useFailed, useSuccess, useURLQueryParams } from 'app/hooks';
 import {
   getCheckouts,
   getCheckoutDetails,
@@ -20,8 +20,9 @@ import {
   DeleteCheckoutHookType,
   CreatingCheckoutType,
   UpdatingCheckoutType,
+  CheckoutDetailsState,
+  UseCheckoutsReturnType,
 } from './types';
-
 import { FormInstance } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import PATHS from 'router/paths';
@@ -37,21 +38,24 @@ export const useResetCheckout = () => {
   }, [dispatch]);
 };
 
-export const useCheckouts = () => {
+export const useCheckouts = (): UseCheckoutsReturnType => {
+  const params = useURLQueryParams();
   const state = useAppSelector(selectCheckoutListState);
   const dispatch = useAppDispatch();
 
-  const fetchCheckouts = useCallback((param = {}) => dispatch(getCheckouts(param)), [dispatch]);
-
   useEffect(() => {
-    fetchCheckouts();
-  }, [dispatch, fetchCheckouts]);
+    dispatch(getCheckouts(params));
+  }, [dispatch, params]);
+
+  const refreshCurrentPage = () => {
+    dispatch(getCheckouts(params));
+  };
 
   useFailed(state.getCheckoutsFailed);
-  return { ...state, fetchCheckouts };
+  return { ...state, refreshCurrentPage };
 };
 
-export const useCheckout = (id?: string) => {
+export const useCheckout = (id?: string): CheckoutDetailsState => {
   const state = useAppSelector(selectCheckoutDetailsState);
   const dispatch = useAppDispatch();
 
@@ -119,7 +123,7 @@ export const useReinitCheckoutForm = (form: FormInstance, update: Function) => {
   }, [checkout, form, update]);
 };
 
-export const useDeleteCheckout = (): DeleteCheckoutHookType => {
+export const useDeleteCheckout = (callback: () => void): DeleteCheckoutHookType => {
   const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
   const state = useAppSelector(selectDeleteCheckoutState);
   const dispatch = useAppDispatch();
@@ -130,7 +134,7 @@ export const useDeleteCheckout = (): DeleteCheckoutHookType => {
 
   const message = t('checkoutDeletedSuccessfully');
 
-  useSuccess(state.deleteCheckoutSuccess, message);
+  useSuccess(state.deleteCheckoutSuccess, message, callback);
   useFailed(state.deleteCheckoutFailed);
 
   return {

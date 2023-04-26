@@ -12,7 +12,7 @@ import SelectAccountModal from 'components/SelectAccountModal';
 import CheckoutProductFormItems from 'features/checkout/FormItems/CheckoutProductFormItems';
 import CheckoutBrandingFormItems from 'features/checkout/FormItems/CheckoutBrandingFormItems';
 import Congratulation from './Congratulation';
-import { useDeboundCallback } from 'app/hooks';
+import { useDebounceCallback } from 'app/hooks';
 import { AccountType } from 'features/auth/types';
 import { useTranslation } from 'react-i18next';
 import { formatCheckoutToStringPrice } from 'utils/format/balance';
@@ -54,7 +54,7 @@ export default function Onboarding() {
   loginSuccessRef.current = loginSuccess;
   loginFailedRef.current = loginFailed;
 
-  const onFieldsChange = useDeboundCallback(() => {
+  const onFieldsChange = useDebounceCallback(() => {
     setPreviewingCheckout(form.getFieldsValue());
   });
 

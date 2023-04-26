@@ -1,4 +1,5 @@
 import { AxiosPromise } from 'axios';
+import { GetListPayload, PagingState } from 'types';
 interface PaymentParams {
   limit?: number;
   afterId?: string;
@@ -29,9 +30,11 @@ export interface GetChargesState {
   hasCheckout: boolean;
   firstCheckoutAsset: string;
   isFirstLoad: boolean;
-  chargesPaging: {
-    hasPrevPage: boolean;
-    hasNextPage: boolean;
-    prevPageData: Charge[];
-  };
+  chargesPaging: PagingState;
+}
+
+export interface GetChargesPayload extends GetListPayload {
+  status?: string;
+  'created[gte]'?: string;
+  'created[lte]'?: string;
 }
