@@ -25,11 +25,10 @@ export default function ChargeTable(props: any) {
         const assetMetadata = ASSET_METADATA[asset];
         return (
           <Space align="center" size={20}>
-            <span>{priceFormatHelper.getCheckoutPrice({ price: amount, asset }, assetMetadata)}</span>
-
             <Avatar src={assetMetadata.logo} size={22}>
               {asset}
             </Avatar>
+            <span>{priceFormatHelper.getCheckoutPrice({ price: amount, asset }, assetMetadata)}</span>
 
             <ChargeStatus status={status} />
           </Space>
@@ -37,7 +36,6 @@ export default function ChargeTable(props: any) {
       },
       width: 300,
     },
-
     {
       key: 'description',
       title: tPayment('description'),
