@@ -5,9 +5,10 @@ const en = {
   noExtensionTitle: 'You need to install supported extension to start using Libra.',
   preferExtension: 'There is an awesome extension we prefer.',
 
-  experienceFeature: 'Experience Feature',
-  developerModeIsForPartnerOnly: 'Currently, this feature is for our partners only.',
-  contactUsForMoreDetails: 'Please contact us for more details.',
+  partnerFeature: 'Exclusive Access for Partners',
+  developerModeIsForPartnerOnly: 'Our API and Webhook are accessible for partners only.',
+  pleaseDropLine: 'Please drop us a line at',
+  toGainAccess: 'to gain access!',
 
   toCreateCheckoutLink: `To create your checkout link, please connect your wallet as sign up your Libra account. This will allow you to
     access all the features and benefits of our platform.`,
