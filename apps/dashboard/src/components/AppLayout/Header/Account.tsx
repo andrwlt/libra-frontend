@@ -122,7 +122,7 @@ const Account = () => {
         </Space>
       </Dropdown>
       <Modal
-        width={416}
+        width={480}
         open={isDeveloperInfoModalOpen}
         onCancel={() => setIsDeveloperInfoModalOpen(false)}
         footer={false}
@@ -131,7 +131,7 @@ const Account = () => {
           <Space align="center" size={12}>
             <ExperimentTwoTone style={{ fontSize: 21, position: 'relative', top: '1.5px' }} />
             <Typography.Title style={{ margin: 0, fontSize: 16 }} level={5}>
-              {tWording('experienceFeature')}
+              {tWording('partnerFeature')}
             </Typography.Title>
           </Space>
 
@@ -140,7 +140,9 @@ const Account = () => {
           </Row>
 
           <Row style={{ paddingLeft: 33 }}>
-            <Typography.Text>{tWording('contactUsForMoreDetails')}</Typography.Text>
+            <Typography.Text>{tWording('pleaseDropLine')}</Typography.Text>
+            <Typography.Link href="mailto:partner@golibra.xyz" style={{ marginLeft: 5, marginRight: 5 }}>partner@golibra.xyz</Typography.Link>
+            <Typography.Text>{tWording('toGainAccess')}</Typography.Text>
           </Row>
 
           <Row justify="end" style={{ marginTop: 12 }}>
