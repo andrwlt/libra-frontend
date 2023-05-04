@@ -29,7 +29,7 @@ const layout = {
   hide: 'Hide',
   close: 'Close',
   ok: 'OK',
-  
+
   leavingPageWarningTitle: 'Leave page with unsaved changes?',
   leavingPageWarningContent: 'Leaving this page will delete all unsaved changes.',
   confirmLeavingPage: 'Leave Page',
@@ -48,6 +48,8 @@ const layout = {
   fileSizeWarning: 'Image must smaller than 2MB!',
 
   logout: 'Log Out',
+
+  secret: 'Secret',
 };
 
 export default layout;

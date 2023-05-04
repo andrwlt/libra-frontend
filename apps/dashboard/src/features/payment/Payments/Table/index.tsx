@@ -1,5 +1,4 @@
-import { Table, Button, Row, Space, Avatar } from 'antd';
-import { Fragment } from 'react';
+import { Table, Button, Row, Avatar, Space } from 'antd';
 import getTableLoaderProps from 'components/Common/TableLoader';
 import type { ColumnsType } from 'antd/es/table';
 import { Charge as ChargeDataType } from 'features/payment/types';
@@ -10,6 +9,24 @@ import { LOCALE_WORKSPACE } from 'app/i18n';
 import ChargeStatus from './ChargeStatus';
 import { priceFormatHelper } from '@atscale/libra-ui';
 import { usePageChange } from 'app/hooks';
+import styled from 'styled-components';
+
+const TableWrapper = styled.div`
+  .ant-table-content {
+    .amount-th {
+      &::before {
+        content: none !important;
+      }
+
+      white-space: nowrap;
+    }
+
+    .status-th {
+      padding-left: 3px !important;
+      padding-right: 70px;
+    }
+  }
+`;
 
 export default function ChargeTable(props: any) {
   const { charges, getChargesLoading, chargesPaging } = props;
@@ -19,22 +36,32 @@ export default function ChargeTable(props: any) {
 
   const columns: ColumnsType<ChargeDataType> = [
     {
+      className: 'amount-th',
       key: 'amount',
       title: tPayment('amount'),
-      render: ({ asset, amount, status }) => {
+      width: 100,
+      render: ({ asset, amount }) => {
         const assetMetadata = ASSET_METADATA[asset];
+
         return (
-          <Space align="center" size={20}>
-            <Avatar src={assetMetadata.logo} size={22}>
+          <Space>
+            <Avatar src={assetMetadata.logo} size={24}>
               {asset}
             </Avatar>
-            <span>{priceFormatHelper.getCheckoutPrice({ price: amount, asset }, assetMetadata)}</span>
-
-            <ChargeStatus status={status} />
+            {priceFormatHelper.getCheckoutPrice({ price: amount, asset }, assetMetadata)}
           </Space>
         );
       },
-      width: 300,
+    },
+    {
+      className: 'status-th',
+      title: '',
+      width: 30,
+      key: 'status',
+      align: 'left',
+      render: ({ status }) => {
+        return <ChargeStatus status={status} />;
+      },
     },
     {
       key: 'description',
@@ -57,7 +84,7 @@ export default function ChargeTable(props: any) {
   ];
 
   return (
-    <Fragment>
+    <TableWrapper>
       <Table
         pagination={false}
         columns={columns}
@@ -83,6 +110,6 @@ export default function ChargeTable(props: any) {
       ) : (
         ''
       )}
-    </Fragment>
+    </TableWrapper>
   );
 }
