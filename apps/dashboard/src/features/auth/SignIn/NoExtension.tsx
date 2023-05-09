@@ -20,7 +20,7 @@ const Content = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin-bottom: 150px;
+  margin-bottom: 50px;
 `;
 
 const Image = styled.img`
@@ -42,6 +42,8 @@ const ExtensionLink = styled.a`
   align-items: center;
 `;
 
+const { Title, Text, Link } = Typography;
+
 const NoExtension = () => {
   const { t } = useTranslation(LOCALE_WORKSPACE.WORDING);
 
@@ -49,18 +51,29 @@ const NoExtension = () => {
     <Wrapper>
       <Content>
         <Image src={icon} />
-        <Typography.Title style={{ display: 'block', marginTop: 10 }} level={3}>
+        <Title style={{ display: 'block', marginTop: 10 }} level={3}>
           {t('noExtensionTitle')}
-        </Typography.Title>
-        <Typography.Text style={{ display: 'block', fontSize: 18 }}>{t('preferExtension')}</Typography.Text>
+        </Title>
+        <Text style={{ display: 'block', fontSize: 18 }}>{t('preferExtension')}</Text>
 
-        <Space style={{ marginTop: 50 }}>
+        <Space style={{ marginTop: 40, marginBottom: 40 }}>
           <ExtensionLink href="https://polkadot.js.org/extension/" target="_blank">
             <ExtensionImage src={polkadotIcon} alt="polkadot" />
-            <Typography.Text type="secondary" style={{ display: 'block', marginTop: 10 }}>
+            <Text type="secondary" style={{ display: 'block', marginTop: 10 }}>
               Polkadot.js
-            </Typography.Text>
+            </Text>
           </ExtensionLink>
+        </Space>
+
+        <Space>
+          <Text style={{ display: 'block', fontSize: 18 }}>{t('noExtensionHelpText')}</Text>
+          <Link
+            href="https://discord.com/channels/999216269226164234/1101337338493292705"
+            target="_blank"
+            style={{ display: 'block', fontSize: 18 }}
+          >
+            {t('letUsKnow')}
+          </Link>
         </Space>
       </Content>
     </Wrapper>
