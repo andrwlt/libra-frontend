@@ -2,8 +2,10 @@ const en = {
   noAccountTitle: 'You need a Polkadot account to sign up and start using Libra.',
   noAccountBtnText: 'Close to create one',
 
-  noExtensionTitle: 'You need to install supported extension to start using Libra.',
-  preferExtension: 'There is an awesome extension we prefer.',
+  noExtensionTitle: 'Almost There!',
+  preferExtension: `To connect with Libra, you'll need a compatible wallet. Here are the available wallets to choose from:`,
+  noExtensionHelpText: `Is your wallet software missing from the list?`,
+  letUsKnow: 'Let us know!',
 
   partnerFeature: 'Exclusive Access for Partners',
   developerModeIsForPartnerOnly: 'Our API and Webhook are accessible for partners only.',
@@ -25,6 +27,12 @@ const en = {
   paymentWillShowHere: 'Your received payments will show here',
 
   greatJob: `Great job! You're almost done.`,
+
+  helpCenterTitle: `Need Assistance? We've Got You Covered!`,
+  helpCenterContentPart1: `If you're uncertain about anything or need help, simply`,
+  reachOut: 'reach out to us',
+  helpCenterContentPart2: `on our #help channel in`,
+  helpCenterContentPart3: `We're here for you!`,
 };
 
 export default en;
