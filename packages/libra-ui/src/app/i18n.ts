@@ -15,7 +15,7 @@ i18n
       en: {
         translation: {
           thankForYourPayment: 'Thanks for your payment',
-          orderWillBeSent: 'An order summary will be sent to your email within minutes',
+          productWillBeSent: '{{productName}} will be sent to your email upon successful payment.',
           poweredBy: 'Powered by',
           libraLogo: 'Libra Logo',
           privacy: 'Privacy',
