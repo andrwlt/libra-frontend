@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useAppSelector, useAppDispatch, useFailed, useSuccess, useURLQueryParams } from 'app/hooks';
 import {
   getCheckouts,
@@ -22,6 +22,7 @@ import {
   UpdatingCheckoutType,
   CheckoutDetailsState,
   UseCheckoutsReturnType,
+  UseHelpTextReturnType,
 } from './types';
 import { FormInstance } from 'antd';
 import { useNavigate } from 'react-router-dom';
@@ -140,5 +141,25 @@ export const useDeleteCheckout = (callback: () => void): DeleteCheckoutHookType 
   return {
     ...state,
     handleDeleteCheckout,
+  };
+};
+
+export const useHelpText = (): UseHelpTextReturnType => {
+  const [shouldShowHelpText, setShouldShowHelpText] = useState<any>();
+
+  const onFocus = () => {
+    if (shouldShowHelpText === undefined) {
+      setShouldShowHelpText(true);
+    }
+  };
+
+  const onChange = () => {
+    setShouldShowHelpText(false);
+  };
+
+  return {
+    onFocus,
+    onChange,
+    shouldShowHelpText,
   };
 };

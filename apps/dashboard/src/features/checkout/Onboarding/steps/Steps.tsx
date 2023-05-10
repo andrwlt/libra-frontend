@@ -27,7 +27,7 @@ export default function Steps({ style, children, step, setStepIndex, numberOfSte
         />
       </div>
       <div>{children}</div>
-      <div style={{ paddingTop: '28px' }}>
+      <div style={{ paddingTop: '28px', minWidth: 150, display: 'flex', justifyContent: 'flex-end' }}>
         {step.nextAction ? (
           step.nextAction
         ) : (

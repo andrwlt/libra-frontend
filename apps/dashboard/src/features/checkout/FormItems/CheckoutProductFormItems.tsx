@@ -1,10 +1,12 @@
 import { Input, InputNumber, Select, Form, Space } from 'antd';
 import ImageUploader from 'components/Inputs/ImageUploader';
 import { useTranslation } from 'react-i18next';
-import { FormItemsPropsType } from 'features/checkout/types';
+import { FormItemsPropsType, PriceInputPropsType } from 'features/checkout/types';
 import { ASSET_METADATA } from '@atscale/libra-ui';
 import type { AssetMetadata } from '@atscale/libra-ui';
 import { LOCALE_WORKSPACE } from 'app/i18n';
+import { useHelpText } from 'features/checkout/checkoutHooks';
+import styled from 'styled-components';
 
 const FormItem = Form.Item;
 
@@ -24,34 +26,43 @@ const AssetInput = ({ onChange, value, onboardingMode }: AssetInputProps) => {
   );
 };
 
-interface PriceInputProps {
+interface PriceInputProps extends PriceInputPropsType {
   onChange?: Function;
   value?: number;
-  onboardingMode?: boolean;
 }
 
-const PriceInput = ({ value, onChange, onboardingMode }: PriceInputProps) => {
+const PriceInput = (props: PriceInputProps) => {
+  const { value, onChange, onboardingMode, onPriceInputFocus, onPriceInputChange } = props;
   const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
 
-  const placeholder = onboardingMode ? t('pricePlaceholderOnboarding') : t('pricePlaceholder');
+  const placeholder = onboardingMode ? '1' : t('pricePlaceholder');
 
   return (
     <InputNumber
+      onFocus={() => {
+        if (onboardingMode) {
+          onPriceInputFocus?.();
+        }
+      }}
       min={0}
       value={value}
-      onChange={(val) => onChange?.(val)}
+      onChange={(val) => {
+        onPriceInputChange?.();
+        onChange?.(val);
+      }}
       placeholder={placeholder}
       style={{ width: onboardingMode ? 'calc(100% - 88px)' : '100%' }}
     />
   );
 };
 
-const ProductPriceFormItem = ({ onboardingMode }: FormItemsPropsType) => {
+const ProductPriceFormItem = (props: PriceInputPropsType) => {
+  const { onboardingMode } = props;
   const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
 
   return (
     <Form.Item
-      label={onboardingMode ? '1232132' : 'Price'}
+      label={'Price'}
       noStyle={!!onboardingMode}
       style={{ flexGrow: 1, paddingRight: '32px' }}
       name={['item', 'price']}
@@ -76,7 +87,7 @@ const ProductPriceFormItem = ({ onboardingMode }: FormItemsPropsType) => {
         { type: 'number', message: t<string>('productPriceMustBeNumber') },
       ]}
     >
-      <PriceInput onboardingMode={onboardingMode} />
+      <PriceInput {...props} />
     </Form.Item>
   );
 };
@@ -85,21 +96,50 @@ const ProductNameFormItem = ({ onboardingMode }: FormItemsPropsType) => {
   const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
   const label = onboardingMode ? t('productNameLabelOnboarding') : t('productNameLabel');
   const placeholder = onboardingMode ? t('productNamePlaceholderOnboarding') : t('productNamePlaceholder');
+  const { shouldShowHelpText, onFocus, onChange } = useHelpText();
 
   return (
     <FormItem
+      style={{ marginBottom: onboardingMode ? 32 : 24 }}
       name={['item', 'name']}
       label={label}
       rules={[{ required: true, message: t<string>('productNameIsRequired') }]}
       required
+      help={onboardingMode && shouldShowHelpText ? t('productNameHelpTextOnboarding') : undefined}
     >
-      <Input placeholder={placeholder} />
+      <Input placeholder={placeholder} onFocus={onFocus} onChange={onChange} />
     </FormItem>
   );
 };
 
-const CheckoutProductFormItems = ({ isShow, onboardingMode = false, onFieldsChange }: FormItemsPropsType) => {
+export const StyledOnboardingImageFormItem = styled(Form.Item)`
+  .ant-upload-wrapper {
+    display: flex;
+    justify-content: center;
+
+    .ant-upload {
+      margin-right: 0 !important;
+    }
+  }
+
+  .ant-form-item-explain {
+    text-align: center;
+  }
+`;
+
+const CheckoutProductFormItems = ({ isShow, onboardingMode = false }: FormItemsPropsType) => {
   const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
+  const {
+    shouldShowHelpText: shouldShowPriceHelpText,
+    onFocus: onPriceInputFocus,
+    onChange: onPriceInputChange,
+  } = useHelpText();
+
+  const {
+    shouldShowHelpText: shouldShowImageHelpText,
+    onFocus: onImageInputFocus,
+    onChange: onImageInputChange,
+  } = useHelpText();
 
   return (
     <>
@@ -108,9 +148,18 @@ const CheckoutProductFormItems = ({ isShow, onboardingMode = false, onFieldsChan
           <div style={{ width: '400px' }}>
             <ProductNameFormItem onboardingMode />
 
-            <FormItem label={t('whatIsPrice')} required>
+            <FormItem
+              style={{ height: 106, marginBottom: 0 }}
+              label={t('priceLabelOnboarding')}
+              required
+              help={shouldShowPriceHelpText ? t('priceHelpTextOnboarding') : undefined}
+            >
               <Space.Compact style={{ width: '100%' }}>
-                <ProductPriceFormItem onboardingMode />
+                <ProductPriceFormItem
+                  onboardingMode
+                  onPriceInputFocus={onPriceInputFocus}
+                  onPriceInputChange={onPriceInputChange}
+                />
 
                 <Form.Item name="asset" noStyle>
                   <AssetInput onboardingMode />
@@ -118,9 +167,19 @@ const CheckoutProductFormItems = ({ isShow, onboardingMode = false, onFieldsChan
               </Space.Compact>
             </FormItem>
           </div>
-          <Form.Item name={['item', 'image']} noStyle>
-            <ImageUploader label={t<string>('productImage')} purpose="product_image" />
-          </Form.Item>
+
+          <StyledOnboardingImageFormItem
+            help={shouldShowImageHelpText ? t('productImageHelpTextOnboarding') : undefined}
+            name={['item', 'image']}
+            style={{ width: 340, marginBottom: 0, marginTop: 10, height: 176 }}
+          >
+            <ImageUploader
+              onImageInputFocus={onImageInputFocus}
+              onImageInputChange={onImageInputChange}
+              label={t<string>('productImage')}
+              purpose="product_image"
+            />
+          </StyledOnboardingImageFormItem>
         </Space>
       ) : (
         <>

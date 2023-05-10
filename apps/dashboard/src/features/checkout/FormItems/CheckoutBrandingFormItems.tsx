@@ -3,40 +3,60 @@ import ImageUploader from 'components/Inputs/ImageUploader';
 import { useTranslation } from 'react-i18next';
 import { FormItemsPropsType } from 'features/checkout/types';
 import { LOCALE_WORKSPACE } from 'app/i18n';
+import { useHelpText } from 'features/checkout/checkoutHooks';
+import { StyledOnboardingImageFormItem } from './CheckoutProductFormItems';
 
 const FormItem = Form.Item;
 
 const BrandingNameFormItem = ({ onboardingMode }: FormItemsPropsType) => {
   const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
+  const { shouldShowHelpText, onFocus, onChange } = useHelpText();
 
-  const placeholder = onboardingMode
-    ? t('brandNamePlaceholderOnboarding')
-    : t('brandNamePlaceholder');
+  const placeholder = onboardingMode ? t('brandNamePlaceholderOnboarding') : t('brandNamePlaceholder');
   const label = onboardingMode ? t('brandNameLabelOnboarding') : t('brandNameLabel');
+
+  const style: any = {
+    width: onboardingMode ? '460px' : '100%',
+  };
+
+  if (onboardingMode) {
+    style.height = 106;
+    style.marginBottom = 0;
+  }
 
   return (
     <FormItem
       name={['branding', 'name']}
-      style={{ width: onboardingMode ? '400px' : '100%' }}
+      help={onboardingMode && shouldShowHelpText ? t('brandNameHelpTextOnboarding') : undefined}
+      style={style}
       label={label}
       rules={[{ required: true, message: t<string>('brandNameIsRequired') }]}
     >
-      <Input placeholder={placeholder} />
+      <Input placeholder={placeholder} onFocus={onFocus} onChange={onChange} />
     </FormItem>
   );
 };
 
-const CheckoutBrandingFormItems = ({ isShow, onboardingMode = false, onFieldsChange }: FormItemsPropsType) => {
+const CheckoutBrandingFormItems = ({ isShow, onboardingMode = false }: FormItemsPropsType) => {
   const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
   const label = t('brandLogo');
-
+  const { shouldShowHelpText, onFocus: onImageInputFocus, onChange: onImageInputChange } = useHelpText();
   return (
     <>
       {onboardingMode ? (
         <Space size={60} style={{ display: isShow ? '' : 'none' }}>
-          <Form.Item noStyle name={['branding', 'logo']}>
-            <ImageUploader label={label} purpose="brand_logo" />
-          </Form.Item>
+          <StyledOnboardingImageFormItem
+            style={{ width: 230, height: 176, marginBottom: 0 }}
+            name={['branding', 'logo']}
+            help={shouldShowHelpText ? t('brandLogoHelpTextOnboarding') : undefined}
+          >
+            <ImageUploader
+              label={label}
+              purpose="brand_logo"
+              onImageInputChange={onImageInputChange}
+              onImageInputFocus={onImageInputFocus}
+            />
+          </StyledOnboardingImageFormItem>
 
           <BrandingNameFormItem onboardingMode />
         </Space>

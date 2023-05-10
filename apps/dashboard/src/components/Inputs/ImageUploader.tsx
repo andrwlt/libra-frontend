@@ -13,9 +13,18 @@ interface ImageUploaderProps {
   size?: string;
   value?: string;
   purpose: string;
+  onImageInputFocus?: () => void;
+  onImageInputChange?: () => void;
 }
 
-export default function ImageUploader({ label, onChange, value, purpose }: ImageUploaderProps) {
+export default function ImageUploader({
+  label,
+  onChange,
+  value,
+  purpose,
+  onImageInputFocus,
+  onImageInputChange,
+}: ImageUploaderProps) {
   const { t } = useTranslation(LOCALE_WORKSPACE.LAYOUT);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -37,6 +46,8 @@ export default function ImageUploader({ label, onChange, value, purpose }: Image
   };
 
   const beforeUpload = async (file: RcFile) => {
+    onImageInputChange?.();
+
     const isImage = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/svg+xml';
 
     if (!isImage) {
@@ -71,19 +82,25 @@ export default function ImageUploader({ label, onChange, value, purpose }: Image
   );
 
   return (
-    <Upload
-      customRequest={uploadImage}
-      listType="picture-card"
-      showUploadList={false}
-      onChange={handleChange}
-      beforeUpload={beforeUpload}
-      style={{ height: '100%', width: '100%' }}
+    <div
+      onMouseOver={() => {
+        onImageInputFocus?.();
+      }}
     >
-      {value ? (
-        <img src={value} alt={label} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-      ) : (
-        uploadButton
-      )}
-    </Upload>
+      <Upload
+        customRequest={uploadImage}
+        listType="picture-card"
+        showUploadList={false}
+        onChange={handleChange}
+        beforeUpload={beforeUpload}
+        style={{ height: '100%', width: '100%' }}
+      >
+        {value ? (
+          <img src={value} alt={label} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+        ) : (
+          uploadButton
+        )}
+      </Upload>
+    </div>
   );
 }

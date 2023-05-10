@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { LOCALE_WORKSPACE } from 'app/i18n';
 
-const { Title } = Typography;
+const { Title, Paragraph } = Typography;
 
 interface Props {
   checkoutURL: string;
@@ -46,12 +46,20 @@ export default function Congratulation({ checkoutURL }: Props) {
           <Button>{t('dashboard')}</Button>
         </Link>
       </div>
-      <div style={{ maxWidth: '540px', height: 'auto' }}>
-        <Title level={2} style={{ marginTop: 0 }}>
+      <div style={{ maxWidth: '540px', height: 'auto', marginTop: -100 }}>
+        <Title level={2} style={{ marginTop: 0, textAlign: 'center' }}>
           {tWording('congratulation')}
         </Title>
-        <Title level={5}>{tWording('useUrl')}</Title>
+        <Paragraph style={{ textAlign: 'center' }}>{tWording('congratulationContent')}</Paragraph>
+        <Title level={5} style={{ textAlign: 'center', marginBottom: 16 }}>
+          {tWording('useUrl')}
+        </Title>
+
         <SharableURL url={checkoutURL} />
+
+        <Title level={5} style={{ textAlign: 'center' }}>
+          {tWording('congratulationFooter')}
+        </Title>
       </div>
     </div>
   );

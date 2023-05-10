@@ -121,8 +121,20 @@ export interface FormItemsPropsType {
   onFieldsChange?: () => void;
 }
 
+export interface PriceInputPropsType extends FormItemsPropsType {
+  shouldShowHelpText?: boolean | undefined;
+  onPriceInputFocus?: () => void;
+  onPriceInputChange?: () => void;
+}
+
 export type AddMoreInfo = <T>(original: T, getState: () => RootState) => T;
 
 export interface UseCheckoutsReturnType extends CheckoutListState {
   refreshCurrentPage: () => void;
+}
+
+export interface UseHelpTextReturnType {
+  shouldShowHelpText: boolean | undefined;
+  onFocus: () => void;
+  onChange: () => void;
 }
