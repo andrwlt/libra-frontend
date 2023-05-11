@@ -14,14 +14,14 @@ i18n
     resources: {
       en: {
         translation: {
-          thankForYourPayment: 'Thanks for your payment',
-          orderWillBeSent: 'An order summary will be sent to your email within minutes',
+          emailHelpText: '{{productName}} will be sent to your email upon successful payment.',
+          thankForYourPayment: 'Thanks for Your Purchase!',
+          productWillBeSent: 'Get ready! Your {{productName}} is zooming its way to your inbox.',
           poweredBy: 'Powered by',
           libraLogo: 'Libra Logo',
           privacy: 'Privacy',
           terms: 'Terms',
-          defaultErrorMessage:
-            "Whoopsie! Looks like our dApp had one too many cups of coffee this morning. We're working on calming it down. Please try again later.",
+          defaultErrorMessage: "Oops! Something went wrong. Please contact help@golibra.xyz to get the supports.",
           insufficientBalanceError: 'Oops! It seems your balance is not sufficient to process the payment.',
           contactInformation: 'Contact information',
           paymentMethod: 'Payment method',

@@ -111,15 +111,21 @@ function FooterLinks() {
   const { t } = useTranslation();
   return (
     <Space>
-      <Paragraph style={{ margin: 0 }} strong>
-        {t('poweredBy')}
-      </Paragraph>
-      <LibraLogo height={18}></LibraLogo>
+      <a href="https://golibra.xyz" target="_blank">
+        <Space>
+          <Paragraph style={{ margin: 0 }} strong>
+            {t('poweredBy')}
+          </Paragraph>
+          <LibraLogo height={18}></LibraLogo>
+        </Space>
+      </a>
 
       <Divider type="vertical" style={{ height: 20 }} />
 
-      <FooterLink> {t('privacy')}</FooterLink>
-      <FooterLink>{t('terms')}</FooterLink>
+      <FooterLink href="https://golibra.xyz/privacy-policy" target='_blank'> {t('privacy')}</FooterLink>
+      <FooterLink href="https://golibra.xyz/terms-of-service" target="_blank">
+        {t('terms')}
+      </FooterLink>
     </Space>
   );
 }

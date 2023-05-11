@@ -17849,15 +17849,23 @@ function FooterLinks() {
     var _ref = (0, import_react_i18next.useTranslation)(), t2 = _ref.t;
     return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_antd.Space, {
         children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Paragraph, {
-                style: {
-                    margin: 0
-                },
-                strong: true,
-                children: t2("poweredBy")
-            }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(LibraLogo, {
-                height: 18
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("a", {
+                href: "https://golibra.xyz",
+                target: "_blank",
+                children: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_antd.Space, {
+                    children: [
+                        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Paragraph, {
+                            style: {
+                                margin: 0
+                            },
+                            strong: true,
+                            children: t2("poweredBy")
+                        }),
+                        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(LibraLogo, {
+                            height: 18
+                        })
+                    ]
+                })
             }),
             /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Divider, {
                 type: "vertical",
@@ -17866,12 +17874,16 @@ function FooterLinks() {
                 }
             }),
             /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(FooterLink, {
+                href: "https://golibra.xyz/privacy-policy",
+                target: "_blank",
                 children: [
                     " ",
                     t2("privacy")
                 ]
             }),
             /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(FooterLink, {
+                href: "https://golibra.xyz/terms-of-service",
+                target: "_blank",
                 children: t2("terms")
             })
         ]
@@ -71952,6 +71964,45 @@ function _getBalance2() {
     });
     return _getBalance2.apply(this, arguments);
 }
+var getPaymentInfo = function() {
+    var _ref = _async_to_generator(function(tx, account3, asset) {
+        var info6, _23;
+        return __generator(this, function(_state) {
+            switch(_state.label){
+                case 0:
+                    _state.trys.push([
+                        0,
+                        2,
+                        ,
+                        3
+                    ]);
+                    return [
+                        4,
+                        tx.paymentInfo(getSs58AddressByAsset(account3.address, asset))
+                    ];
+                case 1:
+                    info6 = _state.sent();
+                    return [
+                        2,
+                        info6
+                    ];
+                case 2:
+                    _23 = _state.sent();
+                    return [
+                        2,
+                        null
+                    ];
+                case 3:
+                    return [
+                        2
+                    ];
+            }
+        });
+    });
+    return function getPaymentInfo(tx, account3, asset) {
+        return _ref.apply(this, arguments);
+    };
+}();
 function createTransferTx(rpc18, account3, to, amount, asset) {
     return _createTransferTx.apply(this, arguments);
 }
@@ -71974,7 +72025,7 @@ function _createTransferTx() {
                         4,
                         Promise.all([
                             getBalance2(rpc18, account3.address, asset),
-                            tx.paymentInfo(getSs58AddressByAsset(account3.address, asset))
+                            getPaymentInfo(tx, account3, asset)
                         ])
                     ];
                 case 2:
@@ -71983,7 +72034,9 @@ function _createTransferTx() {
                         2
                     ]), balance = _ref[0], paymentInfo = _ref[1];
                     requiredBalance = import_jsbi2.default.add(import_jsbi2.default.BigInt(amount), import_jsbi2.default.BigInt(existentialDeposit));
-                    requiredBalance = import_jsbi2.default.add(import_jsbi2.default.BigInt(paymentInfo.partialFee), requiredBalance);
+                    if (paymentInfo) {
+                        requiredBalance = import_jsbi2.default.add(import_jsbi2.default.BigInt(paymentInfo.partialFee), requiredBalance);
+                    }
                     if (import_jsbi2.default.LT(import_jsbi2.default.BigInt(balance), requiredBalance)) {
                         throw Error("InsufficientBalance");
                     }
@@ -72076,6 +72129,8 @@ function PaymentSummary(param) {
     var _ref3 = _sliced_to_array((0, import_react7.useState)(""), 2), email = _ref3[0], setEmail = _ref3[1];
     var _ref4 = _sliced_to_array((0, import_react7.useState)(""), 2), emailError = _ref4[0], setEmailError = _ref4[1];
     var _ref5 = _sliced_to_array((0, import_react7.useState)(""), 2), paymentError = _ref5[0], setPaymentError = _ref5[1];
+    var _ref6 = _sliced_to_array((0, import_react7.useState)(false), 2), emailHovered = _ref6[0], setEmailHovered = _ref6[1];
+    var _ref7 = _sliced_to_array((0, import_react7.useState)(false), 2), emailFocused = _ref7[0], setEmailFocused = _ref7[1];
     (0, import_react7.useEffect)(function() {
         var assetMetadata = ASSET_METADATA[payment.asset];
         createConnection(assetMetadata.network.config.rpc);
@@ -72104,6 +72159,18 @@ function PaymentSummary(param) {
             return false;
         }
         return true;
+    };
+    var hasEmailHelpText = !emailError && (emailFocused || emailHovered);
+    var helpText = function() {
+        if (emailError) {
+            return emailError;
+        }
+        if (hasEmailHelpText) {
+            return t2("emailHelpText", {
+                productName: payment.productName
+            });
+        }
+        return "";
     };
     var handlePay = function() {
         var _ref = _async_to_generator(function() {
@@ -72196,22 +72263,33 @@ function PaymentSummary(param) {
             /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_antd5.Form, {
                 layout: "vertical",
                 requiredMark: false,
-                children: /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_antd5.Form.Item, {
+                onMouseEnter: function() {
+                    setEmailHovered(true);
+                },
+                onMouseLeave: function() {
+                    setEmailHovered(false);
+                },
+                onFocus: function() {
+                    setEmailFocused(true);
+                    setEmailError("");
+                },
+                onBlur: function() {
+                    return setEmailFocused(false);
+                },
+                children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_antd5.Form.Item, {
                     label: "Email",
                     validateStatus: emailError ? "error" : void 0,
-                    children: [
-                        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_antd5.Input, {
-                            value: email,
-                            onInput: function(e) {
-                                setEmail(e.target.value);
-                            },
-                            placeholder: "john.doe@example.com"
-                        }),
-                        emailError && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_antd5.Typography.Text, {
-                            type: "danger",
-                            children: emailError
-                        })
-                    ]
+                    help: helpText(),
+                    style: {
+                        height: 88
+                    },
+                    children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_antd5.Input, {
+                        value: email,
+                        onInput: function(e) {
+                            setEmail(e.target.value);
+                        },
+                        placeholder: "john.doe@example.com"
+                    })
                 })
             }),
             /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", {
@@ -72236,7 +72314,7 @@ function PaymentSummary(param) {
                             onAccountConnected: handleAccountConnected
                         })
                     }),
-                    (previewMode || !!account3) && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_antd5.Button, {
+                    (previewMode || account3 && account3.signer) && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_antd5.Button, {
                         style: {
                             marginTop: 32,
                             marginBottom: 8
@@ -72304,7 +72382,7 @@ var import_antd7 = require("antd");
 var import_react_i18next3 = require("react-i18next");
 var import_jsx_runtime9 = require("react/jsx-runtime");
 var AfterPaymentPreviewer = function(param) {
-    var afterPayment = param.afterPayment;
+    var afterPayment = param.afterPayment, productName = param.productName;
     var _afterPayment_config;
     var _ref = (0, import_react_i18next3.useTranslation)(), t2 = _ref.t;
     var message = (_afterPayment_config = afterPayment.config) === null || _afterPayment_config === void 0 ? void 0 : _afterPayment_config.message;
@@ -72319,7 +72397,9 @@ var AfterPaymentPreviewer = function(param) {
             /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_antd7.Result, {
                 status: "success",
                 title: message || t2("thankForYourPayment"),
-                subTitle: !message && t2("orderWillBeSent")
+                subTitle: !message && t2("productWillBeSent", {
+                    productName: productName
+                })
             })
         ]
     });
@@ -75661,13 +75741,14 @@ instance.use(import_i18next_browser_languagedetector.default).use(import_react_i
     resources: {
         en: {
             translation: {
-                thankForYourPayment: "Thanks for your payment",
-                orderWillBeSent: "An order summary will be sent to your email within minutes",
+                emailHelpText: "{{productName}} will be sent to your email upon successful payment.",
+                thankForYourPayment: "Thanks for Your Purchase!",
+                productWillBeSent: "Get ready! Your {{productName}} is zooming its way to your inbox.",
                 poweredBy: "Powered by",
                 libraLogo: "Libra Logo",
                 privacy: "Privacy",
                 terms: "Terms",
-                defaultErrorMessage: "Whoopsie! Looks like our dApp had one too many cups of coffee this morning. We're working on calming it down. Please try again later.",
+                defaultErrorMessage: "Oops! Something went wrong. Please contact help@golibra.xyz to get the supports.",
                 insufficientBalanceError: "Oops! It seems your balance is not sufficient to process the payment.",
                 contactInformation: "Contact information",
                 paymentMethod: "Payment method",
@@ -75716,7 +75797,8 @@ var CheckoutPreview = function(param) {
                         /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_antd8.Col, {
                             span: 12,
                             children: (completed || isShowAfterPayment) && afterPayment ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(AfterPaymentPreviewer_default, {
-                                afterPayment: afterPayment
+                                afterPayment: afterPayment,
+                                productName: item.name || "The product"
                             }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(PaymentSummary, {
                                 previewMode: previewMode,
                                 payment: {

@@ -58,10 +58,12 @@ export default function PaymentSummary({
 }) {
   const { t } = useTranslation();
   const [paying, setPaying] = useState(false);
-  const [account, setAccount] = useState(null);
+  const [account, setAccount] = useState<any>(null);
   const [email, setEmail] = useState<string>('');
   const [emailError, setEmailError] = useState<string>('');
   const [paymentError, setPaymentError] = useState<string>('');
+  const [emailHovered, setEmailHovered] = useState(false);
+  const [emailFocused, setEmailFocused] = useState(false);
 
   useEffect(() => {
     const assetMetadata = ASSET_METADATA[payment.asset];
@@ -88,6 +90,18 @@ export default function PaymentSummary({
 
     return true;
   };
+
+  const hasEmailHelpText = !emailError && (emailFocused || emailHovered);
+
+  const helpText = () => {
+    if (emailError) {
+      return emailError;
+    }
+    if (hasEmailHelpText) {
+      return t('emailHelpText', { productName: payment.productName });
+    }
+    return '';
+  }
 
   const handlePay = async () => {
     if (previewMode) {
@@ -127,8 +141,27 @@ export default function PaymentSummary({
         {t('contactInformation')}
       </Typography.Title>
 
-      <Form layout="vertical" requiredMark={false}>
-        <Form.Item label="Email" validateStatus={emailError ? 'error' : undefined}>
+      <Form
+        layout="vertical"
+        requiredMark={false}
+        onMouseEnter={() => {
+          setEmailHovered(true);
+        }}
+        onMouseLeave={() => {
+          setEmailHovered(false);
+        }}
+        onFocus={() => {
+          setEmailFocused(true);
+          setEmailError('');
+        }}
+        onBlur={() => setEmailFocused(false)}
+      >
+        <Form.Item
+          label="Email"
+          validateStatus={emailError ? 'error' : undefined}
+          help={helpText()}
+          style={{ height: 88 }}
+        >
           <Input
             value={email}
             onInput={(e: any) => {
@@ -136,7 +169,6 @@ export default function PaymentSummary({
             }}
             placeholder="john.doe@example.com"
           ></Input>
-          {emailError && <Typography.Text type="danger">{emailError}</Typography.Text>}
         </Form.Item>
       </Form>
 
@@ -161,8 +193,7 @@ export default function PaymentSummary({
             ></AccountConnection>
           </ExtensionsProvider>
         )}
-
-        {(previewMode || !!account) && (
+        {(previewMode || (account && account.signer)) && (
           <Button
             style={{ marginTop: 32, marginBottom: 8 }}
             type="primary"

@@ -76,7 +76,7 @@ const CheckoutPreview = ({
           </Col>
           <Col span={12}>
             {(completed || isShowAfterPayment) && afterPayment ? (
-              <AfterPaymentPreviewer afterPayment={afterPayment} />
+              <AfterPaymentPreviewer afterPayment={afterPayment} productName={item.name || 'The product'}/>
             ) : (
               <PaymentSummary
                 previewMode={previewMode}
