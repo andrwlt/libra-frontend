@@ -21,8 +21,6 @@ const en = {
   useUrl: 'Please use the url bellow to start selling your product.',
   congratulationFooter: 'Let the world know about your exciting new crypto venture!',
 
-
-
   hasPaymentNoCheckoutSubtitle: 'To accept payments from your customers, you need to create a checkout first.',
   noPaymentHasCheckoutSubTitle: 'Promote your checkout and start earning your first {{asset}}.',
   noPaymentHasCheckoutTitle: `It's happening…`,
@@ -38,8 +36,9 @@ const en = {
   helpCenterContentPart2: `on our #help channel in`,
   helpCenterContentPart3: `We're here for you!`,
 
+  welcomeOkBtnText: 'Get Started',
   welcomeTitle: `Let's Get Started`,
-  welcomeContent: `With Libra Checkout, you can easily sell your digital products and receive payments in cryptocurrencies. Just follow these 3 simple steps, and your crypto business will be up and running in no time.`
+  welcomeContent: `With Libra Checkout, you can easily sell your digital products and receive payments in cryptocurrencies. Just follow these 3 simple steps, and your crypto business will be up and running in no time.`,
 };
 
 export default en;

@@ -111,7 +111,7 @@ const initCheckout: CheckoutResponseAfterConvertingPrice = {
     },
   },
   payee: '',
-  asset: 'wnd',
+  asset: 'ksm',
   active: false,
   created: '',
 };

@@ -13,10 +13,18 @@ interface ImageUploaderProps {
   size?: string;
   value?: string;
   purpose: string;
-  onImageInputFocus?: () => void;
+  onHoverImageInput?: () => void;
+  onMouseLeaveImageInput?: () => void;
 }
 
-export default function ImageUploader({ label, onChange, value, purpose, onImageInputFocus }: ImageUploaderProps) {
+export default function ImageUploader({
+  label,
+  onChange,
+  value,
+  purpose,
+  onHoverImageInput,
+  onMouseLeaveImageInput,
+}: ImageUploaderProps) {
   const { t } = useTranslation(LOCALE_WORKSPACE.LAYOUT);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -73,10 +81,11 @@ export default function ImageUploader({ label, onChange, value, purpose, onImage
 
   return (
     <div
-      onFocus={() => {
-        setTimeout(() => {
-          onImageInputFocus?.();
-        });
+      onMouseOver={() => {
+        onHoverImageInput?.();
+      }}
+      onMouseLeave={() => {
+        onMouseLeaveImageInput?.();
       }}
     >
       <Upload

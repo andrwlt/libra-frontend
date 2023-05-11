@@ -3,14 +3,15 @@ import ImageUploader from 'components/Inputs/ImageUploader';
 import { useTranslation } from 'react-i18next';
 import { FormItemsPropsType } from 'features/checkout/types';
 import { LOCALE_WORKSPACE } from 'app/i18n';
-import { useHelpText } from 'features/checkout/checkoutHooks';
+import { useCheckFieldError, useHelpText } from 'features/checkout/checkoutHooks';
 import { StyledOnboardingImageFormItem } from './CheckoutProductFormItems';
 
 const FormItem = Form.Item;
 
 const BrandingNameFormItem = ({ onboardingMode }: FormItemsPropsType) => {
   const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
-  const { shouldShowHelpText, onFocus } = useHelpText();
+  const isFieldError = useCheckFieldError(['branding', 'name']);
+  const { shouldShowHelpText, onFocus, onChange, onBlur } = useHelpText(isFieldError);
 
   const placeholder = onboardingMode ? t('brandNamePlaceholderOnboarding') : t('brandNamePlaceholder');
   const label = onboardingMode ? t('brandNameLabelOnboarding') : t('brandNameLabel');
@@ -32,7 +33,12 @@ const BrandingNameFormItem = ({ onboardingMode }: FormItemsPropsType) => {
       label={label}
       rules={[{ required: true, message: t<string>('brandNameIsRequired') }]}
     >
-      <Input placeholder={placeholder} onFocus={onFocus} />
+      <Input
+        placeholder={placeholder}
+        onFocus={onboardingMode ? onFocus : () => {}}
+        onChange={onboardingMode ? (e) => onChange(e.target.value) : () => {}}
+        onBlur={onboardingMode ? onBlur : () => {}}
+      />
     </FormItem>
   );
 };
@@ -40,7 +46,9 @@ const BrandingNameFormItem = ({ onboardingMode }: FormItemsPropsType) => {
 const CheckoutBrandingFormItems = ({ isShow, onboardingMode = false }: FormItemsPropsType) => {
   const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
   const label = t('brandLogo');
-  const { shouldShowHelpText, onFocus: onImageInputFocus } = useHelpText();
+
+  const isFieldError = false;
+  const { shouldShowHelpText, onFocus: onHoverImageInput, onBlur: onMouseLeaveImageInput } = useHelpText(isFieldError);
   return (
     <>
       {onboardingMode ? (
@@ -50,7 +58,12 @@ const CheckoutBrandingFormItems = ({ isShow, onboardingMode = false }: FormItems
             name={['branding', 'logo']}
             help={shouldShowHelpText ? t('brandLogoHelpTextOnboarding') : undefined}
           >
-            <ImageUploader label={label} purpose="brand_logo" onImageInputFocus={onImageInputFocus} />
+            <ImageUploader
+              label={label}
+              purpose="brand_logo"
+              onHoverImageInput={onHoverImageInput}
+              onMouseLeaveImageInput={onMouseLeaveImageInput}
+            />
           </StyledOnboardingImageFormItem>
 
           <BrandingNameFormItem onboardingMode />

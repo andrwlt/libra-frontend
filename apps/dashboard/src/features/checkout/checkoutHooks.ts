@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAppSelector, useAppDispatch, useFailed, useSuccess, useURLQueryParams } from 'app/hooks';
 import {
   getCheckouts,
@@ -24,10 +24,11 @@ import {
   UseCheckoutsReturnType,
   UseHelpTextReturnType,
 } from './types';
-import { FormInstance } from 'antd';
+import { FormInstance, Form } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import PATHS from 'router/paths';
 import { LOCALE_WORKSPACE } from 'app/i18n';
+import { ASSET_METADATA } from '@atscale/libra-ui';
 
 export const useResetCheckout = () => {
   const dispatch = useAppDispatch();
@@ -144,17 +145,61 @@ export const useDeleteCheckout = (callback: () => void): DeleteCheckoutHookType 
   };
 };
 
-export const useHelpText = (): UseHelpTextReturnType => {
-  const [shouldShowHelpText, setShouldShowHelpText] = useState(false);
+export const useHelpText = (isError?: boolean): UseHelpTextReturnType => {
+  const [shouldShowHelpText, setShouldShowHelpText] = useState<any>();
+  const isFieldTouchedRef = useRef<any>(null);
+
+  const form = Form.useFormInstance();
 
   const onFocus = () => {
-    if (!shouldShowHelpText) {
+    if (!isError) {
       setShouldShowHelpText(true);
+      isFieldTouchedRef.current = true;
+    }
+  };
+
+  const isEmpty = (value: any) => {
+    return value === null || value === undefined || value === '';
+  };
+
+  const isPriceTooSmall = (value: number) => {
+    const asset = form.getFieldValue(['asset']);
+    const { decimals } = ASSET_METADATA[asset];
+    const smallestPrice = 1 / Math.pow(10, decimals);
+
+    return value === 0 || (value && value < smallestPrice);
+  };
+
+  const onChange = (value: any, isPriceInput = false) => {
+    if (isEmpty(value) || (isPriceInput && isPriceTooSmall(value))) {
+      if (shouldShowHelpText) {
+        setShouldShowHelpText(false);
+      }
+    } else {
+      if (!shouldShowHelpText) {
+        setShouldShowHelpText(true);
+      }
+    }
+  };
+
+  const onBlur = () => {
+    if (!isError) {
+      setShouldShowHelpText(false);
     }
   };
 
   return {
     onFocus,
+    onChange,
     shouldShowHelpText,
+    onBlur,
+    setShouldShowHelpText,
   };
+};
+
+export const useCheckFieldError = (fieldName: string[]) => {
+  const form = Form.useFormInstance();
+  const fieldErrors = form.getFieldError(fieldName);
+
+  return !!fieldErrors.length;
 };

@@ -25,7 +25,7 @@ const Header = styled.div`
   margin-left: auto;
   margin-right: auto;
   height: auto;
-  padding-top: 32px;
+  padding-top: 40px;
   padding-bottom: 22px;
 `;
 
@@ -66,6 +66,7 @@ export default function Onboarding() {
 
   useEffect(() => {
     const modal = Modal.info({
+      okText: tWording('welcomeOkBtnText'),
       maskClosable: true,
       width: 600,
       icon: null,

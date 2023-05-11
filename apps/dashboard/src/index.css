@@ -50,6 +50,7 @@ body {
 .ant-form .ant-upload-select {
   width: 132px !important;
   height: 132px !important;
+  overflow: hidden;
 }
 
 .ant-form .upload-image--large .ant-upload-select {
