@@ -1,11 +1,11 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
 import Previewer from 'components/Checkout/Previewer';
 import { Checkout as CheckoutPreview } from '@atscale/libra-ui';
 import Loading from 'components/Common/Loading';
 import Steps from './steps/Steps';
 import ConnectWallet from '../FormItems/ConnectWallet';
-import { theme, Button, Form } from 'antd';
+import { theme, Button, Form, Modal, Space } from 'antd';
 import { useLogin, useConnectExtension } from 'features/auth/authHooks';
 import { useCheckout, useCreateCheckout, useResetCheckout } from 'features/checkout/checkoutHooks';
 import SelectAccountModal from 'components/SelectAccountModal';
@@ -18,12 +18,15 @@ import { useTranslation } from 'react-i18next';
 import { formatCheckoutToStringPrice } from 'utils/format/balance';
 import { LOCALE_WORKSPACE } from 'app/i18n';
 import { initMessageAfterPayment } from 'config';
+import waveIcon from 'assets/wave.png';
 
 const Header = styled.div`
   padding: 32px 64px;
   margin-left: auto;
   margin-right: auto;
   height: auto;
+  padding-top: 40px;
+  padding-bottom: 22px;
 `;
 
 const Content = styled.div`
@@ -36,6 +39,7 @@ const Content = styled.div`
 
 export default function Onboarding() {
   const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
+  const { t: tWording } = useTranslation(LOCALE_WORKSPACE.WORDING);
   const [form] = Form.useForm();
   const { checkout } = useCheckout();
 
@@ -60,6 +64,26 @@ export default function Onboarding() {
 
   useResetCheckout();
 
+  useEffect(() => {
+    const modal = Modal.info({
+      okText: tWording('welcomeOkBtnText'),
+      maskClosable: true,
+      width: 600,
+      icon: null,
+      className: 'welcome-modal',
+      title: (
+        <Space align="center" size={6}>
+          <img alt="welcome-icon" src={waveIcon} style={{ width: 22, lineHeight: 1 }} />{' '}
+          <span style={{ lineHeight: 1.5 }}>{tWording('welcomeTitle')}</span>
+        </Space>
+      ),
+      content: tWording<string>('welcomeContent'),
+    });
+
+    return () => {
+      modal.destroy();
+    };
+  }, [tWording]);
   const {
     token: { boxShadow, colorBgLayout },
   } = theme.useToken();
@@ -128,7 +152,7 @@ export default function Onboarding() {
             <CheckoutBrandingFormItems isShow={stepIndex === 1} onboardingMode onFieldsChange={onFieldsChange} />
           </Form>
 
-          <ConnectWallet isShow={stepIndex === 3} />
+          <ConnectWallet isShow={stepIndex === 2} />
         </Steps>
       </Header>
 

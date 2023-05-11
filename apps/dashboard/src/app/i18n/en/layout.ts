@@ -10,7 +10,7 @@ const layout = {
   checkout: 'Checkout',
   copied: 'Copied',
   copy: 'Copy',
-  orShareItOn: 'or share it on',
+  orShareItOn: 'Or share it directly on',
   loading: 'Loading...',
   checkouts: 'Checkouts',
   developers: 'Developers',

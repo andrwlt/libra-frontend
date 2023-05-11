@@ -50,6 +50,7 @@ body {
 .ant-form .ant-upload-select {
   width: 132px !important;
   height: 132px !important;
+  overflow: hidden;
 }
 
 .ant-form .upload-image--large .ant-upload-select {
@@ -97,4 +98,12 @@ body {
 
 .ant-avatar > img {
   object-fit: contain !important;
+}
+
+.welcome-modal .ant-modal-confirm-title .ant-space-item:first-child {
+  height: 22px;
+}
+
+.welcome-modal .ant-modal-confirm-content {
+  padding-left: 34px;
 }

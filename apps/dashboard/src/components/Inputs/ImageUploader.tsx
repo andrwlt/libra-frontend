@@ -13,9 +13,18 @@ interface ImageUploaderProps {
   size?: string;
   value?: string;
   purpose: string;
+  onHoverImageInput?: () => void;
+  onMouseLeaveImageInput?: () => void;
 }
 
-export default function ImageUploader({ label, onChange, value, purpose }: ImageUploaderProps) {
+export default function ImageUploader({
+  label,
+  onChange,
+  value,
+  purpose,
+  onHoverImageInput,
+  onMouseLeaveImageInput,
+}: ImageUploaderProps) {
   const { t } = useTranslation(LOCALE_WORKSPACE.LAYOUT);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -71,19 +80,28 @@ export default function ImageUploader({ label, onChange, value, purpose }: Image
   );
 
   return (
-    <Upload
-      customRequest={uploadImage}
-      listType="picture-card"
-      showUploadList={false}
-      onChange={handleChange}
-      beforeUpload={beforeUpload}
-      style={{ height: '100%', width: '100%' }}
+    <div
+      onMouseOver={() => {
+        onHoverImageInput?.();
+      }}
+      onMouseLeave={() => {
+        onMouseLeaveImageInput?.();
+      }}
     >
-      {value ? (
-        <img src={value} alt={label} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
-      ) : (
-        uploadButton
-      )}
-    </Upload>
+      <Upload
+        customRequest={uploadImage}
+        listType="picture-card"
+        showUploadList={false}
+        onChange={handleChange}
+        beforeUpload={beforeUpload}
+        style={{ height: '100%', width: '100%' }}
+      >
+        {value ? (
+          <img src={value} alt={label} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+        ) : (
+          uploadButton
+        )}
+      </Upload>
+    </div>
   );
 }
