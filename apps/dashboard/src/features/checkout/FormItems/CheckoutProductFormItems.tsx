@@ -96,19 +96,21 @@ const ProductNameFormItem = ({ onboardingMode }: FormItemsPropsType) => {
   const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
   const label = onboardingMode ? t('productNameLabelOnboarding') : t('productNameLabel');
   const placeholder = onboardingMode ? t('productNamePlaceholderOnboarding') : t('productNamePlaceholder');
-  const { shouldShowHelpText, onFocus, onChange } = useHelpText();
+  const { shouldShowHelpText, onFocus } = useHelpText();
 
   return (
-    <FormItem
-      style={{ marginBottom: onboardingMode ? 32 : 24 }}
-      name={['item', 'name']}
-      label={label}
-      rules={[{ required: true, message: t<string>('productNameIsRequired') }]}
-      required
-      help={onboardingMode && shouldShowHelpText ? t('productNameHelpTextOnboarding') : undefined}
-    >
-      <Input placeholder={placeholder} onFocus={onFocus} onChange={onChange} />
-    </FormItem>
+    <div style={{ marginBottom: onboardingMode ? 3 : 0 }}>
+      <FormItem
+        style={{ height: onboardingMode ? 110 : 'auto', marginBottom: onboardingMode ? 0 : 24 }}
+        extra={onboardingMode && shouldShowHelpText ? t('productNameHelpTextOnboarding') : undefined}
+        name={['item', 'name']}
+        label={label}
+        rules={[{ required: true, message: t<string>('productNameIsRequired') }]}
+        required
+      >
+        <Input placeholder={placeholder} onFocus={onFocus} />
+      </FormItem>
+    </div>
   );
 };
 
@@ -129,17 +131,8 @@ export const StyledOnboardingImageFormItem = styled(Form.Item)`
 
 const CheckoutProductFormItems = ({ isShow, onboardingMode = false }: FormItemsPropsType) => {
   const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
-  const {
-    shouldShowHelpText: shouldShowPriceHelpText,
-    onFocus: onPriceInputFocus,
-    onChange: onPriceInputChange,
-  } = useHelpText();
-
-  const {
-    shouldShowHelpText: shouldShowImageHelpText,
-    onFocus: onImageInputFocus,
-    onChange: onImageInputChange,
-  } = useHelpText();
+  const { shouldShowHelpText: shouldShowPriceHelpText, onFocus: onPriceInputFocus } = useHelpText();
+  const { shouldShowHelpText: shouldShowImageHelpText, onFocus: onImageInputFocus } = useHelpText();
 
   return (
     <>
@@ -151,15 +144,11 @@ const CheckoutProductFormItems = ({ isShow, onboardingMode = false }: FormItemsP
             <FormItem
               style={{ height: 106, marginBottom: 0 }}
               label={t('priceLabelOnboarding')}
+              extra={shouldShowPriceHelpText ? t('priceHelpTextOnboarding') : undefined}
               required
-              help={shouldShowPriceHelpText ? t('priceHelpTextOnboarding') : undefined}
             >
               <Space.Compact style={{ width: '100%' }}>
-                <ProductPriceFormItem
-                  onboardingMode
-                  onPriceInputFocus={onPriceInputFocus}
-                  onPriceInputChange={onPriceInputChange}
-                />
+                <ProductPriceFormItem onboardingMode onPriceInputFocus={onPriceInputFocus} />
 
                 <Form.Item name="asset" noStyle>
                   <AssetInput onboardingMode />
@@ -171,11 +160,10 @@ const CheckoutProductFormItems = ({ isShow, onboardingMode = false }: FormItemsP
           <StyledOnboardingImageFormItem
             help={shouldShowImageHelpText ? t('productImageHelpTextOnboarding') : undefined}
             name={['item', 'image']}
-            style={{ width: 340, marginBottom: 0, marginTop: 10, height: 176 }}
+            style={{ width: 340, marginBottom: 0, height: 176 }}
           >
             <ImageUploader
               onImageInputFocus={onImageInputFocus}
-              onImageInputChange={onImageInputChange}
               label={t<string>('productImage')}
               purpose="product_image"
             />

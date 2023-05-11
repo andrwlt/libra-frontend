@@ -25,8 +25,8 @@ const Header = styled.div`
   margin-left: auto;
   margin-right: auto;
   height: auto;
+  padding-top: 32px;
   padding-bottom: 22px;
-  padding-top: 40px;
 `;
 
 const Content = styled.div`

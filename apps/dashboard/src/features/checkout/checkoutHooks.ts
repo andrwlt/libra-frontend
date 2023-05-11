@@ -145,21 +145,16 @@ export const useDeleteCheckout = (callback: () => void): DeleteCheckoutHookType 
 };
 
 export const useHelpText = (): UseHelpTextReturnType => {
-  const [shouldShowHelpText, setShouldShowHelpText] = useState<any>();
+  const [shouldShowHelpText, setShouldShowHelpText] = useState(false);
 
   const onFocus = () => {
-    if (shouldShowHelpText === undefined) {
+    if (!shouldShowHelpText) {
       setShouldShowHelpText(true);
     }
   };
 
-  const onChange = () => {
-    setShouldShowHelpText(false);
-  };
-
   return {
     onFocus,
-    onChange,
     shouldShowHelpText,
   };
 };

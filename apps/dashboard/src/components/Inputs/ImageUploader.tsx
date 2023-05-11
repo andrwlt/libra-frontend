@@ -14,17 +14,9 @@ interface ImageUploaderProps {
   value?: string;
   purpose: string;
   onImageInputFocus?: () => void;
-  onImageInputChange?: () => void;
 }
 
-export default function ImageUploader({
-  label,
-  onChange,
-  value,
-  purpose,
-  onImageInputFocus,
-  onImageInputChange,
-}: ImageUploaderProps) {
+export default function ImageUploader({ label, onChange, value, purpose, onImageInputFocus }: ImageUploaderProps) {
   const { t } = useTranslation(LOCALE_WORKSPACE.LAYOUT);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -46,8 +38,6 @@ export default function ImageUploader({
   };
 
   const beforeUpload = async (file: RcFile) => {
-    onImageInputChange?.();
-
     const isImage = file.type === 'image/jpeg' || file.type === 'image/png' || file.type === 'image/svg+xml';
 
     if (!isImage) {
@@ -83,8 +73,10 @@ export default function ImageUploader({
 
   return (
     <div
-      onMouseOver={() => {
-        onImageInputFocus?.();
+      onFocus={() => {
+        setTimeout(() => {
+          onImageInputFocus?.();
+        });
       }}
     >
       <Upload

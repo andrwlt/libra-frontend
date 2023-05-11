@@ -10,7 +10,7 @@ const FormItem = Form.Item;
 
 const BrandingNameFormItem = ({ onboardingMode }: FormItemsPropsType) => {
   const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
-  const { shouldShowHelpText, onFocus, onChange } = useHelpText();
+  const { shouldShowHelpText, onFocus } = useHelpText();
 
   const placeholder = onboardingMode ? t('brandNamePlaceholderOnboarding') : t('brandNamePlaceholder');
   const label = onboardingMode ? t('brandNameLabelOnboarding') : t('brandNameLabel');
@@ -27,12 +27,12 @@ const BrandingNameFormItem = ({ onboardingMode }: FormItemsPropsType) => {
   return (
     <FormItem
       name={['branding', 'name']}
-      help={onboardingMode && shouldShowHelpText ? t('brandNameHelpTextOnboarding') : undefined}
+      extra={onboardingMode && shouldShowHelpText ? t('brandNameHelpTextOnboarding') : undefined}
       style={style}
       label={label}
       rules={[{ required: true, message: t<string>('brandNameIsRequired') }]}
     >
-      <Input placeholder={placeholder} onFocus={onFocus} onChange={onChange} />
+      <Input placeholder={placeholder} onFocus={onFocus} />
     </FormItem>
   );
 };
@@ -40,7 +40,7 @@ const BrandingNameFormItem = ({ onboardingMode }: FormItemsPropsType) => {
 const CheckoutBrandingFormItems = ({ isShow, onboardingMode = false }: FormItemsPropsType) => {
   const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
   const label = t('brandLogo');
-  const { shouldShowHelpText, onFocus: onImageInputFocus, onChange: onImageInputChange } = useHelpText();
+  const { shouldShowHelpText, onFocus: onImageInputFocus } = useHelpText();
   return (
     <>
       {onboardingMode ? (
@@ -50,12 +50,7 @@ const CheckoutBrandingFormItems = ({ isShow, onboardingMode = false }: FormItems
             name={['branding', 'logo']}
             help={shouldShowHelpText ? t('brandLogoHelpTextOnboarding') : undefined}
           >
-            <ImageUploader
-              label={label}
-              purpose="brand_logo"
-              onImageInputChange={onImageInputChange}
-              onImageInputFocus={onImageInputFocus}
-            />
+            <ImageUploader label={label} purpose="brand_logo" onImageInputFocus={onImageInputFocus} />
           </StyledOnboardingImageFormItem>
 
           <BrandingNameFormItem onboardingMode />

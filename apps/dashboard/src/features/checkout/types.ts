@@ -134,7 +134,6 @@ export interface UseCheckoutsReturnType extends CheckoutListState {
 }
 
 export interface UseHelpTextReturnType {
-  shouldShowHelpText: boolean | undefined;
+  shouldShowHelpText: boolean;
   onFocus: () => void;
-  onChange: () => void;
 }
