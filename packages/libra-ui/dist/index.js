@@ -72129,6 +72129,8 @@ function PaymentSummary(param) {
     var _ref3 = _sliced_to_array((0, import_react7.useState)(""), 2), email = _ref3[0], setEmail = _ref3[1];
     var _ref4 = _sliced_to_array((0, import_react7.useState)(""), 2), emailError = _ref4[0], setEmailError = _ref4[1];
     var _ref5 = _sliced_to_array((0, import_react7.useState)(""), 2), paymentError = _ref5[0], setPaymentError = _ref5[1];
+    var _ref6 = _sliced_to_array((0, import_react7.useState)(false), 2), emailHovered = _ref6[0], setEmailHovered = _ref6[1];
+    var _ref7 = _sliced_to_array((0, import_react7.useState)(false), 2), emailFocused = _ref7[0], setEmailFocused = _ref7[1];
     (0, import_react7.useEffect)(function() {
         var assetMetadata = ASSET_METADATA[payment.asset];
         createConnection(assetMetadata.network.config.rpc);
@@ -72157,6 +72159,18 @@ function PaymentSummary(param) {
             return false;
         }
         return true;
+    };
+    var hasEmailHelpText = !emailError && (emailFocused || emailHovered);
+    var helpText = function() {
+        if (emailError) {
+            return emailError;
+        }
+        if (hasEmailHelpText) {
+            return t2("emailHelpText", {
+                productName: payment.productName
+            });
+        }
+        return "";
     };
     var handlePay = function() {
         var _ref = _async_to_generator(function() {
@@ -72249,22 +72263,33 @@ function PaymentSummary(param) {
             /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_antd5.Form, {
                 layout: "vertical",
                 requiredMark: false,
-                children: /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_antd5.Form.Item, {
+                onMouseEnter: function() {
+                    setEmailHovered(true);
+                },
+                onMouseLeave: function() {
+                    setEmailHovered(false);
+                },
+                onFocus: function() {
+                    setEmailFocused(true);
+                    setEmailError("");
+                },
+                onBlur: function() {
+                    return setEmailFocused(false);
+                },
+                children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_antd5.Form.Item, {
                     label: "Email",
                     validateStatus: emailError ? "error" : void 0,
-                    children: [
-                        /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_antd5.Input, {
-                            value: email,
-                            onInput: function(e) {
-                                setEmail(e.target.value);
-                            },
-                            placeholder: "john.doe@example.com"
-                        }),
-                        emailError && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_antd5.Typography.Text, {
-                            type: "danger",
-                            children: emailError
-                        })
-                    ]
+                    help: helpText(),
+                    style: {
+                        height: 88
+                    },
+                    children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_antd5.Input, {
+                        value: email,
+                        onInput: function(e) {
+                            setEmail(e.target.value);
+                        },
+                        placeholder: "john.doe@example.com"
+                    })
                 })
             }),
             /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", {
@@ -72289,7 +72314,7 @@ function PaymentSummary(param) {
                             onAccountConnected: handleAccountConnected
                         })
                     }),
-                    (previewMode || !!account3) && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_antd5.Button, {
+                    (previewMode || account3 && account3.signer) && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_antd5.Button, {
                         style: {
                             marginTop: 32,
                             marginBottom: 8
@@ -75716,13 +75741,14 @@ instance.use(import_i18next_browser_languagedetector.default).use(import_react_i
     resources: {
         en: {
             translation: {
-                thankForYourPayment: "Thanks for your payment",
-                productWillBeSent: "{{productName}} will be sent to your email upon successful payment.",
+                emailHelpText: "{{productName}} will be sent to your email upon successful payment.",
+                thankForYourPayment: "Thanks for Your Purchase!",
+                productWillBeSent: "Get ready! Your {{productName}} is zooming its way to your inbox.",
                 poweredBy: "Powered by",
                 libraLogo: "Libra Logo",
                 privacy: "Privacy",
                 terms: "Terms",
-                defaultErrorMessage: "Whoopsie! Looks like our dApp had one too many cups of coffee this morning. We're working on calming it down. Please try again later.",
+                defaultErrorMessage: "Oops! Something went wrong. Please contact help@golibra.xyz to get the supports.",
                 insufficientBalanceError: "Oops! It seems your balance is not sufficient to process the payment.",
                 contactInformation: "Contact information",
                 paymentMethod: "Payment method",
