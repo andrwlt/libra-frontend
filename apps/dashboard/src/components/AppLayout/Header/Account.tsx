@@ -148,8 +148,8 @@ const Account = () => {
 
           <Row style={{ paddingLeft: 33 }}>
             <Text>{tWording('pleaseDropLine')}</Text>
-            <Link href="mailto:partner@golibra.xyz" style={{ marginLeft: 5, marginRight: 5 }}>
-              partner@golibra.xyz
+            <Link href="mailto:partners@golibra.xyz" style={{ marginLeft: 5, marginRight: 5 }}>
+              partners@golibra.xyz
             </Link>
             <Text>{tWording('toGainAccess')}</Text>
           </Row>
