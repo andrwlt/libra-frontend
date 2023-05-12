@@ -2,7 +2,7 @@ import { AfterPayment } from '../../app/types';
 import { Result } from 'antd';
 import { useTranslation } from 'react-i18next';
 
-const AfterPaymentPreviewer = ({ afterPayment }: { afterPayment: AfterPayment }) => {
+const AfterPaymentPreviewer = ({ afterPayment, productName }: { afterPayment: AfterPayment; productName: string }) => {
   const { t } = useTranslation();
   const message = afterPayment.config?.message;
 
@@ -12,7 +12,7 @@ const AfterPaymentPreviewer = ({ afterPayment }: { afterPayment: AfterPayment })
       <Result
         status="success"
         title={message || t('thankForYourPayment')}
-        subTitle={!message && t('orderWillBeSent')}
+        subTitle={!message && t('productWillBeSent', { productName })}
       />
     </div>
   );

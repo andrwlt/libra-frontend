@@ -10,7 +10,7 @@ const layout = {
   checkout: 'Checkout',
   copied: 'Copied',
   copy: 'Copy',
-  orShareItOn: 'or share it on',
+  orShareItOn: 'Or share it directly on',
   loading: 'Loading...',
   checkouts: 'Checkouts',
   developers: 'Developers',
@@ -28,6 +28,7 @@ const layout = {
   reveal: 'Reveal',
   hide: 'Hide',
   close: 'Close',
+  ok: 'OK',
 
   leavingPageWarningTitle: 'Leave page with unsaved changes?',
   leavingPageWarningContent: 'Leaving this page will delete all unsaved changes.',
@@ -47,6 +48,8 @@ const layout = {
   fileSizeWarning: 'Image must smaller than 2MB!',
 
   logout: 'Log Out',
+
+  secret: 'Secret',
 };
 
 export default layout;

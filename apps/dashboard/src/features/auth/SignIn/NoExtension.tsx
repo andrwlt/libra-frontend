@@ -1,9 +1,7 @@
-import icon1 from 'assets/outdated-1.png';
-import icon2 from 'assets/outdated-2.svg';
+import icon from 'assets/web-setting.png';
 import polkadotIcon from 'assets/polkadot.png';
 import styled from 'styled-components';
 import { Typography, Space } from 'antd';
-import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { LOCALE_WORKSPACE } from 'app/i18n';
 
@@ -22,12 +20,12 @@ const Content = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin-bottom: 150px;
+  margin-bottom: 50px;
 `;
 
 const Image = styled.img`
-  width: 350px;
-  height: 350px;
+  width: 300px;
+  height: 300px;
 `;
 
 const ExtensionImage = styled.img`
@@ -44,29 +42,38 @@ const ExtensionLink = styled.a`
   align-items: center;
 `;
 
+const { Title, Text, Link } = Typography;
+
 const NoExtension = () => {
-  const [icon, setIcon] = useState(icon2);
   const { t } = useTranslation(LOCALE_WORKSPACE.WORDING);
 
-  const changeIcon = () => {
-    setIcon(icon === icon2 ? icon1 : icon2);
-  };
   return (
     <Wrapper>
       <Content>
-        <Image src={icon} onClick={changeIcon} />
-        <Typography.Title style={{ display: 'block', marginTop: 10 }} level={3}>
+        <Image src={icon} />
+        <Title style={{ display: 'block', marginTop: 10 }} level={3}>
           {t('noExtensionTitle')}
-        </Typography.Title>
-        <Typography.Text style={{ display: 'block', fontSize: 18 }}>{t('preferExtension')}</Typography.Text>
+        </Title>
+        <Text style={{ display: 'block', fontSize: 18 }}>{t('preferExtension')}</Text>
 
-        <Space style={{ marginTop: 50 }}>
+        <Space style={{ marginTop: 40, marginBottom: 40 }}>
           <ExtensionLink href="https://polkadot.js.org/extension/" target="_blank">
             <ExtensionImage src={polkadotIcon} alt="polkadot" />
-            <Typography.Text type="secondary" style={{ display: 'block', marginTop: 10 }}>
+            <Text type="secondary" style={{ display: 'block', marginTop: 10 }}>
               Polkadot.js
-            </Typography.Text>
+            </Text>
           </ExtensionLink>
+        </Space>
+
+        <Space>
+          <Text style={{ display: 'block', fontSize: 18 }}>{t('noExtensionHelpText')}</Text>
+          <Link
+            href="https://discord.com/channels/999216269226164234/1101337338493292705"
+            target="_blank"
+            style={{ display: 'block', fontSize: 18 }}
+          >
+            {t('letUsKnow')}
+          </Link>
         </Space>
       </Content>
     </Wrapper>

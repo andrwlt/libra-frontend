@@ -1,11 +1,10 @@
 import styled from 'styled-components';
-import { Row, Layout, Col, message } from 'antd';
+import { Row, Layout, Col } from 'antd';
 import CheckoutSummary from './CheckoutSummary';
 import PaymentSummary from './PaymentSummary';
 import { CheckoutType } from '../../app/types';
 import CheckoutBrand from './Brand';
 import AfterPaymentPreviewer from './AfterPaymentPreviewer';
-import { useTranslation } from 'react-i18next';
 import '../../app/i18n';
 import { useState } from 'react';
 
@@ -55,10 +54,8 @@ const CheckoutPreview = ({
   isShowAfterPayment?: boolean;
   loading?: boolean;
 }) => {
-  const { t } = useTranslation();
   const { branding, item, asset, afterPayment } = checkoutData;
   const [completed, setCompleted] = useState(false);
-  const [messageApi, contextHolder] = message.useMessage();
 
   const handlePaymentSuccess = () => {
     if (afterPayment && afterPayment.type === 'redirect' && afterPayment.config.url) {
@@ -69,13 +66,8 @@ const CheckoutPreview = ({
     setCompleted(true);
   };
 
-  const handlePaymentFailed = () => {
-    messageApi.error(t('defaultErrorMessage'));
-  };
-
   return (
     <Wrapper>
-      {contextHolder}
       <CheckoutBrand branding={branding} loading={loading} />
       <ContentWrapper>
         <MainContent justify="space-between">
@@ -84,7 +76,7 @@ const CheckoutPreview = ({
           </Col>
           <Col span={12}>
             {(completed || isShowAfterPayment) && afterPayment ? (
-              <AfterPaymentPreviewer afterPayment={afterPayment} />
+              <AfterPaymentPreviewer afterPayment={afterPayment} productName={item.name || 'The product'}/>
             ) : (
               <PaymentSummary
                 previewMode={previewMode}
@@ -95,7 +87,6 @@ const CheckoutPreview = ({
                   productName: checkoutData.item.name,
                 }}
                 onPaymentSuccess={handlePaymentSuccess}
-                onPaymentFailed={handlePaymentFailed}
               />
             )}
           </Col>

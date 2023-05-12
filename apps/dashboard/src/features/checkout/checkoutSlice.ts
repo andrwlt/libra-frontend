@@ -17,6 +17,7 @@ import { RootState } from 'app/store';
 import { resetStore } from 'features/auth/authSlice';
 import { formatCheckoutToNumberPrice } from 'utils/format/balance';
 import pagingHelper from 'utils/pagingHelper';
+import { GetListPayload } from 'types';
 
 const addPayeeToCheckout: AddMoreInfo = (checkout, getState) => {
   const {
@@ -31,23 +32,10 @@ const addPayeeToCheckout: AddMoreInfo = (checkout, getState) => {
 
 export const getCheckouts = createAppAsyncThunk(
   'checkout/getCheckouts',
-  async ({ deletedId, isGoNext = true }: { deletedId?: string; isGoNext?: boolean }, { rejectWithValue, getState }) => {
+  async (searchParams: GetListPayload, { rejectWithValue }) => {
     try {
-      const {
-        checkout: { checkouts, checkoutsPaging },
-      } = getState();
-
-      const params = { paging: checkoutsPaging, request: checkoutAPI.getCheckouts, data: checkouts };
-
-      if (deletedId) {
-        return await pagingHelper.refreshAfterDeleting<CheckoutResponseType>(params);
-      } else {
-        if (isGoNext) {
-          return await pagingHelper.goNext<CheckoutResponseType>(params);
-        } else {
-          return await pagingHelper.goBack<CheckoutResponseType>(params);
-        }
-      }
+      const params = { request: checkoutAPI.getCheckouts, searchParams };
+      return await pagingHelper.fetchData<CheckoutResponseType>(params);
     } catch (err) {
       return rejectWithValue(err);
     }
@@ -95,7 +83,6 @@ export const deleteCheckout = createAppAsyncThunk(
   async (deletedId: string, { rejectWithValue, dispatch }) => {
     try {
       await checkoutAPI.deleteCheckout(deletedId);
-      dispatch(getCheckouts({ deletedId }));
       return deletedId;
     } catch (err) {
       return rejectWithValue(err);
@@ -124,7 +111,7 @@ const initCheckout: CheckoutResponseAfterConvertingPrice = {
     },
   },
   payee: '',
-  asset: 'wnd',
+  asset: 'ksm',
   active: false,
   created: '',
 };
@@ -133,7 +120,11 @@ const initialState: CheckoutState = {
   checkouts: [],
   getCheckoutsLoading: false,
   getCheckoutsFailed: undefined,
-  checkoutsPaging: { hasPrevPage: false, hasNextPage: false, prevPageData: [] },
+  checkoutsPaging: {
+    hasNextPage: false,
+    hasPrevPage: false,
+  },
+
   isFirstLoad: true,
 
   checkout: initCheckout,

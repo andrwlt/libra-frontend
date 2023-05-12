@@ -14,15 +14,7 @@ import { LOCALE_WORKSPACE } from 'app/i18n';
 export default function Payments() {
   const { t } = useTranslation(LOCALE_WORKSPACE.PAYMENT);
   const { t: tWording } = useTranslation(LOCALE_WORKSPACE.WORDING);
-  const {
-    charges,
-    hasCheckout,
-    firstCheckoutAsset,
-    getChargesLoading,
-    fetchCharges,
-    chargesPaging,
-    isFirstLoad,
-  } = useCharges();
+  const { charges, hasCheckout, firstCheckoutAsset, getChargesLoading, chargesPaging, isFirstLoad } = useCharges();
 
   const { status, createdLte, createdGte } = useChargeParams();
   const navigate = useNavigate();
@@ -60,12 +52,7 @@ export default function Payments() {
 
         <Card>
           {shouldShowTable ? (
-            <ChargeTable
-              charges={charges}
-              getChargesLoading={getChargesLoading}
-              fetchCharges={fetchCharges}
-              chargesPaging={chargesPaging}
-            />
+            <ChargeTable charges={charges} getChargesLoading={getChargesLoading} chargesPaging={chargesPaging} />
           ) : (
             <Result
               style={{ maxWidth: '480px', margin: 'auto' }}

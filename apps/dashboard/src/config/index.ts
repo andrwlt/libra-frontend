@@ -6,6 +6,7 @@ export const CONNECTED_ACCOUNT = 'libra-connected-account';
 
 export const LOGIN_MESSAGE = 'libra-checkout-login';
 export const DEFAULT_LIMIT = 10;
+export const LIMIT_PLUS_1 = DEFAULT_LIMIT + 1;
 
 export const PAYMENT_STATUS = {
   SUCCEEDED: 'succeeded',
@@ -52,4 +53,9 @@ export const initMessageAfterPayment = {
   config: {
     message: '',
   },
+};
+
+export const PAGING_PARAM = {
+  BEFORE_ID: 'beforeId',
+  AFTER_ID: 'afterId',
 };

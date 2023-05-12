@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000"/>
+    <meta name="theme-color" content="#000000" />
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <!--
       manifest.json provides metadata used when your web app is installed on a
@@ -21,7 +21,31 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>Libra | Decentralized Payments System that empowers the next e-commerce</title>
-    <meta name="description" content="Decentralized Payments System that empowers the next e-commerce">
+    <meta name="description" content="Decentralized Payments System that empowers the next e-commerce" />
+    <script>
+      const PRODUCTION_HOST = 'app.golibra.xyz';
+      const shouldAddGtag = window.location.host === PRODUCTION_HOST;
+
+      if (shouldAddGtag) {
+        const addGtagScriptTag = () => {
+          const gtagScriptTag = document.createElement('script');
+          gtagScriptTag.src = 'https://www.googletagmanager.com/gtag/js?id=G-42LBDSZMZB';
+          document.head.appendChild(gtagScriptTag);
+        };
+
+        const addTracking = () => {
+          window.dataLayer = window.dataLayer || [];
+          function gtag() {
+            dataLayer.push(arguments);
+          }
+          gtag('js', new Date());
+          gtag('config', 'G-42LBDSZMZB');
+        };
+
+        addGtagScriptTag();
+        addTracking();
+      }
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>

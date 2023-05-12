@@ -7,8 +7,10 @@ import type { Dayjs } from 'dayjs';
 import { useTranslation } from 'react-i18next';
 import { PAYMENT_STATUS, NULL_VALUE } from 'config';
 import { getExistProps } from 'utils/paging';
-import { useChargeParams } from 'features/payment/paymentHooks';
+import { useChargeParams, CHARGES_PARAMS } from 'features/payment/paymentHooks';
 import { LOCALE_WORKSPACE } from 'app/i18n';
+
+const { STATUS, CREATED_GTE, CREATED_LTE } = CHARGES_PARAMS;
 
 dayjs.extend(utc);
 
@@ -46,9 +48,9 @@ const ChargesFilter = ({ isLoading }: { isLoading: boolean }) => {
 
     setSearchParams(
       getExistProps({
-        status: values.status,
-        'created[gte]': values?.created?.[0]?.utc().format(),
-        'created[lte]': values?.created?.[1]?.utc().format(),
+        [STATUS]: values.status,
+        [CREATED_GTE]: values?.created?.[0]?.utc().format(),
+        [CREATED_LTE]: values?.created?.[1]?.utc().format(),
       }),
     );
   };
@@ -59,7 +61,7 @@ const ChargesFilter = ({ isLoading }: { isLoading: boolean }) => {
   };
 
   const isFormChanged =
-    form.getFieldsValue(['status'])?.status === NULL_VALUE && !form.getFieldsValue(['created'])?.created;
+    form.getFieldsValue([STATUS])?.status === NULL_VALUE && !form.getFieldsValue(['created'])?.created;
 
   return (
     <Form form={form} onFieldsChange={onFinish} initialValues={initialValues} disabled={isLoading}>

@@ -12,26 +12,31 @@ import { ASSET_METADATA } from '../../config';
 async function pay(payment: Payment, account: any, email: string) {
   const { payee, amount, asset, productName } = payment;
   const assetMetadata = ASSET_METADATA[asset];
-  const tx = await createTransferTx(assetMetadata.network.config.rpc, account, payee, amount, asset);
 
-  const response = await fetch(`${window.location.href}/pay`, {
-    body: JSON.stringify({
-      from: getSs58AddressByAsset(account.address, asset),
-      to: getSs58AddressByAsset(payee, asset),
-      description: `${email} + ${productName}`,
-      amount,
-      asset,
-      tx,
-      email,
-    }),
-    method: 'post',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  try {
+    const tx = await createTransferTx(assetMetadata.network.config.rpc, account, payee, amount, asset);
 
-  if (response.status !== 200 && response.status !== 201) {
-    throw new Error(response.statusText);
+    const response = await fetch(`${window.location.href}/pay`, {
+      body: JSON.stringify({
+        from: getSs58AddressByAsset(account.address, asset),
+        to: getSs58AddressByAsset(payee, asset),
+        description: `${email} + ${productName}`,
+        amount,
+        asset,
+        tx,
+        email,
+      }),
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (response.status !== 200 && response.status !== 201) {
+      throw new Error(response.statusText);
+    }
+  } catch (err) {
+    throw err;
   }
 }
 
@@ -46,18 +51,20 @@ export default function PaymentSummary({
   previewMode = true,
   payment,
   onPaymentSuccess,
-  onPaymentFailed,
 }: {
   previewMode: boolean;
   payment: Payment;
   onPaymentSuccess: Function;
-  onPaymentFailed: Function;
 }) {
   const { t } = useTranslation();
   const [paying, setPaying] = useState(false);
-  const [account, setAccount] = useState(null);
+  const [account, setAccount] = useState<any>(null);
   const [email, setEmail] = useState<string>('');
   const [emailError, setEmailError] = useState<string>('');
+  const [paymentError, setPaymentError] = useState<string>('');
+  const [emailHovered, setEmailHovered] = useState(false);
+  const [emailFocused, setEmailFocused] = useState(false);
+
   useEffect(() => {
     const assetMetadata = ASSET_METADATA[payment.asset];
     // Preload network connection to improve speed.
@@ -69,6 +76,8 @@ export default function PaymentSummary({
   };
 
   const validateEmail = () => {
+    setEmailError('');
+
     if (!email) {
       setEmailError('Email is required.');
       return false;
@@ -82,6 +91,18 @@ export default function PaymentSummary({
     return true;
   };
 
+  const hasEmailHelpText = !emailError && (emailFocused || emailHovered);
+
+  const helpText = () => {
+    if (emailError) {
+      return emailError;
+    }
+    if (hasEmailHelpText) {
+      return t('emailHelpText', { productName: payment.productName });
+    }
+    return '';
+  }
+
   const handlePay = async () => {
     if (previewMode) {
       setPaying(true);
@@ -89,14 +110,24 @@ export default function PaymentSummary({
         setPaying(false);
       }, 1000);
     } else {
+      setPaymentError('');
+
       if (validateEmail()) {
         setPaying(true);
-
         try {
           await pay(payment, account, email);
           onPaymentSuccess();
-        } catch (err) {
-          onPaymentFailed(err);
+        } catch (err: any) {
+          switch (err.message) {
+            case 'Cancelled':
+              setPaymentError('');
+              break;
+            case 'InsufficientBalance':
+              setPaymentError(t('insufficientBalanceError') || 'Insufficient balance');
+              break;
+            default:
+              setPaymentError(t('defaultErrorMessage') || 'Something went wrong');
+          }
         }
 
         setPaying(false);
@@ -110,8 +141,27 @@ export default function PaymentSummary({
         {t('contactInformation')}
       </Typography.Title>
 
-      <Form layout="vertical" requiredMark={false}>
-        <Form.Item label="Email" validateStatus={emailError ? 'error' : undefined}>
+      <Form
+        layout="vertical"
+        requiredMark={false}
+        onMouseEnter={() => {
+          setEmailHovered(true);
+        }}
+        onMouseLeave={() => {
+          setEmailHovered(false);
+        }}
+        onFocus={() => {
+          setEmailFocused(true);
+          setEmailError('');
+        }}
+        onBlur={() => setEmailFocused(false)}
+      >
+        <Form.Item
+          label="Email"
+          validateStatus={emailError ? 'error' : undefined}
+          help={helpText()}
+          style={{ height: 88 }}
+        >
           <Input
             value={email}
             onInput={(e: any) => {
@@ -119,7 +169,6 @@ export default function PaymentSummary({
             }}
             placeholder="john.doe@example.com"
           ></Input>
-          {emailError && <Typography.Text type="danger">{emailError}</Typography.Text>}
         </Form.Item>
       </Form>
 
@@ -138,15 +187,26 @@ export default function PaymentSummary({
 
         {!previewMode && (
           <ExtensionsProvider>
-            <AccountConnection onAccountConnected={handleAccountConnected}></AccountConnection>
+            <AccountConnection
+              network={ASSET_METADATA[payment.asset].network}
+              onAccountConnected={handleAccountConnected}
+            ></AccountConnection>
           </ExtensionsProvider>
         )}
-
-        {(previewMode || !!account) && (
-          <Button style={{ marginTop: 32 }} type="primary" size="large" block loading={paying} onClick={handlePay}>
+        {(previewMode || (account && account.signer)) && (
+          <Button
+            style={{ marginTop: 32, marginBottom: 8 }}
+            type="primary"
+            size="large"
+            block
+            loading={paying}
+            onClick={handlePay}
+          >
             {t('pay')}
           </Button>
         )}
+
+        {paymentError && <Typography.Text type="danger">{paymentError}</Typography.Text>}
       </div>
     </div>
   );
