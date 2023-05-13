@@ -64,7 +64,7 @@ const ChargesFilter = ({ isLoading }: { isLoading: boolean }) => {
     form.getFieldsValue([STATUS])?.status === NULL_VALUE && !form.getFieldsValue(['created'])?.created;
 
   return (
-    <Form form={form} onFieldsChange={onFinish} initialValues={initialValues} disabled={isLoading}>
+    <Form form={form} onFieldsChange={onFinish} initialValues={initialValues} disabled={isLoading} autoComplete="off">
       <Row justify="space-between" gutter={0} style={{ width: '100%', marginLeft: 0, marginRight: 0, paddingLeft: 14 }}>
         <Col span={6}>
           <Form.Item name="status" label="Status" style={{ marginBottom: 0 }}>
