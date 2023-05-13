@@ -77,7 +77,7 @@ const AfterPaymentFormItem = ({ onFieldsChange }: { onFieldsChange: () => void }
               style={{ marginLeft: 25, width: '100%', marginBottom: 5 }}
               name={['afterPayment', 'config', 'message']}
             >
-              <Input.TextArea ref={inputRef} />
+              <Input.TextArea ref={inputRef} autoComplete="off" />
             </Form.Item>
           )}
         </Row>
@@ -99,7 +99,7 @@ const AfterPaymentFormItem = ({ onFieldsChange }: { onFieldsChange: () => void }
               validateTrigger="onBlur"
               rules={[{ type: 'url', message: t<string>('invalidUrl') }]}
             >
-              <Input placeholder="https://"></Input>
+              <Input placeholder="https://" autoComplete="off"></Input>
             </Form.Item>
           )}
         </Row>

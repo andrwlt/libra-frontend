@@ -142,6 +142,7 @@ export default function Onboarding() {
           numberOfSteps={steps.length + 1}
         >
           <Form
+            autoComplete="off"
             form={form}
             layout="vertical"
             style={{ width: '100%', display: 'flex', justifyContent: 'center' }}

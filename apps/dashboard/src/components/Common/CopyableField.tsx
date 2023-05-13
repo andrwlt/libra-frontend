@@ -23,6 +23,7 @@ export default function CopyableField({ text, style = { minWidth: 540 }, size = 
   return (
     <Space.Compact size={size} style={style}>
       <Input
+        autoComplete="off"
         size={size}
         readOnly
         style={{ width: 'calc(100% - 48px)', background: 'rgb(247, 250, 252)' }}
