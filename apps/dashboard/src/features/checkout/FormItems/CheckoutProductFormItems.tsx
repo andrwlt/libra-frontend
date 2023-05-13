@@ -44,6 +44,7 @@ const PriceInput = (props: PriceInputProps) => {
 
   return (
     <InputNumber
+      autoComplete="off"
       onFocus={() => {
         if (onboardingMode) {
           onPriceInputFocus?.();
@@ -123,6 +124,7 @@ const ProductNameFormItem = ({ onboardingMode }: FormItemsPropsType) => {
       required
     >
       <Input
+        autoComplete="off"
         placeholder={placeholder}
         onFocus={onboardingMode ? onFocus : () => {}}
         onBlur={onboardingMode ? onBlur : () => {}}
@@ -228,7 +230,7 @@ const CheckoutProductFormItems = ({ isShow, onboardingMode = false }: FormItemsP
           </div>
 
           <Form.Item label={t<string>('description')} name={['item', 'description']}>
-            <Input.TextArea rows={3} placeholder={t<string>('descriptionPlaceholder')} />
+            <Input.TextArea autoComplete="off" rows={3} placeholder={t<string>('descriptionPlaceholder')} />
           </Form.Item>
         </>
       )}

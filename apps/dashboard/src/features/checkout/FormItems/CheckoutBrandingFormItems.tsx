@@ -34,6 +34,7 @@ const BrandingNameFormItem = ({ onboardingMode }: FormItemsPropsType) => {
       rules={[{ required: true, message: t<string>('brandNameIsRequired') }]}
     >
       <Input
+        autoComplete="off"
         placeholder={placeholder}
         onFocus={onboardingMode ? onFocus : () => {}}
         onChange={onboardingMode ? (e) => onChange(e.target.value) : () => {}}

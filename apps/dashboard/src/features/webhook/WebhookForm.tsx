@@ -72,7 +72,14 @@ const WebhookForm = (props: {
         disabled: isLoading,
       }}
     >
-      <Form initialValues={initialValues} form={form} layout="vertical" style={{ marginTop: 20 }} disabled={isLoading}>
+      <Form
+        initialValues={initialValues}
+        form={form}
+        layout="vertical"
+        style={{ marginTop: 20 }}
+        disabled={isLoading}
+        autoComplete="off"
+      >
         <FormItem
           label={t('endpointUrl')}
           name="url"
@@ -89,11 +96,11 @@ const WebhookForm = (props: {
             },
           ]}
         >
-          <Input placeholder="https://" />
+          <Input autoComplete="off" placeholder="https://" />
         </FormItem>
 
         <FormItem label={t('description')} name="description">
-          <Input.TextArea placeholder={t<string>('descriptionPlaceholder')} rows={2} />
+          <Input.TextArea autoComplete="off" placeholder={t<string>('descriptionPlaceholder')} rows={2} />
         </FormItem>
 
         <FormItem
