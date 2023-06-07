@@ -1,4 +1,4 @@
-import { EXTENSION_IDS, GET_EXTENSIONS_MAX_RETRY, GET_EXTENSIONS_INTERVAL_DURATION } from 'config';
+import { EXTENSIONS, GET_EXTENSIONS_MAX_RETRY, GET_EXTENSIONS_INTERVAL_DURATION } from 'config';
 import { Extension, ExtensionId, GetExtensionResult } from 'app/types';
 
 function hasInjectedWeb3() {
@@ -6,41 +6,30 @@ function hasInjectedWeb3() {
   return ethereum || injectedWeb3;
 }
 
-const hasInjectedWallet = (id: ExtensionId) => {
-  const { ethereum, injectedWeb3 } = window as any;
-
-  if (id === 'METAMASK') return ethereum;
-  if (id === 'polkadot-js') return injectedWeb3;
+const hasInjectedWallet = () => {
+  const { injectedWeb3 } = window as any;
+  return injectedWeb3;
 };
 
 const getExtensions = (): Extension[] => {
-  const { injectedWeb3, ethereum }: any = window;
+  const { injectedWeb3 }: any = window;
+  console.log('injectedWeb3',injectedWeb3)
 
   const extensions: Extension[] = [];
 
-  const polkadot = injectedWeb3?.[EXTENSION_IDS.POLKADOT_JS];
-  if (injectedWeb3) {
-    extensions.push({ id: 'polkadot-js', instant: polkadot });
-  }
-
-  if (ethereum) {
-    extensions.push({ id: 'METAMASK', instant: ethereum });
-  }
+  EXTENSIONS.forEach((extension) => {
+    const extensionInstant = injectedWeb3?.[extension.id];
+    if (extensionInstant) {
+      extensions.push({ id: extension.id, instant: extensionInstant });
+    }
+  });
 
   return extensions;
 };
 
 const getExtension = (id: ExtensionId): GetExtensionResult => {
-  const { injectedWeb3, ethereum }: any = window;
-
-  if (id === 'polkadot-js') {
-    const polkadot = injectedWeb3?.[EXTENSION_IDS.POLKADOT_JS];
-    return { id: 'polkadot-js', instant: polkadot };
-  }
-
-  if (id === 'METAMASK') {
-    return { id: 'METAMASK', instant: ethereum };
-  }
+  const extensions = getExtensions();
+  return extensions.find((extension) => extension.id === id);
 };
 
 const extensionAPI = {
@@ -68,7 +57,7 @@ const extensionAPI = {
 
     return new Promise((resolve, reject) => {
       const retryInterval = setInterval(() => {
-        if (hasInjectedWallet(id)) {
+        if (hasInjectedWallet()) {
           clearInterval(retryInterval);
           const extension = getExtension(id);
           resolve(extension);

@@ -1,9 +1,8 @@
 import axios from 'axios';
 import requester from 'services/requester';
 import { LOGIN_MESSAGE } from 'config';
-import { hasInjectedWeb3, getExtensions } from './authUtils';
-import { GET_EXTENSIONS_MAX_RETRY, GET_EXTENSIONS_INTERVAL_DURATION } from 'config';
 import { AuthAPI } from './types';
+import { extensionAPI } from '@atscale/libra-ui';
 
 export const publicInstants = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
@@ -19,22 +18,7 @@ const authAPI: AuthAPI = {
   },
 
   getExtensions() {
-    let retryCounter = 0;
-
-    return new Promise((resolve, reject) => {
-      const retryInterval = setInterval(() => {
-        if (hasInjectedWeb3()) {
-          clearInterval(retryInterval);
-          const extensions = getExtensions();
-          resolve(extensions);
-        }
-
-        if (++retryCounter === GET_EXTENSIONS_MAX_RETRY) {
-          clearInterval(retryInterval);
-          reject(new Error());
-        }
-      }, GET_EXTENSIONS_INTERVAL_DURATION);
-    });
+    return extensionAPI.getExtensions();
   },
 };
 

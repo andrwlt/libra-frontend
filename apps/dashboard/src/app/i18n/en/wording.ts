@@ -1,5 +1,5 @@
 const en = {
-  noAccountTitle: 'You need a Polkadot account to sign up and start using Libra.',
+  noAccountTitle: 'You need an account to sign up and start using Libra.',
   noAccountBtnText: 'Close to create one',
 
   noExtensionTitle: 'Almost There!',

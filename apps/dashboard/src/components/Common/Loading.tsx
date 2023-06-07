@@ -16,6 +16,7 @@ interface LoadingProps {
   loading?: boolean;
   isFullPage?: boolean;
   isContentPage?: boolean;
+  bordered?: boolean;
 }
 
 const FullPageWrapper = styled.div`
@@ -86,13 +87,13 @@ const FULL_PAGE_ICON_SIZE = 25;
 const NORMAL_TEXT_FONT_SIZE = 15;
 const FULL_PAGE_TEXT_FONT_SIZE = 17;
 
-const Loading = ({ loading = true, isFullPage, isContentPage, message }: LoadingProps) => {
+const Loading = ({ loading = true, isFullPage, isContentPage, message, bordered }: LoadingProps) => {
   const {
     token: { colorBgBase, colorTextTertiary },
   } = theme.useToken();
   const quote = useFunnyQuote(loading);
 
-  const style = { background: colorBgBase };
+  const style = { background: colorBgBase, borderRadius: bordered ? 8 : 0 };
 
   const loadingContent = (
     <LoaderContainer>

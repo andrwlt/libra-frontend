@@ -1,9 +1,3 @@
-export interface AssetMetadata {
-  decimals: number;
-  symbol: string;
-  logo: string;
-}
-
 export interface GetListResponse<T> {
   data: {
     data: T[];

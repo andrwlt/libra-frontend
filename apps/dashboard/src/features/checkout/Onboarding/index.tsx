@@ -1,19 +1,19 @@
 import { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
-import Previewer from 'components/Checkout/Previewer';
-import { Checkout as CheckoutPreview } from '@atscale/libra-ui';
+// import Previewer from 'components/Checkout/Previewer';
+// import { Checkout } from '@atscale/libra-ui';
 import Loading from 'components/Common/Loading';
 import Steps from './steps/Steps';
 import ConnectWallet from '../FormItems/ConnectWallet';
 import { theme, Button, Form, Modal, Space } from 'antd';
-import { useLogin, useConnectExtension } from 'features/auth/authHooks';
+import { useLogin, useConnectExtension1 } from 'features/auth/authHooks';
 import { useCheckout, useCreateCheckout, useResetCheckout } from 'features/checkout/checkoutHooks';
 import SelectAccountModal from 'components/SelectAccountModal';
 import CheckoutProductFormItems from 'features/checkout/FormItems/CheckoutProductFormItems';
 import CheckoutBrandingFormItems from 'features/checkout/FormItems/CheckoutBrandingFormItems';
 import Congratulation from './Congratulation';
 import { useDebounceCallback } from 'app/hooks';
-import { AccountType } from 'features/auth/types';
+import { Account } from 'features/auth/types';
 import { useTranslation } from 'react-i18next';
 import { formatCheckoutToStringPrice } from 'utils/format/balance';
 import { LOCALE_WORKSPACE } from 'app/i18n';
@@ -48,7 +48,7 @@ export default function Onboarding() {
   const [previewingCheckout, setPreviewingCheckout] = useState(checkout);
   const [isOpenSelectAccountModal, setIsOpenSelectAccountModal] = useState(false);
   const { handleLogin, loginLoading, loginSuccess, loginFailed } = useLogin();
-  const { handleConnectExtension, connectExtensionLoading, connectedExtension } = useConnectExtension(() => {
+  const { handleConnectExtension, connectExtensionLoading, connectedExtension } = useConnectExtension1(() => {
     setIsOpenSelectAccountModal(true);
   });
   const [stepIndex, setStepIndex] = useState(0);
@@ -115,7 +115,7 @@ export default function Onboarding() {
     },
   ];
 
-  const loginThenCreateCheckout = async (account: AccountType) => {
+  const loginThenCreateCheckout = async (account: Account) => {
     setIsOpenSelectAccountModal(false);
     await handleLogin(account);
 
@@ -158,9 +158,9 @@ export default function Onboarding() {
       </Header>
 
       <Content style={{ background: colorBgLayout }}>
-        <Previewer onboardingMode width={768}>
-          <CheckoutPreview checkoutData={previewingCheckout} />
-        </Previewer>
+        {/* <Previewer onboardingMode width={768}>
+          <Checkout checkoutData={previewingCheckout} />
+        </Previewer> */}
       </Content>
 
       <Loading

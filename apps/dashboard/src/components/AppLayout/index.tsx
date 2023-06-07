@@ -1,4 +1,3 @@
-import React from 'react';
 import { Layout } from 'antd';
 import Header from 'components/AppLayout/Header';
 import { Navigate, Outlet } from 'react-router-dom';

@@ -5,12 +5,12 @@ import {
   CreateCheckoutState,
   UpdateCheckoutState,
   DeleteCheckoutState,
-  CreatingCheckoutType,
+  CreatingCheckout,
   AddMoreInfo,
-  UpdatingCheckoutType,
-  CheckoutResponseAfterConvertingPrice,
-  CheckoutResponseType,
+  UpdatingCheckout,
 } from './types';
+
+import { NumberPriceCheckoutResponse, CheckoutResponse } from '@atscale/libra-ui';
 import { createAppAsyncThunk } from 'app/hooks';
 import checkoutAPI from './checkoutAPI';
 import { RootState } from 'app/store';
@@ -35,7 +35,7 @@ export const getCheckouts = createAppAsyncThunk(
   async (searchParams: GetListPayload, { rejectWithValue }) => {
     try {
       const params = { request: checkoutAPI.getCheckouts, searchParams };
-      return await pagingHelper.fetchData<CheckoutResponseType>(params);
+      return await pagingHelper.fetchData<CheckoutResponse>(params);
     } catch (err) {
       return rejectWithValue(err);
     }
@@ -56,9 +56,9 @@ export const getCheckoutDetails = createAppAsyncThunk(
 
 export const createCheckout = createAppAsyncThunk(
   'checkout/createCheckout',
-  async (checkout: CreatingCheckoutType, { rejectWithValue, getState, dispatch }) => {
+  async (checkout: CreatingCheckout, { rejectWithValue, getState, dispatch }) => {
     try {
-      const response = await checkoutAPI.createCheckout(addPayeeToCheckout<CreatingCheckoutType>(checkout, getState));
+      const response = await checkoutAPI.createCheckout(addPayeeToCheckout<CreatingCheckout>(checkout, getState));
       return response.data;
     } catch (err) {
       return rejectWithValue(err);
@@ -68,9 +68,9 @@ export const createCheckout = createAppAsyncThunk(
 
 export const updateCheckout = createAppAsyncThunk(
   'checkout/updateCheckout',
-  async (checkout: UpdatingCheckoutType, { rejectWithValue, getState }) => {
+  async (checkout: UpdatingCheckout, { rejectWithValue, getState }) => {
     try {
-      const response = await checkoutAPI.updateCheckout(addPayeeToCheckout<UpdatingCheckoutType>(checkout, getState));
+      const response = await checkoutAPI.updateCheckout(addPayeeToCheckout<UpdatingCheckout>(checkout, getState));
       return response.data;
     } catch (err) {
       return rejectWithValue(err);
@@ -97,7 +97,7 @@ interface CheckoutState
     UpdateCheckoutState,
     DeleteCheckoutState {}
 
-const initCheckout: CheckoutResponseAfterConvertingPrice = {
+const initCheckout: NumberPriceCheckoutResponse = {
   id: '',
   branding: {},
   item: {
@@ -111,7 +111,8 @@ const initCheckout: CheckoutResponseAfterConvertingPrice = {
     },
   },
   payee: '',
-  asset: 'dot',
+  assetId: '',
+  networkId: '',
   active: false,
   created: '',
 };
@@ -151,6 +152,14 @@ export const authSlice = createSlice({
   reducers: {
     resetCheckout() {
       return initialState;
+    },
+
+    updateCheckoutAsset(state, { payload: { assetId, networkId } }) {
+      state.checkout = {
+        ...state.checkout,
+        assetId,
+        networkId,
+      };
     },
   },
   extraReducers: (builder) => {
@@ -268,6 +277,6 @@ export const selectDeleteCheckoutState = ({
   deleteCheckoutSuccess,
 });
 
-export const { resetCheckout } = authSlice.actions;
+export const { resetCheckout, updateCheckoutAsset } = authSlice.actions;
 
 export default authSlice.reducer as Reducer<CheckoutState>;

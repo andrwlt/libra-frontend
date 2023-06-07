@@ -1,4 +1,4 @@
-export const NETWORKS = {
+export const NETWORKS_CONFIG = {
   westend: {
     name: 'Westend',
     endpoints: {

@@ -1,17 +1,12 @@
 import { createSlice, Reducer, createAction } from '@reduxjs/toolkit';
 import { createAppAsyncThunk } from 'app/hooks';
 import authAPI from './authAPI';
-import { LOGIN_MESSAGE, APP_NAME, EXTENSION_IDS } from 'config';
-import {
-  ConnectExtensionState,
-  ExtensionState,
-  LoginState,
-  AuthPersitState,
-  AuthHookState,
-  AccountType,
-} from './types';
+import { LOGIN_MESSAGE, APP_NAME } from 'config';
+import { ConnectExtensionState, ExtensionState, LoginState, AuthPersitState, AuthHookState, Account } from './types';
 import { RootState } from 'app/store';
 import { setAxiosToken, removeAxiosToken } from 'services/requester';
+import type { Extension } from '@atscale/libra-ui';
+import { EXTENSION_IDS } from '@atscale/libra-ui';
 
 export interface AuthState extends ExtensionState, ConnectExtensionState, LoginState, AuthPersitState {}
 
@@ -36,42 +31,33 @@ export const resetStore = createAction('RESET_STORE');
 
 export const login = createAppAsyncThunk(
   'auth/login',
-  async (account: AccountType, { rejectWithValue, getState, dispatch }) => {
-    if (!account) {
-      account = getState().auth.libraConnectedAccount;
+  async (account: Account, { rejectWithValue, getState, dispatch }) => {
+    let connectedExtension = getState().auth.connectedExtension;
+    if (!connectedExtension) {
+      return rejectWithValue('ERROR');
     }
 
-    let connectedExtension = getState().auth.connectedExtension;
     const { address } = account;
 
     try {
-      if (!connectedExtension) {
-        await dispatch(connectExtension(EXTENSION_IDS.POLKADOT_JS));
-        connectedExtension = getState().auth.connectedExtension;
-      }
+      const { signature } = await authAPI.getSignater(connectedExtension, address);
+      const addressType = 'substrate';
+      const response = await authAPI.signIn({
+        signature,
+        address,
+        message: LOGIN_MESSAGE,
+        addressType,
+      });
 
-      if (connectedExtension) {
-        const { signature } = await authAPI.getSignater(connectedExtension, address);
-        const response = await authAPI.signIn({
-          signature,
-          address,
-          message: LOGIN_MESSAGE,
-        });
+      const { accessToken, refreshToken } = response.data;
 
-        const { accessToken, refreshToken } = response.data;
+      setAxiosToken(accessToken);
 
-        setAxiosToken(accessToken);
-
-        return {
-          accessToken,
-          refreshToken,
-          account,
-        };
-      }
-      // JUST FOR TYPE CHECKING - MUST NEVER HAPPEN
-      else {
-        return rejectWithValue({ message: `Have no connected extension!` });
-      }
+      return {
+        accessToken,
+        refreshToken,
+        account,
+      };
     } catch (err) {
       return rejectWithValue(err);
     } finally {
@@ -84,7 +70,7 @@ export const login = createAppAsyncThunk(
 
 export const getExtensions = createAppAsyncThunk('auth/getExtensions', async (_, { rejectWithValue }) => {
   try {
-    const extensions = await authAPI.getExtensions();
+    const extensions: Extension[] = await authAPI.getExtensions();
     return extensions;
   } catch (err) {
     return rejectWithValue(err);
@@ -94,13 +80,7 @@ export const getExtensions = createAppAsyncThunk('auth/getExtensions', async (_,
 export const connectExtension = createAppAsyncThunk(
   'auth/connectExtension',
   async (extensionId: string, { rejectWithValue, getState, dispatch }) => {
-    let extensions = getState().auth.extensions;
-
-    if (!extensions.length) {
-      await dispatch(getExtensions());
-      extensions = getState().auth.extensions;
-    }
-
+    const extensions = getState().auth.extensions;
     const extension = extensions.find((ext) => ext.id === extensionId);
 
     if (!extension) {
@@ -108,8 +88,9 @@ export const connectExtension = createAppAsyncThunk(
     }
 
     try {
-      const connection = await extension.enable(APP_NAME);
-      const accounts = await connection.accounts.get();
+      const connection = await extension.instant.enable(APP_NAME);
+      const polkadotAccounts = await connection.accounts.get();
+      const accounts = polkadotAccounts.map((account: any) => ({ ...account, type: EXTENSION_IDS.POLKADOT_JS }));
 
       const connectedExtension = {
         ...extension,
@@ -140,6 +121,7 @@ export const authSlice = createSlice({
 
     resetConnectedExtension(state) {
       state.connectedExtension = undefined;
+      state.connectExtensionFailed = undefined;
     },
 
     updateToken(state, { payload: { accessToken } }) {
@@ -177,10 +159,13 @@ export const authSlice = createSlice({
 
       .addCase(connectExtension.pending, (state) => {
         state.connectExtensionLoading = true;
+        state.connectedExtension = undefined;
+        state.connectExtensionFailed = undefined;
       })
       .addCase(connectExtension.fulfilled, (state, { payload }) => {
         state.connectExtensionLoading = false;
         state.connectedExtension = payload;
+        state.connectExtensionFailed = undefined;
       })
       .addCase(connectExtension.rejected, (state, { payload }) => {
         state.connectExtensionLoading = false;

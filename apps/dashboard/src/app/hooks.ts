@@ -62,9 +62,9 @@ export const useFailed: ReactToResult = (error, customMess, callback) => {
 export const useDebounceCallback = (callback: Function, timeout = 200) => {
   const timeoutRef = useRef<any>(null);
 
-  const handleCallback = () => {
+  const handleCallback = (value?: any) => {
     clearTimeout(timeoutRef.current);
-    timeoutRef.current = setTimeout(callback, timeout);
+    timeoutRef.current = setTimeout(() => callback(value), timeout);
   };
 
   return handleCallback;

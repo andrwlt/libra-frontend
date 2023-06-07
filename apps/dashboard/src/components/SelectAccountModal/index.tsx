@@ -1,6 +1,6 @@
 import { Typography, Modal, Result, Button } from 'antd';
 import AccountOption from 'components/SelectAccountModal/AccountOption';
-import { AccountType } from 'features/auth/types';
+import { Account } from 'features/auth/types';
 import { useTranslation } from 'react-i18next';
 import { useResetConnectedExtension } from 'features/auth/authHooks';
 import { SmileOutlined } from '@ant-design/icons';
@@ -9,7 +9,7 @@ import { LOCALE_WORKSPACE } from 'app/i18n';
 type SelectAccountModalPropsType = {
   open: boolean;
   onClose: () => void;
-  onSelectAccount: (account: AccountType) => void;
+  onSelectAccount: (account: Account) => void;
   connectedExtension: any;
   connectExtensionLoading: boolean;
 };
@@ -41,7 +41,7 @@ const SelectAccountModal = (props: SelectAccountModalPropsType) => {
       {connectedExtension && connectedExtension.accounts.length > 0 && (
         <>
           <div>
-            {connectedExtension.accounts.map((account: AccountType) => (
+            {connectedExtension.accounts.map((account: Account) => (
               <AccountOption
                 key={account.address}
                 account={account}

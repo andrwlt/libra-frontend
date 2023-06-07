@@ -1,5 +1,6 @@
 import icon from 'assets/web-setting.png';
 import polkadotIcon from 'assets/polkadot.png';
+import metamaskIcon from 'assets/metamask.png';
 import styled from 'styled-components';
 import { Typography, Space } from 'antd';
 import { useTranslation } from 'react-i18next';
@@ -31,6 +32,7 @@ const Image = styled.img`
 const ExtensionImage = styled.img`
   width: 110px;
   height: 110px;
+  object-fit: cover;
 `;
 
 const ExtensionLink = styled.a`
@@ -56,7 +58,14 @@ const NoExtension = () => {
         </Title>
         <Text style={{ display: 'block', fontSize: 18 }}>{t('preferExtension')}</Text>
 
-        <Space style={{ marginTop: 40, marginBottom: 40 }}>
+        <Space style={{ marginTop: 40, marginBottom: 40 }} size={40}>
+          <ExtensionLink href="https://metamask.io/download/" target="_blank">
+            <ExtensionImage src={metamaskIcon} alt="metamask" />
+            <Text type="secondary" style={{ display: 'block', marginTop: 10 }}>
+              Metamask
+            </Text>
+          </ExtensionLink>
+
           <ExtensionLink href="https://polkadot.js.org/extension/" target="_blank">
             <ExtensionImage src={polkadotIcon} alt="polkadot" />
             <Text type="secondary" style={{ display: 'block', marginTop: 10 }}>

@@ -6294,44 +6294,29 @@ function hasInjectedWeb3() {
     var ethereum = window.ethereum, injectedWeb3 = window.injectedWeb3;
     return ethereum || injectedWeb3;
 }
-var hasInjectedWallet = function(id) {
-    var ethereum = window.ethereum, injectedWeb3 = window.injectedWeb3;
-    if (id === "METAMASK") return ethereum;
-    if (id === "polkadot-js") return injectedWeb3;
+var hasInjectedWallet = function() {
+    var injectedWeb3 = window.injectedWeb3;
+    return injectedWeb3;
 };
 var getExtensions = function() {
-    var injectedWeb3 = window.injectedWeb3, ethereum = window.ethereum;
+    var injectedWeb3 = window.injectedWeb3;
     var extensions = [];
-    var polkadot = injectedWeb3 === null || injectedWeb3 === void 0 ? void 0 : injectedWeb3[EXTENSION_IDS.POLKADOT_JS];
-    if (injectedWeb3) {
-        extensions.push({
-            id: "polkadot-js",
-            instant: polkadot
-        });
-    }
-    if (ethereum) {
-        extensions.push({
-            id: "METAMASK",
-            instant: ethereum
-        });
-    }
+    EXTENSIONS.forEach(function(extension) {
+        var extensionInstant = injectedWeb3 === null || injectedWeb3 === void 0 ? void 0 : injectedWeb3[extension.id];
+        if (extensionInstant) {
+            extensions.push({
+                id: extension.id,
+                instant: extensionInstant
+            });
+        }
+    });
     return extensions;
 };
 var getExtension = function(id) {
-    var injectedWeb3 = window.injectedWeb3, ethereum = window.ethereum;
-    if (id === "polkadot-js") {
-        var polkadot = injectedWeb3 === null || injectedWeb3 === void 0 ? void 0 : injectedWeb3[EXTENSION_IDS.POLKADOT_JS];
-        return {
-            id: "polkadot-js",
-            instant: polkadot
-        };
-    }
-    if (id === "METAMASK") {
-        return {
-            id: "METAMASK",
-            instant: ethereum
-        };
-    }
+    var extensions = getExtensions();
+    return extensions.find(function(extension) {
+        return extension.id === id;
+    });
 };
 var extensionAPI = {
     getExtensions: function getExtensions1() {
@@ -6354,7 +6339,7 @@ var extensionAPI = {
         var retryCounter = 0;
         return new Promise(function(resolve, reject) {
             var retryInterval = setInterval(function() {
-                if (hasInjectedWallet(id)) {
+                if (hasInjectedWallet()) {
                     clearInterval(retryInterval);
                     var extension = getExtension(id);
                     resolve(extension);

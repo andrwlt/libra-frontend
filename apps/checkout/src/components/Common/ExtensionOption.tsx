@@ -2,10 +2,23 @@ import { Typography, Row, Tag } from 'antd';
 import styled from 'styled-components';
 import { EXTENSIONS, ExtensionId } from '@atscale/libra-ui';
 import polkadotJsLogo from 'assets/polkadot-js.svg';
-import metamaskLogo from 'assets/metamask.svg';
+import subwalletLogo from 'assets/subwallet-logo.jpeg';
+import talismanLogo from 'assets/talisman-logo.png';
 
-export const getExtensionLogo = (id: 'polkadot-js' | 'METAMASK') => {
-  return id === 'polkadot-js' ? polkadotJsLogo : metamaskLogo;
+export const getExtensionLogo = (id: ExtensionId) => {
+  switch (id) {
+    case 'polkadot-js':
+      return polkadotJsLogo;
+
+    case 'subwallet-js':
+      return subwalletLogo;
+
+    case 'talisman':
+      return talismanLogo;
+
+    default:
+      return polkadotJsLogo;
+  }
 };
 
 const ExtensionOptionWrapper = styled(Row)`

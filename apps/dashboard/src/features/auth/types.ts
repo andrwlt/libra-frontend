@@ -1,27 +1,15 @@
+import { ExtensionId, Extension } from '@atscale/libra-ui';
 import { AxiosPromise } from 'axios';
 
-export interface AccountType {
+export interface Account {
   address: string;
-  genesisHash: string;
   name: string;
-  type: string;
+  type: 'METAMASK' | 'polkadot-js';
 }
 
-export interface ExtensionConfig {
-  id: string;
-  name: string;
-  logo: string;
-  installURL: string;
-}
-
-export interface Extension extends ExtensionConfig {
-  enable: (appName: string) => Promise<any>;
-  accounts?: AccountType[];
-}
-
-export interface ConnectedExtension extends ExtensionConfig {
+export interface ConnectedExtension extends Extension {
   signer: any;
-  accounts: AccountType[];
+  accounts: Account[];
 }
 
 export interface ExtensionsContextInterface {
@@ -33,13 +21,13 @@ export interface ExtensionsContextInterface {
 }
 
 export interface ExtensionState {
-  extensions: Extension[];
+  extensions: any[];
   getExtensionsLoading: boolean;
   getExtensionsFailed: any;
 }
 
 export interface ConnectExtensionState {
-  connectedExtension: ConnectedExtension | any;
+  connectedExtension?: ConnectedExtension;
   connectExtensionLoading: boolean;
   connectExtensionFailed: any;
 }
@@ -55,29 +43,30 @@ export interface LoginState {
 }
 
 export interface LoginHook extends LoginState {
-  handleLogin: (account: AccountType) => Promise<void>;
+  handleLogin: (account: Account) => Promise<void>;
 }
 
 export interface AuthPersitState {
   token: string | undefined;
-  libraConnectedAccount: any;
+  libraConnectedAccount?: Account;
   refreshToken: undefined | string;
 }
 
 export interface AuthHookState {
   token: string | undefined;
   loginLoading: boolean;
-  account: any;
+  account?: Account;
 }
 
 export interface AuthAPI {
   getSignater(extension: ConnectedExtension, address: string): Promise<any>;
   signIn(data: LoginPayload): AxiosPromise;
-  getExtensions(): Promise<any>;
+  getExtensions(): Promise<Extension[]>;
 }
 
 export interface LoginPayload {
   signature: string;
   address: string;
   message: string;
+  addressType: 'evm' | 'substrate';
 }

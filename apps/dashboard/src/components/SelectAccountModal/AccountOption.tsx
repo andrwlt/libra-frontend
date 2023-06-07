@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Space, Typography, theme } from 'antd';
 import styled from 'styled-components';
 import Identicon from '@polkadot/react-identicon';
-import { AccountType } from 'features/auth/types';
+import { Account } from 'features/auth/types';
 
 type AccountOptionWraperProps = {
   hovered: boolean;
@@ -18,7 +18,7 @@ const AccountOptionWraper = styled.div<AccountOptionWraperProps>`
   margin: 8px 0;
 `;
 
-const AccountOption = ({ account, onClick }: { account: AccountType; onClick: Function }) => {
+const AccountOption = ({ account, onClick }: { account: Account; onClick: Function }) => {
   const [hovered, setHovered] = useState(false);
   const { token } = theme.useToken();
   return (

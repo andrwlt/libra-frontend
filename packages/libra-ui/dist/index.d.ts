@@ -82,7 +82,7 @@ interface Account {
     name: string;
     type: 'METAMASK' | 'polkadot-js';
 }
-type ExtensionId = 'polkadot-js' | 'METAMASK';
+type ExtensionId = 'polkadot-js' | 'subwallet-js' | 'talisman';
 interface Extension {
     id: ExtensionId;
     instant: any;

@@ -5,11 +5,11 @@ import { useCheckouts, useDeleteCheckout, useResetCheckout } from 'features/chec
 import { useNavigate } from 'react-router-dom';
 import CopyableField from 'components/Common/CopyableField';
 import { getCheckoutLink, formatCreatedDate } from 'utils/format/formatText';
-import { ASSET_METADATA } from '@atscale/libra-ui';
+import { getAssetMetadata } from '@atscale/libra-ui';
 import PATHS from 'router/paths';
 import PageHeader from 'components/Common/PageHeader';
 import { useTranslation } from 'react-i18next';
-import { CheckoutResponseType as Checkout } from './types';
+import { CheckoutResponse } from '@atscale/libra-ui';
 import type { MenuProps } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { StyledContainer } from 'components/Common/Styled';
@@ -49,17 +49,17 @@ export default function Checkouts() {
 
   const hasCheckout = checkouts.length > 0;
 
-  const columns: ColumnsType<Checkout> = [
+  const columns: ColumnsType<CheckoutResponse> = [
     {
       title: t('linkURL'),
       key: 'Link URL',
-      render: (checkout: Checkout) => <CopyableField style={{ minWidth: 420 }} text={getCheckoutLink(checkout.id)} />,
+      render: (_, checkout) => <CopyableField style={{ minWidth: 420 }} text={getCheckoutLink(checkout.id)} />,
       width: 500,
     },
     {
       title: t('status'),
       key: 'Status',
-      render: ({ active }: Checkout) => {
+      render: (_, { active }) => {
         const text = active ? 'Active' : 'Deactivated';
         const color = active ? 'success' : 'orange';
         return <Tag color={color}>{text}</Tag>;
@@ -69,29 +69,35 @@ export default function Checkouts() {
     {
       title: t('name'),
       key: 'Name',
-      render: ({ item: { name } }: Checkout) => name,
+      render: (_, { item: { name } }) => name,
     },
     {
       title: t('price'),
       key: 'Price',
-      render: ({ item: { price }, asset }: Checkout) => {
-        const assetMetadata = ASSET_METADATA[asset];
+      render: (_, checkout) => {
+        const {
+          item: { price },
+          assetId,
+          networkId,
+        } = checkout;
+        const asset = { assetId, networkId };
+        const assetMetadata = getAssetMetadata(asset);
         return (
-          <Space align="center">
-            {assetMetadata && (
-              <Avatar src={assetMetadata.logo} size="small">
-                {asset}
+          assetMetadata && (
+            <Space align="center">
+              <Avatar src={assetMetadata.logoUrl} size="small">
+                {assetMetadata.symbol}
               </Avatar>
-            )}
-            <span> {priceFormatHelper.getCheckoutPrice({ price: price, asset: asset }, assetMetadata)}</span>
-          </Space>
+              <span> {priceFormatHelper.getCheckoutPrice({ price: price, asset }, assetMetadata)}</span>
+            </Space>
+          )
         );
       },
     },
     {
       title: t('created'),
       key: 'Created',
-      render: (checkout: Checkout) => {
+      render: (_, checkout) => {
         return formatCreatedDate(checkout.created);
       },
       width: 200,
@@ -99,7 +105,7 @@ export default function Checkouts() {
     {
       title: '',
       width: 50,
-      render: (checkout: Checkout) => {
+      render: (_, checkout) => {
         const items: MenuProps['items'] = [
           {
             label: (

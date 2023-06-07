@@ -2,22 +2,22 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import { Typography, theme, Form, Tabs } from 'antd';
-import { Checkout as CheckoutPreview } from '@atscale/libra-ui';
 import { ActionBar } from './ActionBar';
 import {
   useCheckout,
   useCreateCheckout,
   useUpdateCheckout,
   useResetCheckout,
-  useReinitCheckoutForm,
+  useReInitCheckoutForm,
 } from 'features/checkout/checkoutHooks';
 import CheckoutBrandingFormItems from 'features/checkout/FormItems/CheckoutBrandingFormItems';
-import CheckoutProductFormItems from 'features/checkout/FormItems/CheckoutProductFormItems';
+import ProductFormItems from 'features/checkout/Checkout/Form/ProductFormItems';
 import AfterPaymentFormItem from 'features/checkout/FormItems/AfterPaymentFormItem';
 import type { TabsProps } from 'antd';
 import Previewer from 'components/Checkout/Previewer';
 import { useDebounceCallback } from 'app/hooks';
-import { CheckoutPreviewType, CreatingCheckoutType, UpdatingCheckoutType } from '../types';
+import { CreatingCheckout, UpdatingCheckout } from 'features/checkout/types';
+import { Checkout, CheckoutComponent, getNetworkAssets } from '@atscale/libra-ui';
 import { useTranslation } from 'react-i18next';
 import { formatCheckoutToStringPrice } from 'utils/format/balance';
 import { FixedWrapper } from 'components/Common/Styled';
@@ -67,20 +67,30 @@ const PRODUCT_STEP_KEY = 'product';
 const BRANDING_STEP_KEY = 'branding';
 const AFTER_PAYMENT_STEP_KEY = 'afterPayment';
 
-const Checkout = () => {
+const CheckoutDetails = () => {
   const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
   const { id } = useParams();
   const { checkout, getCheckoutLoading } = useCheckout(id);
   const { handleCreateCheckout, createCheckoutLoading } = useCreateCheckout();
   const { handleUpdateCheckout, updateCheckoutLoading } = useUpdateCheckout();
 
-  const [previewingCheckout, setPreviewingCheckout] = useState<CheckoutPreviewType>(checkout);
+  const [previewingCheckout, setPreviewingCheckout] = useState<Checkout>(checkout);
   const [form] = Form.useForm();
 
-  useReinitCheckoutForm(form, setPreviewingCheckout);
+  useReInitCheckoutForm(form, setPreviewingCheckout);
   useResetCheckout();
 
-  const onFieldsChange = useDebounceCallback(() => {
+  const onFieldsChange = useDebounceCallback((changedFields: any) => {
+    if (changedFields) {
+      const { value, name } = changedFields[0];
+      const isNetworkChanged = name?.[0] === 'networkId';
+      if (isNetworkChanged) {
+        const assets = getNetworkAssets(value);
+        form.setFieldValue(['assetId'], assets?.[0]?.id);
+        form.setFieldValue(['item', 'price'], undefined);
+      }
+    }
+
     setPreviewingCheckout(form.getFieldsValue());
   });
 
@@ -94,6 +104,7 @@ const Checkout = () => {
     form
       .validateFields()
       .then((values) => {
+        console.log('values', values);
         let { afterPayment } = values;
 
         if (afterPayment.type === AFTER_PAYMENT_TYPE.MESSAGE && !afterPayment.config) {
@@ -101,12 +112,13 @@ const Checkout = () => {
         }
 
         if (id) {
-          handleUpdateCheckout(formatCheckoutToStringPrice({ ...values, afterPayment, id }) as UpdatingCheckoutType);
+          handleUpdateCheckout(formatCheckoutToStringPrice({ ...values, afterPayment, id }) as UpdatingCheckout);
         } else {
-          handleCreateCheckout(formatCheckoutToStringPrice({ ...values, afterPayment }) as CreatingCheckoutType);
+          handleCreateCheckout(formatCheckoutToStringPrice({ ...values, afterPayment }) as CreatingCheckout);
         }
       })
       .catch((error) => {
+        console.log('error', error);
         const errorStep = error.errorFields?.[0]?.name?.[0];
         if (errorStep === 'item' && activeStep !== PRODUCT_STEP_KEY) {
           setActiveStep(PRODUCT_STEP_KEY);
@@ -129,7 +141,7 @@ const Checkout = () => {
       forceRender: true,
       key: PRODUCT_STEP_KEY,
       label: t('product'),
-      children: <CheckoutProductFormItems />,
+      children: <ProductFormItems />,
     },
     {
       key: BRANDING_STEP_KEY,
@@ -157,7 +169,7 @@ const Checkout = () => {
         <CheckoutFormWrapper background={colorBgBase} boxShadow={boxShadow}>
           <div style={{ width: '100%', maxWidth: '440px' }}>
             <Form
-              autoComplete='off'
+              autoComplete="off"
               disabled={getCheckoutLoading || isSubmitLoading}
               layout="vertical"
               initialValues={checkout}
@@ -178,7 +190,7 @@ const Checkout = () => {
             {showRedirectPreviewer ? (
               <RedirectPreviewer />
             ) : (
-              <CheckoutPreview
+              <CheckoutComponent
                 loading={getCheckoutLoading}
                 checkoutData={previewingCheckout}
                 isShowAfterPayment={isShowAfterPayment}
@@ -191,4 +203,4 @@ const Checkout = () => {
   );
 };
 
-export default Checkout;
+export default CheckoutDetails;

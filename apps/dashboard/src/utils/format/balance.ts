@@ -1,24 +1,25 @@
-import { CheckoutResponseAfterConvertingPrice, CheckoutResponseType } from 'features/checkout/types';
+import { NumberPriceCheckoutResponse, CheckoutResponse } from '@atscale/libra-ui';
 import { priceFormatHelper } from '@atscale/libra-ui';
 
-export const formatCheckoutToNumberPrice = (checkout: CheckoutResponseType): CheckoutResponseAfterConvertingPrice => {
-  const { item, asset } = checkout;
+export const formatCheckoutToNumberPrice = (checkout: CheckoutResponse): NumberPriceCheckoutResponse => {
+  const { item, assetId, networkId } = checkout;
+
   return {
     ...checkout,
     item: {
       ...item,
-      price: priceFormatHelper.formatBalance(item.price, asset),
+      price: priceFormatHelper.formatBalance(item.price, { assetId, networkId }),
     },
   };
 };
 
 export const formatCheckoutToStringPrice = (checkout: any) => {
-  const { item, asset } = checkout;
+  const { item, assetId, networkId } = checkout;
   return {
     ...checkout,
     item: {
       ...item,
-      price: priceFormatHelper.toSmallestUnit(item.price ?? 0, asset),
+      price: priceFormatHelper.toSmallestUnit(item.price ?? 0, { assetId, networkId }),
     },
   };
 };

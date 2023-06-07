@@ -12,14 +12,15 @@ import {
   resetCheckout,
   selectDeleteCheckoutState,
   deleteCheckout,
+  updateCheckoutAsset,
 } from 'features/checkout/checkoutSlice';
 import { useTranslation } from 'react-i18next';
 import {
   CreateCheckoutHookType,
   UpdateCheckoutHookType,
   DeleteCheckoutHookType,
-  CreatingCheckoutType,
-  UpdatingCheckoutType,
+  CreatingCheckout,
+  UpdatingCheckout,
   CheckoutDetailsState,
   UseCheckoutsReturnType,
   UseHelpTextReturnType,
@@ -28,7 +29,8 @@ import { FormInstance, Form } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import PATHS from 'router/paths';
 import { LOCALE_WORKSPACE } from 'app/i18n';
-import { ASSET_METADATA } from '@atscale/libra-ui';
+import { getAssetMetadata, getNetworkAssets } from '@atscale/libra-ui';
+import { useNetworks } from 'features/auth/authHooks';
 
 export const useResetCheckout = () => {
   const dispatch = useAppDispatch();
@@ -59,13 +61,25 @@ export const useCheckouts = (): UseCheckoutsReturnType => {
 
 export const useCheckout = (id?: string): CheckoutDetailsState => {
   const state = useAppSelector(selectCheckoutDetailsState);
+  const networks = useNetworks();
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (id) {
       dispatch(getCheckoutDetails(id));
+    } else {
+      const initNetworkId = networks[0]?.id;
+      if (initNetworkId) {
+        const assets = getNetworkAssets(initNetworkId);
+        dispatch(
+          updateCheckoutAsset({
+            networkId: initNetworkId,
+            assetId: assets[0]?.id,
+          }),
+        );
+      }
     }
-  }, [dispatch, id]);
+  }, [dispatch, id, networks]);
 
   useFailed(state.getCheckoutFailed);
   return state;
@@ -77,7 +91,7 @@ export const useCreateCheckout = (onboardingMode = false): CreateCheckoutHookTyp
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const handleCreateCheckout = (checkout: CreatingCheckoutType) => {
+  const handleCreateCheckout = (checkout: CreatingCheckout) => {
     dispatch(createCheckout(checkout));
   };
 
@@ -99,7 +113,7 @@ export const useUpdateCheckout = (): UpdateCheckoutHookType => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const handleUpdateCheckout = (checkout: UpdatingCheckoutType) => {
+  const handleUpdateCheckout = (checkout: UpdatingCheckout) => {
     dispatch(updateCheckout(checkout));
   };
 
@@ -114,7 +128,7 @@ export const useUpdateCheckout = (): UpdateCheckoutHookType => {
   };
 };
 
-export const useReinitCheckoutForm = (form: FormInstance, update: Function) => {
+export const useReInitCheckoutForm = (form: FormInstance, update: Function) => {
   const { checkout } = useCheckout();
 
   useEffect(() => {
@@ -163,8 +177,9 @@ export const useHelpText = (isError?: boolean): UseHelpTextReturnType => {
   };
 
   const isPriceTooSmall = (value: number) => {
-    const asset = form.getFieldValue(['asset']);
-    const { decimals } = ASSET_METADATA[asset];
+    const assetId = form.getFieldValue(['assetId']);
+    const networkId = form.getFieldValue(['networkId']);
+    const { decimals } = getAssetMetadata({ assetId, networkId });
     const smallestPrice = 1 / Math.pow(10, decimals);
 
     return value === 0 || (value && value < smallestPrice);

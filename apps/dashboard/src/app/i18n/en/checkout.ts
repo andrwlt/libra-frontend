@@ -11,6 +11,8 @@ const checkout = {
   redirectUrlPlaceholder: 'Your website URL',
   invalidUrl: 'Invalid URL',
 
+  assetIsRequired: 'Asset is Required!',
+  networkIsRequired: 'Network is Required!',
   brandNameIsRequired: 'Brand name is required!',
   brandNamePlaceholderOnboarding: 'KittyCat Studio',
   brandNameHelpTextOnboarding: `Cryptocurrency transactions are non-refundable. A reputable business name is crucial for encouraging customers to make purchases.`,
@@ -33,7 +35,8 @@ const checkout = {
   description: 'Description',
   descriptionPlaceholder: 'Description about your product or service',
   asset: 'Asset',
-  productImageHelpTextOnboarding: 'A well-chosen image can effectively showcase your product and boost your sales conversion by 30%.',
+  productImageHelpTextOnboarding:
+    'A well-chosen image can effectively showcase your product and boost your sales conversion by 30%.',
   brandLogoHelpTextOnboarding: 'A professional business logo helps build trust and drives sales.',
 
   contactInformation: 'Contact information',

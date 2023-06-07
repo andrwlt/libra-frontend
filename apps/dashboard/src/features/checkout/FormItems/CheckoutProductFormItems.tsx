@@ -2,8 +2,7 @@ import { Input, InputNumber, Select, Form, Space } from 'antd';
 import ImageUploader from 'components/Inputs/ImageUploader';
 import { useTranslation } from 'react-i18next';
 import { FormItemsPropsType, PriceInputPropsType } from 'features/checkout/types';
-import { ASSET_METADATA } from '@atscale/libra-ui';
-import type { AssetMetadata } from '@atscale/libra-ui';
+import { getAssetMetadata } from '@atscale/libra-ui';
 import { LOCALE_WORKSPACE } from 'app/i18n';
 import { useCheckFieldError, useHelpText } from 'features/checkout/checkoutHooks';
 import styled from 'styled-components';
@@ -17,16 +16,16 @@ interface AssetInputProps {
 }
 
 const AssetInput = ({ onChange, value, onboardingMode }: AssetInputProps) => {
-  const assetOptions = [ASSET_METADATA.ksm, ASSET_METADATA.dot];
+  // const assetOptions = [ASSET_METADATA.ksm, ASSET_METADATA.dot];
   return (
     <Select style={{ width: onboardingMode ? '88px' : '102px' }} value={value} onChange={(val) => onChange?.(val)}>
-      {assetOptions.map((asset: AssetMetadata) => {
+      {/* {assetOptions.map((asset: AssetMetadata) => {
         return (
           <Select.Option key={asset.code} value={asset.code}>
             {asset.symbol}
           </Select.Option>
         );
-      })}
+      })} */}
     </Select>
   );
 };
@@ -82,13 +81,13 @@ const ProductPriceFormItem = (props: PriceInputPropsType) => {
       style={{ flexGrow: 1, paddingRight: '32px' }}
       name={['item', 'price']}
       required
-      dependencies={['asset']}
+      dependencies={['assetId']}
       rules={[
         ({ getFieldValue }) => ({
           validator(_, value) {
-            const asset = getFieldValue(['asset']);
-
-            const { decimals } = ASSET_METADATA[asset];
+            const assetId = getFieldValue(['assetId']);
+            const networkId = getFieldValue(['networkId']);
+            const { decimals } = getAssetMetadata({ assetId, networkId });
             const smallestPrice = 1 / Math.pow(10, decimals);
 
             if (value === 0 || (value && value < smallestPrice)) {

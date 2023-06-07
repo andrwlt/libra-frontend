@@ -2,14 +2,13 @@ import { useState } from 'react';
 import { Button, Typography, Card, theme as antdTheme } from 'antd';
 import styled from 'styled-components';
 import logo from 'assets/logo.svg';
-import { useExtensions, useAuth, useLogin, useConnectExtension } from 'features/auth/authHooks';
-import SelectAccountModal from 'components/SelectAccountModal';
+import { useAuth, useLogin } from 'features/auth/authHooks';
+import ConnectWalletModal from 'components/ConnectWalletModal';
 import { Navigate } from 'react-router-dom';
 import PATHS from 'router/paths';
 import { Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Loading from 'components/Common/Loading';
-import NoExtension from './NoExtension';
 import { LOCALE_WORKSPACE } from 'app/i18n';
 
 type PropsType = {
@@ -26,11 +25,7 @@ const SignInWrapper = styled.div<PropsType>`
 `;
 
 export default function SignIn() {
-  const { getExtensionsLoading, getExtensionsFailed } = useExtensions();
-  const [isSelectAccountModalOpen, setIsSelectAccountModalOpen] = useState(false);
-  const { handleConnectExtension, connectExtensionLoading, connectedExtension } = useConnectExtension(() => {
-    setIsSelectAccountModalOpen(true);
-  });
+  const [isConnectWalletModalOpen, setIsConnectWalletModalOpen] = useState(false);
   const { token } = useAuth();
   const { loginLoading, handleLogin } = useLogin();
   const { t } = useTranslation(LOCALE_WORKSPACE.AUTH);
@@ -45,43 +40,35 @@ export default function SignIn() {
 
   return (
     <SignInWrapper colorBgLayout={colorBgLayout} className="test">
-      <Loading loading={getExtensionsLoading || loginLoading} isFullPage />
-      {getExtensionsFailed ? (
-        <NoExtension />
-      ) : (
-        <Card style={{ boxShadow, maxWidth: '480px', width: '100%', padding: '1rem' }}>
-          <a href="https://golibra.xyz">
-            <img src={logo} height={36} alt="Libra Logo"></img>
-          </a>
-          <Typography.Title level={3}>{t('login')}</Typography.Title>
+      <Loading loading={loginLoading} isFullPage />
+      <Card style={{ boxShadow, maxWidth: '480px', width: '100%', padding: '1rem' }}>
+        <a href="https://golibra.xyz">
+          <img src={logo} height={36} alt="Libra Logo"></img>
+        </a>
+        <Typography.Title level={3}>{t('login')}</Typography.Title>
 
-          <Typography.Title style={{ fontWeight: 'normal', marginTop: '-4px' }} type="secondary" level={5}>
-            {t('continueToLibra')}
-          </Typography.Title>
+        <Typography.Title style={{ fontWeight: 'normal', marginTop: '-4px' }} type="secondary" level={5}>
+          {t('continueToLibra')}
+        </Typography.Title>
 
-          <Button
-            loading={connectExtensionLoading}
-            style={{ marginTop: '32px' }}
-            type="primary"
-            size="large"
-            block
-            onClick={handleConnectExtension}
-          >
-            {t('continueWithWallet')}
-          </Button>
+        <Button
+          style={{ marginTop: '32px' }}
+          type="primary"
+          size="large"
+          block
+          onClick={() => setIsConnectWalletModalOpen(true)}
+        >
+          {t('continueWithWallet')}
+        </Button>
 
-          <Typography.Paragraph type="secondary" style={{ marginTop: '16px' }}>
-            {t('newToLibra')} <Link to={PATHS.onboard}> {t('tryNow')}</Link>
-          </Typography.Paragraph>
-        </Card>
-      )}
-
-      <SelectAccountModal
-        open={isSelectAccountModalOpen}
-        onSelectAccount={handleLogin}
-        onClose={() => setIsSelectAccountModalOpen(false)}
-        connectExtensionLoading={connectExtensionLoading}
-        connectedExtension={connectedExtension}
+        <Typography.Paragraph type="secondary" style={{ marginTop: '16px' }}>
+          {t('newToLibra')} <Link to={PATHS.onboard}> {t('tryNow')}</Link>
+        </Typography.Paragraph>
+      </Card>
+      <ConnectWalletModal
+        open={isConnectWalletModalOpen}
+        handleLogin={handleLogin}
+        onClose={() => setIsConnectWalletModalOpen(false)}
       />
     </SignInWrapper>
   );

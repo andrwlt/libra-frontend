@@ -11,6 +11,7 @@ import { breakpoints } from 'config';
 import { useLocation } from 'react-router-dom';
 import { ExperimentTwoTone, QuestionCircleOutlined } from '@ant-design/icons';
 import { LOCALE_WORKSPACE } from 'app/i18n';
+import { Account } from 'features/auth/types';
 
 const StyledMenuItem = styled.div`
   display: flex;
@@ -26,7 +27,21 @@ const { Title, Text, Link } = Typography;
 
 const developerRoutes = ['webhooks', 'apiKeys', 'developers'];
 
-const Account = () => {
+const getAccountName = (account: Account) => {
+  if (!account) {
+    return '';
+  }
+
+  return account.name;
+};
+
+const AccountIcon = ({ account }: { account: Account }) => {
+  return (
+    <Identicon value={account?.address} size={35} theme="polkadot" style={{ display: 'block', cursor: 'pointer' }} />
+  );
+};
+
+const AccountComponent = () => {
   const { t } = useTranslation(LOCALE_WORKSPACE.LAYOUT);
   const { t: tWording } = useTranslation(LOCALE_WORKSPACE.WORDING);
 
@@ -39,22 +54,21 @@ const Account = () => {
   const [, rootPath] = location.pathname.split('/');
   const isDeveloperActive = developerRoutes.includes(rootPath);
 
+  if (!account) {
+    return null;
+  }
+
   const items: MenuProps['items'] = [
     {
       key: '1',
       label: (
         <StyledMenuItem style={{ cursor: 'auto' }}>
-          <Identicon
-            value={account?.address}
-            size={35}
-            theme="polkadot"
-            style={{ display: 'block', cursor: 'pointer' }}
-          />
+          <AccountIcon account={account} />
           <div style={{ marginLeft: 10, display: 'flex', flexDirection: 'column' }}>
-            <Text style={{ margin: 0 }}> {account?.name}</Text>
+            <Text style={{ margin: 0 }}> {getAccountName(account)}</Text>
             <Text type="secondary" style={{ margin: 0 }}>
               {' '}
-              {truncate(account?.address, { start: 6, end: 6 })}
+              {truncate(account.address, { start: 6, end: 6 })}
             </Text>
           </div>
         </StyledMenuItem>
@@ -120,12 +134,7 @@ const Account = () => {
         placement={screen === breakpoints.screen.xl ? 'bottom' : 'bottomRight'}
       >
         <Space align="center" size={8} style={{ cursor: 'pointer' }}>
-          <Identicon
-            value={account?.address}
-            size={35}
-            theme="polkadot"
-            style={{ display: 'block', cursor: 'pointer' }}
-          />
+          <AccountIcon account={account} />
         </Space>
       </Dropdown>
       <Modal
@@ -202,4 +211,4 @@ const Account = () => {
   );
 };
 
-export default Account;
+export default AccountComponent;

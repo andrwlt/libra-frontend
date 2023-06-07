@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useAppSelector, useAppDispatch, useFailed, useSuccess } from 'app/hooks';
 import {
   connectExtension,
@@ -12,20 +12,31 @@ import {
   resetStore,
   resetConnectedExtension,
 } from './authSlice';
-import { LoginHook, ConnectExtensionHook, AuthHookState, AccountType } from './types';
-import { EXTENSION_IDS } from 'config';
+import { LoginHook, ConnectExtensionHook, AuthHookState, Account } from './types';
+import { WALLET_TYPES } from 'config';
+import { Network, getWalletNetworks, EXTENSION_IDS } from '@atscale/libra-ui';
 
 export const useExtensions = (revalidate: boolean = false) => {
   const state = useAppSelector(selectExtensionsState);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    if (!state.extensions.length || revalidate) {
+    if (revalidate) {
       dispatch(getExtensions());
     }
   }, [dispatch, revalidate, state.extensions.length]);
 
-  return state;
+  const installedExtensions: { [key: string]: boolean } = useMemo(() => {
+    return state.extensions.reduce(
+      (dict, extension) => ({
+        ...dict,
+        [extension.id]: true,
+      }),
+      {},
+    );
+  }, [state.extensions]);
+
+  return { ...state, installedExtensions };
 };
 
 export const useLogin = (): LoginHook => {
@@ -33,7 +44,7 @@ export const useLogin = (): LoginHook => {
 
   const dispatch = useAppDispatch();
 
-  const handleLogin = async (account: AccountType) => {
+  const handleLogin = async (account: Account) => {
     await dispatch(login(account));
   };
 
@@ -47,7 +58,7 @@ export const useAuth = (): AuthHookState => {
   return state;
 };
 
-export const useConnectExtension = (onConnected: () => void): ConnectExtensionHook => {
+export const useConnectExtension1 = (onConnected: () => void): ConnectExtensionHook => {
   const state = useAppSelector(selectConnectExtensionState);
   const dispatch = useAppDispatch();
 
@@ -55,7 +66,20 @@ export const useConnectExtension = (onConnected: () => void): ConnectExtensionHo
     dispatch(connectExtension(EXTENSION_IDS.POLKADOT_JS));
   };
 
-  useSuccess(state.connectedExtension, '', onConnected);
+  useSuccess(state.connectedExtension as any, '', onConnected);
+
+  useFailed(state.connectExtensionFailed);
+
+  return { ...state, handleConnectExtension };
+};
+
+export const useConnectExtension = () => {
+  const state = useAppSelector(selectConnectExtensionState);
+  const dispatch = useAppDispatch();
+
+  const handleConnectExtension = (extensionId: string) => {
+    dispatch(connectExtension(extensionId));
+  };
 
   useFailed(state.connectExtensionFailed);
 
@@ -79,4 +103,21 @@ export const useLogout = (): (() => void) => {
     dispatch(logout());
     dispatch(resetStore());
   };
+};
+
+export const useNetworks = (): Network[] => {
+  const { account } = useAppSelector(selectAuthHookState);
+
+  const networks = useMemo(() => {
+    if (!account) {
+      return [];
+    }
+
+    const { type } = account;
+    const walletType = WALLET_TYPES[type];
+
+    return getWalletNetworks(walletType);
+  }, [account]);
+
+  return networks;
 };

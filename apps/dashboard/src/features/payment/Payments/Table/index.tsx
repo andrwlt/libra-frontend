@@ -2,7 +2,7 @@ import { Table, Button, Row, Avatar, Space } from 'antd';
 import getTableLoaderProps from 'components/Common/TableLoader';
 import type { ColumnsType } from 'antd/es/table';
 import { Charge as ChargeDataType } from 'features/payment/types';
-import { ASSET_METADATA } from '@atscale/libra-ui';
+import { getAssetMetadata } from '@atscale/libra-ui';
 import { formatCreatedDate } from 'utils/format/formatText';
 import { useTranslation } from 'react-i18next';
 import { LOCALE_WORKSPACE } from 'app/i18n';
@@ -40,13 +40,14 @@ export default function ChargeTable(props: any) {
       key: 'amount',
       title: tPayment('amount'),
       width: 100,
-      render: ({ asset, amount }) => {
-        const assetMetadata = ASSET_METADATA[asset];
+      render: ({ assetId, networkId, amount }) => {
+        const asset = { assetId, networkId };
+        const assetMetadata = getAssetMetadata(asset);
 
         return (
           <Space>
-            <Avatar src={assetMetadata.logo} size={24}>
-              {asset}
+            <Avatar src={assetMetadata.logoUrl} size={24}>
+              {assetMetadata.symbol}
             </Avatar>
             {priceFormatHelper.getCheckoutPrice({ price: amount, asset }, assetMetadata)}
           </Space>
