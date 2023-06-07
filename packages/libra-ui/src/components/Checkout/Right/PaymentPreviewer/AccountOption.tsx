@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Typography, Space, theme } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import Identicon from '@polkadot/react-identicon';
+import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
 
 const { Paragraph } = Typography;
 
@@ -9,12 +10,13 @@ interface AccountProps {
   account: {
     name: string;
     address: string;
+    type: 'METAMASK' | 'polkadot-js';
   };
   variant?: 'default' | 'select';
 }
 
 export default function AccountInfo({ account, variant = 'default' }: AccountProps) {
-  const { name, address } = account;
+  const { name, address, type } = account;
   const {
     token: { colorPrimary, colorBorder },
   } = theme.useToken();
@@ -41,7 +43,12 @@ export default function AccountInfo({ account, variant = 'default' }: AccountPro
   return (
     <div style={style} onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
       <Space align="center" size="middle">
-        <Identicon value={address} size={24} theme="substrate"></Identicon>
+        {type === 'polkadot-js' ? (
+          <Identicon value={address} size={24} theme="substrate"></Identicon>
+        ) : (
+          <Jazzicon diameter={24} seed={jsNumberForAddress(account.address)} />
+        )}
+
         <Space direction="vertical" size={4}>
           <Paragraph strong style={{ marginBottom: 0 }}>
             {name}

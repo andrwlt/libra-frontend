@@ -1,10 +1,10 @@
 import styled from 'styled-components';
 import { Image, Space, Avatar, Typography, Divider, Skeleton } from 'antd';
-import { AssetMetadata, CheckoutProductItemNumberPrice } from '../../app/types';
+import { AssetMetadata, NumberPriceProduct, Asset } from 'app/types';
 import LibraLogo from 'components/LibraLogo';
-import { ASSET_METADATA } from '../../config';
-import { getCheckoutPrice } from '../../utils';
+import { getCheckoutPrice } from 'utils';
 import { useTranslation } from 'react-i18next';
+import { getAssetMetadata } from 'utils/asset';
 
 const { Paragraph, Link } = Typography;
 
@@ -18,8 +18,8 @@ const ImageWrapper = styled.div`
 `;
 
 interface ProductInfoProps {
-  product: CheckoutProductItemNumberPrice | undefined;
-  asset: string;
+  product: NumberPriceProduct | undefined;
+  asset: Asset;
   loading: boolean;
 }
 
@@ -62,7 +62,7 @@ const ProductInfoWrapper = styled.div`
 const ProductInformation = ({ product, asset, loading }: ProductInfoProps) => {
   const { name, description, price, image } = product || {};
 
-  const assetMetadata: AssetMetadata = ASSET_METADATA[asset];
+  const assetMetadata: AssetMetadata = getAssetMetadata(asset);
 
   return (
     <ProductInfoWrapper>
@@ -74,7 +74,7 @@ const ProductInformation = ({ product, asset, loading }: ProductInfoProps) => {
 
       <Skeleton active className="product-price-skeleton" paragraph={false} loading={loading}>
         <Space align="center" style={{ marginTop: 10 }}>
-          {assetMetadata && <Avatar src={assetMetadata.logo}>{asset}</Avatar>}
+          {assetMetadata && <Avatar src={assetMetadata.logoUrl}>{assetMetadata.symbol}</Avatar>}
 
           <Typography.Title level={3} style={{ margin: 0, fontSize: 32 }}>
             {price ? getCheckoutPrice({ price, asset }, assetMetadata) : '0'}
@@ -122,7 +122,10 @@ function FooterLinks() {
 
       <Divider type="vertical" style={{ height: 20 }} />
 
-      <FooterLink href="https://golibra.xyz/privacy-policy" target='_blank'> {t('privacy')}</FooterLink>
+      <FooterLink href="https://golibra.xyz/privacy-policy" target="_blank">
+        {' '}
+        {t('privacy')}
+      </FooterLink>
       <FooterLink href="https://golibra.xyz/terms-of-service" target="_blank">
         {t('terms')}
       </FooterLink>
@@ -145,8 +148,8 @@ const CheckoutSummary = ({
   previewMode,
   loading,
 }: {
-  product: CheckoutProductItemNumberPrice;
-  asset: string;
+  product: NumberPriceProduct;
+  asset: Asset;
   previewMode: boolean;
   loading: boolean;
 }) => {

@@ -1,4 +1,5 @@
-import { ASSET_METADATA } from 'config';
+import { Asset, AssetMetadata } from 'app/types';
+import { getAssetMetadata } from './asset';
 import JSBI from 'jsbi';
 
 function toReverseArray(str: string) {
@@ -22,8 +23,8 @@ const getDecimalsShouldBeDecrease = (stringNumber: string) => {
   return count;
 };
 
-function formatBalance(amount: string, asset: string): number {
-  const metadata = ASSET_METADATA[asset];
+function formatBalance(amount: string, asset: Asset): number {
+  const metadata = getAssetMetadata(asset);
 
   if (!metadata) {
     return Number(amount);
@@ -56,28 +57,60 @@ function formatBalance(amount: string, asset: string): number {
   return Number(result);
 }
 
-function toSmallestUnit(originAmount: number, asset: string) {
-  const metadata = ASSET_METADATA[asset];
-  let amount = originAmount;
-  let decimals = metadata?.decimals;
+function exponentToStringDecimals(num: number) {
+  if (num < 0.000001) {
+    let numChunks: any[] = [];
+    numChunks = num.toString().split('e');
 
-  if (!Number.isInteger(amount)) {
-    const decimalLength = amount.toString().split('.')[1].length;
-    decimals = decimals - decimalLength;
-    amount = amount * Math.pow(10, decimalLength);
+    let numOfZeroes = Math.abs(numChunks[1]) - 1;
+    let decimalNumber = '';
+    let zeroes = '';
+    let int = numChunks[0];
+
+    for (let i = 0; i < int.length; i++) {
+      int = int.replace('.', '');
+    }
+
+    for (let i = 0; i < numOfZeroes; i++) {
+      zeroes += '0';
+    }
+
+    return '0.' + zeroes + int;
+  } else {
+    return num.toString();
   }
-
-  let stringNumber = amount.toString();
-
-  if (metadata) {
-    const scale = JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(decimals));
-    stringNumber = JSBI.multiply(JSBI.BigInt(amount), scale).toString();
-  }
-
-  return stringNumber;
 }
 
-export const getCheckoutPrice = ({ price, asset }: { price: string | number; asset: string }, assetMetadata: any) => {
+function toSmallestUnit(originAmount: number, asset: Asset) {
+  try {
+    const metadata = getAssetMetadata(asset);
+    if (!metadata) {
+      return 0;
+    }
+
+    let amount = originAmount;
+    let decimals = metadata?.decimals;
+
+    if (!Number.isInteger(amount)) {
+      // avoid scientific notation issue
+      const decimalLength = exponentToStringDecimals(amount).split('.')[1].length;
+      decimals = decimals - decimalLength;
+      amount = amount * Math.pow(10, decimalLength);
+    }
+
+    const scale = JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(decimals));
+    const stringNumber = JSBI.multiply(JSBI.BigInt(amount), scale).toString();
+
+    return stringNumber;
+  } catch (err) {
+    console.log('err', err);
+  }
+}
+
+export const getCheckoutPrice = (
+  { price, asset }: { price: string | number; asset: Asset },
+  assetMetadata: AssetMetadata,
+) => {
   const nextPrice = typeof price !== 'number' ? formatBalance(price, asset) : price;
   const unit = assetMetadata ? assetMetadata.symbol : asset;
   const formattedPrice = nextPrice.toLocaleString('en-US', {

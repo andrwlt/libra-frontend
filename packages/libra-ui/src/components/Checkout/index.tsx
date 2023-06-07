@@ -1,11 +1,11 @@
 import styled from 'styled-components';
 import { Row, Layout, Col } from 'antd';
-import CheckoutSummary from './CheckoutSummary';
-import PaymentSummary from './PaymentSummary';
-import { CheckoutType } from '../../app/types';
+import CheckoutSummary from './Left/CheckoutSummary';
+import PaymentPreviewer from './Right/PaymentPreviewer';
+import { Checkout } from 'app/types';
 import CheckoutBrand from './Brand';
-import AfterPaymentPreviewer from './AfterPaymentPreviewer';
-import '../../app/i18n';
+import AfterPaymentPreviewer from './Right/AfterPaymentPreviewer';
+import 'app/i18n';
 import { useState } from 'react';
 
 const { Content } = Layout;
@@ -48,13 +48,15 @@ const CheckoutPreview = ({
   previewMode = true,
   isShowAfterPayment = false,
   loading = false,
+  HandlePaymentComponent,
 }: {
-  checkoutData: CheckoutType;
+  checkoutData: Checkout;
   previewMode?: boolean;
   isShowAfterPayment?: boolean;
   loading?: boolean;
+  HandlePaymentComponent?: any;
 }) => {
-  const { branding, item, asset, afterPayment } = checkoutData;
+  const { branding, item, assetId, networkId, afterPayment } = checkoutData;
   const [completed, setCompleted] = useState(false);
 
   const handlePaymentSuccess = () => {
@@ -72,21 +74,35 @@ const CheckoutPreview = ({
       <ContentWrapper>
         <MainContent justify="space-between">
           <Col span={12}>
-            <CheckoutSummary loading={loading} product={item} asset={asset} previewMode={previewMode} />
+            <CheckoutSummary
+              loading={loading}
+              product={item}
+              asset={{ assetId, networkId }}
+              previewMode={previewMode}
+            />
           </Col>
+
           <Col span={12}>
             {(completed || isShowAfterPayment) && afterPayment ? (
-              <AfterPaymentPreviewer afterPayment={afterPayment} productName={item.name || 'The product'}/>
-            ) : (
-              <PaymentSummary
-                previewMode={previewMode}
+              <AfterPaymentPreviewer afterPayment={afterPayment} productName={item.name || 'The product'} />
+            ) : previewMode ? (
+              <PaymentPreviewer
                 payment={{
                   payee: checkoutData.payee || '',
                   amount: checkoutData.item.price || 0,
-                  asset: checkoutData.asset,
+                  asset: { assetId, networkId },
                   productName: checkoutData.item.name,
                 }}
+              />
+            ) : (
+              <HandlePaymentComponent
                 onPaymentSuccess={handlePaymentSuccess}
+                payment={{
+                  payee: checkoutData.payee || '',
+                  amount: checkoutData.item.price || 0,
+                  asset: { assetId, networkId },
+                  productName: checkoutData.item.name,
+                }}
               />
             )}
           </Col>

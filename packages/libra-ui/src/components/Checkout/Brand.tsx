@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 import styled from 'styled-components';
 import { Typography, Skeleton } from 'antd';
-import { Brand as BrandType } from '../../app/types';
+import { Brand } from '../../app/types';
 
 const { Title } = Typography;
 
@@ -27,7 +27,7 @@ const LogoWrapper = styled.div`
   }
 `;
 
-const CheckoutBrand = ({ branding, loading }: { branding: BrandType; loading: boolean }) => {
+const CheckoutBrand = ({ branding, loading }: { branding: Brand; loading: boolean }) => {
   const { name, logo } = branding;
 
   const HasNoBrand = !logo && !name;
@@ -40,7 +40,7 @@ const CheckoutBrand = ({ branding, loading }: { branding: BrandType; loading: bo
             'Brand'
           ) : (
             <Fragment>
-              {logo && <img style={{ height: 24 }} src={logo} alt="brand logo" />}
+              {logo && <img style={{ height: 24, marginRight: 10 }} src={logo} alt="brand logo" />}
               {name && (
                 <Title style={{ margin: 0 }} level={5}>
                   {name}

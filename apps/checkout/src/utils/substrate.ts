@@ -1,6 +1,7 @@
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import { getSs58AddressByAsset } from './address';
 import JSBI from 'jsbi';
+import { Asset } from '@atscale/libra-ui';
 
 const connections: Record<string, ApiPromise> = {};
 
@@ -13,7 +14,7 @@ export async function createConnection(rpc: string) {
   return connections[rpc];
 }
 
-export async function getBalance(rpc: string, account: string, asset: string) {
+export async function getBalance(rpc: string, account: string, asset: Asset) {
   const connection = await createConnection(rpc);
   const raw = await connection.query.system.account(getSs58AddressByAsset(account, asset));
   const { data } = raw.toJSON() as any;
@@ -35,7 +36,7 @@ export async function createTransferTx(
   account: any,
   to: string,
   amount: number,
-  asset: string,
+  asset: Asset,
 ): Promise<string> {
   const connection = await createConnection(rpc);
   connection.setSigner(account.signer);

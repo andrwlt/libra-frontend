@@ -1,4 +1,4 @@
-import { AfterPayment } from '../../app/types';
+import { AfterPayment } from 'app/types';
 import { Result } from 'antd';
 import { useTranslation } from 'react-i18next';
 
