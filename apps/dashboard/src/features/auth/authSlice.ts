@@ -42,6 +42,7 @@ export const login = createAppAsyncThunk(
     try {
       const { signature } = await authAPI.getSignater(connectedExtension, address);
       const addressType = 'substrate';
+
       const response = await authAPI.signIn({
         signature,
         address,
@@ -89,8 +90,14 @@ export const connectExtension = createAppAsyncThunk(
 
     try {
       const connection = await extension.instant.enable(APP_NAME);
+
       const polkadotAccounts = await connection.accounts.get();
-      const accounts = polkadotAccounts.map((account: any) => ({ ...account, type: EXTENSION_IDS.POLKADOT_JS }));
+
+      const accounts = polkadotAccounts.map((account: any) => ({
+        name: account.name,
+        address: account.address,
+        type: EXTENSION_IDS.POLKADOT_JS,
+      }));
 
       const connectedExtension = {
         ...extension,

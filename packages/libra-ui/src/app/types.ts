@@ -99,7 +99,7 @@ export interface Account {
 }
 
 export type GetExtensionResult = Extension | undefined;
-export type ExtensionId = 'polkadot-js' | 'subwallet-js' | 'talisman';
+export type ExtensionId = 'polkadot-js' | 'subwallet-js' | 'talisman' | 'enkrypt';
 export interface Extension {
   id: ExtensionId;
   instant: any;

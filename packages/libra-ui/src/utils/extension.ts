@@ -13,12 +13,12 @@ const hasInjectedWallet = () => {
 
 const getExtensions = (): Extension[] => {
   const { injectedWeb3 }: any = window;
-  console.log('injectedWeb3',injectedWeb3)
 
   const extensions: Extension[] = [];
 
   EXTENSIONS.forEach((extension) => {
     const extensionInstant = injectedWeb3?.[extension.id];
+
     if (extensionInstant) {
       extensions.push({ id: extension.id, instant: extensionInstant });
     }

@@ -26,7 +26,7 @@ const STEPS = {
 const initStep = STEPS.SELECT_WALLET;
 
 const OptionHeight = 60;
-const initHeight = 250;
+const initHeight = 310;
 const wordingHeight = 40;
 
 const ConnectWalletModal = (props: ConnectWalletModalPropsType) => {
@@ -78,7 +78,7 @@ const ConnectWalletModal = (props: ConnectWalletModalPropsType) => {
         </Title>
       }
     >
-      <div style={{ height, transition: 'height .05s' }}>
+      <div style={{ height, transition: 'height .1s' }}>
         {step === STEPS.SELECT_WALLET ? (
           <div>
             <Paragraph style={{ textAlign: 'center', marginBottom: 20 }}>{tWording('preferExtension')}</Paragraph>

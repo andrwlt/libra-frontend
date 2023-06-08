@@ -82,7 +82,7 @@ interface Account {
     name: string;
     type: 'METAMASK' | 'polkadot-js';
 }
-type ExtensionId = 'polkadot-js' | 'subwallet-js' | 'talisman';
+type ExtensionId = 'polkadot-js' | 'subwallet-js' | 'talisman' | 'enkrypt';
 interface Extension {
     id: ExtensionId;
     instant: any;
@@ -123,7 +123,7 @@ declare const getWalletNetworks: (walletType: WalletType) => Network[];
 declare const getNetworkAssets: (networkId: string) => AssetMetadata[];
 declare const getAssetMetadata: (asset: Asset) => AssetMetadata;
 declare const getNetwork: (asset: Asset) => Network;
-declare const getExtensionId: (asset: Asset) => "polkadot-js" | "METAMASK" | undefined;
+declare const getExtensionId: (asset: Asset) => "polkadot-js" | undefined;
 
 declare const extensionAPI: {
     getExtensions(): Promise<Extension[]>;

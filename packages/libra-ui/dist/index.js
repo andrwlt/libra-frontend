@@ -925,6 +925,11 @@ var EXTENSIONS = [
         id: "talisman",
         name: "Talisman",
         installURL: "https://www.talisman.xyz"
+    },
+    {
+        id: "enkrypt",
+        name: "Enkrypt",
+        installURL: "enkrypt.com"
     }
 ];
 var NETWORKS_CONFIG = [
@@ -1059,9 +1064,6 @@ var getExtensionId = function(asset) {
     var nextwork = getNetwork(asset);
     if (nextwork.type === "substrate") {
         return "polkadot-js";
-    }
-    if (nextwork.type === "evm") {
-        return "METAMASK";
     }
 };
 // src/utils/index.ts

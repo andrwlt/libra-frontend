@@ -21,6 +21,12 @@ export const EXTENSIONS: ExtensionConfig[] = [
     name: 'Talisman',
     installURL: 'https://www.talisman.xyz',
   },
+
+  {
+    id: 'enkrypt',
+    name: 'Enkrypt',
+    installURL: 'enkrypt.com',
+  },
 ];
 
 export const NETWORKS_CONFIG: Network[] = [

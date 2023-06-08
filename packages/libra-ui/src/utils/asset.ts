@@ -49,8 +49,4 @@ export const getExtensionId = (asset: Asset) => {
   if (nextwork.type === 'substrate') {
     return 'polkadot-js';
   }
-
-  if (nextwork.type === 'evm') {
-    return 'METAMASK';
-  }
 };

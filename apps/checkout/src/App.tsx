@@ -11,25 +11,15 @@ const AppWrapper = styled.div`
 `;
 
 const checkout: any = {
-  id: 'ckt_01h1e7wv85pxm2a55dej34cc2e',
-  branding: { name: 'Test Matic Brand', logo: '' },
-  item: { name: 'Test Matic', price: '1' },
-  networkId: 'nw_polygon',
-  assetId: 'ast_usdt',
-  payee: '0x21c77f8318171d4b349717c136d4cff724183b69',
+  id: 'ckt_01h1e8q2fxqta9y3f2tnfj2wp6',
+  branding: { name: 'Test' },
+  item: { name: 'Hung Test Kusama', price: '1000000' },
+  asset: 'ksm',
+  networkId: 'nw_kusama',
+  assetId: 'ast_ksm',
+  payee: '5F4n3N5t3GGWmWDvrSoQryhXGQ8AayBmUUA2juS12bwdT6yJ',
   afterPayment: { type: 'message', config: { message: '' } },
 };
-
-// const checkout: any = {
-//   id: 'ckt_01h1e8q2fxqta9y3f2tnfj2wp6',
-//   branding: { name: 'Test' },
-//   item: { name: 'Hung Test Kusama', price: '1000000' },
-//   asset: 'ksm',
-//   networkId: 'nw_kusama',
-//   assetId: 'ast_ksm',
-//   payee: '5F4n3N5t3GGWmWDvrSoQryhXGQ8AayBmUUA2juS12bwdT6yJ',
-//   afterPayment: { type: 'message', config: { message: '' } },
-// };
 
 function App() {
   // const { checkout }: any = window;

@@ -11,7 +11,6 @@ import { APP_NAME } from 'config';
 import service from 'service';
 import type { MenuProps } from 'antd';
 import styled from 'styled-components';
-import { connectPolygonNetwork } from 'utils/evm';
 
 const Wrapper = styled.div`
   .ant-skeleton,
@@ -26,8 +25,6 @@ const Wrapper = styled.div`
     }
   }
 `;
-
-const POLYGON_CHAIN_ID = '0x89';
 
 const { Title, Text } = Typography;
 
@@ -47,37 +44,23 @@ const Payment = ({ payment, onPaymentSuccess }: { payment: PaymentType; onPaymen
   const network = getNetwork(asset);
   const networkLogo = getNetworkLogo(network.id);
   const extensionId = getExtensionId(asset);
-  const isPolkadotExtension = extensionId === 'polkadot-js';
 
   const connectExtension = useCallback(async () => {
     setConnectExtensionLoading(true);
 
     if (extension) {
       let accounts: any[] = [];
-
-      if (isPolkadotExtension) {
-        const result = await extension.instant.enable(APP_NAME);
-        accounts = await result.accounts.get();
-        accounts = accounts.map((account: any) => ({ ...account, type: EXTENSION_IDS.POLKADOT_JS }));
-        setSinger(result.signer);
-      } else {
-        const accountsAddress = await extension.instant.request({
-          method: 'eth_requestAccounts',
-        });
-
-        accounts = accountsAddress.map((address: string) => ({
-          name: address,
-          address,
-          type: EXTENSION_IDS.METAMASK,
-        }));
-      }
+      const result = await extension.instant.enable(APP_NAME);
+      accounts = await result.accounts.get();
+      accounts = accounts.map((account: any) => ({ ...account, type: EXTENSION_IDS.POLKADOT_JS }));
+      setSinger(result.signer);
 
       setAccounts(accounts);
       setAccount(accounts[0]);
       saveConnectedExtension(extension.id);
     }
     setConnectExtensionLoading(false);
-  }, [isPolkadotExtension, extension]);
+  }, [extension]);
 
   useEffect(() => {
     if (extension && isExtensionConnected(extension.id)) {
@@ -106,16 +89,6 @@ const Payment = ({ payment, onPaymentSuccess }: { payment: PaymentType; onPaymen
     setPaying(true);
 
     try {
-      if (!isPolkadotExtension) {
-        const chainId = await extension.instant.request({
-          method: 'eth_chainId',
-        });
-
-        if (chainId !== POLYGON_CHAIN_ID) {
-          // await connectPolygonNetwork(extension, asset);
-        }
-      }
-
       await service.pay(payment, { ...account, signer }, email);
 
       onPaymentSuccess();

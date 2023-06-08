@@ -104,7 +104,6 @@ const CheckoutDetails = () => {
     form
       .validateFields()
       .then((values) => {
-        console.log('values', values);
         let { afterPayment } = values;
 
         if (afterPayment.type === AFTER_PAYMENT_TYPE.MESSAGE && !afterPayment.config) {
@@ -118,7 +117,6 @@ const CheckoutDetails = () => {
         }
       })
       .catch((error) => {
-        console.log('error', error);
         const errorStep = error.errorFields?.[0]?.name?.[0];
         if (errorStep === 'item' && activeStep !== PRODUCT_STEP_KEY) {
           setActiveStep(PRODUCT_STEP_KEY);
