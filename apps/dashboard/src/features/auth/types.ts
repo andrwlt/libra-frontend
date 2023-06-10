@@ -1,16 +1,5 @@
-import { ExtensionId, Extension } from '@atscale/libra-ui';
+import { Extension, ConnectedExtension, Account } from '@atscale/libra-ui';
 import { AxiosPromise } from 'axios';
-
-export interface Account {
-  address: string;
-  name: string;
-  type: 'METAMASK' | 'polkadot-js';
-}
-
-export interface ConnectedExtension extends Extension {
-  signer: any;
-  accounts: Account[];
-}
 
 export interface ExtensionsContextInterface {
   extensions: Extension[];
@@ -59,7 +48,7 @@ export interface AuthHookState {
 }
 
 export interface AuthAPI {
-  getSignater(extension: ConnectedExtension, address: string): Promise<any>;
+  getSignature(extension: ConnectedExtension, address: string): Promise<any>;
   signIn(data: LoginPayload): AxiosPromise;
   getExtensions(): Promise<Extension[]>;
 }

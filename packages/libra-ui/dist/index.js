@@ -247,6 +247,15 @@ function _templateObject12() {
     };
     return data;
 }
+function _templateObject13() {
+    var data = _tagged_template_literal([
+        "\n  height: 50px;\n  border: 1px solid rgb(217, 217, 217);\n  border-radius: 8px;\n  padding: 10px;\n  cursor: pointer;\n  transition: all 0.2s;\n\n  &:hover {\n    border-color: rgb(11, 119, 255);\n  }\n\n  &:not(:first-child) {\n    margin-top: 10px;\n  }\n"
+    ]);
+    _templateObject13 = function _templateObject13() {
+        return data;
+    };
+    return data;
+}
 var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -361,451 +370,6 @@ var require_classnames = __commonJS({
         })();
     }
 });
-// ../../node_modules/mersenne-twister/src/mersenne-twister.js
-var require_mersenne_twister = __commonJS({
-    "../../node_modules/mersenne-twister/src/mersenne-twister.js": function(exports, module2) {
-        var MersenneTwister = function MersenneTwister(seed) {
-            if (seed == void 0) {
-                seed = /* @__PURE__ */ new Date().getTime();
-            }
-            this.N = 624;
-            this.M = 397;
-            this.MATRIX_A = 2567483615;
-            this.UPPER_MASK = 2147483648;
-            this.LOWER_MASK = 2147483647;
-            this.mt = new Array(this.N);
-            this.mti = this.N + 1;
-            if (seed.constructor == Array) {
-                this.init_by_array(seed, seed.length);
-            } else {
-                this.init_seed(seed);
-            }
-        };
-        MersenneTwister.prototype.init_seed = function(s) {
-            this.mt[0] = s >>> 0;
-            for(this.mti = 1; this.mti < this.N; this.mti++){
-                var s = this.mt[this.mti - 1] ^ this.mt[this.mti - 1] >>> 30;
-                this.mt[this.mti] = (((s & 4294901760) >>> 16) * 1812433253 << 16) + (s & 65535) * 1812433253 + this.mti;
-                this.mt[this.mti] >>>= 0;
-            }
-        };
-        MersenneTwister.prototype.init_by_array = function(init_key, key_length) {
-            var i, j, k;
-            this.init_seed(19650218);
-            i = 1;
-            j = 0;
-            k = this.N > key_length ? this.N : key_length;
-            for(; k; k--){
-                var s = this.mt[i - 1] ^ this.mt[i - 1] >>> 30;
-                this.mt[i] = (this.mt[i] ^ (((s & 4294901760) >>> 16) * 1664525 << 16) + (s & 65535) * 1664525) + init_key[j] + j;
-                this.mt[i] >>>= 0;
-                i++;
-                j++;
-                if (i >= this.N) {
-                    this.mt[0] = this.mt[this.N - 1];
-                    i = 1;
-                }
-                if (j >= key_length) j = 0;
-            }
-            for(k = this.N - 1; k; k--){
-                var s = this.mt[i - 1] ^ this.mt[i - 1] >>> 30;
-                this.mt[i] = (this.mt[i] ^ (((s & 4294901760) >>> 16) * 1566083941 << 16) + (s & 65535) * 1566083941) - i;
-                this.mt[i] >>>= 0;
-                i++;
-                if (i >= this.N) {
-                    this.mt[0] = this.mt[this.N - 1];
-                    i = 1;
-                }
-            }
-            this.mt[0] = 2147483648;
-        };
-        MersenneTwister.prototype.random_int = function() {
-            var y;
-            var mag01 = new Array(0, this.MATRIX_A);
-            if (this.mti >= this.N) {
-                var kk;
-                if (this.mti == this.N + 1) this.init_seed(5489);
-                for(kk = 0; kk < this.N - this.M; kk++){
-                    y = this.mt[kk] & this.UPPER_MASK | this.mt[kk + 1] & this.LOWER_MASK;
-                    this.mt[kk] = this.mt[kk + this.M] ^ y >>> 1 ^ mag01[y & 1];
-                }
-                for(; kk < this.N - 1; kk++){
-                    y = this.mt[kk] & this.UPPER_MASK | this.mt[kk + 1] & this.LOWER_MASK;
-                    this.mt[kk] = this.mt[kk + (this.M - this.N)] ^ y >>> 1 ^ mag01[y & 1];
-                }
-                y = this.mt[this.N - 1] & this.UPPER_MASK | this.mt[0] & this.LOWER_MASK;
-                this.mt[this.N - 1] = this.mt[this.M - 1] ^ y >>> 1 ^ mag01[y & 1];
-                this.mti = 0;
-            }
-            y = this.mt[this.mti++];
-            y ^= y >>> 11;
-            y ^= y << 7 & 2636928640;
-            y ^= y << 15 & 4022730752;
-            y ^= y >>> 18;
-            return y >>> 0;
-        };
-        MersenneTwister.prototype.random_int31 = function() {
-            return this.random_int() >>> 1;
-        };
-        MersenneTwister.prototype.random_incl = function() {
-            return this.random_int() * (1 / 4294967295);
-        };
-        MersenneTwister.prototype.random = function() {
-            return this.random_int() * (1 / 4294967296);
-        };
-        MersenneTwister.prototype.random_excl = function() {
-            return (this.random_int() + 0.5) * (1 / 4294967296);
-        };
-        MersenneTwister.prototype.random_long = function() {
-            var a = this.random_int() >>> 5, b = this.random_int() >>> 6;
-            return (a * 67108864 + b) * (1 / 9007199254740992);
-        };
-        module2.exports = MersenneTwister;
-    }
-});
-// ../../node_modules/react-jazzicon/dist/colorUtils.js
-var require_colorUtils = __commonJS({
-    "../../node_modules/react-jazzicon/dist/colorUtils.js": function(exports) {
-        "use strict";
-        Object.defineProperty(exports, "__esModule", {
-            value: true
-        });
-        exports.HSLToHex = exports.hexToHSL = exports.colorRotate = void 0;
-        var colorRotate = function colorRotate(hex, degrees) {
-            var hsl = (0, exports.hexToHSL)(hex);
-            var hue = hsl.h;
-            hue = (hue + degrees) % 360;
-            hue = hue < 0 ? 360 + hue : hue;
-            hsl.h = hue;
-            return (0, exports.HSLToHex)(hsl);
-        };
-        exports.colorRotate = colorRotate;
-        var hexToHSL = function hexToHSL(hex) {
-            var rStr = "0x" + hex[1] + hex[2];
-            var gStr = "0x" + hex[3] + hex[4];
-            var bStr = "0x" + hex[5] + hex[6];
-            var r = parseInt(rStr) / 255;
-            var g = parseInt(gStr) / 255;
-            var b = parseInt(bStr) / 255;
-            var cmin = Math.min(r, g, b), cmax = Math.max(r, g, b), delta = cmax - cmin, h = 0, s = 0, l = 0;
-            if (delta == 0) h = 0;
-            else if (cmax == r) h = (g - b) / delta % 6;
-            else if (cmax == g) h = (b - r) / delta + 2;
-            else h = (r - g) / delta + 4;
-            h = Math.round(h * 60);
-            if (h < 0) h += 360;
-            l = (cmax + cmin) / 2;
-            s = delta == 0 ? 0 : delta / (1 - Math.abs(2 * l - 1));
-            s = +(s * 100).toFixed(1);
-            l = +(l * 100).toFixed(1);
-            return {
-                h: h,
-                s: s,
-                l: l
-            };
-        };
-        exports.hexToHSL = hexToHSL;
-        var HSLToHex = function HSLToHex(hsl) {
-            var h = hsl.h, s = hsl.s, l = hsl.l;
-            s /= 100;
-            l /= 100;
-            var c = (1 - Math.abs(2 * l - 1)) * s, x = c * (1 - Math.abs(h / 60 % 2 - 1)), m = l - c / 2, r = 0, g = 0, b = 0;
-            if (0 <= h && h < 60) {
-                r = c;
-                g = x;
-                b = 0;
-            } else if (60 <= h && h < 120) {
-                r = x;
-                g = c;
-                b = 0;
-            } else if (120 <= h && h < 180) {
-                r = 0;
-                g = c;
-                b = x;
-            } else if (180 <= h && h < 240) {
-                r = 0;
-                g = x;
-                b = c;
-            } else if (240 <= h && h < 300) {
-                r = x;
-                g = 0;
-                b = c;
-            } else if (300 <= h && h < 360) {
-                r = c;
-                g = 0;
-                b = x;
-            }
-            var rStr = Math.round((r + m) * 255).toString(16);
-            var gStr = Math.round((g + m) * 255).toString(16);
-            var bStr = Math.round((b + m) * 255).toString(16);
-            if (rStr.length == 1) rStr = "0" + rStr;
-            if (gStr.length == 1) gStr = "0" + gStr;
-            if (bStr.length == 1) bStr = "0" + bStr;
-            return "#" + rStr + gStr + bStr;
-        };
-        exports.HSLToHex = HSLToHex;
-    }
-});
-// ../../node_modules/react-jazzicon/dist/colors.js
-var require_colors = __commonJS({
-    "../../node_modules/react-jazzicon/dist/colors.js": function(exports) {
-        "use strict";
-        Object.defineProperty(exports, "__esModule", {
-            value: true
-        });
-        exports.default = Object.freeze([
-            "#01888c",
-            "#fc7500",
-            "#034f5d",
-            "#f73f01",
-            "#fc1960",
-            "#c7144c",
-            "#f3c100",
-            "#1598f2",
-            "#2465e1",
-            "#f19e02"
-        ]);
-    }
-});
-// ../../node_modules/react-jazzicon/dist/Paper.js
-var require_Paper = __commonJS({
-    "../../node_modules/react-jazzicon/dist/Paper.js": function(exports) {
-        "use strict";
-        var __assign = exports && exports.__assign || function() {
-            __assign = Object.assign || function(t2) {
-                for(var s, i = 1, n = arguments.length; i < n; i++){
-                    s = arguments[i];
-                    for(var p in s)if (Object.prototype.hasOwnProperty.call(s, p)) t2[p] = s[p];
-                }
-                return t2;
-            };
-            return __assign.apply(this, arguments);
-        };
-        Object.defineProperty(exports, "__esModule", {
-            value: true
-        });
-        var jsx_runtime_1 = require("react/jsx-runtime");
-        var styles = {
-            borderRadius: "50px",
-            display: "inline-block",
-            margin: 0,
-            overflow: "hidden",
-            padding: 0
-        };
-        var Paper = function Paper(_a) {
-            var children = _a.children, color = _a.color, diameter = _a.diameter, styleOverrides = _a.style;
-            return (0, jsx_runtime_1.jsx)("div", __assign({
-                className: "paper",
-                style: __assign(__assign(__assign({}, styles), {
-                    backgroundColor: color,
-                    height: diameter,
-                    width: diameter
-                }), styleOverrides)
-            }, {
-                children: children
-            }), void 0);
-        };
-        exports.default = Paper;
-    }
-});
-// ../../node_modules/react-jazzicon/dist/Jazzicon.js
-var require_Jazzicon = __commonJS({
-    "../../node_modules/react-jazzicon/dist/Jazzicon.js": function(exports) {
-        "use strict";
-        var __extends = exports && exports.__extends || function() {
-            var extendStatics = function extendStatics1(d, b) {
-                extendStatics = Object.setPrototypeOf || _instanceof({
-                    __proto__: []
-                }, Array) && function(d2, b2) {
-                    d2.__proto__ = b2;
-                } || function(d2, b2) {
-                    for(var p in b2)if (Object.prototype.hasOwnProperty.call(b2, p)) d2[p] = b2[p];
-                };
-                return extendStatics(d, b);
-            };
-            return function(d, b) {
-                var __ = function __() {
-                    this.constructor = d;
-                };
-                if (typeof b !== "function" && b !== null) throw new TypeError("Class extends value " + String(b) + " is not a constructor or null");
-                extendStatics(d, b);
-                d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-            };
-        }();
-        var __assign = exports && exports.__assign || function() {
-            __assign = Object.assign || function(t2) {
-                for(var s, i = 1, n = arguments.length; i < n; i++){
-                    s = arguments[i];
-                    for(var p in s)if (Object.prototype.hasOwnProperty.call(s, p)) t2[p] = s[p];
-                }
-                return t2;
-            };
-            return __assign.apply(this, arguments);
-        };
-        var __createBinding = exports && exports.__createBinding || (Object.create ? function(o, m, k, k2) {
-            if (k2 === void 0) k2 = k;
-            Object.defineProperty(o, k2, {
-                enumerable: true,
-                get: function get() {
-                    return m[k];
-                }
-            });
-        } : function(o, m, k, k2) {
-            if (k2 === void 0) k2 = k;
-            o[k2] = m[k];
-        });
-        var __setModuleDefault = exports && exports.__setModuleDefault || (Object.create ? function(o, v) {
-            Object.defineProperty(o, "default", {
-                enumerable: true,
-                value: v
-            });
-        } : function(o, v) {
-            o["default"] = v;
-        });
-        var __importStar = exports && exports.__importStar || function(mod) {
-            if (mod && mod.__esModule) return mod;
-            var result = {};
-            if (mod != null) {
-                for(var k in mod)if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-            }
-            __setModuleDefault(result, mod);
-            return result;
-        };
-        var __importDefault = exports && exports.__importDefault || function(mod) {
-            return mod && mod.__esModule ? mod : {
-                "default": mod
-            };
-        };
-        Object.defineProperty(exports, "__esModule", {
-            value: true
-        });
-        var jsx_runtime_1 = require("react/jsx-runtime");
-        var React5 = __importStar(require("react"));
-        var mersenne_twister_1 = __importDefault(require_mersenne_twister());
-        var colorUtils_1 = require_colorUtils();
-        var colors_1 = __importDefault(require_colors());
-        var Paper_1 = __importDefault(require_Paper());
-        var shapeCount = 4;
-        var svgns = "http://www.w3.org/2000/svg";
-        var wobble = 30;
-        var defaultDiameter = 24;
-        var Jazzicon2 = /** @class */ function(_super) {
-            var Jazzicon3 = function Jazzicon3() {
-                var _this = _super !== null && _super.apply(this, arguments) || this;
-                _this.genColor = function(colors) {
-                    var rand = _this.generator.random();
-                    var idx = Math.floor(colors.length * _this.generator.random());
-                    var color = colors.splice(idx, 1)[0];
-                    return color;
-                };
-                _this.hueShift = function(colors, generator) {
-                    var amount = generator.random() * 30 - wobble / 2;
-                    var rotate = function rotate(hex) {
-                        return (0, colorUtils_1.colorRotate)(hex, amount);
-                    };
-                    return colors.map(rotate);
-                };
-                _this.genShape = function(remainingColors, diameter, i, total) {
-                    var center = diameter / 2;
-                    var firstRot = _this.generator.random();
-                    var angle = Math.PI * 2 * firstRot;
-                    var velocity = diameter / total * _this.generator.random() + i * diameter / total;
-                    var tx = Math.cos(angle) * velocity;
-                    var ty = Math.sin(angle) * velocity;
-                    var translate = "translate(" + tx + " " + ty + ")";
-                    var secondRot = _this.generator.random();
-                    var rot = firstRot * 360 + secondRot * 180;
-                    var rotate = "rotate(" + rot.toFixed(1) + " " + center + " " + center + ")";
-                    var transform = translate + " " + rotate;
-                    var fill = _this.genColor(remainingColors);
-                    return (0, jsx_runtime_1.jsx)("rect", {
-                        x: "0",
-                        y: "0",
-                        rx: "0",
-                        ry: "0",
-                        height: diameter,
-                        width: diameter,
-                        transform: transform,
-                        fill: fill
-                    }, i);
-                };
-                return _this;
-            };
-            __extends(Jazzicon3, _super);
-            Jazzicon3.prototype.render = function() {
-                var _this = this;
-                var _a = this.props, _b = _a.diameter, diameter = _b === void 0 ? defaultDiameter : _b, _c = _a.paperStyles, paperStyles = _c === void 0 ? {} : _c, seed = _a.seed, _d = _a.svgStyles, svgStyles = _d === void 0 ? {} : _d;
-                this.generator = new mersenne_twister_1.default(seed);
-                var remainingColors = this.hueShift(colors_1.default.slice(), this.generator);
-                var shapesArr = Array(shapeCount).fill(void 0);
-                return (0, jsx_runtime_1.jsx)(Paper_1.default, __assign({
-                    color: this.genColor(remainingColors),
-                    diameter: diameter,
-                    style: paperStyles
-                }, {
-                    children: (0, jsx_runtime_1.jsx)("svg", __assign({
-                        xmlns: svgns,
-                        x: "0",
-                        y: "0",
-                        height: diameter,
-                        width: diameter,
-                        style: svgStyles
-                    }, {
-                        children: shapesArr.map(function(s, i) {
-                            return _this.genShape(remainingColors, diameter, i, shapeCount - 1);
-                        })
-                    }), void 0)
-                }), void 0);
-            };
-            return Jazzicon3;
-        }(React5.PureComponent);
-        exports.default = Jazzicon2;
-    }
-});
-// ../../node_modules/react-jazzicon/dist/jsNumberForAddress.js
-var require_jsNumberForAddress = __commonJS({
-    "../../node_modules/react-jazzicon/dist/jsNumberForAddress.js": function(exports) {
-        "use strict";
-        var jsNumberForAddress2 = function jsNumberForAddress2(address) {
-            var addr = address.slice(2, 10);
-            var seed = parseInt(addr, 16);
-            return seed;
-        };
-        Object.defineProperty(exports, "__esModule", {
-            value: true
-        });
-        exports.default = jsNumberForAddress2;
-    }
-});
-// ../../node_modules/react-jazzicon/dist/index.js
-var require_dist = __commonJS({
-    "../../node_modules/react-jazzicon/dist/index.js": function(exports) {
-        "use strict";
-        var __importDefault = exports && exports.__importDefault || function(mod) {
-            return mod && mod.__esModule ? mod : {
-                "default": mod
-            };
-        };
-        Object.defineProperty(exports, "__esModule", {
-            value: true
-        });
-        exports.jsNumberForAddress = exports.default = void 0;
-        var Jazzicon_1 = require_Jazzicon();
-        Object.defineProperty(exports, "default", {
-            enumerable: true,
-            get: function get() {
-                return __importDefault(Jazzicon_1).default;
-            }
-        });
-        var jsNumberForAddress_1 = require_jsNumberForAddress();
-        Object.defineProperty(exports, "jsNumberForAddress", {
-            enumerable: true,
-            get: function get() {
-                return __importDefault(jsNumberForAddress_1).default;
-            }
-        });
-    }
-});
 // src/index.tsx
 var src_exports = {};
 __export(src_exports, {
@@ -827,14 +391,14 @@ __export(src_exports, {
     Loading: function() {
         return Loading_default;
     },
+    WalletList: function() {
+        return WalletList_default;
+    },
     extensionAPI: function() {
         return extension_default;
     },
     getAssetMetadata: function() {
         return getAssetMetadata;
-    },
-    getExtensionId: function() {
-        return getExtensionId;
     },
     getNetwork: function() {
         return getNetwork;
@@ -914,22 +478,26 @@ var EXTENSIONS = [
     {
         id: "polkadot-js",
         name: "Polkadot.{Js}",
-        installURL: "https://polkadot.js.org/extension/"
+        installURL: "https://polkadot.js.org/extension/",
+        logo: "https://avatars.githubusercontent.com/u/33775474?s=280&v=4"
     },
     {
         id: "subwallet-js",
         name: "SubWallet",
-        installURL: "https://www.subwallet.app/download.html"
+        installURL: "https://www.subwallet.app/download.html",
+        logo: "https://1570604715-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F-Lh39Kwxa1xxZM9WX_Bs%2Ficon%2FiETEgi1ykXUQRW63vPnL%2FLogo%3DWhite%2C%20Background%3DGradient.jpg?alt=media&token=46c5dafa-ce09-4576-bcd9-a5c796786f1a"
     },
     {
         id: "talisman",
         name: "Talisman",
-        installURL: "https://www.talisman.xyz"
+        installURL: "https://www.talisman.xyz",
+        logo: "https://res.cloudinary.com/crunchbase-production/image/upload/c_lpad,f_auto,q_auto:eco,dpr_1/vsgo8bn1iof4ryzk3gkf"
     },
     {
         id: "enkrypt",
         name: "Enkrypt",
-        installURL: "enkrypt.com"
+        installURL: "https://www.enkrypt.com",
+        logo: "https://avatars.githubusercontent.com/u/47159500?s=280&v=4"
     }
 ];
 var NETWORKS_CONFIG = [
@@ -1059,12 +627,6 @@ var getNetwork = function(asset) {
         config: {}
     };
     return netWork !== null && netWork !== void 0 ? netWork : initNetwork;
-};
-var getExtensionId = function(asset) {
-    var nextwork = getNetwork(asset);
-    if (nextwork.type === "substrate") {
-        return "polkadot-js";
-    }
 };
 // src/utils/index.ts
 var import_jsbi = __toESM(require("jsbi"));
@@ -2572,12 +2134,11 @@ Loading3QuartersOutlined2.displayName = "Loading3QuartersOutlined";
 var Loading3QuartersOutlined_default2 = /* @__PURE__ */ React4.forwardRef(Loading3QuartersOutlined2);
 // src/components/Checkout/Right/PaymentPreviewer/AccountOption.tsx
 var import_react_identicon = __toESM(require("@polkadot/react-identicon"));
-var import_react_jazzicon = __toESM(require_dist());
 var import_jsx_runtime3 = require("react/jsx-runtime");
 var _import_antd2_Typography = import_antd2.Typography, Paragraph2 = _import_antd2_Typography.Paragraph;
 function AccountInfo(param) {
-    var account = param.account, _param_variant = param.variant, variant = _param_variant === void 0 ? "default" : _param_variant;
-    var name = account.name, address = account.address, type = account.type;
+    var account = param.account, _param_variant = param.variant, variant = _param_variant === void 0 ? "default" : _param_variant, _param_noPadding = param.noPadding, noPadding = _param_noPadding === void 0 ? false : _param_noPadding;
+    var name = account.name, address = account.address;
     var _import_antd2_theme_useToken = import_antd2.theme.useToken(), _import_antd2_theme_useToken_token = _import_antd2_theme_useToken.token, colorPrimary = _import_antd2_theme_useToken_token.colorPrimary, colorBorder = _import_antd2_theme_useToken_token.colorBorder;
     var _ref = _sliced_to_array((0, import_react3.useState)(false), 2), hovered = _ref[0], setHovered = _ref[1];
     var shortedAddress = "".concat(account.address.slice(0, 16), "...").concat(account.address.slice(-12));
@@ -2593,6 +2154,9 @@ function AccountInfo(param) {
             border: "solid 1px ".concat(hovered ? colorPrimary : colorBorder)
         });
     }
+    if (noPadding) {
+        delete style.padding;
+    }
     return /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)("div", {
         style: style,
         onMouseEnter: function() {
@@ -2606,13 +2170,10 @@ function AccountInfo(param) {
                 align: "center",
                 size: "middle",
                 children: [
-                    type === "polkadot-js" ? /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_react_identicon.default, {
+                    /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_react_identicon.default, {
                         value: address,
                         size: 24,
                         theme: "substrate"
-                    }) : /* @__PURE__ */ (0, import_jsx_runtime3.jsx)(import_react_jazzicon.default, {
-                        diameter: 24,
-                        seed: (0, import_react_jazzicon.jsNumberForAddress)(account.address)
                     }),
                     /* @__PURE__ */ (0, import_jsx_runtime3.jsxs)(import_antd2.Space, {
                         direction: "vertical",
@@ -2714,19 +2275,17 @@ var ContactInformation_default = ContactInformation;
 // src/components/Checkout/Right/PaymentPreviewer/index.tsx
 var import_jsx_runtime5 = require("react/jsx-runtime");
 var EXAMPLE_POLKADOT_ADDRESS = "5ERjkQVj8M7v5UVZQ8qTbZ2qb1o5TgNXq9tXt2BsWF9jBpDu";
-var EXAMPLE_METAMASK_ADDRESS = "0x71a753bFc4F9AeADc744c2Aa01e928bfD4BF5ceC";
 function PaymentSummary(param) {
     var payment = param.payment;
     var _ref = (0, import_react_i18next3.useTranslation)(), t2 = _ref.t;
     var _ref1 = _sliced_to_array((0, import_react5.useState)(false), 2), loading = _ref1[0], setLoading = _ref1[1];
     var _ref2 = _sliced_to_array((0, import_react5.useState)(""), 2), email = _ref2[0], setEmail = _ref2[1];
-    var extensionId = getExtensionId(payment.asset);
     return(//TODO: Fix style
     /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", {
         style: {
-            width: 430,
-            maxWidth: 430,
-            marginLeft: 50
+            width: 380,
+            maxWidth: 380,
+            marginLeft: 80
         },
         children: [
             /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(ContactInformation_default, {
@@ -2747,8 +2306,7 @@ function PaymentSummary(param) {
                         variant: "select",
                         account: {
                             name: "Test Account",
-                            address: extensionId === "polkadot-js" ? EXAMPLE_POLKADOT_ADDRESS : EXAMPLE_METAMASK_ADDRESS,
-                            type: extensionId || "polkadot-js"
+                            address: EXAMPLE_POLKADOT_ADDRESS
                         }
                     }),
                     /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(import_antd4.Button, {
@@ -6293,13 +5851,9 @@ var CheckoutPreview = function(param) {
 var Checkout_default = CheckoutPreview;
 // src/utils/extension.ts
 function hasInjectedWeb3() {
-    var ethereum = window.ethereum, injectedWeb3 = window.injectedWeb3;
-    return ethereum || injectedWeb3;
-}
-var hasInjectedWallet = function() {
     var injectedWeb3 = window.injectedWeb3;
     return injectedWeb3;
-};
+}
 var getExtensions = function() {
     var injectedWeb3 = window.injectedWeb3;
     var extensions = [];
@@ -6314,12 +5868,6 @@ var getExtensions = function() {
     });
     return extensions;
 };
-var getExtension = function(id) {
-    var extensions = getExtensions();
-    return extensions.find(function(extension) {
-        return extension.id === id;
-    });
-};
 var extensionAPI = {
     getExtensions: function getExtensions1() {
         var retryCounter = 0;
@@ -6329,22 +5877,6 @@ var extensionAPI = {
                     clearInterval(retryInterval);
                     var extensions = getExtensions();
                     resolve(extensions);
-                }
-                if (++retryCounter === GET_EXTENSIONS_MAX_RETRY) {
-                    clearInterval(retryInterval);
-                    reject(new Error());
-                }
-            }, GET_EXTENSIONS_INTERVAL_DURATION);
-        });
-    },
-    getExtension: function getExtension1(id) {
-        var retryCounter = 0;
-        return new Promise(function(resolve, reject) {
-            var retryInterval = setInterval(function() {
-                if (hasInjectedWallet()) {
-                    clearInterval(retryInterval);
-                    var extension = getExtension(id);
-                    resolve(extension);
                 }
                 if (++retryCounter === GET_EXTENSIONS_MAX_RETRY) {
                     clearInterval(retryInterval);
@@ -6446,6 +5978,52 @@ var Loading = function(param) {
 var Loading_default = (0, import_react8.memo)(Loading, function(oldProps, newProps) {
     return oldProps.loading === newProps.loading;
 });
+// src/components/Common/WalletList.tsx
+var import_antd9 = require("antd");
+var import_styled_components5 = __toESM(require("styled-components"));
+var import_jsx_runtime10 = require("react/jsx-runtime");
+var ExtensionOptionWrapper = (0, import_styled_components5.default)(import_antd9.Row)(_templateObject13());
+var Text = import_antd9.Typography.Text;
+var ExtensionOption = function(param) {
+    var extension = param.extension, onSelect = param.onSelect, installed = param.installed;
+    var name = extension.name;
+    return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(ExtensionOptionWrapper, {
+        align: "middle",
+        onClick: installed ? function() {
+            return onSelect === null || onSelect === void 0 ? void 0 : onSelect(extension.id);
+        } : function() {
+            window.open(extension.installURL);
+        },
+        children: [
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("img", {
+                src: extension.logo,
+                alt: "icon",
+                style: {
+                    width: 20,
+                    objectFit: "contain",
+                    marginRight: 10,
+                    marginLeft: 5
+                }
+            }),
+            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Text, {
+                children: name
+            })
+        ]
+    });
+};
+var WalletList = function(param) {
+    var extensionDictionary = param.extensionDictionary, onSelectWallet = param.onSelectWallet;
+    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", {
+        children: EXTENSIONS.map(function(extension) {
+            return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(ExtensionOption, {
+                extension: extension,
+                onSelect: onSelectWallet,
+                installed: !!extensionDictionary[extension.id]
+            }, extension.id);
+        })
+    });
+};
+var WalletList_default = WalletList;
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
     AccountOption: AccountOption,
@@ -6454,9 +6032,9 @@ var Loading_default = (0, import_react8.memo)(Loading, function(oldProps, newPro
     EXTENSIONS: EXTENSIONS,
     EXTENSION_IDS: EXTENSION_IDS,
     Loading: Loading,
+    WalletList: WalletList,
     extensionAPI: extensionAPI,
     getAssetMetadata: getAssetMetadata,
-    getExtensionId: getExtensionId,
     getNetwork: getNetwork,
     getNetworkAssets: getNetworkAssets,
     getWalletNetworks: getWalletNetworks,

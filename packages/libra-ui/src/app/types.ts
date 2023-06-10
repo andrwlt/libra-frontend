@@ -95,21 +95,29 @@ export type WalletType = 'substrate' | 'evm';
 export interface Account {
   address: string;
   name: string;
-  type: 'METAMASK' | 'polkadot-js';
 }
 
-export type GetExtensionResult = Extension | undefined;
-export type ExtensionId = 'polkadot-js' | 'subwallet-js' | 'talisman' | 'enkrypt';
 export interface Extension {
   id: ExtensionId;
   instant: any;
-  accounts?: Account[];
 }
+
+export interface ConnectedExtension extends Extension {
+  signer: any;
+  accounts: Account[];
+}
+
+export interface ExtensionDictionary {
+  [extensionId: string]: Extension;
+}
+
+export type ExtensionId = 'polkadot-js' | 'subwallet-js' | 'talisman' | 'enkrypt';
 
 export interface ExtensionConfig {
   id: ExtensionId;
   name: string;
   installURL: string;
+  logo: string;
 }
 
 export interface Payment {

@@ -1,16 +1,13 @@
-import { Fragment, useContext, useState, useEffect, useCallback } from 'react';
-import { Typography, Row, Button, Dropdown } from 'antd';
-import { useTranslation } from 'react-i18next';
-import { AccountOption, EXTENSION_IDS, Payment as PaymentType, getNetwork, getExtensionId } from '@atscale/libra-ui';
+import { Fragment, useContext } from 'react';
+import { Typography, Button, Dropdown, Form } from 'antd';
+import { AccountOption, Payment as PaymentType } from '@atscale/libra-ui';
 import { validateEmail } from 'utils/validator';
 import { ContactInformation } from '@atscale/libra-ui';
-import NoExtension from 'components/Payment/NoExtension';
+import SelectWallet from 'components/Payment/SelectWallet';
 import ExtensionContext from 'context';
-import { getErrorMessage, getNetworkLogo, isExtensionConnected, saveConnectedExtension } from 'utils';
-import { APP_NAME } from 'config';
-import service from 'service';
-import type { MenuProps } from 'antd';
 import styled from 'styled-components';
+import { useAccount, useEmail, usePay } from 'hooks';
+import NetworkInfo from './NetworkInfo';
 
 const Wrapper = styled.div`
   .ant-skeleton,
@@ -29,86 +26,27 @@ const Wrapper = styled.div`
 const { Title, Text } = Typography;
 
 const Payment = ({ payment, onPaymentSuccess }: { payment: PaymentType; onPaymentSuccess: Function }) => {
-  const { getExtensionFailed, extension } = useContext(ExtensionContext);
-  const { t } = useTranslation();
-  const [email, setEmail] = useState<string>('');
-  const [emailError, setEmailError] = useState<string>('');
-  const [account, setAccount] = useState<any>(null);
-  const [accounts, setAccounts] = useState<any>([]);
-  const [signer, setSinger] = useState<any>();
-  const [connectExtensionLoading, setConnectExtensionLoading] = useState(false);
-  const [paymentError, setPaymentError] = useState<string>('');
-  const [paying, setPaying] = useState(false);
+  const { connectedExtension } = useContext(ExtensionContext);
+  const { account, onSelectAccount } = useAccount(connectedExtension);
+  const { paymentError, handlePay, paying } = usePay();
+  const { email, setEmail, emailError, setEmailError } = useEmail();
 
-  const { asset } = payment;
-  const network = getNetwork(asset);
-  const networkLogo = getNetworkLogo(network.id);
-  const extensionId = getExtensionId(asset);
-
-  const connectExtension = useCallback(async () => {
-    setConnectExtensionLoading(true);
-
-    if (extension) {
-      let accounts: any[] = [];
-      const result = await extension.instant.enable(APP_NAME);
-      accounts = await result.accounts.get();
-      accounts = accounts.map((account: any) => ({ ...account, type: EXTENSION_IDS.POLKADOT_JS }));
-      setSinger(result.signer);
-
-      setAccounts(accounts);
-      setAccount(accounts[0]);
-      saveConnectedExtension(extension.id);
-    }
-    setConnectExtensionLoading(false);
-  }, [extension]);
-
-  useEffect(() => {
-    if (extension && isExtensionConnected(extension.id)) {
-      connectExtension();
-    }
-
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [extension]);
-
-  const resetEmailError = () => {
-    setEmailError('');
-  };
-
-  const handlePay = async () => {
-    if (!extension) {
-      return;
-    }
-
+  const onPay = () => {
     const isEmailValid = validateEmail(email);
     if (isEmailValid !== true) {
       setEmailError(isEmailValid);
-      // return;
+      return;
     }
 
-    setPaymentError('');
-    setPaying(true);
-
-    try {
-      await service.pay(payment, { ...account, signer }, email);
-
-      onPaymentSuccess();
-    } catch (err: any) {
-      const errorMessage = getErrorMessage(err);
-      setPaymentError(errorMessage);
-    } finally {
-      setPaying(false);
+    if (connectedExtension && account && onPaymentSuccess) {
+      handlePay({ connectedExtension, account, payment, onPaymentSuccess, email });
     }
-  };
-
-  const onSelectAccount: MenuProps['onClick'] = ({ key }) => {
-    const selectedAccount = accounts.find((selectedAccount: any) => selectedAccount.address === key);
-    setAccount(selectedAccount);
   };
 
   return (
-    <div style={{ width: 430, maxWidth: 430, marginLeft: 50 }}>
-      {getExtensionFailed ? (
-        <NoExtension asset={asset} />
+    <div style={{ width: 380, maxWidth: 380, marginLeft: 80 }}>
+      {!connectedExtension ? (
+        <SelectWallet />
       ) : (
         <Fragment>
           <ContactInformation
@@ -116,33 +54,33 @@ const Payment = ({ payment, onPaymentSuccess }: { payment: PaymentType; onPaymen
             value={email}
             onChange={setEmail}
             error={emailError}
-            resetError={resetEmailError}
+            resetError={() => setEmailError('')}
           />
 
           <Wrapper>
-            <Title level={4}>{t('Payment Method')} </Title>
+            <Form layout="vertical">
+              <Title level={4}>Payment Method </Title>
+              <NetworkInfo asset={payment.asset} />
 
-            <Row align="middle" style={{ marginTop: 12, marginBottom: 24 }}>
-              <img alt="network" src={networkLogo} style={{ width: 20 }} />
-              <Text style={{ marginLeft: 10 }}>{network.name} Network</Text>
-            </Row>
-
-            {isExtensionConnected(extensionId) && accounts.length ? (
-              <div style={{ marginBottom: 24 }}>
-                <Dropdown
-                  trigger={['click']}
-                  menu={{
-                    items: accounts.map((account: any) => ({
-                      key: account.address,
-                      label: <AccountOption account={account} />,
-                    })),
-                    onClick: onSelectAccount,
-                  }}
-                >
-                  <div onClick={(e) => e.preventDefault()}>
-                    <AccountOption variant="select" account={account} />
-                  </div>
-                </Dropdown>
+              <Form.Item label="Account">
+                {connectedExtension.accounts.length ? (
+                  <Dropdown
+                    trigger={['click']}
+                    menu={{
+                      items: connectedExtension.accounts.map((account) => ({
+                        key: account.address,
+                        label: <AccountOption account={account} noPadding />,
+                      })),
+                      onClick: onSelectAccount,
+                    }}
+                  >
+                    <div onClick={(e) => e.preventDefault()}>
+                      {account && <AccountOption variant="select" account={account} />}
+                    </div>
+                  </Dropdown>
+                ) : (
+                  <Text type="warning">You need to create an account to start using Libra</Text>
+                )}
 
                 <Button
                   disabled={!account}
@@ -151,24 +89,13 @@ const Payment = ({ payment, onPaymentSuccess }: { payment: PaymentType; onPaymen
                   size="large"
                   block
                   loading={paying}
-                  onClick={handlePay}
+                  onClick={onPay}
                 >
                   Pay
                 </Button>
                 {paymentError && <Typography.Text type="danger">{paymentError}</Typography.Text>}
-              </div>
-            ) : (
-              <Row align="middle" style={{ marginTop: 20 }}>
-                <Button
-                  onClick={() => connectExtension()}
-                  type="primary"
-                  style={{ width: '100%' }}
-                  loading={connectExtensionLoading}
-                >
-                  Connect wallet
-                </Button>
-              </Row>
-            )}
+              </Form.Item>
+            </Form>
           </Wrapper>
         </Fragment>
       )}

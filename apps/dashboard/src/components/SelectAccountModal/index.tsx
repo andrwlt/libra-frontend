@@ -1,6 +1,6 @@
 import { Typography, Modal, Result, Button } from 'antd';
 import AccountOption from 'components/SelectAccountModal/AccountOption';
-import { Account } from 'features/auth/types';
+import { Account } from '@atscale/libra-ui';
 import { useTranslation } from 'react-i18next';
 import { useResetConnectedExtension } from 'features/auth/authHooks';
 import { SmileOutlined } from '@ant-design/icons';

@@ -12,9 +12,9 @@ import {
   resetStore,
   resetConnectedExtension,
 } from './authSlice';
-import { LoginHook, ConnectExtensionHook, AuthHookState, Account } from './types';
+import { LoginHook, ConnectExtensionHook, AuthHookState } from './types';
 import { WALLET_TYPES } from 'config';
-import { Network, getWalletNetworks, EXTENSION_IDS } from '@atscale/libra-ui';
+import { Network, getWalletNetworks, EXTENSION_IDS, Account, Extension } from '@atscale/libra-ui';
 
 export const useExtensions = (revalidate: boolean = false) => {
   const state = useAppSelector(selectExtensionsState);
@@ -26,11 +26,11 @@ export const useExtensions = (revalidate: boolean = false) => {
     }
   }, [dispatch, revalidate, state.extensions.length]);
 
-  const installedExtensions: { [key: string]: boolean } = useMemo(() => {
+  const installedExtensions: { [key: string]: Extension } = useMemo(() => {
     return state.extensions.reduce(
       (dict, extension) => ({
         ...dict,
-        [extension.id]: true,
+        [extension.id]: extension,
       }),
       {},
     );
@@ -113,8 +113,7 @@ export const useNetworks = (): Network[] => {
       return [];
     }
 
-    const { type } = account;
-    const walletType = WALLET_TYPES[type];
+    const walletType = WALLET_TYPES.substrate;
 
     return getWalletNetworks(walletType);
   }, [account]);

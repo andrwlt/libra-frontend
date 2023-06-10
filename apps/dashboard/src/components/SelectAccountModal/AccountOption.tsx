@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Space, Typography, theme } from 'antd';
 import styled from 'styled-components';
 import Identicon from '@polkadot/react-identicon';
-import { Account } from 'features/auth/types';
+import { Account } from '@atscale/libra-ui';
 
 type AccountOptionWraperProps = {
   hovered: boolean;

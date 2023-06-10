@@ -1,9 +1,8 @@
 import { CheckoutComponent, Loading } from '@atscale/libra-ui';
 import styled from 'styled-components';
 import ExtensionContext from './context';
-import { useExtension } from 'hooks';
+import { useConnectExtension, useExtensions } from 'hooks';
 import Payment from 'components/Payment';
-import { useMemo } from 'react';
 
 const AppWrapper = styled.div`
   width: 100vw;
@@ -22,23 +21,15 @@ const checkout: any = {
 };
 
 function App() {
-  // const { checkout }: any = window;
-
-  const asset = useMemo(() => {
-    return {
-      assetId: checkout.assetId,
-      networkId: checkout.networkId,
-    };
-  }, []);
-
-  const { getExtensionLoading, getExtensionFailed, extension } = useExtension(asset);
+  const { getExtensionsLoading, extensions } = useExtensions();
+  const { connectedExtension, onConnectExtension } = useConnectExtension();
 
   return (
     <AppWrapper className="App">
-      {getExtensionLoading ? (
+      {getExtensionsLoading ? (
         <Loading isFullPage />
       ) : (
-        <ExtensionContext.Provider value={{ extension, getExtensionFailed }}>
+        <ExtensionContext.Provider value={{ extensions, onConnectExtension, connectedExtension }}>
           <CheckoutComponent
             previewMode={false}
             checkoutData={checkout}

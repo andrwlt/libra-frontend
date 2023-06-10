@@ -1,9 +1,15 @@
-import { Extension } from '@atscale/libra-ui';
+import { ConnectedExtension, Extension } from '@atscale/libra-ui';
 import { createContext } from 'react';
+import { ExtensionDictionary } from 'types';
 
 const ExtensionContext = createContext<{
-  extension?: Extension;
-  getExtensionFailed: any;
-}>({ extension: undefined, getExtensionFailed: undefined });
+  extensions: ExtensionDictionary;
+  onConnectExtension: (extension: Extension) => void;
+  connectedExtension?: ConnectedExtension;
+}>({
+  extensions: {},
+  onConnectExtension: (id) => {},
+  connectedExtension: undefined,
+});
 
 export default ExtensionContext;

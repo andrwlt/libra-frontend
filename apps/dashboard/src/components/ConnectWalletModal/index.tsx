@@ -1,13 +1,11 @@
 import { Typography, Modal, Button, Row } from 'antd';
-import { Account } from 'features/auth/types';
+import { Account, WalletList } from '@atscale/libra-ui';
 import { useTranslation } from 'react-i18next';
 import { useConnectExtension, useExtensions, useResetConnectedExtension } from 'features/auth/authHooks';
 import { LOCALE_WORKSPACE } from 'app/i18n';
-import { EXTENSIONS } from '@atscale/libra-ui';
 import { useEffect, useState } from 'react';
 import Loading from 'components/Common/Loading';
 import AccountOption from './AccountOption';
-import ExtensionOption from './ExtensionOption';
 import { ArrowLeftOutlined } from '@ant-design/icons';
 
 type ConnectWalletModalPropsType = {
@@ -78,21 +76,12 @@ const ConnectWalletModal = (props: ConnectWalletModalPropsType) => {
         </Title>
       }
     >
-      <div style={{ height, transition: 'height .1s' }}>
+      <div style={{ height, transition: 'height .15s' }}>
         {step === STEPS.SELECT_WALLET ? (
           <div>
             <Paragraph style={{ textAlign: 'center', marginBottom: 20 }}>{tWording('preferExtension')}</Paragraph>
             <Loading loading={getExtensionsLoading} bordered />
-            {EXTENSIONS.map((extension) => (
-              <ExtensionOption
-                key={extension.id}
-                extension={extension}
-                onSelect={() => {
-                  onSelectWallet(extension.id);
-                }}
-                installed={installedExtensions[extension.id]}
-              />
-            ))}
+            <WalletList extensionDictionary={installedExtensions} onSelectWallet={onSelectWallet}></WalletList>
           </div>
         ) : (
           <div>

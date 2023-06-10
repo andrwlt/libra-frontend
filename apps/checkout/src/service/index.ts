@@ -10,8 +10,6 @@ const service = {
     try {
       const tx = await createTransferTx(network.rpc, account, payee, amount, asset);
 
-      console.log('tx', tx);
-
       const response = await fetch(`${window.location.href}/pay`, {
         body: JSON.stringify({
           from: getSs58AddressByAsset(account.address, asset),

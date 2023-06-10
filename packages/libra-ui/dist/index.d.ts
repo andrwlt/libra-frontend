@@ -80,18 +80,24 @@ type WalletType = 'substrate' | 'evm';
 interface Account {
     address: string;
     name: string;
-    type: 'METAMASK' | 'polkadot-js';
 }
-type ExtensionId = 'polkadot-js' | 'subwallet-js' | 'talisman' | 'enkrypt';
 interface Extension {
     id: ExtensionId;
     instant: any;
-    accounts?: Account[];
 }
+interface ConnectedExtension extends Extension {
+    signer: any;
+    accounts: Account[];
+}
+interface ExtensionDictionary {
+    [extensionId: string]: Extension;
+}
+type ExtensionId = 'polkadot-js' | 'subwallet-js' | 'talisman' | 'enkrypt';
 interface ExtensionConfig {
     id: ExtensionId;
     name: string;
     installURL: string;
+    logo: string;
 }
 interface Payment {
     payee: string;
@@ -123,11 +129,9 @@ declare const getWalletNetworks: (walletType: WalletType) => Network[];
 declare const getNetworkAssets: (networkId: string) => AssetMetadata[];
 declare const getAssetMetadata: (asset: Asset) => AssetMetadata;
 declare const getNetwork: (asset: Asset) => Network;
-declare const getExtensionId: (asset: Asset) => "polkadot-js" | undefined;
 
 declare const extensionAPI: {
     getExtensions(): Promise<Extension[]>;
-    getExtension(id: ExtensionId): Promise<Extension | undefined>;
 };
 
 declare const EXTENSION_IDS: {
@@ -140,11 +144,11 @@ interface AccountProps {
     account: {
         name: string;
         address: string;
-        type: 'METAMASK' | 'polkadot-js';
     };
     variant?: 'default' | 'select';
+    noPadding?: boolean;
 }
-declare function AccountInfo({ account, variant }: AccountProps): JSX.Element;
+declare function AccountInfo({ account, variant, noPadding }: AccountProps): JSX.Element;
 
 declare const ContactInformation: ({ productName, value, onChange, error, resetError, }: {
     productName: string;
@@ -163,4 +167,10 @@ interface LoadingProps {
 }
 declare const _default: react.MemoExoticComponent<({ loading, isFullPage, isContentPage, message, bordered }: LoadingProps) => JSX.Element | null>;
 
-export { AccountInfo as AccountOption, Asset, AssetMetadata, BaseCheckout, BaseProduct, Checkout, CheckoutPreview as CheckoutComponent, CheckoutResponse, ContactInformation, EXTENSIONS, EXTENSION_IDS, Extension, ExtensionConfig, ExtensionId, _default as Loading, Network, NumberPriceCheckoutResponse, Payment, WalletType, extensionAPI, getAssetMetadata, getExtensionId, getNetwork, getNetworkAssets, getWalletNetworks, priceFormatHelper };
+interface WalletListProps {
+    onSelectWallet: (id: ExtensionId) => void;
+    extensionDictionary: ExtensionDictionary;
+}
+declare const WalletList: ({ extensionDictionary, onSelectWallet }: WalletListProps) => JSX.Element;
+
+export { Account, AccountInfo as AccountOption, Asset, AssetMetadata, BaseCheckout, BaseProduct, Checkout, CheckoutPreview as CheckoutComponent, CheckoutResponse, ConnectedExtension, ContactInformation, EXTENSIONS, EXTENSION_IDS, Extension, ExtensionConfig, ExtensionDictionary, ExtensionId, _default as Loading, Network, NumberPriceCheckoutResponse, Payment, WalletList, WalletType, extensionAPI, getAssetMetadata, getNetwork, getNetworkAssets, getWalletNetworks, priceFormatHelper };

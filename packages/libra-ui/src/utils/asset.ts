@@ -43,10 +43,3 @@ export const getNetwork = (asset: Asset) => {
   const initNetwork: Network = { id: '', name: '', type: 'substrate', rpc: '', config: {} };
   return netWork ?? initNetwork;
 };
-
-export const getExtensionId = (asset: Asset) => {
-  const nextwork = getNetwork(asset);
-  if (nextwork.type === 'substrate') {
-    return 'polkadot-js';
-  }
-};

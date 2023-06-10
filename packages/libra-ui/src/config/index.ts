@@ -10,22 +10,26 @@ export const EXTENSIONS: ExtensionConfig[] = [
     id: 'polkadot-js',
     name: 'Polkadot.{Js}',
     installURL: 'https://polkadot.js.org/extension/',
+    logo: 'https://avatars.githubusercontent.com/u/33775474?s=280&v=4',
   },
   {
     id: 'subwallet-js',
     name: 'SubWallet',
     installURL: 'https://www.subwallet.app/download.html',
+    logo: 'https://1570604715-files.gitbook.io/~/files/v0/b/gitbook-x-prod.appspot.com/o/spaces%2F-Lh39Kwxa1xxZM9WX_Bs%2Ficon%2FiETEgi1ykXUQRW63vPnL%2FLogo%3DWhite%2C%20Background%3DGradient.jpg?alt=media&token=46c5dafa-ce09-4576-bcd9-a5c796786f1a',
   },
   {
     id: 'talisman',
     name: 'Talisman',
     installURL: 'https://www.talisman.xyz',
+    logo: 'https://res.cloudinary.com/crunchbase-production/image/upload/c_lpad,f_auto,q_auto:eco,dpr_1/vsgo8bn1iof4ryzk3gkf',
   },
 
   {
     id: 'enkrypt',
     name: 'Enkrypt',
-    installURL: 'enkrypt.com',
+    installURL: 'https://www.enkrypt.com',
+    logo: 'https://avatars.githubusercontent.com/u/47159500?s=280&v=4',
   },
 ];
 

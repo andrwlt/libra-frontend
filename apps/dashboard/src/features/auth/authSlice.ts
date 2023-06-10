@@ -2,10 +2,10 @@ import { createSlice, Reducer, createAction } from '@reduxjs/toolkit';
 import { createAppAsyncThunk } from 'app/hooks';
 import authAPI from './authAPI';
 import { LOGIN_MESSAGE, APP_NAME } from 'config';
-import { ConnectExtensionState, ExtensionState, LoginState, AuthPersitState, AuthHookState, Account } from './types';
+import { ConnectExtensionState, ExtensionState, LoginState, AuthPersitState, AuthHookState } from './types';
 import { RootState } from 'app/store';
 import { setAxiosToken, removeAxiosToken } from 'services/requester';
-import type { Extension } from '@atscale/libra-ui';
+import type { Extension, Account } from '@atscale/libra-ui';
 import { EXTENSION_IDS } from '@atscale/libra-ui';
 
 export interface AuthState extends ExtensionState, ConnectExtensionState, LoginState, AuthPersitState {}
@@ -40,7 +40,7 @@ export const login = createAppAsyncThunk(
     const { address } = account;
 
     try {
-      const { signature } = await authAPI.getSignater(connectedExtension, address);
+      const { signature } = await authAPI.getSignature(connectedExtension, address);
       const addressType = 'substrate';
 
       const response = await authAPI.signIn({

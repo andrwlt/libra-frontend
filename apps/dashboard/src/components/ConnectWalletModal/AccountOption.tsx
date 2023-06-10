@@ -2,8 +2,7 @@ import { Fragment } from 'react';
 import { Typography, Row } from 'antd';
 import styled from 'styled-components';
 import Identicon from '@polkadot/react-identicon';
-import { Account } from 'features/auth/types';
-import Jazzicon, { jsNumberForAddress } from 'react-jazzicon';
+import { Account } from '@atscale/libra-ui';
 
 const AccountOptionWrapper = styled(Row)`
   height: 50px;
@@ -24,19 +23,12 @@ const AccountOptionWrapper = styled(Row)`
 const AccountOption = ({ account, onSelect }: { account: Account; onSelect: Function }) => {
   return (
     <AccountOptionWrapper onClick={() => onSelect(account)} align="middle">
-      {account.type === 'polkadot-js' ? (
-        <Fragment>
-          <Identicon value={account.address} style={{ margin: '0 5px' }} size={20} theme="polkadot"></Identicon>
-          <Typography.Paragraph style={{ marginBottom: 0 }} strong>
-            {account.name}
-          </Typography.Paragraph>
-        </Fragment>
-      ) : (
-        <Fragment>
-          <Jazzicon paperStyles={{ margin: '0 5px' }} diameter={20} seed={jsNumberForAddress(account.address)} />
-          <Typography.Paragraph style={{ marginBottom: 0 }}>{account.name}</Typography.Paragraph>
-        </Fragment>
-      )}
+      <Fragment>
+        <Identicon value={account.address} style={{ margin: '0 5px' }} size={20} theme="polkadot"></Identicon>
+        <Typography.Paragraph style={{ marginBottom: 0 }} strong>
+          {account.name}
+        </Typography.Paragraph>
+      </Fragment>
     </AccountOptionWrapper>
   );
 };

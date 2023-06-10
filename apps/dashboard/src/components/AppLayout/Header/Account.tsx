@@ -11,7 +11,7 @@ import { breakpoints } from 'config';
 import { useLocation } from 'react-router-dom';
 import { ExperimentTwoTone, QuestionCircleOutlined } from '@ant-design/icons';
 import { LOCALE_WORKSPACE } from 'app/i18n';
-import { Account } from 'features/auth/types';
+import { Account } from '@atscale/libra-ui';
 
 const StyledMenuItem = styled.div`
   display: flex;

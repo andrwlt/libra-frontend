@@ -13,7 +13,7 @@ import CheckoutProductFormItems from 'features/checkout/FormItems/CheckoutProduc
 import CheckoutBrandingFormItems from 'features/checkout/FormItems/CheckoutBrandingFormItems';
 import Congratulation from './Congratulation';
 import { useDebounceCallback } from 'app/hooks';
-import { Account } from 'features/auth/types';
+import { Account } from '@atscale/libra-ui';
 import { useTranslation } from 'react-i18next';
 import { formatCheckoutToStringPrice } from 'utils/format/balance';
 import { LOCALE_WORKSPACE } from 'app/i18n';
