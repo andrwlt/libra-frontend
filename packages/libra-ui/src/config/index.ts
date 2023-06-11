@@ -1,10 +1,5 @@
 import { Network, AssetConfig, ExtensionConfig } from 'app/types';
 
-export const EXTENSION_IDS = {
-  POLKADOT_JS: 'polkadot-js',
-  METAMASK: 'METAMASK',
-};
-
 export const EXTENSIONS: ExtensionConfig[] = [
   {
     id: 'polkadot-js',

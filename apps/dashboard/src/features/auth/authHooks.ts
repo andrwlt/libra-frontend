@@ -13,8 +13,7 @@ import {
   resetConnectedExtension,
 } from './authSlice';
 import { LoginHook, ConnectExtensionHook, AuthHookState } from './types';
-import { WALLET_TYPES } from 'config';
-import { Network, getWalletNetworks, EXTENSION_IDS, Account, Extension } from '@atscale/libra-ui';
+import { Network, getWalletNetworks, Account, Extension } from '@atscale/libra-ui';
 
 export const useExtensions = (revalidate: boolean = false) => {
   const state = useAppSelector(selectExtensionsState);
@@ -63,7 +62,7 @@ export const useConnectExtension1 = (onConnected: () => void): ConnectExtensionH
   const dispatch = useAppDispatch();
 
   const handleConnectExtension = () => {
-    dispatch(connectExtension(EXTENSION_IDS.POLKADOT_JS));
+    dispatch(connectExtension('polkadot-js'));
   };
 
   useSuccess(state.connectedExtension as any, '', onConnected);
@@ -113,9 +112,8 @@ export const useNetworks = (): Network[] => {
       return [];
     }
 
-    const walletType = WALLET_TYPES.substrate;
 
-    return getWalletNetworks(walletType);
+    return getWalletNetworks();
   }, [account]);
 
   return networks;

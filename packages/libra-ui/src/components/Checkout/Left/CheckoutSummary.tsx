@@ -1,10 +1,12 @@
 import styled from 'styled-components';
-import { Image, Space, Avatar, Typography, Divider, Skeleton } from 'antd';
+import { Image, Space, Avatar, Typography, Divider, Skeleton, InputNumber, Input, Button } from 'antd';
 import { AssetMetadata, NumberPriceProduct, Asset } from 'app/types';
 import LibraLogo from 'components/LibraLogo';
 import { getCheckoutPrice } from 'utils';
 import { useTranslation } from 'react-i18next';
 import { getAssetMetadata } from 'utils/asset';
+import { useState } from 'react';
+import FormItem from 'antd/es/form/FormItem';
 
 const { Paragraph, Link } = Typography;
 
@@ -21,6 +23,9 @@ interface ProductInfoProps {
   product: NumberPriceProduct | undefined;
   asset: Asset;
   loading: boolean;
+  previewMode: boolean;
+  onUpdatePrice?: (price: number | null) => void;
+  updatingPrice?: number | null;
 }
 
 const ProductInfoWrapper = styled.div`
@@ -59,10 +64,39 @@ const ProductInfoWrapper = styled.div`
   }
 `;
 
-const ProductInformation = ({ product, asset, loading }: ProductInfoProps) => {
-  const { name, description, price, image } = product || {};
-
+const ProductInformation = ({
+  product,
+  asset,
+  loading,
+  onUpdatePrice,
+  updatingPrice,
+  previewMode,
+}: ProductInfoProps) => {
+  const { name, description, price, image, priceType, presetPrice } = product || {};
   const assetMetadata: AssetMetadata = getAssetMetadata(asset);
+  const [isUpdatingPrice, setIsUpdatingPrice] = useState(false);
+  const [priceValid, setPriceValid] = useState<true | string>(true);
+
+  const onPriceChange = (price: number | null) => {
+    let priceValid: true | string = true;
+
+    if (!price) {
+      priceValid = 'Price is Required!';
+    } else {
+      if (product?.minPrice && price < product?.minPrice) {
+        priceValid = `Price must be greater or equal to ${product.minPrice}`;
+      }
+
+      if (product?.maxPrice && price > product?.maxPrice) {
+        priceValid = `Price must be less than or equal to ${product.maxPrice}`;
+      }
+    }
+
+    console.log(priceValid);
+
+    setPriceValid(priceValid);
+    onUpdatePrice?.(price);
+  };
 
   return (
     <ProductInfoWrapper>
@@ -73,13 +107,49 @@ const ProductInformation = ({ product, asset, loading }: ProductInfoProps) => {
       </Skeleton>
 
       <Skeleton active className="product-price-skeleton" paragraph={false} loading={loading}>
-        <Space align="center" style={{ marginTop: 10 }}>
+        <Space align="start" style={{ marginTop: 10 }}>
           {assetMetadata && <Avatar src={assetMetadata.logoUrl}>{assetMetadata.symbol}</Avatar>}
-
-          <Typography.Title level={3} style={{ margin: 0, fontSize: 32 }}>
-            {price ? getCheckoutPrice({ price, asset }, assetMetadata) : '0'}
-          </Typography.Title>
+          {priceType === 'fixed' ? (
+            <Typography.Title level={3} style={{ margin: 0, fontSize: 32, lineHeight: '32px' }}>
+              {price ? getCheckoutPrice({ price, asset }, assetMetadata) : '0'}
+            </Typography.Title>
+          ) : (
+            <div>
+              {presetPrice ? (
+                <div>
+                  {isUpdatingPrice ? (
+                    <FormItem
+                      validateStatus={priceValid !== true ? 'error' : ''}
+                      help={priceValid !== true && priceValid}
+                      style={{ marginBottom: 0 }}
+                    >
+                      <InputNumber style={{ width: 200 }} value={updatingPrice} onChange={onPriceChange} />
+                    </FormItem>
+                  ) : (
+                    <Typography.Title level={3} style={{ margin: 0, fontSize: 32, lineHeight: '32px' }}>
+                      {getCheckoutPrice({ price: presetPrice, asset }, assetMetadata)}
+                    </Typography.Title>
+                  )}
+                </div>
+              ) : (
+                <InputNumber value={''} style={{ width: 200 }} />
+              )}
+            </div>
+          )}
         </Space>
+
+        {priceType === 'flexible' && presetPrice && !isUpdatingPrice && (
+          <Button
+            style={{ display: 'block', marginTop: 20 }}
+            onClick={() => {
+              if (!previewMode) {
+                setIsUpdatingPrice(true);
+              }
+            }}
+          >
+            Change Amount
+          </Button>
+        )}
       </Skeleton>
 
       <Skeleton active className="product-description-skeleton" paragraph={false} loading={loading}>
@@ -147,15 +217,26 @@ const CheckoutSummary = ({
   asset,
   previewMode,
   loading,
+  onUpdatePrice,
+  updatingPrice,
 }: {
   product: NumberPriceProduct;
   asset: Asset;
   previewMode: boolean;
   loading: boolean;
+  onUpdatePrice?: (price: number | null) => void;
+  updatingPrice?: number | null;
 }) => {
   return (
     <CheckoutSummaryWrapper style={previewMode ? { maxHeight: 550 } : {}}>
-      <ProductInformation product={product} asset={asset} loading={loading} />
+      <ProductInformation
+        previewMode={previewMode}
+        product={product}
+        asset={asset}
+        loading={loading}
+        onUpdatePrice={onUpdatePrice}
+        updatingPrice={updatingPrice}
+      />
       <div>
         <FooterLinks />
       </div>

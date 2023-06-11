@@ -49,12 +49,16 @@ const CheckoutPreview = ({
   isShowAfterPayment = false,
   loading = false,
   HandlePaymentComponent,
+  onUpdatePrice,
+  updatingPrice,
 }: {
   checkoutData: Checkout;
   previewMode?: boolean;
   isShowAfterPayment?: boolean;
   loading?: boolean;
   HandlePaymentComponent?: any;
+  onUpdatePrice?: (price: number | null) => void;
+  updatingPrice?: number | null;
 }) => {
   const { branding, item, assetId, networkId, afterPayment } = checkoutData;
   const [completed, setCompleted] = useState(false);
@@ -79,6 +83,8 @@ const CheckoutPreview = ({
               product={item}
               asset={{ assetId, networkId }}
               previewMode={previewMode}
+              onUpdatePrice={onUpdatePrice}
+              updatingPrice={updatingPrice}
             />
           </Col>
 

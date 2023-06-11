@@ -104,16 +104,32 @@ const CheckoutDetails = () => {
     form
       .validateFields()
       .then((values) => {
-        let { afterPayment } = values;
+        let { afterPayment, item } = values;
 
         if (afterPayment.type === AFTER_PAYMENT_TYPE.MESSAGE && !afterPayment.config) {
           afterPayment.config = { message: '' };
         }
 
-        if (id) {
-          handleUpdateCheckout(formatCheckoutToStringPrice({ ...values, afterPayment, id }) as UpdatingCheckout);
+        const nextItem = {
+          ...item,
+        };
+
+        if (nextItem.priceType === 'fixed') {
+          delete nextItem.minPrice;
+          delete nextItem.maxPrice;
+          delete nextItem.presetPrice;
         } else {
-          handleCreateCheckout(formatCheckoutToStringPrice({ ...values, afterPayment }) as CreatingCheckout);
+          delete item.price;
+        }
+
+        if (id) {
+          handleUpdateCheckout(
+            formatCheckoutToStringPrice({ ...values, item: nextItem, afterPayment, id }) as UpdatingCheckout,
+          );
+        } else {
+          handleCreateCheckout(
+            formatCheckoutToStringPrice({ ...values, item: nextItem, afterPayment }) as CreatingCheckout,
+          );
         }
       })
       .catch((error) => {

@@ -15,12 +15,19 @@ interface BaseProduct {
     name: string;
     description?: string;
     image?: string;
+    priceType: 'fixed' | 'flexible';
 }
 interface StringPriceProduct extends BaseProduct {
-    price: string;
+    price?: string;
+    presetPrice?: string;
+    minPrice?: string;
+    maxPrice?: string;
 }
 interface NumberPriceProduct extends BaseProduct {
-    price: number | null;
+    price?: number | null;
+    presetPrice?: number | null;
+    minPrice?: number | null;
+    maxPrice?: number | null;
 }
 interface Asset {
     assetId: string;
@@ -106,12 +113,14 @@ interface Payment {
     productName: string;
 }
 
-declare const CheckoutPreview: ({ checkoutData, previewMode, isShowAfterPayment, loading, HandlePaymentComponent, }: {
+declare const CheckoutPreview: ({ checkoutData, previewMode, isShowAfterPayment, loading, HandlePaymentComponent, onUpdatePrice, updatingPrice, }: {
     checkoutData: Checkout;
     previewMode?: boolean | undefined;
     isShowAfterPayment?: boolean | undefined;
     loading?: boolean | undefined;
     HandlePaymentComponent?: any;
+    onUpdatePrice?: ((price: number | null) => void) | undefined;
+    updatingPrice?: number | null | undefined;
 }) => JSX.Element;
 
 declare function formatBalance(amount: string, asset: Asset): number;
@@ -125,7 +134,7 @@ declare const priceFormatHelper: {
     }, assetMetadata: AssetMetadata) => string;
 };
 
-declare const getWalletNetworks: (walletType: WalletType) => Network[];
+declare const getWalletNetworks: () => Network[];
 declare const getNetworkAssets: (networkId: string) => AssetMetadata[];
 declare const getAssetMetadata: (asset: Asset) => AssetMetadata;
 declare const getNetwork: (asset: Asset) => Network;
@@ -134,10 +143,6 @@ declare const extensionAPI: {
     getExtensions(): Promise<Extension[]>;
 };
 
-declare const EXTENSION_IDS: {
-    POLKADOT_JS: string;
-    METAMASK: string;
-};
 declare const EXTENSIONS: ExtensionConfig[];
 
 interface AccountProps {
@@ -173,4 +178,4 @@ interface WalletListProps {
 }
 declare const WalletList: ({ extensionDictionary, onSelectWallet }: WalletListProps) => JSX.Element;
 
-export { Account, AccountInfo as AccountOption, Asset, AssetMetadata, BaseCheckout, BaseProduct, Checkout, CheckoutPreview as CheckoutComponent, CheckoutResponse, ConnectedExtension, ContactInformation, EXTENSIONS, EXTENSION_IDS, Extension, ExtensionConfig, ExtensionDictionary, ExtensionId, _default as Loading, Network, NumberPriceCheckoutResponse, Payment, WalletList, WalletType, extensionAPI, getAssetMetadata, getNetwork, getNetworkAssets, getWalletNetworks, priceFormatHelper };
+export { Account, AccountInfo as AccountOption, Asset, AssetMetadata, BaseCheckout, BaseProduct, Checkout, CheckoutPreview as CheckoutComponent, CheckoutResponse, ConnectedExtension, ContactInformation, EXTENSIONS, Extension, ExtensionConfig, ExtensionDictionary, ExtensionId, _default as Loading, Network, NumberPriceCheckoutResponse, Payment, WalletList, WalletType, extensionAPI, getAssetMetadata, getNetwork, getNetworkAssets, getWalletNetworks, priceFormatHelper };

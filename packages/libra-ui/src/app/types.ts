@@ -14,14 +14,21 @@ export interface BaseProduct {
   name: string;
   description?: string;
   image?: string;
+  priceType: 'fixed' | 'flexible';
 }
 
 interface StringPriceProduct extends BaseProduct {
-  price: string;
+  price?: string;
+  presetPrice?: string;
+  minPrice?: string;
+  maxPrice?: string;
 }
 
 export interface NumberPriceProduct extends BaseProduct {
-  price: number | null;
+  price?: number | null;
+  presetPrice?: number | null;
+  minPrice?: number | null;
+  maxPrice?: number | null;
 }
 
 export interface Asset {

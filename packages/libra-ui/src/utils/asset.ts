@@ -1,8 +1,8 @@
-import { AssetMetadata, Asset, WalletType, Network } from 'app/types';
+import { AssetMetadata, Asset, Network } from 'app/types';
 import { ASSETS_CONFIG, NETWORKS_CONFIG } from 'config';
 
-export const getWalletNetworks = (walletType: WalletType) => {
-  return NETWORKS_CONFIG.filter(({ type }) => type === walletType);
+export const getWalletNetworks = () => {
+  return NETWORKS_CONFIG;
 };
 
 export const getNetworkAssets = (networkId: string) => {

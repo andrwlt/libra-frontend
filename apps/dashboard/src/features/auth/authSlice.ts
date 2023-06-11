@@ -6,7 +6,6 @@ import { ConnectExtensionState, ExtensionState, LoginState, AuthPersitState, Aut
 import { RootState } from 'app/store';
 import { setAxiosToken, removeAxiosToken } from 'services/requester';
 import type { Extension, Account } from '@atscale/libra-ui';
-import { EXTENSION_IDS } from '@atscale/libra-ui';
 
 export interface AuthState extends ExtensionState, ConnectExtensionState, LoginState, AuthPersitState {}
 
@@ -96,7 +95,6 @@ export const connectExtension = createAppAsyncThunk(
       const accounts = polkadotAccounts.map((account: any) => ({
         name: account.name,
         address: account.address,
-        type: EXTENSION_IDS.POLKADOT_JS,
       }));
 
       const connectedExtension = {

@@ -385,9 +385,6 @@ __export(src_exports, {
     EXTENSIONS: function() {
         return EXTENSIONS;
     },
-    EXTENSION_IDS: function() {
-        return EXTENSION_IDS;
-    },
     Loading: function() {
         return Loading_default;
     },
@@ -470,10 +467,6 @@ function LibraLogo(param) {
     });
 }
 // src/config/index.ts
-var EXTENSION_IDS = {
-    POLKADOT_JS: "polkadot-js",
-    METAMASK: "METAMASK"
-};
 var EXTENSIONS = [
     {
         id: "polkadot-js",
@@ -570,11 +563,8 @@ var ASSETS_CONFIG = [
 var GET_EXTENSIONS_MAX_RETRY = 10;
 var GET_EXTENSIONS_INTERVAL_DURATION = 500;
 // src/utils/asset.ts
-var getWalletNetworks = function(walletType) {
-    return NETWORKS_CONFIG.filter(function(param) {
-        var type = param.type;
-        return type === walletType;
-    });
+var getWalletNetworks = function() {
+    return NETWORKS_CONFIG;
 };
 var getNetworkAssets = function(networkId) {
     return ASSETS_CONFIG.reduce(function(assets, asset) {
@@ -742,14 +732,35 @@ var priceFormatHelper = {
 };
 // src/components/Checkout/Left/CheckoutSummary.tsx
 var import_react_i18next = require("react-i18next");
+var import_react = require("react");
+var import_FormItem = __toESM(require("antd/es/form/FormItem"));
 var import_jsx_runtime2 = require("react/jsx-runtime");
 var _import_antd_Typography = import_antd.Typography, Paragraph = _import_antd_Typography.Paragraph, Link = _import_antd_Typography.Link;
 var ImageWrapper = import_styled_components.default.div(_templateObject());
 var ProductInfoWrapper = import_styled_components.default.div(_templateObject1());
 var ProductInformation = function(param) {
-    var product = param.product, asset = param.asset, loading = param.loading;
-    var _ref = product || {}, name = _ref.name, description = _ref.description, price = _ref.price, image = _ref.image;
+    var product = param.product, asset = param.asset, loading = param.loading, onUpdatePrice = param.onUpdatePrice, updatingPrice = param.updatingPrice, previewMode = param.previewMode;
+    var _ref = product || {}, name = _ref.name, description = _ref.description, price = _ref.price, image = _ref.image, priceType = _ref.priceType, presetPrice = _ref.presetPrice;
     var assetMetadata = getAssetMetadata(asset);
+    var _ref1 = _sliced_to_array((0, import_react.useState)(false), 2), isUpdatingPrice = _ref1[0], setIsUpdatingPrice = _ref1[1];
+    var _ref2 = _sliced_to_array((0, import_react.useState)(true), 2), priceValid = _ref2[0], setPriceValid = _ref2[1];
+    var onPriceChange = function(price2) {
+        var priceValid2 = true;
+        console.log("price", price2);
+        if (!price2) {
+            priceValid2 = "Price is Required!";
+        } else {
+            if ((product === null || product === void 0 ? void 0 : product.minPrice) && price2 < (product === null || product === void 0 ? void 0 : product.minPrice)) {
+                priceValid2 = "Price must be greater or equal to ".concat(product.minPrice);
+            }
+            if ((product === null || product === void 0 ? void 0 : product.maxPrice) && price2 > (product === null || product === void 0 ? void 0 : product.maxPrice)) {
+                priceValid2 = "Price must be less than or equal to ".concat(product.maxPrice);
+            }
+        }
+        console.log(priceValid2);
+        setPriceValid(priceValid2);
+        onUpdatePrice === null || onUpdatePrice === void 0 ? void 0 : onUpdatePrice(price2);
+    };
     return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(ProductInfoWrapper, {
         children: [
             /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Skeleton, {
@@ -767,34 +778,82 @@ var ProductInformation = function(param) {
                     children: name || "Product name"
                 })
             }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Skeleton, {
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_antd.Skeleton, {
                 active: true,
                 className: "product-price-skeleton",
                 paragraph: false,
                 loading: loading,
-                children: /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_antd.Space, {
-                    align: "center",
-                    style: {
-                        marginTop: 10
-                    },
-                    children: [
-                        assetMetadata && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Avatar, {
-                            src: assetMetadata.logoUrl,
-                            children: assetMetadata.symbol
-                        }),
-                        /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Typography.Title, {
-                            level: 3,
-                            style: {
-                                margin: 0,
-                                fontSize: 32
-                            },
-                            children: price ? getCheckoutPrice({
-                                price: price,
-                                asset: asset
-                            }, assetMetadata) : "0"
-                        })
-                    ]
-                })
+                children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_antd.Space, {
+                        align: "start",
+                        style: {
+                            marginTop: 10
+                        },
+                        children: [
+                            assetMetadata && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Avatar, {
+                                src: assetMetadata.logoUrl,
+                                children: assetMetadata.symbol
+                            }),
+                            priceType === "fixed" ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Typography.Title, {
+                                level: 3,
+                                style: {
+                                    margin: 0,
+                                    fontSize: 32,
+                                    lineHeight: "32px"
+                                },
+                                children: price ? getCheckoutPrice({
+                                    price: price,
+                                    asset: asset
+                                }, assetMetadata) : "0"
+                            }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", {
+                                children: presetPrice ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", {
+                                    children: isUpdatingPrice ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_FormItem.default, {
+                                        validateStatus: priceValid !== true ? "error" : "",
+                                        help: priceValid !== true && priceValid,
+                                        style: {
+                                            marginBottom: 0
+                                        },
+                                        children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.InputNumber, {
+                                            style: {
+                                                width: 200
+                                            },
+                                            value: updatingPrice,
+                                            onChange: onPriceChange
+                                        })
+                                    }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Typography.Title, {
+                                        level: 3,
+                                        style: {
+                                            margin: 0,
+                                            fontSize: 32,
+                                            lineHeight: "32px"
+                                        },
+                                        children: getCheckoutPrice({
+                                            price: presetPrice,
+                                            asset: asset
+                                        }, assetMetadata)
+                                    })
+                                }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.InputNumber, {
+                                    value: "",
+                                    style: {
+                                        width: 200
+                                    }
+                                })
+                            })
+                        ]
+                    }),
+                    priceType === "flexible" && presetPrice && !isUpdatingPrice && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Button, {
+                        style: {
+                            display: "block",
+                            marginTop: 20
+                        },
+                        onClick: function() {
+                            if (!previewMode) {
+                                setIsUpdatingPrice(true);
+                            }
+                        },
+                        children: "Change Amount"
+                    })
+                ]
             }),
             /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Skeleton, {
                 active: true,
@@ -870,16 +929,19 @@ function FooterLinks() {
 }
 var CheckoutSummaryWrapper = import_styled_components.default.div(_templateObject3());
 var CheckoutSummary = function(param) {
-    var product = param.product, asset = param.asset, previewMode = param.previewMode, loading = param.loading;
+    var product = param.product, asset = param.asset, previewMode = param.previewMode, loading = param.loading, onUpdatePrice = param.onUpdatePrice, updatingPrice = param.updatingPrice;
     return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(CheckoutSummaryWrapper, {
         style: previewMode ? {
             maxHeight: 550
         } : {},
         children: [
             /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(ProductInformation, {
+                previewMode: previewMode,
                 product: product,
                 asset: asset,
-                loading: loading
+                loading: loading,
+                onUpdatePrice: onUpdatePrice,
+                updatingPrice: updatingPrice
             }),
             /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", {
                 children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(FooterLinks, {})
@@ -889,15 +951,15 @@ var CheckoutSummary = function(param) {
 };
 var CheckoutSummary_default = CheckoutSummary;
 // src/components/Checkout/Right/PaymentPreviewer/index.tsx
-var import_react5 = require("react");
+var import_react6 = require("react");
 var import_antd4 = require("antd");
 var import_react_i18next3 = require("react-i18next");
 // src/components/Checkout/Right/PaymentPreviewer/AccountOption.tsx
-var import_react3 = require("react");
+var import_react4 = require("react");
 var import_antd2 = require("antd");
 // ../../node_modules/@ant-design/icons/es/components/Context.js
-var import_react = require("react");
-var IconContext = /* @__PURE__ */ (0, import_react.createContext)({});
+var import_react2 = require("react");
+var IconContext = /* @__PURE__ */ (0, import_react2.createContext)({});
 var Context_default = IconContext;
 // ../../node_modules/@babel/runtime/helpers/esm/typeof.js
 function _typeof(obj) {
@@ -1749,7 +1811,7 @@ var magenta = presetPalettes.magenta;
 var grey = presetPalettes.grey;
 var gray = presetPalettes.grey;
 // ../../node_modules/@ant-design/icons/es/utils.js
-var import_react2 = __toESM(require("react"));
+var import_react3 = __toESM(require("react"));
 // ../../node_modules/rc-util/es/warning.js
 var warned = {};
 function warning(valid, message) {
@@ -1910,13 +1972,13 @@ function normalizeAttrs() {
 }
 function generate2(node, key, rootProps) {
     if (!rootProps) {
-        return /* @__PURE__ */ import_react2.default.createElement(node.tag, _objectSpread2({
+        return /* @__PURE__ */ import_react3.default.createElement(node.tag, _objectSpread2({
             key: key
         }, normalizeAttrs(node.attrs)), (node.children || []).map(function(child, index) {
             return generate2(child, "".concat(key, "-").concat(node.tag, "-").concat(index));
         }));
     }
-    return /* @__PURE__ */ import_react2.default.createElement(node.tag, _objectSpread2(_objectSpread2({
+    return /* @__PURE__ */ import_react3.default.createElement(node.tag, _objectSpread2(_objectSpread2({
         key: key
     }, normalizeAttrs(node.attrs)), rootProps), (node.children || []).map(function(child, index) {
         return generate2(child, "".concat(key, "-").concat(node.tag, "-").concat(index));
@@ -1936,12 +1998,12 @@ function normalizeTwoToneColors(twoToneColor) {
 var iconStyles = "\n.anticon {\n  display: inline-block;\n  color: inherit;\n  font-style: normal;\n  line-height: 0;\n  text-align: center;\n  text-transform: none;\n  vertical-align: -0.125em;\n  text-rendering: optimizeLegibility;\n  -webkit-font-smoothing: antialiased;\n  -moz-osx-font-smoothing: grayscale;\n}\n\n.anticon > * {\n  line-height: 1;\n}\n\n.anticon svg {\n  display: inline-block;\n}\n\n.anticon::before {\n  display: none;\n}\n\n.anticon .anticon-icon {\n  display: block;\n}\n\n.anticon[tabindex] {\n  cursor: pointer;\n}\n\n.anticon-spin::before,\n.anticon-spin {\n  display: inline-block;\n  -webkit-animation: loadingCircle 1s infinite linear;\n  animation: loadingCircle 1s infinite linear;\n}\n\n@-webkit-keyframes loadingCircle {\n  100% {\n    -webkit-transform: rotate(360deg);\n    transform: rotate(360deg);\n  }\n}\n\n@keyframes loadingCircle {\n  100% {\n    -webkit-transform: rotate(360deg);\n    transform: rotate(360deg);\n  }\n}\n";
 var useInsertStyles = function useInsertStyles2() {
     var styleStr = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : iconStyles;
-    var _useContext = (0, import_react2.useContext)(Context_default), csp = _useContext.csp, prefixCls = _useContext.prefixCls;
+    var _useContext = (0, import_react3.useContext)(Context_default), csp = _useContext.csp, prefixCls = _useContext.prefixCls;
     var mergedStyleStr = styleStr;
     if (prefixCls) {
         mergedStyleStr = mergedStyleStr.replace(/anticon/g, prefixCls);
     }
-    (0, import_react2.useEffect)(function() {
+    (0, import_react3.useEffect)(function() {
         updateCSS(mergedStyleStr, "@ant-design-icons", {
             prepend: true,
             csp: csp
@@ -2140,7 +2202,7 @@ function AccountInfo(param) {
     var account = param.account, _param_variant = param.variant, variant = _param_variant === void 0 ? "default" : _param_variant, _param_noPadding = param.noPadding, noPadding = _param_noPadding === void 0 ? false : _param_noPadding;
     var name = account.name, address = account.address;
     var _import_antd2_theme_useToken = import_antd2.theme.useToken(), _import_antd2_theme_useToken_token = _import_antd2_theme_useToken.token, colorPrimary = _import_antd2_theme_useToken_token.colorPrimary, colorBorder = _import_antd2_theme_useToken_token.colorBorder;
-    var _ref = _sliced_to_array((0, import_react3.useState)(false), 2), hovered = _ref[0], setHovered = _ref[1];
+    var _ref = _sliced_to_array((0, import_react4.useState)(false), 2), hovered = _ref[0], setHovered = _ref[1];
     var shortedAddress = "".concat(account.address.slice(0, 16), "...").concat(account.address.slice(-12));
     var style = {
         display: "flex",
@@ -2206,15 +2268,15 @@ function AccountInfo(param) {
     });
 }
 // src/components/Checkout/Right/PaymentPreviewer/ContactInformation.tsx
-var import_react4 = require("react");
+var import_react5 = require("react");
 var import_antd3 = require("antd");
 var import_react_i18next2 = require("react-i18next");
 var import_jsx_runtime4 = require("react/jsx-runtime");
 var ContactInformation = function(param) {
     var productName = param.productName, value = param.value, onChange = param.onChange, error2 = param.error, resetError = param.resetError;
     var _ref = (0, import_react_i18next2.useTranslation)(), t2 = _ref.t;
-    var _ref1 = _sliced_to_array((0, import_react4.useState)(false), 2), emailHovered = _ref1[0], setEmailHovered = _ref1[1];
-    var _ref2 = _sliced_to_array((0, import_react4.useState)(false), 2), emailFocused = _ref2[0], setEmailFocused = _ref2[1];
+    var _ref1 = _sliced_to_array((0, import_react5.useState)(false), 2), emailHovered = _ref1[0], setEmailHovered = _ref1[1];
+    var _ref2 = _sliced_to_array((0, import_react5.useState)(false), 2), emailFocused = _ref2[0], setEmailFocused = _ref2[1];
     var hasEmailHelpText = !error2 && (emailFocused || emailHovered);
     var getHelpText = function() {
         if (error2) {
@@ -2278,10 +2340,9 @@ var EXAMPLE_POLKADOT_ADDRESS = "5ERjkQVj8M7v5UVZQ8qTbZ2qb1o5TgNXq9tXt2BsWF9jBpDu
 function PaymentSummary(param) {
     var payment = param.payment;
     var _ref = (0, import_react_i18next3.useTranslation)(), t2 = _ref.t;
-    var _ref1 = _sliced_to_array((0, import_react5.useState)(false), 2), loading = _ref1[0], setLoading = _ref1[1];
-    var _ref2 = _sliced_to_array((0, import_react5.useState)(""), 2), email = _ref2[0], setEmail = _ref2[1];
-    return(//TODO: Fix style
-    /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", {
+    var _ref1 = _sliced_to_array((0, import_react6.useState)(false), 2), loading = _ref1[0], setLoading = _ref1[1];
+    var _ref2 = _sliced_to_array((0, import_react6.useState)(""), 2), email = _ref2[0], setEmail = _ref2[1];
+    return /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", {
         style: {
             width: 380,
             maxWidth: 380,
@@ -2329,10 +2390,10 @@ function PaymentSummary(param) {
                 ]
             })
         ]
-    }));
+    });
 }
 // src/components/Checkout/Brand.tsx
-var import_react6 = require("react");
+var import_react7 = require("react");
 var import_styled_components2 = __toESM(require("styled-components"));
 var import_antd5 = require("antd");
 var import_jsx_runtime6 = require("react/jsx-runtime");
@@ -2350,7 +2411,7 @@ var CheckoutBrand = function(param) {
                 paragraph: false,
                 loading: loading,
                 active: true,
-                children: HasNoBrand ? "Brand" : /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(import_react6.Fragment, {
+                children: HasNoBrand ? "Brand" : /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(import_react7.Fragment, {
                     children: [
                         logo && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("img", {
                             style: {
@@ -5775,16 +5836,16 @@ instance.use(import_i18next_browser_languagedetector.default).use(import_react_i
     }
 });
 // src/components/Checkout/index.tsx
-var import_react7 = require("react");
+var import_react8 = require("react");
 var import_jsx_runtime8 = require("react/jsx-runtime");
 var Content = import_antd7.Layout.Content;
 var Wrapper = (0, import_styled_components3.default)(import_antd7.Layout)(_templateObject6());
 var ContentWrapper = (0, import_styled_components3.default)(Content)(_templateObject7());
 var MainContent = (0, import_styled_components3.default)(import_antd7.Row)(_templateObject8());
 var CheckoutPreview = function(param) {
-    var checkoutData = param.checkoutData, _param_previewMode = param.previewMode, previewMode = _param_previewMode === void 0 ? true : _param_previewMode, _param_isShowAfterPayment = param.isShowAfterPayment, isShowAfterPayment = _param_isShowAfterPayment === void 0 ? false : _param_isShowAfterPayment, _param_loading = param.loading, loading = _param_loading === void 0 ? false : _param_loading, HandlePaymentComponent = param.HandlePaymentComponent;
+    var checkoutData = param.checkoutData, _param_previewMode = param.previewMode, previewMode = _param_previewMode === void 0 ? true : _param_previewMode, _param_isShowAfterPayment = param.isShowAfterPayment, isShowAfterPayment = _param_isShowAfterPayment === void 0 ? false : _param_isShowAfterPayment, _param_loading = param.loading, loading = _param_loading === void 0 ? false : _param_loading, HandlePaymentComponent = param.HandlePaymentComponent, onUpdatePrice = param.onUpdatePrice, updatingPrice = param.updatingPrice;
     var branding = checkoutData.branding, item = checkoutData.item, assetId = checkoutData.assetId, networkId = checkoutData.networkId, afterPayment = checkoutData.afterPayment;
-    var _ref = _sliced_to_array((0, import_react7.useState)(false), 2), completed = _ref[0], setCompleted = _ref[1];
+    var _ref = _sliced_to_array((0, import_react8.useState)(false), 2), completed = _ref[0], setCompleted = _ref[1];
     var handlePaymentSuccess = function() {
         if (afterPayment && afterPayment.type === "redirect" && afterPayment.config.url) {
             window.location.href = afterPayment.config.url;
@@ -5811,7 +5872,9 @@ var CheckoutPreview = function(param) {
                                     assetId: assetId,
                                     networkId: networkId
                                 },
-                                previewMode: previewMode
+                                previewMode: previewMode,
+                                onUpdatePrice: onUpdatePrice,
+                                updatingPrice: updatingPrice
                             })
                         }),
                         /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_antd7.Col, {
@@ -5888,7 +5951,7 @@ var extensionAPI = {
 };
 var extension_default = extensionAPI;
 // src/components/Common/Loading.tsx
-var import_react8 = require("react");
+var import_react9 = require("react");
 var import_styled_components4 = __toESM(require("styled-components"));
 var import_antd8 = require("antd");
 var import_react_i18next6 = require("react-i18next");
@@ -5903,9 +5966,9 @@ var LoadingWrapper = import_styled_components4.default.div(_templateObject10());
 var PageContentLoadingWrapper = (0, import_styled_components4.default)(FullPageWrapper)(_templateObject11());
 var LoaderContainer = import_styled_components4.default.div(_templateObject12());
 var useFunnyQuote = function(loading) {
-    var prevQuoteRef = (0, import_react8.useRef)();
+    var prevQuoteRef = (0, import_react9.useRef)();
     var _ref = (0, import_react_i18next6.useTranslation)(), t2 = _ref.t;
-    var quote = (0, import_react8.useMemo)(function() {
+    var quote = (0, import_react9.useMemo)(function() {
         var getFunnyQuote = function() {
             var quoteIndex = getRandomInt(0, 17);
             return t2("funnyQuotes.".concat(quoteIndex));
@@ -5975,7 +6038,7 @@ var Loading = function(param) {
         children: loadingContent
     });
 };
-var Loading_default = (0, import_react8.memo)(Loading, function(oldProps, newProps) {
+var Loading_default = (0, import_react9.memo)(Loading, function(oldProps, newProps) {
     return oldProps.loading === newProps.loading;
 });
 // src/components/Common/WalletList.tsx
@@ -6030,7 +6093,6 @@ var WalletList_default = WalletList;
     CheckoutComponent: CheckoutComponent,
     ContactInformation: ContactInformation,
     EXTENSIONS: EXTENSIONS,
-    EXTENSION_IDS: EXTENSION_IDS,
     Loading: Loading,
     WalletList: WalletList,
     extensionAPI: extensionAPI,

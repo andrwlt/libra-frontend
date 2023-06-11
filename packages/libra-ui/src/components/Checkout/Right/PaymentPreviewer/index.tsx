@@ -13,7 +13,6 @@ export default function PaymentSummary({ payment }: { payment: Payment }) {
   const [email, setEmail] = useState('');
 
   return (
-    //TODO: Fix style
     <div style={{ width: 380, maxWidth: 380, marginLeft: 80 }}>
       <ContactInformation value={email} onChange={setEmail} productName={payment.productName} />
 

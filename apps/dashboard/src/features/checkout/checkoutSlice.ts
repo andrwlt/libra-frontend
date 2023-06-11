@@ -102,7 +102,8 @@ const initCheckout: NumberPriceCheckoutResponse = {
   branding: {},
   item: {
     name: '',
-    price: null,
+    price: 0,
+    priceType: 'fixed',
   },
   afterPayment: {
     type: 'message',

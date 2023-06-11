@@ -20,7 +20,7 @@ import {
   ExtensionConfig,
   Account,
 } from 'app/types';
-import { EXTENSION_IDS, EXTENSIONS } from 'config';
+import { EXTENSIONS } from 'config';
 import AccountOption from 'components/Checkout/Right/PaymentPreviewer/AccountOption';
 import ContactInformation from 'components/Checkout/Right/PaymentPreviewer/ContactInformation';
 import Loading from 'components/Common/Loading';
@@ -34,7 +34,6 @@ export {
   getWalletNetworks,
   getAssetMetadata,
   extensionAPI,
-  EXTENSION_IDS,
   EXTENSIONS,
   AccountOption,
   ContactInformation,
