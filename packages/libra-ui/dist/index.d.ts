@@ -11,11 +11,12 @@ interface Brand {
     name?: string;
     logo?: string;
 }
+type PriceType = 'fixed' | 'flexible';
 interface BaseProduct {
     name: string;
     description?: string;
     image?: string;
-    priceType: 'fixed' | 'flexible';
+    priceType: PriceType;
 }
 interface StringPriceProduct extends BaseProduct {
     price?: string;
@@ -112,18 +113,23 @@ interface Payment {
     asset: Asset;
     productName: string;
 }
+type NumFlexPrice = number | null;
+type FlexPriceValid = true | string;
 
-declare const CheckoutPreview: ({ checkoutData, previewMode, isShowAfterPayment, loading, HandlePaymentComponent, onUpdatePrice, updatingPrice, }: {
+declare const CheckoutPreview: ({ checkoutData, previewMode, isShowAfterPayment, loading, HandlePaymentComponent, onNumFlexPriceChange, numFlexPrice, flexPriceValid, validateFlexPrice, }: {
     checkoutData: Checkout;
     previewMode?: boolean | undefined;
     isShowAfterPayment?: boolean | undefined;
     loading?: boolean | undefined;
     HandlePaymentComponent?: any;
-    onUpdatePrice?: ((price: number | null) => void) | undefined;
-    updatingPrice?: number | null | undefined;
+    onNumFlexPriceChange?: ((price: NumFlexPrice) => void) | undefined;
+    validateFlexPrice?: ((price: NumFlexPrice) => FlexPriceValid) | undefined;
+    numFlexPrice?: NumFlexPrice | undefined;
+    flexPriceValid: FlexPriceValid;
 }) => JSX.Element;
 
 declare function formatBalance(amount: string, asset: Asset): number;
+declare function exponentToStringDecimals(num: number): string;
 declare function toSmallestUnit(originAmount: number, asset: Asset): string | 0 | undefined;
 declare const priceFormatHelper: {
     formatBalance: typeof formatBalance;
@@ -132,6 +138,7 @@ declare const priceFormatHelper: {
         price: string | number;
         asset: Asset;
     }, assetMetadata: AssetMetadata) => string;
+    exponentToStringDecimals: typeof exponentToStringDecimals;
 };
 
 declare const getWalletNetworks: () => Network[];
@@ -178,4 +185,4 @@ interface WalletListProps {
 }
 declare const WalletList: ({ extensionDictionary, onSelectWallet }: WalletListProps) => JSX.Element;
 
-export { Account, AccountInfo as AccountOption, Asset, AssetMetadata, BaseCheckout, BaseProduct, Checkout, CheckoutPreview as CheckoutComponent, CheckoutResponse, ConnectedExtension, ContactInformation, EXTENSIONS, Extension, ExtensionConfig, ExtensionDictionary, ExtensionId, _default as Loading, Network, NumberPriceCheckoutResponse, Payment, WalletList, WalletType, extensionAPI, getAssetMetadata, getNetwork, getNetworkAssets, getWalletNetworks, priceFormatHelper };
+export { Account, AccountInfo as AccountOption, Asset, AssetMetadata, BaseCheckout, BaseProduct, Checkout, CheckoutPreview as CheckoutComponent, CheckoutResponse, ConnectedExtension, ContactInformation, EXTENSIONS, Extension, ExtensionConfig, ExtensionDictionary, ExtensionId, FlexPriceValid, _default as Loading, Network, NumFlexPrice, NumberPriceCheckoutResponse, Payment, PriceType, WalletList, WalletType, extensionAPI, getAssetMetadata, getNetwork, getNetworkAssets, getWalletNetworks, priceFormatHelper };

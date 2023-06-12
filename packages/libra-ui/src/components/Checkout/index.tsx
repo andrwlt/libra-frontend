@@ -2,11 +2,12 @@ import styled from 'styled-components';
 import { Row, Layout, Col } from 'antd';
 import CheckoutSummary from './Left/CheckoutSummary';
 import PaymentPreviewer from './Right/PaymentPreviewer';
-import { Checkout } from 'app/types';
+import { Checkout, NumFlexPrice, FlexPriceValid } from 'app/types';
 import CheckoutBrand from './Brand';
 import AfterPaymentPreviewer from './Right/AfterPaymentPreviewer';
 import 'app/i18n';
 import { useState } from 'react';
+import { priceFormatHelper } from 'utils';
 
 const { Content } = Layout;
 
@@ -49,18 +50,30 @@ const CheckoutPreview = ({
   isShowAfterPayment = false,
   loading = false,
   HandlePaymentComponent,
-  onUpdatePrice,
-  updatingPrice,
+  onNumFlexPriceChange,
+  numFlexPrice,
+  flexPriceValid,
+  validateFlexPrice,
 }: {
   checkoutData: Checkout;
   previewMode?: boolean;
   isShowAfterPayment?: boolean;
   loading?: boolean;
   HandlePaymentComponent?: any;
-  onUpdatePrice?: (price: number | null) => void;
-  updatingPrice?: number | null;
+  onNumFlexPriceChange?: (price: NumFlexPrice) => void;
+  validateFlexPrice?: (price: NumFlexPrice) => FlexPriceValid;
+  numFlexPrice?: NumFlexPrice;
+  flexPriceValid: FlexPriceValid;
 }) => {
-  const { branding, item, assetId, networkId, afterPayment } = checkoutData;
+  const { branding, item, assetId, networkId, afterPayment, payee } = checkoutData;
+  const { priceType, price, name } = item;
+  const checkoutPrice =
+    priceType === 'fixed'
+      ? price
+      : numFlexPrice
+      ? priceFormatHelper.toSmallestUnit(numFlexPrice, { assetId, networkId })
+      : undefined;
+
   const [completed, setCompleted] = useState(false);
 
   const handlePaymentSuccess = () => {
@@ -83,8 +96,9 @@ const CheckoutPreview = ({
               product={item}
               asset={{ assetId, networkId }}
               previewMode={previewMode}
-              onUpdatePrice={onUpdatePrice}
-              updatingPrice={updatingPrice}
+              onNumFlexPriceChange={onNumFlexPriceChange}
+              numFlexPrice={numFlexPrice}
+              flexPriceValid={flexPriceValid}
             />
           </Col>
 
@@ -92,23 +106,19 @@ const CheckoutPreview = ({
             {(completed || isShowAfterPayment) && afterPayment ? (
               <AfterPaymentPreviewer afterPayment={afterPayment} productName={item.name || 'The product'} />
             ) : previewMode ? (
-              <PaymentPreviewer
-                payment={{
-                  payee: checkoutData.payee || '',
-                  amount: checkoutData.item.price || 0,
-                  asset: { assetId, networkId },
-                  productName: checkoutData.item.name,
-                }}
-              />
+              <PaymentPreviewer productName={name} />
             ) : (
               <HandlePaymentComponent
                 onPaymentSuccess={handlePaymentSuccess}
                 payment={{
-                  payee: checkoutData.payee || '',
-                  amount: checkoutData.item.price || 0,
+                  payee: payee ?? '',
+                  amount: checkoutPrice,
                   asset: { assetId, networkId },
-                  productName: checkoutData.item.name,
+                  productName: name,
                 }}
+                validateFlexPrice={validateFlexPrice}
+                priceType={item.priceType}
+                numFlexPrice={numFlexPrice}
               />
             )}
           </Col>

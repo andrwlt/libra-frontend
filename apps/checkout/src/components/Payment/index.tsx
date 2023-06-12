@@ -1,6 +1,6 @@
 import { Fragment, useContext } from 'react';
 import { Typography, Button, Dropdown, Form } from 'antd';
-import { AccountOption, Payment as PaymentType } from '@atscale/libra-ui';
+import { AccountOption, Payment as PaymentType, FlexPriceValid, NumFlexPrice, PriceType } from '@atscale/libra-ui';
 import { validateEmail } from 'utils/validator';
 import { ContactInformation } from '@atscale/libra-ui';
 import SelectWallet from 'components/Payment/SelectWallet';
@@ -25,7 +25,19 @@ const Wrapper = styled.div`
 
 const { Title, Text } = Typography;
 
-const Payment = ({ payment, onPaymentSuccess }: { payment: PaymentType; onPaymentSuccess: Function }) => {
+const Payment = ({
+  payment,
+  onPaymentSuccess,
+  validateFlexPrice,
+  priceType,
+  numFlexPrice,
+}: {
+  payment: PaymentType;
+  onPaymentSuccess: Function;
+  validateFlexPrice: (price: NumFlexPrice) => FlexPriceValid;
+  priceType: PriceType;
+  numFlexPrice: NumFlexPrice;
+}) => {
   const { connectedExtension } = useContext(ExtensionContext);
   const { account, onSelectAccount } = useAccount(connectedExtension);
   const { paymentError, handlePay, paying } = usePay();
@@ -36,6 +48,13 @@ const Payment = ({ payment, onPaymentSuccess }: { payment: PaymentType; onPaymen
     if (isEmailValid !== true) {
       setEmailError(isEmailValid);
       return;
+    }
+
+    if (priceType === 'flexible') {
+      const isPriceValid = validateFlexPrice(numFlexPrice);
+      if (isPriceValid !== true) {
+        return;
+      }
     }
 
     if (connectedExtension && account && onPaymentSuccess) {

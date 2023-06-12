@@ -155,7 +155,7 @@ const CheckoutDetails = () => {
       forceRender: true,
       key: PRODUCT_STEP_KEY,
       label: t('product'),
-      children: <ProductFormItems />,
+      children: <ProductFormItems onFieldsChange={onFieldsChange} />,
     },
     {
       key: BRANDING_STEP_KEY,
@@ -205,6 +205,7 @@ const CheckoutDetails = () => {
               <RedirectPreviewer />
             ) : (
               <CheckoutComponent
+                flexPriceValid={true}
                 loading={getCheckoutLoading}
                 checkoutData={previewingCheckout}
                 isShowAfterPayment={isShowAfterPayment}

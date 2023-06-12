@@ -1,5 +1,14 @@
-import { ConnectedExtension, Extension, extensionAPI, Payment } from '@atscale/libra-ui';
-import { useEffect, useState } from 'react';
+import {
+  CheckoutResponse,
+  ConnectedExtension,
+  Extension,
+  extensionAPI,
+  NumFlexPrice,
+  Payment,
+  priceFormatHelper,
+  FlexPriceValid,
+} from '@atscale/libra-ui';
+import { useEffect, useMemo, useState } from 'react';
 import { ExtensionDictionary } from 'types';
 import { APP_NAME } from 'config';
 import { Account } from '@atscale/libra-ui';
@@ -135,4 +144,65 @@ export const usePay = () => {
   };
 
   return { handlePay, paying, paymentError };
+};
+
+export const useFlexiblePrice = (checkout: CheckoutResponse) => {
+  const {
+    item: { presetPrice, minPrice, maxPrice, priceType },
+    assetId,
+    networkId,
+  } = checkout;
+
+  const { numberFlexiblePrice, numberMinPrice, numberMaxPrice } = useMemo(() => {
+    if (priceType === 'fixed') {
+      return {};
+    } else {
+      const getNumPrice = (price: string | undefined) => {
+        return price ? priceFormatHelper.formatBalance(price, { assetId, networkId }) : undefined;
+      };
+      return {
+        numberFlexiblePrice: getNumPrice(presetPrice),
+        numberMinPrice: getNumPrice(minPrice),
+        numberMaxPrice: getNumPrice(maxPrice),
+      };
+    }
+  }, [priceType, presetPrice, minPrice, maxPrice, assetId, networkId]);
+
+  const [numFlexPrice, setNumFlexPrice] = useState<NumFlexPrice>(() => {
+    return numberFlexiblePrice ?? null;
+  });
+
+  const [flexPriceValid, setFlexPriceValid] = useState<FlexPriceValid>(true);
+
+  const validateFlexPrice = (price: number | null) => {
+    let priceValid: FlexPriceValid = true;
+
+    if (!price) {
+      priceValid = 'Price is Required!';
+    } else {
+      if (numberMinPrice && price < numberMinPrice) {
+        priceValid = `Price must be greater or equal to ${priceFormatHelper.exponentToStringDecimals(numberMinPrice)}`;
+      }
+
+      if (numberMaxPrice && price > numberMaxPrice) {
+        priceValid = `Price must be less than or equal to ${priceFormatHelper.exponentToStringDecimals(
+          numberMaxPrice,
+        )}`;
+      }
+    }
+    setFlexPriceValid(priceValid);
+    return priceValid;
+  };
+
+  const onNumFlexPriceChange = (price: number | null) => {
+    validateFlexPrice(price);
+    setNumFlexPrice(price);
+  };
+
+  return {
+    numFlexPrice,
+    onNumFlexPriceChange,
+    flexPriceValid,
+    validateFlexPrice,
+  };
 };

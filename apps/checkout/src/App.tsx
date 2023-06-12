@@ -1,9 +1,8 @@
 import { CheckoutComponent, Loading } from '@atscale/libra-ui';
 import styled from 'styled-components';
 import ExtensionContext from './context';
-import { useConnectExtension, useExtensions } from 'hooks';
+import { useConnectExtension, useExtensions, useFlexiblePrice } from 'hooks';
 import Payment from 'components/Payment';
-import { useState } from 'react';
 
 const AppWrapper = styled.div`
   width: 100vw;
@@ -15,11 +14,11 @@ const checkout: any = {
   branding: { name: 'Test' },
   item: {
     name: 'Hung Test Kusama',
-    price: '1000000',
+    price: '100000000000',
     priceType: 'flexible',
-    presetPrice: 10,
-    minPrice: 5,
-    maxPrice: 15,
+    presetPrice: undefined,
+    minPrice: '5000000000',
+    maxPrice: '15000000000',
   },
   asset: 'ksm',
   networkId: 'nw_kusama',
@@ -31,8 +30,7 @@ const checkout: any = {
 function App() {
   const { getExtensionsLoading, extensions } = useExtensions();
   const { connectedExtension, onConnectExtension } = useConnectExtension();
-  const [updatingPrice, setUpdatingPrice] = useState(() => checkout.presetPrice || 0);
-
+  const { numFlexPrice, onNumFlexPriceChange, flexPriceValid, validateFlexPrice } = useFlexiblePrice(checkout);
   return (
     <AppWrapper className="App">
       {getExtensionsLoading ? (
@@ -40,8 +38,10 @@ function App() {
       ) : (
         <ExtensionContext.Provider value={{ extensions, onConnectExtension, connectedExtension }}>
           <CheckoutComponent
-            updatingPrice={updatingPrice}
-            onUpdatePrice={setUpdatingPrice}
+            flexPriceValid={flexPriceValid}
+            validateFlexPrice={validateFlexPrice}
+            numFlexPrice={numFlexPrice}
+            onNumFlexPriceChange={onNumFlexPriceChange}
             previewMode={false}
             checkoutData={checkout}
             HandlePaymentComponent={Payment}

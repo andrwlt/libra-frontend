@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Image, Space, Avatar, Typography, Divider, Skeleton, InputNumber, Input, Button } from 'antd';
-import { AssetMetadata, NumberPriceProduct, Asset } from 'app/types';
+import { AssetMetadata, NumberPriceProduct, Asset, NumFlexPrice, FlexPriceValid } from 'app/types';
 import LibraLogo from 'components/LibraLogo';
 import { getCheckoutPrice } from 'utils';
 import { useTranslation } from 'react-i18next';
@@ -24,8 +24,9 @@ interface ProductInfoProps {
   asset: Asset;
   loading: boolean;
   previewMode: boolean;
-  onUpdatePrice?: (price: number | null) => void;
-  updatingPrice?: number | null;
+  onNumFlexPriceChange?: (price: NumFlexPrice) => void;
+  numFlexPrice?: NumFlexPrice;
+  flexPriceValid: FlexPriceValid;
 }
 
 const ProductInfoWrapper = styled.div`
@@ -68,35 +69,14 @@ const ProductInformation = ({
   product,
   asset,
   loading,
-  onUpdatePrice,
-  updatingPrice,
+  onNumFlexPriceChange,
+  numFlexPrice,
+  flexPriceValid,
   previewMode,
 }: ProductInfoProps) => {
   const { name, description, price, image, priceType, presetPrice } = product || {};
   const assetMetadata: AssetMetadata = getAssetMetadata(asset);
   const [isUpdatingPrice, setIsUpdatingPrice] = useState(false);
-  const [priceValid, setPriceValid] = useState<true | string>(true);
-
-  const onPriceChange = (price: number | null) => {
-    let priceValid: true | string = true;
-
-    if (!price) {
-      priceValid = 'Price is Required!';
-    } else {
-      if (product?.minPrice && price < product?.minPrice) {
-        priceValid = `Price must be greater or equal to ${product.minPrice}`;
-      }
-
-      if (product?.maxPrice && price > product?.maxPrice) {
-        priceValid = `Price must be less than or equal to ${product.maxPrice}`;
-      }
-    }
-
-    console.log(priceValid);
-
-    setPriceValid(priceValid);
-    onUpdatePrice?.(price);
-  };
 
   return (
     <ProductInfoWrapper>
@@ -109,6 +89,7 @@ const ProductInformation = ({
       <Skeleton active className="product-price-skeleton" paragraph={false} loading={loading}>
         <Space align="start" style={{ marginTop: 10 }}>
           {assetMetadata && <Avatar src={assetMetadata.logoUrl}>{assetMetadata.symbol}</Avatar>}
+
           {priceType === 'fixed' ? (
             <Typography.Title level={3} style={{ margin: 0, fontSize: 32, lineHeight: '32px' }}>
               {price ? getCheckoutPrice({ price, asset }, assetMetadata) : '0'}
@@ -119,11 +100,11 @@ const ProductInformation = ({
                 <div>
                   {isUpdatingPrice ? (
                     <FormItem
-                      validateStatus={priceValid !== true ? 'error' : ''}
-                      help={priceValid !== true && priceValid}
+                      validateStatus={flexPriceValid !== true ? 'error' : ''}
+                      help={flexPriceValid !== true && flexPriceValid}
                       style={{ marginBottom: 0 }}
                     >
-                      <InputNumber style={{ width: 200 }} value={updatingPrice} onChange={onPriceChange} />
+                      <InputNumber style={{ width: 200 }} value={numFlexPrice} onChange={onNumFlexPriceChange} />
                     </FormItem>
                   ) : (
                     <Typography.Title level={3} style={{ margin: 0, fontSize: 32, lineHeight: '32px' }}>
@@ -132,7 +113,17 @@ const ProductInformation = ({
                   )}
                 </div>
               ) : (
-                <InputNumber value={''} style={{ width: 200 }} />
+                <FormItem
+                  validateStatus={flexPriceValid !== true ? 'error' : ''}
+                  help={flexPriceValid !== true && flexPriceValid}
+                  style={{ marginBottom: 0 }}
+                >
+                  {previewMode ? (
+                    <InputNumber value="" style={{ width: 200 }} />
+                  ) : (
+                    <InputNumber style={{ width: 200 }} value={numFlexPrice} onChange={onNumFlexPriceChange} />
+                  )}
+                </FormItem>
               )}
             </div>
           )}
@@ -217,15 +208,17 @@ const CheckoutSummary = ({
   asset,
   previewMode,
   loading,
-  onUpdatePrice,
-  updatingPrice,
+  onNumFlexPriceChange,
+  numFlexPrice,
+  flexPriceValid,
 }: {
   product: NumberPriceProduct;
   asset: Asset;
   previewMode: boolean;
   loading: boolean;
-  onUpdatePrice?: (price: number | null) => void;
-  updatingPrice?: number | null;
+  onNumFlexPriceChange?: (price: NumFlexPrice) => void;
+  numFlexPrice?: NumFlexPrice;
+  flexPriceValid: FlexPriceValid;
 }) => {
   return (
     <CheckoutSummaryWrapper style={previewMode ? { maxHeight: 550 } : {}}>
@@ -234,8 +227,9 @@ const CheckoutSummary = ({
         product={product}
         asset={asset}
         loading={loading}
-        onUpdatePrice={onUpdatePrice}
-        updatingPrice={updatingPrice}
+        onNumFlexPriceChange={onNumFlexPriceChange}
+        numFlexPrice={numFlexPrice}
+        flexPriceValid={flexPriceValid}
       />
       <div>
         <FooterLinks />

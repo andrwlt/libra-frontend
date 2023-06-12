@@ -48,7 +48,7 @@ const ProductPriceFormItem = () => {
   );
 };
 
-const FlexProductPriceFormItem = () => {
+const FlexProductPriceFormItem = ({ onFieldsChange }: { onFieldsChange: () => void }) => {
   const form = Form.useFormInstance();
   const initHasPresetPrice = form.getFieldValue(['item', 'price']) === undefined;
   const initHasMinMaxPrice =
@@ -67,6 +67,7 @@ const FlexProductPriceFormItem = () => {
             if (!checked) {
               form.setFieldValue(['item', 'presetPrice'], undefined);
             }
+            onFieldsChange();
           }}
         >
           Suggest a preset amount
@@ -114,6 +115,8 @@ const FlexProductPriceFormItem = () => {
               form.setFieldValue(['item', 'minPrice'], undefined);
               form.setFieldValue(['item', 'maxPrice'], undefined);
             }
+
+            onFieldsChange();
           }}
         >
           Set limit
@@ -160,7 +163,7 @@ const FlexProductPriceFormItem = () => {
   );
 };
 
-const CheckoutProductFormItems = () => {
+const CheckoutProductFormItems = ({ onFieldsChange }: { onFieldsChange: () => void }) => {
   const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
   const networks = useNetworks();
   const form = Form.useFormInstance();
@@ -247,7 +250,7 @@ const CheckoutProductFormItems = () => {
         </Radio.Group>
       </FormItem>
 
-      {isFixedPrice ? <ProductPriceFormItem /> : <FlexProductPriceFormItem />}
+      {isFixedPrice ? <ProductPriceFormItem /> : <FlexProductPriceFormItem onFieldsChange={onFieldsChange} />}
 
       <Form.Item label={t<string>('description')} name={['item', 'description']}>
         <Input.TextArea autoComplete="off" rows={2} placeholder={t<string>('descriptionPlaceholder')} />

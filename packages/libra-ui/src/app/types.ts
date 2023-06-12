@@ -10,11 +10,13 @@ export interface Brand {
   logo?: string;
 }
 
+export type PriceType = 'fixed' | 'flexible';
+
 export interface BaseProduct {
   name: string;
   description?: string;
   image?: string;
-  priceType: 'fixed' | 'flexible';
+  priceType: PriceType;
 }
 
 interface StringPriceProduct extends BaseProduct {
@@ -133,3 +135,6 @@ export interface Payment {
   asset: Asset;
   productName: string;
 }
+
+export type NumFlexPrice = number | null;
+export type FlexPriceValid = true | string;

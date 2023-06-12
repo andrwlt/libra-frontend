@@ -19,6 +19,9 @@ import {
   ExtensionId,
   ExtensionConfig,
   Account,
+  FlexPriceValid,
+  NumFlexPrice,
+  PriceType,
 } from 'app/types';
 import { EXTENSIONS } from 'config';
 import AccountOption from 'components/Checkout/Right/PaymentPreviewer/AccountOption';
@@ -58,4 +61,7 @@ export type {
   ExtensionDictionary,
   ConnectedExtension,
   Account,
+  FlexPriceValid,
+  NumFlexPrice,
+  PriceType,
 };

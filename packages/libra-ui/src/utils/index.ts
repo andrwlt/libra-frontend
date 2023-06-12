@@ -125,4 +125,5 @@ export const priceFormatHelper = {
   formatBalance,
   toSmallestUnit,
   getCheckoutPrice,
+  exponentToStringDecimals,
 };
