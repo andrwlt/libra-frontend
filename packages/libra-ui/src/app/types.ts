@@ -12,37 +12,48 @@ export interface Brand {
 
 export type PriceType = 'fixed' | 'flexible';
 
+export interface NumberPrice {
+  type: PriceType;
+  value?: number | null;
+  preset?: number | null;
+  minimum?: number | null;
+  maximum?: number | null;
+}
+
+export interface StringPrice {
+  type: PriceType;
+  value?: string;
+  preset?: string;
+  minimum?: string;
+  maximum?: string;
+}
+
 export interface BaseProduct {
   name: string;
   description?: string;
   image?: string;
-  priceType: PriceType;
 }
 
-interface StringPriceProduct extends BaseProduct {
-  price?: string;
-  presetPrice?: string;
-  minPrice?: string;
-  maxPrice?: string;
+export interface StringPriceProduct extends BaseProduct {
+  price: StringPrice;
 }
 
 export interface NumberPriceProduct extends BaseProduct {
-  price?: number | null;
-  presetPrice?: number | null;
-  minPrice?: number | null;
-  maxPrice?: number | null;
+  price: NumberPrice;
 }
 
 export interface Asset {
   assetId: string;
   networkId: string;
 }
+
 export interface BaseCheckout {
   branding: Brand;
   assetId: string;
   networkId: string;
   afterPayment?: AfterPayment;
   payee?: string;
+  checkoutType?: string | null;
 }
 
 export interface Checkout extends BaseCheckout {

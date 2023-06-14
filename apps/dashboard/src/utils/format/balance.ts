@@ -1,33 +1,33 @@
 import { NumberPriceCheckoutResponse, CheckoutResponse } from '@atscale/libra-ui';
 import { priceFormatHelper } from '@atscale/libra-ui';
 
-export const formatCheckoutToNumberPrice = (checkout: CheckoutResponse): NumberPriceCheckoutResponse => {
+const formatCheckoutPrice = (checkout: any, priceFormatter: Function) => {
   let { item, assetId, networkId } = checkout;
+  const {
+    price: { type, minimum, maximum, value, preset },
+  } = item;
+
+  const nextPrice = {
+    type,
+    value: value ? priceFormatter(value, { assetId, networkId }) : undefined,
+    preset: preset ? priceFormatter(preset, { assetId, networkId }) : undefined,
+    minimum: minimum ? priceFormatter(minimum, { assetId, networkId }) : undefined,
+    maximum: maximum ? priceFormatter(maximum, { assetId, networkId }) : undefined,
+  };
 
   return {
     ...checkout,
     item: {
       ...item,
-      price: item.price ? priceFormatHelper.formatBalance(item.price, { assetId, networkId }) : undefined,
-      presetPrice: item.presetPrice
-        ? priceFormatHelper.formatBalance(item.presetPrice, { assetId, networkId })
-        : undefined,
-      minPrice: item.minPrice ? priceFormatHelper.formatBalance(item.minPrice, { assetId, networkId }) : undefined,
-      maxPrice: item.maxPrice ? priceFormatHelper.formatBalance(item.maxPrice, { assetId, networkId }) : undefined,
+      price: nextPrice,
     },
   };
 };
 
+export const formatCheckoutToNumberPrice = (checkout: CheckoutResponse): NumberPriceCheckoutResponse => {
+  return formatCheckoutPrice(checkout, priceFormatHelper.formatBalance);
+};
+
 export const formatCheckoutToStringPrice = (checkout: any) => {
-  const { item, assetId, networkId } = checkout;
-  return {
-    ...checkout,
-    item: {
-      ...item,
-      price: item.price && priceFormatHelper.toSmallestUnit(item.price, { assetId, networkId }),
-      presetPrice: item.presetPrice && priceFormatHelper.toSmallestUnit(item.presetPrice, { assetId, networkId }),
-      minPrice: item.minPrice && priceFormatHelper.toSmallestUnit(item.minPrice, { assetId, networkId }),
-      maxPrice: item.maxPrice && priceFormatHelper.toSmallestUnit(item.maxPrice, { assetId, networkId }),
-    },
-  };
+  return formatCheckoutPrice(checkout, priceFormatHelper.toSmallestUnit);
 };

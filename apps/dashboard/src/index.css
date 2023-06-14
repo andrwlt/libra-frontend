@@ -51,11 +51,11 @@ body {
   width: 132px !important;
   height: 132px !important;
   overflow: hidden;
+  margin-right: 0 !important;
+  margin-bottom: 0 !important;
 }
 
 .ant-form .upload-image--large .ant-upload-select {
-  width: 150px !important;
-  height: 150px !important;
 }
 
 .libra-navbar-sub-menu .ant-menu-item:has(.active-link) {

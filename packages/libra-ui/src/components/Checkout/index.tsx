@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Row, Layout, Col } from 'antd';
 import CheckoutSummary from './Left/CheckoutSummary';
 import PaymentPreviewer from './Right/PaymentPreviewer';
-import { Checkout, NumFlexPrice, FlexPriceValid } from 'app/types';
+import { Checkout, NumFlexPrice, FlexPriceValid, CheckoutResponse } from 'app/types';
 import CheckoutBrand from './Brand';
 import AfterPaymentPreviewer from './Right/AfterPaymentPreviewer';
 import 'app/i18n';
@@ -55,7 +55,7 @@ const CheckoutPreview = ({
   flexPriceValid,
   validateFlexPrice,
 }: {
-  checkoutData: Checkout;
+  checkoutData: Checkout | CheckoutResponse;
   previewMode?: boolean;
   isShowAfterPayment?: boolean;
   loading?: boolean;
@@ -65,11 +65,12 @@ const CheckoutPreview = ({
   numFlexPrice?: NumFlexPrice;
   flexPriceValid: FlexPriceValid;
 }) => {
-  const { branding, item, assetId, networkId, afterPayment, payee } = checkoutData;
-  const { priceType, price, name } = item;
+  const { branding, item, assetId, networkId, afterPayment, payee, checkoutType } = checkoutData;
+  const { price, name } = item;
+
   const checkoutPrice =
-    priceType === 'fixed'
-      ? price
+    price.type === 'fixed'
+      ? price.value
       : numFlexPrice
       ? priceFormatHelper.toSmallestUnit(numFlexPrice, { assetId, networkId })
       : undefined;
@@ -106,7 +107,7 @@ const CheckoutPreview = ({
             {(completed || isShowAfterPayment) && afterPayment ? (
               <AfterPaymentPreviewer afterPayment={afterPayment} productName={item.name || 'The product'} />
             ) : previewMode ? (
-              <PaymentPreviewer productName={name} />
+              <PaymentPreviewer productName={name} checkoutType={checkoutType} />
             ) : (
               <HandlePaymentComponent
                 onPaymentSuccess={handlePaymentSuccess}
@@ -117,8 +118,9 @@ const CheckoutPreview = ({
                   productName: name,
                 }}
                 validateFlexPrice={validateFlexPrice}
-                priceType={item.priceType}
+                priceType={item.price.type}
                 numFlexPrice={numFlexPrice}
+                checkoutType={checkoutType}
               />
             )}
           </Col>

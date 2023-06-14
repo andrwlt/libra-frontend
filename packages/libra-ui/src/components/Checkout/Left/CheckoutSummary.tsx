@@ -1,11 +1,11 @@
 import styled from 'styled-components';
-import { Image, Space, Avatar, Typography, Divider, Skeleton, InputNumber, Input, Button } from 'antd';
-import { AssetMetadata, NumberPriceProduct, Asset, NumFlexPrice, FlexPriceValid } from 'app/types';
+import { Image, Space, Avatar, Typography, Divider, Skeleton, InputNumber, Button } from 'antd';
+import { AssetMetadata, NumberPriceProduct, Asset, NumFlexPrice, FlexPriceValid, StringPriceProduct } from 'app/types';
 import LibraLogo from 'components/LibraLogo';
-import { getCheckoutPrice } from 'utils';
+import { getCheckoutPrice, priceFormatHelper } from 'utils';
 import { useTranslation } from 'react-i18next';
 import { getAssetMetadata } from 'utils/asset';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import FormItem from 'antd/es/form/FormItem';
 
 const { Paragraph, Link } = Typography;
@@ -18,16 +18,6 @@ const ImageWrapper = styled.div`
   justify-content: center;
   align-items: center;
 `;
-
-interface ProductInfoProps {
-  product: NumberPriceProduct | undefined;
-  asset: Asset;
-  loading: boolean;
-  previewMode: boolean;
-  onNumFlexPriceChange?: (price: NumFlexPrice) => void;
-  numFlexPrice?: NumFlexPrice;
-  flexPriceValid: FlexPriceValid;
-}
 
 const ProductInfoWrapper = styled.div`
   width: 100%;
@@ -73,10 +63,51 @@ const ProductInformation = ({
   numFlexPrice,
   flexPriceValid,
   previewMode,
-}: ProductInfoProps) => {
-  const { name, description, price, image, priceType, presetPrice } = product || {};
+}: {
+  product: NumberPriceProduct | StringPriceProduct;
+  asset: Asset;
+  loading: boolean;
+  previewMode: boolean;
+  onNumFlexPriceChange?: (price: NumFlexPrice) => void;
+  numFlexPrice?: NumFlexPrice;
+  flexPriceValid: FlexPriceValid;
+}) => {
+  const {
+    name,
+    description,
+    price: { type: priceType, value: priceValue, preset: presetPrice },
+    image,
+  } = product;
+
   const assetMetadata: AssetMetadata = getAssetMetadata(asset);
   const [isUpdatingPrice, setIsUpdatingPrice] = useState(false);
+  const inputRef = useRef<any>(null);
+
+  useEffect(() => {
+    if (isUpdatingPrice) {
+      inputRef?.current?.focus();
+    }
+  }, [isUpdatingPrice]);
+
+  const flexPriceElement = (
+    <FormItem
+      validateStatus={flexPriceValid !== true ? 'error' : ''}
+      help={flexPriceValid !== true && flexPriceValid}
+      style={{ marginBottom: 0 }}
+    >
+      <InputNumber
+        ref={inputRef}
+        onBlur={() => {
+          if (flexPriceValid === true) {
+            setIsUpdatingPrice(false);
+          }
+        }}
+        style={{ width: 200 }}
+        value={numFlexPrice}
+        onChange={onNumFlexPriceChange}
+      />
+    </FormItem>
+  );
 
   return (
     <ProductInfoWrapper>
@@ -92,38 +123,24 @@ const ProductInformation = ({
 
           {priceType === 'fixed' ? (
             <Typography.Title level={3} style={{ margin: 0, fontSize: 32, lineHeight: '32px' }}>
-              {price ? getCheckoutPrice({ price, asset }, assetMetadata) : '0'}
+              {!!priceValue ? getCheckoutPrice({ price: priceValue, asset }, assetMetadata) : '0'}
             </Typography.Title>
           ) : (
             <div>
               {presetPrice ? (
                 <div>
                   {isUpdatingPrice ? (
-                    <FormItem
-                      validateStatus={flexPriceValid !== true ? 'error' : ''}
-                      help={flexPriceValid !== true && flexPriceValid}
-                      style={{ marginBottom: 0 }}
-                    >
-                      <InputNumber style={{ width: 200 }} value={numFlexPrice} onChange={onNumFlexPriceChange} />
-                    </FormItem>
+                    flexPriceElement
                   ) : (
                     <Typography.Title level={3} style={{ margin: 0, fontSize: 32, lineHeight: '32px' }}>
-                      {getCheckoutPrice({ price: presetPrice, asset }, assetMetadata)}
+                      {getCheckoutPrice({ price: numFlexPrice ?? presetPrice, asset }, assetMetadata)}
                     </Typography.Title>
                   )}
                 </div>
+              ) : previewMode ? (
+                <InputNumber value="" style={{ width: 200 }} />
               ) : (
-                <FormItem
-                  validateStatus={flexPriceValid !== true ? 'error' : ''}
-                  help={flexPriceValid !== true && flexPriceValid}
-                  style={{ marginBottom: 0 }}
-                >
-                  {previewMode ? (
-                    <InputNumber value="" style={{ width: 200 }} />
-                  ) : (
-                    <InputNumber style={{ width: 200 }} value={numFlexPrice} onChange={onNumFlexPriceChange} />
-                  )}
-                </FormItem>
+                flexPriceElement
               )}
             </div>
           )}
@@ -212,7 +229,7 @@ const CheckoutSummary = ({
   numFlexPrice,
   flexPriceValid,
 }: {
-  product: NumberPriceProduct;
+  product: NumberPriceProduct | StringPriceProduct;
   asset: Asset;
   previewMode: boolean;
   loading: boolean;

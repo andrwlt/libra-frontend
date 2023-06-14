@@ -76,7 +76,9 @@ export default function Checkouts() {
       key: 'Price',
       render: (_, checkout) => {
         const {
-          item: { price, priceType },
+          item: {
+            price: { type: priceType, value: priceValue },
+          },
           assetId,
           networkId,
         } = checkout;
@@ -90,7 +92,9 @@ export default function Checkouts() {
               </Avatar>
               <span>
                 {' '}
-                {priceType === 'fixed' && price && priceFormatHelper.getCheckoutPrice({ price, asset }, assetMetadata)}
+                {priceType === 'fixed' &&
+                  priceValue &&
+                  priceFormatHelper.getCheckoutPrice({ price: priceValue, asset }, assetMetadata)}
               </span>
             </Space>
           )

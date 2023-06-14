@@ -6,7 +6,13 @@ import ContactInformation from './ContactInformation';
 
 const EXAMPLE_POLKADOT_ADDRESS = '5ERjkQVj8M7v5UVZQ8qTbZ2qb1o5TgNXq9tXt2BsWF9jBpDu';
 
-export default function PaymentSummary({ productName }: { productName: string }) {
+export default function PaymentSummary({
+  productName,
+  checkoutType,
+}: {
+  productName: string;
+  checkoutType?: string | null;
+}) {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
@@ -38,7 +44,7 @@ export default function PaymentSummary({ productName }: { productName: string })
             }, 1000);
           }}
         >
-          {t('pay')}
+          {checkoutType || t('pay')}
         </Button>
       </div>
     </div>

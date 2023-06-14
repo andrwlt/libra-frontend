@@ -148,7 +148,9 @@ export const usePay = () => {
 
 export const useFlexiblePrice = (checkout: CheckoutResponse) => {
   const {
-    item: { presetPrice, minPrice, maxPrice, priceType },
+    item: {
+      price: { type: priceType, preset: presetPrice, minimum: minPrice, maximum: maxPrice },
+    },
     assetId,
     networkId,
   } = checkout;

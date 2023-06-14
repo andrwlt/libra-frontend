@@ -12,23 +12,30 @@ interface Brand {
     logo?: string;
 }
 type PriceType = 'fixed' | 'flexible';
+interface NumberPrice {
+    type: PriceType;
+    value?: number | null;
+    preset?: number | null;
+    minimum?: number | null;
+    maximum?: number | null;
+}
+interface StringPrice {
+    type: PriceType;
+    value?: string;
+    preset?: string;
+    minimum?: string;
+    maximum?: string;
+}
 interface BaseProduct {
     name: string;
     description?: string;
     image?: string;
-    priceType: PriceType;
 }
 interface StringPriceProduct extends BaseProduct {
-    price?: string;
-    presetPrice?: string;
-    minPrice?: string;
-    maxPrice?: string;
+    price: StringPrice;
 }
 interface NumberPriceProduct extends BaseProduct {
-    price?: number | null;
-    presetPrice?: number | null;
-    minPrice?: number | null;
-    maxPrice?: number | null;
+    price: NumberPrice;
 }
 interface Asset {
     assetId: string;
@@ -40,6 +47,7 @@ interface BaseCheckout {
     networkId: string;
     afterPayment?: AfterPayment;
     payee?: string;
+    checkoutType?: string | null;
 }
 interface Checkout extends BaseCheckout {
     item: NumberPriceProduct;
@@ -117,7 +125,7 @@ type NumFlexPrice = number | null;
 type FlexPriceValid = true | string;
 
 declare const CheckoutPreview: ({ checkoutData, previewMode, isShowAfterPayment, loading, HandlePaymentComponent, onNumFlexPriceChange, numFlexPrice, flexPriceValid, validateFlexPrice, }: {
-    checkoutData: Checkout;
+    checkoutData: Checkout | CheckoutResponse;
     previewMode?: boolean | undefined;
     isShowAfterPayment?: boolean | undefined;
     loading?: boolean | undefined;

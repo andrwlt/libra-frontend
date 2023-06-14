@@ -12,11 +12,11 @@ const checkoutAPI: CheckoutAPI = {
   },
 
   createCheckout(checkout) {
-    return requester.post('/checkout', { ...checkout, asset: '' });
+    return requester.post('/checkout', { ...checkout });
   },
 
   updateCheckout(checkout) {
-    return requester.put(`/checkout/${checkout.id}`, { ...checkout, asset: '' });
+    return requester.put(`/checkout/${checkout.id}`, { ...checkout });
   },
 
   deleteCheckout(id) {

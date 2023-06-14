@@ -741,9 +741,38 @@ var ImageWrapper = import_styled_components.default.div(_templateObject());
 var ProductInfoWrapper = import_styled_components.default.div(_templateObject1());
 var ProductInformation = function(param) {
     var product = param.product, asset = param.asset, loading = param.loading, onNumFlexPriceChange = param.onNumFlexPriceChange, numFlexPrice = param.numFlexPrice, flexPriceValid = param.flexPriceValid, previewMode = param.previewMode;
-    var _ref = product || {}, name = _ref.name, description = _ref.description, price = _ref.price, image = _ref.image, priceType = _ref.priceType, presetPrice = _ref.presetPrice;
+    var name = product.name, description = product.description, _product_price = product.price, priceType = _product_price.type, priceValue = _product_price.value, presetPrice = _product_price.preset, image = product.image;
     var assetMetadata = getAssetMetadata(asset);
-    var _ref1 = _sliced_to_array((0, import_react.useState)(false), 2), isUpdatingPrice = _ref1[0], setIsUpdatingPrice = _ref1[1];
+    var _ref = _sliced_to_array((0, import_react.useState)(false), 2), isUpdatingPrice = _ref[0], setIsUpdatingPrice = _ref[1];
+    var inputRef = (0, import_react.useRef)(null);
+    (0, import_react.useEffect)(function() {
+        if (isUpdatingPrice) {
+            var _inputRef_current;
+            inputRef === null || inputRef === void 0 ? void 0 : (_inputRef_current = inputRef.current) === null || _inputRef_current === void 0 ? void 0 : _inputRef_current.focus();
+        }
+    }, [
+        isUpdatingPrice
+    ]);
+    var flexPriceElement = /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_FormItem.default, {
+        validateStatus: flexPriceValid !== true ? "error" : "",
+        help: flexPriceValid !== true && flexPriceValid,
+        style: {
+            marginBottom: 0
+        },
+        children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.InputNumber, {
+            ref: inputRef,
+            onBlur: function() {
+                if (flexPriceValid === true) {
+                    setIsUpdatingPrice(false);
+                }
+            },
+            style: {
+                width: 200
+            },
+            value: numFlexPrice,
+            onChange: onNumFlexPriceChange
+        })
+    });
     return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(ProductInfoWrapper, {
         children: [
             /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Skeleton, {
@@ -784,26 +813,13 @@ var ProductInformation = function(param) {
                                     fontSize: 32,
                                     lineHeight: "32px"
                                 },
-                                children: price ? getCheckoutPrice({
-                                    price: price,
+                                children: !!priceValue ? getCheckoutPrice({
+                                    price: priceValue,
                                     asset: asset
                                 }, assetMetadata) : "0"
                             }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", {
                                 children: presetPrice ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", {
-                                    children: isUpdatingPrice ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_FormItem.default, {
-                                        validateStatus: flexPriceValid !== true ? "error" : "",
-                                        help: flexPriceValid !== true && flexPriceValid,
-                                        style: {
-                                            marginBottom: 0
-                                        },
-                                        children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.InputNumber, {
-                                            style: {
-                                                width: 200
-                                            },
-                                            value: numFlexPrice,
-                                            onChange: onNumFlexPriceChange
-                                        })
-                                    }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Typography.Title, {
+                                    children: isUpdatingPrice ? flexPriceElement : /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Typography.Title, {
                                         level: 3,
                                         style: {
                                             margin: 0,
@@ -811,29 +827,16 @@ var ProductInformation = function(param) {
                                             lineHeight: "32px"
                                         },
                                         children: getCheckoutPrice({
-                                            price: presetPrice,
+                                            price: numFlexPrice !== null && numFlexPrice !== void 0 ? numFlexPrice : presetPrice,
                                             asset: asset
                                         }, assetMetadata)
                                     })
-                                }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_FormItem.default, {
-                                    validateStatus: flexPriceValid !== true ? "error" : "",
-                                    help: flexPriceValid !== true && flexPriceValid,
+                                }) : previewMode ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.InputNumber, {
+                                    value: "",
                                     style: {
-                                        marginBottom: 0
-                                    },
-                                    children: previewMode ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.InputNumber, {
-                                        value: "",
-                                        style: {
-                                            width: 200
-                                        }
-                                    }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.InputNumber, {
-                                        style: {
-                                            width: 200
-                                        },
-                                        value: numFlexPrice,
-                                        onChange: onNumFlexPriceChange
-                                    })
-                                })
+                                        width: 200
+                                    }
+                                }) : flexPriceElement
                             })
                         ]
                     }),
@@ -2335,7 +2338,7 @@ var ContactInformation_default = ContactInformation;
 var import_jsx_runtime5 = require("react/jsx-runtime");
 var EXAMPLE_POLKADOT_ADDRESS = "5ERjkQVj8M7v5UVZQ8qTbZ2qb1o5TgNXq9tXt2BsWF9jBpDu";
 function PaymentSummary(param) {
-    var productName = param.productName;
+    var productName = param.productName, checkoutType = param.checkoutType;
     var _ref = (0, import_react_i18next3.useTranslation)(), t2 = _ref.t;
     var _ref1 = _sliced_to_array((0, import_react6.useState)(false), 2), loading = _ref1[0], setLoading = _ref1[1];
     var _ref2 = _sliced_to_array((0, import_react6.useState)(""), 2), email = _ref2[0], setEmail = _ref2[1];
@@ -2382,7 +2385,7 @@ function PaymentSummary(param) {
                                 setLoading(false);
                             }, 1e3);
                         },
-                        children: t2("pay")
+                        children: checkoutType || t2("pay")
                     })
                 ]
             })
@@ -5841,9 +5844,9 @@ var ContentWrapper = (0, import_styled_components3.default)(Content)(_templateOb
 var MainContent = (0, import_styled_components3.default)(import_antd7.Row)(_templateObject8());
 var CheckoutPreview = function(param) {
     var checkoutData = param.checkoutData, _param_previewMode = param.previewMode, previewMode = _param_previewMode === void 0 ? true : _param_previewMode, _param_isShowAfterPayment = param.isShowAfterPayment, isShowAfterPayment = _param_isShowAfterPayment === void 0 ? false : _param_isShowAfterPayment, _param_loading = param.loading, loading = _param_loading === void 0 ? false : _param_loading, HandlePaymentComponent = param.HandlePaymentComponent, onNumFlexPriceChange = param.onNumFlexPriceChange, numFlexPrice = param.numFlexPrice, flexPriceValid = param.flexPriceValid, validateFlexPrice = param.validateFlexPrice;
-    var branding = checkoutData.branding, item = checkoutData.item, assetId = checkoutData.assetId, networkId = checkoutData.networkId, afterPayment = checkoutData.afterPayment, payee = checkoutData.payee;
-    var priceType = item.priceType, price = item.price, name = item.name;
-    var checkoutPrice = priceType === "fixed" ? price : numFlexPrice ? priceFormatHelper.toSmallestUnit(numFlexPrice, {
+    var branding = checkoutData.branding, item = checkoutData.item, assetId = checkoutData.assetId, networkId = checkoutData.networkId, afterPayment = checkoutData.afterPayment, payee = checkoutData.payee, checkoutType = checkoutData.checkoutType;
+    var price = item.price, name = item.name;
+    var checkoutPrice = price.type === "fixed" ? price.value : numFlexPrice ? priceFormatHelper.toSmallestUnit(numFlexPrice, {
         assetId: assetId,
         networkId: networkId
     }) : void 0;
@@ -5886,7 +5889,8 @@ var CheckoutPreview = function(param) {
                                 afterPayment: afterPayment,
                                 productName: item.name || "The product"
                             }) : previewMode ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(PaymentSummary, {
-                                productName: name
+                                productName: name,
+                                checkoutType: checkoutType
                             }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(HandlePaymentComponent, {
                                 onPaymentSuccess: handlePaymentSuccess,
                                 payment: {
@@ -5899,8 +5903,9 @@ var CheckoutPreview = function(param) {
                                     productName: name
                                 },
                                 validateFlexPrice: validateFlexPrice,
-                                priceType: item.priceType,
-                                numFlexPrice: numFlexPrice
+                                priceType: item.price.type,
+                                numFlexPrice: numFlexPrice,
+                                checkoutType: checkoutType
                             })
                         })
                     ]
