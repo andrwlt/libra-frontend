@@ -23,6 +23,19 @@ export interface Charge {
   status: 'succeeded' | 'pending' | 'failed';
 }
 
+export interface NextCharge {
+  id: string;
+  from: string;
+  to: string;
+  amount: number;
+  assetId: string;
+  description: string;
+  networkId: string;
+  created: string;
+  status: 'succeeded' | 'pending' | 'failed';
+  receiptEmail: string;
+}
+
 export interface GetChargesState {
   charges: Charge[];
   getChargesLoading: boolean;

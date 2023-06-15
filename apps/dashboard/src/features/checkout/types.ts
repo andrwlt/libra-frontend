@@ -2,6 +2,7 @@ import { AxiosPromise } from 'axios';
 import { RootState } from 'app/store';
 import { BasePagingParams, PagingState } from 'types';
 import { BaseCheckout, BaseProduct, CheckoutResponse, NumberPriceCheckoutResponse } from '@atscale/libra-ui';
+import { NextCharge } from 'features/payment/types';
 
 interface StringPriceProduct extends BaseProduct {
   price: string;
@@ -21,6 +22,8 @@ export interface CheckoutAPI {
   createCheckout: (checkout: CreatingCheckout) => AxiosPromise;
   updateCheckout: (checkout: UpdatingCheckout) => AxiosPromise;
   deleteCheckout: (id: string) => AxiosPromise;
+  getCheckoutSession: (id: string) => Promise<any>;
+  getCheckoutPayments: (id: string) => Promise<any>;
 }
 
 export interface CheckoutListState {
@@ -31,7 +34,7 @@ export interface CheckoutListState {
   isFirstLoad: boolean;
 }
 
-export interface CheckoutDetailsState {
+export interface GetCheckoutState {
   checkout: NumberPriceCheckoutResponse;
   getCheckoutLoading: boolean;
   getCheckoutFailed: any;
@@ -70,6 +73,24 @@ export interface FormItemsPropsType {
   onboardingMode?: boolean;
   isShow?: boolean;
   onFieldsChange?: () => void;
+}
+
+export interface Performance {
+  views: number;
+  sales: number;
+  revenue: number;
+}
+
+export interface CheckoutDetails {
+  checkout: NumberPriceCheckoutResponse;
+  performance: Performance;
+  payments: NextCharge[];
+}
+
+export interface GetCheckoutDetailsState {
+  getCheckoutDetailsLoading: boolean;
+  checkoutDetails?: CheckoutDetails;
+  getCheckoutDetailsFailed: any;
 }
 
 export interface PriceInputPropsType extends FormItemsPropsType {

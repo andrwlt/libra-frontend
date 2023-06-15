@@ -2,7 +2,7 @@ import { Fragment, useState } from 'react';
 import { Button, Card, Result, Space, Avatar, Popconfirm, Table, Tag, Dropdown, Row } from 'antd';
 import { ShopOutlined, EllipsisOutlined, PlusOutlined } from '@ant-design/icons';
 import { useCheckouts, useDeleteCheckout, useResetCheckout } from 'features/checkout/checkoutHooks';
-import { useNavigate } from 'react-router-dom';
+import { generatePath, useNavigate } from 'react-router-dom';
 import CopyableField from 'components/Common/CopyableField';
 import { getCheckoutLink, formatCreatedDate } from 'utils/format/formatText';
 import { getAssetMetadata } from '@atscale/libra-ui';
@@ -77,25 +77,34 @@ export default function Checkouts() {
       render: (_, checkout) => {
         const {
           item: {
-            price: { type: priceType, value: priceValue },
+            price: { type: priceType, value: priceValue, preset: presetValue },
           },
           assetId,
           networkId,
         } = checkout;
         const asset = { assetId, networkId };
         const assetMetadata = getAssetMetadata(asset);
+
+        let checkoutPrice: string = '';
+
+        if (priceType === 'fixed' && priceValue) {
+          checkoutPrice = priceFormatHelper.getCheckoutPrice({ price: priceValue, asset }, assetMetadata);
+        } else {
+          if (presetValue) {
+            checkoutPrice =
+              priceFormatHelper.getCheckoutPrice({ price: presetValue, asset }, assetMetadata) + ' (Preset)';
+          } else {
+            checkoutPrice = 'Flexible Price';
+          }
+        }
+
         return (
           assetMetadata && (
             <Space align="center">
               <Avatar src={assetMetadata.logoUrl} size="small">
                 {assetMetadata.symbol}
               </Avatar>
-              <span>
-                {' '}
-                {priceType === 'fixed' &&
-                  priceValue &&
-                  priceFormatHelper.getCheckoutPrice({ price: priceValue, asset }, assetMetadata)}
-              </span>
+              <span>{checkoutPrice}</span>
             </Space>
           )
         );
@@ -116,7 +125,12 @@ export default function Checkouts() {
         const items: MenuProps['items'] = [
           {
             label: (
-              <p className="styled-table__action-item" onClick={() => goToEditCheckout(checkout.id)}>
+              <p
+                className="styled-table__action-item"
+                onClick={(e) => {
+                  goToEditCheckout(checkout.id);
+                }}
+              >
                 {tLayout('edit')}
               </p>
             ),
@@ -125,7 +139,12 @@ export default function Checkouts() {
           { type: 'divider' },
           {
             label: (
-              <p className="styled-table__action-item color-error" onClick={() => setOpenedPopconfirm(checkout.id)}>
+              <p
+                className="styled-table__action-item color-error"
+                onClick={(e) => {
+                  setOpenedPopconfirm(checkout.id);
+                }}
+              >
                 {tLayout('delete')}
               </p>
             ),
@@ -133,29 +152,40 @@ export default function Checkouts() {
           },
         ];
         return (
-          <Dropdown
-            menu={{ items }}
-            trigger={['click']}
-            overlayStyle={{ width: 150 }}
-            overlayClassName="styled-table__actions"
-            placement="bottomRight"
-            arrow
+          <div
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
           >
-            <Popconfirm
-              title={t('deleteCheckoutWarning')}
-              onConfirm={() => handleDeleteCheckout(checkout.id)}
-              okText="Delete"
-              cancelText="Cancel"
-              okButtonProps={{ loading: deleteCheckoutLoading }}
-              cancelButtonProps={{ disabled: deleteCheckoutLoading }}
-              open={openedPopconfirm === checkout.id}
-              onCancel={() => setOpenedPopconfirm('')}
+            <Dropdown
+              menu={{ items }}
+              trigger={['click']}
+              overlayStyle={{ width: 150 }}
+              overlayClassName="styled-table__actions"
+              placement="bottomRight"
+              arrow
             >
-              <Button size="small" type="text">
-                <EllipsisOutlined />
-              </Button>
-            </Popconfirm>
-          </Dropdown>
+              <Popconfirm
+                title={t('deleteCheckoutWarning')}
+                onConfirm={(e) => {
+                  handleDeleteCheckout(checkout.id);
+                }}
+                okText="Delete"
+                cancelText="Cancel"
+                okButtonProps={{ loading: deleteCheckoutLoading }}
+                cancelButtonProps={{ disabled: deleteCheckoutLoading }}
+                open={openedPopconfirm === checkout.id}
+                onCancel={(e) => {
+                  setOpenedPopconfirm('');
+                }}
+              >
+                <Button size="small" type="text">
+                  <EllipsisOutlined />
+                </Button>
+              </Popconfirm>
+            </Dropdown>
+          </div>
         );
       },
       key: 'action',
@@ -182,6 +212,15 @@ export default function Checkouts() {
                 pagination={false}
                 rowKey="id"
                 {...getTableLoaderProps(getCheckoutsLoading)}
+                onRow={(checkout) => {
+                  return {
+                    onClick: () => {
+                      navigate(generatePath(PATHS.checkout.details, { id: checkout.id }));
+                      console.log('click', checkout);
+                    },
+                  };
+                }}
+                rowClassName="cursor-pointer"
               />
 
               {hasCheckout && (

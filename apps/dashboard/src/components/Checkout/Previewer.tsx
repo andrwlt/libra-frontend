@@ -45,20 +45,29 @@ const PreviewHeader = styled.div`
 
 const PreviewContent = styled.div`
   scale: 0.65;
-
   height: 831px;
   transform-origin: top left;
 `;
 
-const DotBoxWrapper = styled.div`
-  display: flex;
-  position: absolute;
-  left: 14px;
+const SmallPreviewContent = styled.div`
+  scale: 0.45;
+  height: 831px;
+  transform-origin: top left;
 `;
 
-const DotBox = () => {
+interface DotBoxProps {
+  small?: boolean;
+}
+
+const DotBoxWrapper = styled.div<DotBoxProps>`
+  display: flex;
+  position: absolute;
+  left: ${(props) => (props.small ? '10px' : '14px')};
+`;
+
+const DotBox = ({ small }: { small?: boolean }) => {
   return (
-    <DotBoxWrapper>
+    <DotBoxWrapper small={small}>
       <ColorDot />
       <ColorDot />
       <ColorDot />
@@ -71,6 +80,7 @@ interface PreviewProps {
   children?: ReactNode;
   style?: Record<string, string>;
   onboardingMode?: boolean;
+  small?: boolean;
 }
 
 export default function Previewer({
@@ -79,20 +89,36 @@ export default function Previewer({
   children,
   style = {},
   onboardingMode = false,
+  small = false,
 }: PreviewProps) {
   const {
     token: { boxShadow },
   } = theme.useToken();
 
+  const smallWith = 476;
+  const smallHeight = 395;
+
   return (
-    <Wrapper style={{ width: `${width}px`, height: `${height}px`, boxShadow, ...style }}>
+    <Wrapper
+      style={{
+        width: `${small ? smallWith : width}px`,
+        height: `${small ? smallHeight : height}px`,
+        boxShadow,
+        ...style,
+        marginLeft: small ? '0' : 'auto',
+      }}
+    >
       <PreviewHeader>
-        <DotBox />
+        <DotBox small={small} />
         <FakeUrlBar>
           <p style={{ fontSize: 7, margin: 0, lineHeight: '11px' }}>{`checkout.libra.atscale.xyz`}</p>
         </FakeUrlBar>
       </PreviewHeader>
-      <PreviewContent style={{ width: onboardingMode ? 1183 : 1062 }}>{children}</PreviewContent>
+      {small ? (
+        <SmallPreviewContent style={{ width: 1065 }}>{children}</SmallPreviewContent>
+      ) : (
+        <PreviewContent style={{ width: onboardingMode ? 1183 : 1062 }}>{children}</PreviewContent>
+      )}
     </Wrapper>
   );
 }

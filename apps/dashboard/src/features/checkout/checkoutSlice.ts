@@ -1,13 +1,14 @@
 import { createSlice, Reducer } from '@reduxjs/toolkit';
 import {
   CheckoutListState,
-  CheckoutDetailsState,
+  GetCheckoutState,
   CreateCheckoutState,
   UpdateCheckoutState,
   DeleteCheckoutState,
   CreatingCheckout,
   AddMoreInfo,
   UpdatingCheckout,
+  GetCheckoutDetailsState,
 } from './types';
 
 import { NumberPriceCheckoutResponse, CheckoutResponse } from '@atscale/libra-ui';
@@ -42,21 +43,18 @@ export const getCheckouts = createAppAsyncThunk(
   },
 );
 
-export const getCheckoutDetails = createAppAsyncThunk(
-  'checkout/getCheckoutDetails',
-  async (id: string, { rejectWithValue }) => {
-    try {
-      const response = await checkoutAPI.getCheckout(id);
-      return response.data;
-    } catch (err) {
-      return rejectWithValue(err);
-    }
-  },
-);
+export const getCheckout = createAppAsyncThunk('checkout/getCheckout', async (id: string, { rejectWithValue }) => {
+  try {
+    const response = await checkoutAPI.getCheckout(id);
+    return response.data;
+  } catch (err) {
+    return rejectWithValue(err);
+  }
+});
 
 export const createCheckout = createAppAsyncThunk(
   'checkout/createCheckout',
-  async (checkout: CreatingCheckout, { rejectWithValue, getState, dispatch }) => {
+  async (checkout: CreatingCheckout, { rejectWithValue, getState }) => {
     try {
       const response = await checkoutAPI.createCheckout(addPayeeToCheckout<CreatingCheckout>(checkout, getState));
       return response.data;
@@ -80,7 +78,7 @@ export const updateCheckout = createAppAsyncThunk(
 
 export const deleteCheckout = createAppAsyncThunk(
   'checkout/deleteCheckout',
-  async (deletedId: string, { rejectWithValue, dispatch }) => {
+  async (deletedId: string, { rejectWithValue }) => {
     try {
       await checkoutAPI.deleteCheckout(deletedId);
       return deletedId;
@@ -90,12 +88,34 @@ export const deleteCheckout = createAppAsyncThunk(
   },
 );
 
+export const getCheckoutDetails = createAppAsyncThunk(
+  'checkout/getCheckoutDetails',
+  async (id: string, { rejectWithValue }) => {
+    try {
+      const [{ data: checkout }, { data: performance }, { data: payments }] = await Promise.all([
+        checkoutAPI.getCheckout(id),
+        checkoutAPI.getCheckoutSession(id),
+        checkoutAPI.getCheckoutPayments(id),
+      ]);
+
+      return {
+        checkout,
+        performance,
+        payments,
+      };
+    } catch (err) {
+      return rejectWithValue(err);
+    }
+  },
+);
+
 interface CheckoutState
   extends CheckoutListState,
-    CheckoutDetailsState,
+    GetCheckoutState,
     CreateCheckoutState,
     UpdateCheckoutState,
-    DeleteCheckoutState {}
+    DeleteCheckoutState,
+    GetCheckoutDetailsState {}
 
 const initCheckout: NumberPriceCheckoutResponse = {
   id: '',
@@ -147,6 +167,10 @@ const initialState: CheckoutState = {
   deleteCheckoutLoading: false,
   deleteCheckoutSuccess: undefined,
   deleteCheckoutFailed: undefined,
+
+  getCheckoutDetailsLoading: false,
+  checkoutDetails: undefined,
+  getCheckoutDetailsFailed: undefined,
 };
 
 export const authSlice = createSlice({
@@ -155,14 +179,6 @@ export const authSlice = createSlice({
   reducers: {
     resetCheckout() {
       return initialState;
-    },
-
-    updateCheckoutAsset(state, { payload: { assetId, networkId } }) {
-      state.checkout = {
-        ...state.checkout,
-        assetId,
-        networkId,
-      };
     },
   },
   extraReducers: (builder) => {
@@ -182,14 +198,14 @@ export const authSlice = createSlice({
         state.isFirstLoad = false;
       })
 
-      .addCase(getCheckoutDetails.pending, (state) => {
+      .addCase(getCheckout.pending, (state) => {
         state.getCheckoutLoading = true;
       })
-      .addCase(getCheckoutDetails.fulfilled, (state, { payload }) => {
+      .addCase(getCheckout.fulfilled, (state, { payload }) => {
         state.getCheckoutLoading = false;
         state.checkout = formatCheckoutToNumberPrice(payload);
       })
-      .addCase(getCheckoutDetails.rejected, (state, { payload }) => {
+      .addCase(getCheckout.rejected, (state, { payload }) => {
         state.getCheckoutLoading = false;
         state.getCheckoutFailed = payload;
       })
@@ -231,6 +247,18 @@ export const authSlice = createSlice({
         state.deleteCheckoutFailed = payload;
       })
 
+      .addCase(getCheckoutDetails.pending, (state) => {
+        state.getCheckoutDetailsLoading = true;
+      })
+      .addCase(getCheckoutDetails.fulfilled, (state, { payload }) => {
+        state.getCheckoutDetailsLoading = false;
+        state.checkoutDetails = { ...payload, checkout: formatCheckoutToNumberPrice(payload.checkout) };
+      })
+      .addCase(getCheckoutDetails.rejected, (state, { payload }) => {
+        state.getCheckoutDetailsLoading = false;
+        state.getCheckoutDetailsFailed = payload;
+      })
+
       .addCase(resetStore, () => {
         return initialState;
       });
@@ -247,9 +275,9 @@ export const selectCheckoutListState = ({
   isFirstLoad,
 });
 
-export const selectCheckoutDetailsState = ({
+export const selectCheckoutState = ({
   checkout: { checkout, getCheckoutFailed, getCheckoutLoading },
-}: RootState): CheckoutDetailsState => ({
+}: RootState): GetCheckoutState => ({
   checkout,
   getCheckoutFailed,
   getCheckoutLoading,
@@ -280,6 +308,14 @@ export const selectDeleteCheckoutState = ({
   deleteCheckoutSuccess,
 });
 
-export const { resetCheckout, updateCheckoutAsset } = authSlice.actions;
+export const selectCheckoutDetailsState = ({
+  checkout: { checkoutDetails, getCheckoutDetailsFailed, getCheckoutDetailsLoading },
+}: RootState): GetCheckoutDetailsState => ({
+  checkoutDetails,
+  getCheckoutDetailsFailed,
+  getCheckoutDetailsLoading,
+});
+
+export const { resetCheckout } = authSlice.actions;
 
 export default authSlice.reducer as Reducer<CheckoutState>;

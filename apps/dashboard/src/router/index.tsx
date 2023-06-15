@@ -12,6 +12,7 @@ import Onboarding from 'features/checkout/Onboarding';
 import Developers from 'components/Developers/Developers';
 import Webhooks from 'features/webhook/Webhooks';
 import ApiKeys from 'features/apiKey/apiKeys';
+import CheckoutDetails from 'features/checkout/CheckoutDetails';
 
 const routes: RouteObject[] = [
   { path: PATHS.auth.signIn, element: <SignIn /> },
@@ -36,6 +37,10 @@ const routes: RouteObject[] = [
       {
         path: PATHS.checkout.edit,
         element: <Checkout />,
+      },
+      {
+        path: PATHS.checkout.details,
+        element: <CheckoutDetails />,
       },
 
       {

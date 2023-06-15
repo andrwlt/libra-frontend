@@ -22,6 +22,8 @@ import {
   FlexPriceValid,
   NumFlexPrice,
   PriceType,
+  StringPriceProduct,
+  NumberPriceProduct
 } from 'app/types';
 import { EXTENSIONS } from 'config';
 import AccountOption from 'components/Checkout/Right/PaymentPreviewer/AccountOption';
@@ -64,4 +66,6 @@ export type {
   FlexPriceValid,
   NumFlexPrice,
   PriceType,
+  StringPriceProduct,
+  NumberPriceProduct
 };

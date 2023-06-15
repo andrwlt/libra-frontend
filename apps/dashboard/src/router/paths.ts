@@ -15,6 +15,7 @@ const PATHS = {
     root: '/checkouts',
     create: '/checkouts/create',
     edit: '/checkouts/:id/edit',
+    details: '/checkouts/:id/details',
   },
 
   developers: {

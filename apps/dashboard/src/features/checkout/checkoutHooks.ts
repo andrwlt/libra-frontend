@@ -2,9 +2,9 @@ import { useState, useEffect, useRef } from 'react';
 import { useAppSelector, useAppDispatch, useFailed, useSuccess, useURLQueryParams } from 'app/hooks';
 import {
   getCheckouts,
-  getCheckoutDetails,
+  getCheckout,
   selectCheckoutListState,
-  selectCheckoutDetailsState,
+  selectCheckoutState,
   createCheckout,
   selectCreateCheckoutState,
   selectUpdateCheckoutState,
@@ -12,7 +12,8 @@ import {
   resetCheckout,
   selectDeleteCheckoutState,
   deleteCheckout,
-  updateCheckoutAsset,
+  selectCheckoutDetailsState,
+  getCheckoutDetails,
 } from 'features/checkout/checkoutSlice';
 import { useTranslation } from 'react-i18next';
 import {
@@ -21,7 +22,6 @@ import {
   DeleteCheckoutHookType,
   CreatingCheckout,
   UpdatingCheckout,
-  CheckoutDetailsState,
   UseCheckoutsReturnType,
   UseHelpTextReturnType,
 } from './types';
@@ -29,8 +29,7 @@ import { FormInstance, Form } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import PATHS from 'router/paths';
 import { LOCALE_WORKSPACE } from 'app/i18n';
-import { getAssetMetadata, getNetworkAssets } from '@atscale/libra-ui';
-import { useNetworks } from 'features/auth/authHooks';
+import { getAssetMetadata } from '@atscale/libra-ui';
 
 export const useResetCheckout = () => {
   const dispatch = useAppDispatch();
@@ -59,27 +58,15 @@ export const useCheckouts = (): UseCheckoutsReturnType => {
   return { ...state, refreshCurrentPage };
 };
 
-export const useCheckout = (id?: string): CheckoutDetailsState => {
-  const state = useAppSelector(selectCheckoutDetailsState);
-  const networks = useNetworks();
+export const useCheckout = (id?: string) => {
+  const state = useAppSelector(selectCheckoutState);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (id) {
-      dispatch(getCheckoutDetails(id));
-    } else {
-      const initNetworkId = networks[0]?.id;
-      if (initNetworkId) {
-        const assets = getNetworkAssets(initNetworkId);
-        dispatch(
-          updateCheckoutAsset({
-            networkId: initNetworkId,
-            assetId: assets[0]?.id,
-          }),
-        );
-      }
+      dispatch(getCheckout(id));
     }
-  }, [dispatch, id, networks]);
+  }, [dispatch, id]);
 
   useFailed(state.getCheckoutFailed);
   return state;
@@ -217,4 +204,18 @@ export const useCheckFieldError = (fieldName: string[]) => {
   const fieldErrors = form.getFieldError(fieldName);
 
   return !!fieldErrors.length;
+};
+
+export const useCheckoutDetails = (id?: string) => {
+  const state = useAppSelector(selectCheckoutDetailsState);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (id) {
+      dispatch(getCheckoutDetails(id));
+    }
+  }, [dispatch, id]);
+
+  useFailed(state.getCheckoutDetailsFailed);
+  return state;
 };
