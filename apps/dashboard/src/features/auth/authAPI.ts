@@ -11,11 +11,6 @@ export const publicInstants = axios.create({
 const authAPI: AuthAPI = {
   getSignature(extension, address) {
     const payload: any = { address, data: LOGIN_MESSAGE };
-
-    //https://github.com/enkryptcom/enKrypt/blob/main/packages/extension/src/providers/polkadot/methods/dot_signer_signRaw.ts
-    if (extension.id === 'enkrypt') {
-      payload.type = 'bytes';
-    }
     return extension.signer.signRaw(payload);
   },
 

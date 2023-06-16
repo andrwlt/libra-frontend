@@ -26,35 +26,47 @@ type ReactToResult = <T extends { message?: string }>(
 
 export const useSuccess: ReactToResult = (success, customMess, callback) => {
   const messageApi = useContext(NotifyContext);
+  const isMounted = useRef<any>(null);
 
   useEffect(() => {
-    if (success) {
-      if (customMess) {
-        const message = typeof customMess !== 'string' ? customMess.current : customMess;
-        messageApi.open({
-          type: 'success',
-          content: message,
-        });
-      }
+    if (!isMounted.current) {
+      isMounted.current = true;
+    } else {
+      if (success) {
+        if (customMess) {
+          const message = typeof customMess !== 'string' ? customMess.current : customMess;
+          messageApi.open({
+            type: 'success',
+            content: message,
+          });
+        }
 
-      callback?.(success);
+        callback?.(success);
+      }
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [success, customMess]);
 };
 
 export const useFailed: ReactToResult = (error, customMess, callback) => {
   const messageApi = useContext(NotifyContext);
+  const isMounted = useRef<any>(null);
   const { t } = useTranslation(LOCALE_WORKSPACE.LAYOUT);
 
   useEffect(() => {
-    if (error) {
-      messageApi.open({
-        type: 'error',
-        content: customMess || error?.message || t('defaultErrorMessage'),
-      });
-      callback?.(error);
+    if (!isMounted.current) {
+      isMounted.current = true;
+    } else {
+      if (error) {
+        messageApi.open({
+          type: 'error',
+          content: customMess || error?.message || t('defaultErrorMessage'),
+        });
+        callback?.(error);
+      }
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [error]);
 };

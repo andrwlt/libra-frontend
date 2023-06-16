@@ -89,10 +89,10 @@ body {
   background-color: #fff !important;
 }
 
-.checkout-details .ant-table-thead > tr > th,
-.checkout-details .ant-table-thead > tr > td,
-.checkout-details .ant-table-tbody > tr > td,
-.checkout-details .ant-table-tbody > tr.ant-table-placeholder {
+.transparent-table .ant-table-thead > tr > th,
+.transparent-table .ant-table-thead > tr > td,
+.transparent-table .ant-table-tbody > tr > td,
+.transparent-table .ant-table-tbody > tr.ant-table-placeholder {
   background-color: rgb(250, 250, 250) !important;
 }
 

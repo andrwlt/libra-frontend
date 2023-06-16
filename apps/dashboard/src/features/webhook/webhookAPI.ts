@@ -22,6 +22,16 @@ const webhookAPI: WebhookAPI = {
   deleteWebhook(id) {
     return requester.delete(`/webhook-endpoints/${id}`);
   },
+
+  getSecretKey() {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(
+          'sk_test_51MlDPXBGOx8LdIXKJBdiq4bA4PMgcJ6E2eSLqJaf1dt5zNfYO2J1KSZ7h9mxJXmSBKfUZlhddeEq9c7ID1Anw7xR002ECkZAiA',
+        );
+      }, 1000);
+    });
+  },
 };
 
 export default webhookAPI;

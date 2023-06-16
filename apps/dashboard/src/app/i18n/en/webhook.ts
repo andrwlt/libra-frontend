@@ -27,6 +27,12 @@ const webhook = {
   events: 'Events',
   status: 'Status',
   secret: 'Secret',
+
+  secretKey: 'Secret key',
+  revealSecretKey: 'Reveal secret key',
+  hideSecretKey: 'Hide secret key',
+  standardKey: 'Standard keys',
+  standardKeyDescription: 'These keys will allow you to authenticate API requests.',
 };
 
 export default webhook;

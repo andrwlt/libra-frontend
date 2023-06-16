@@ -30,6 +30,7 @@ export interface WebhookAPI {
   createWebhook: (checkout: WebhookBase) => AxiosPromise;
   updateWebhook: (checkout: WebhookResponse) => AxiosPromise;
   deleteWebhook: (id: string) => AxiosPromise;
+  getSecretKey: () => Promise<any>;
 }
 
 export interface CreateWebhookState {
@@ -65,4 +66,10 @@ export interface DeleteWebhookState {
 }
 export interface DeleteWebhookHook extends DeleteWebhookState {
   handleDeleteWebhook: (id: string) => void;
+}
+
+export interface GetSecretKeyState {
+  getSecretKeyLoading: boolean;
+  secretKey?: string;
+  getSecretKeyFailed: any;
 }

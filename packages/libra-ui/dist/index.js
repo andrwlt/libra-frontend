@@ -485,12 +485,6 @@ var EXTENSIONS = [
         name: "Talisman",
         installURL: "https://www.talisman.xyz",
         logo: "https://res.cloudinary.com/crunchbase-production/image/upload/c_lpad,f_auto,q_auto:eco,dpr_1/vsgo8bn1iof4ryzk3gkf"
-    },
-    {
-        id: "enkrypt",
-        name: "Enkrypt",
-        installURL: "https://www.enkrypt.com",
-        logo: "https://avatars.githubusercontent.com/u/47159500?s=280&v=4"
     }
 ];
 var NETWORKS_CONFIG = [

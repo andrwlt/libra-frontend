@@ -6,6 +6,7 @@ import {
   WebhookListState,
   WebhookResponse,
   DeleteWebhookState,
+  GetSecretKeyState,
 } from './types';
 import { createAppAsyncThunk } from 'app/hooks';
 import webhookAPI from './webhookAPI';
@@ -16,7 +17,7 @@ import { GetListPayload } from 'types';
 
 export const getWebhooks = createAppAsyncThunk(
   'webhook/getWebhooks',
-  async (searchParams: GetListPayload, { rejectWithValue, getState }) => {
+  async (searchParams: GetListPayload, { rejectWithValue }) => {
     try {
       const params = { request: webhookAPI.getWebhooks, searchParams };
       return await pagingHelper.fetchData<WebhookResponse>(params);
@@ -28,7 +29,7 @@ export const getWebhooks = createAppAsyncThunk(
 
 export const createWebhook = createAppAsyncThunk(
   'webhook/createWebhook',
-  async (webhook: WebhookBase, { rejectWithValue, dispatch }) => {
+  async (webhook: WebhookBase, { rejectWithValue }) => {
     try {
       const response = await webhookAPI.createWebhook(webhook);
 
@@ -53,7 +54,7 @@ export const updateWebhook = createAppAsyncThunk(
 
 export const deleteWebhook = createAppAsyncThunk(
   'webhook/deleteWebhook',
-  async (deletedId: string, { rejectWithValue, dispatch }) => {
+  async (deletedId: string, { rejectWithValue }) => {
     try {
       await webhookAPI.deleteWebhook(deletedId);
       return deletedId;
@@ -63,7 +64,20 @@ export const deleteWebhook = createAppAsyncThunk(
   },
 );
 
-interface WebhookState extends WebhookListState, CreateWebhookState, UpdateWebhookState, DeleteWebhookState {
+export const getSecretKey = createAppAsyncThunk('webhook/getSecretKey', async (_, { rejectWithValue }) => {
+  try {
+    return await webhookAPI.getSecretKey();
+  } catch (err) {
+    return rejectWithValue(err);
+  }
+});
+
+interface WebhookState
+  extends WebhookListState,
+    CreateWebhookState,
+    UpdateWebhookState,
+    DeleteWebhookState,
+    GetSecretKeyState {
   isFirstLoad: boolean;
 }
 
@@ -88,6 +102,10 @@ const initialState: WebhookState = {
   deleteWebhookLoading: false,
   deleteWebhookSuccess: undefined,
   deleteWebhookFailed: undefined,
+
+  getSecretKeyLoading: false,
+  secretKey: undefined,
+  getSecretKeyFailed: undefined,
 };
 
 export const webhookSlice = createSlice({
@@ -96,6 +114,14 @@ export const webhookSlice = createSlice({
   reducers: {
     resetWebhook() {
       return initialState;
+    },
+
+    setFirstLoad(state, { payload }) {
+      state.isFirstLoad = payload;
+    },
+
+    removeSecretKey(state) {
+      state.secretKey = undefined;
     },
   },
   extraReducers: (builder) => {
@@ -152,6 +178,18 @@ export const webhookSlice = createSlice({
         state.deleteWebhookFailed = payload;
       })
 
+      .addCase(getSecretKey.pending, (state) => {
+        state.getSecretKeyLoading = true;
+      })
+      .addCase(getSecretKey.fulfilled, (state, { payload }) => {
+        state.getSecretKeyLoading = false;
+        state.secretKey = payload;
+      })
+      .addCase(getSecretKey.rejected, (state, { payload }) => {
+        state.getSecretKeyLoading = false;
+        state.getSecretKeyFailed = payload;
+      })
+
       .addCase(resetStore, () => {
         return initialState;
       });
@@ -191,8 +229,16 @@ export const selectDeleteWebhookState = ({
   deleteWebhookSuccess,
 });
 
+export const selectGetSecretKeyState = ({
+  webhook: { getSecretKeyFailed, getSecretKeyLoading, secretKey },
+}: RootState): GetSecretKeyState => ({
+  getSecretKeyFailed,
+  getSecretKeyLoading,
+  secretKey,
+});
+
 export const selectFirstLoadState = ({ webhook: { isFirstLoad } }: RootState) => isFirstLoad;
 
-export const { resetWebhook } = webhookSlice.actions;
+export const { resetWebhook, setFirstLoad, removeSecretKey } = webhookSlice.actions;
 
 export default webhookSlice.reducer as Reducer<WebhookState>;

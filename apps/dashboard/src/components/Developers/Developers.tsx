@@ -4,10 +4,10 @@ import { Menu, Typography } from 'antd';
 import { NavLink } from 'react-router-dom';
 import PATHS from 'router/paths';
 import { useTranslation } from 'react-i18next';
-import { WalletOutlined } from '@ant-design/icons';
+import { WalletOutlined, KeyOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { MenuWrapper } from 'components/AppLayout/Styled';
-import { useFirstLoad } from 'features/webhook/webhookHooks';
+import { useFirstLoad, useResetWebhook } from 'features/webhook/webhookHooks';
 import Loading from 'components/Common/Loading';
 import { LOCALE_WORKSPACE } from 'app/i18n';
 
@@ -20,12 +20,22 @@ const DeveloperMenu = () => {
   const menuItems: MenuProps['items'] = [
     {
       label: (
-        <NavLink to={PATHS.developers.webhook.root} className={getClassName}>
+        <NavLink to={PATHS.developers.root} className={getClassName} end>
           {t('webhooks')}
         </NavLink>
       ),
       icon: <WalletOutlined />,
-      key: PATHS.payment.root,
+      key: PATHS.developers.root,
+    },
+
+    {
+      label: (
+        <NavLink to={PATHS.developers.apiKeys} className={getClassName} end>
+          {t('apiKeys')}
+        </NavLink>
+      ),
+      icon: <KeyOutlined />,
+      key: PATHS.developers.apiKeys,
     },
   ];
 
@@ -60,8 +70,9 @@ const PageHeader = styled.div`
 
 const Developers = () => {
   const { t } = useTranslation(LOCALE_WORKSPACE.LAYOUT);
-  const isFirstLoad = useFirstLoad();
-
+  const { isFirstLoad } = useFirstLoad();
+  useResetWebhook();
+  
   return (
     <Wrapper>
       <PageHeader>

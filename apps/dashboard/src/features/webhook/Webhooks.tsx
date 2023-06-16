@@ -8,7 +8,7 @@ import WebhookForm from './WebhookForm';
 import type { MenuProps } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { EllipsisOutlined, PlusOutlined } from '@ant-design/icons';
-import { useWebhooks, useDeleteWebhook, useResetWebhook, useUpdateWebhook } from 'features/webhook/webhookHooks';
+import { useWebhooks, useDeleteWebhook, useUpdateWebhook } from 'features/webhook/webhookHooks';
 import { WebhookResponse } from './types';
 import getTableLoaderProps from 'components/Common/TableLoader';
 import { SubTableCard } from 'components/Common/Styled';
@@ -51,8 +51,6 @@ const Webhooks = () => {
 
   const { updateWebhookLoading, handleUpdateWebhook } = useUpdateWebhook(afterUpdatingSucceeded);
   const { handleDeleteWebhook, deleteWebhookLoading } = useDeleteWebhook(afterDeleteSuccess);
-
-  useResetWebhook();
 
   const [editingWebhook, setEditingWebhook] = useState<WebhookResponse | undefined>(undefined);
   const { t } = useTranslation(LOCALE_WORKSPACE.WEBHOOK);

@@ -331,7 +331,7 @@ const CheckoutDetails = () => {
   const assetMetadata = getAssetMetadata(asset);
 
   return (
-    <div className="checkout-details" style={{ paddingBottom: 40 }}>
+    <div className="checkout-details transparent-table" style={{ paddingBottom: 40 }}>
       <Row justify={'space-between'}>
         <Col span={14}>
           <Header checkout={checkout} />

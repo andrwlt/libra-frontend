@@ -24,7 +24,7 @@ const STEPS = {
 const initStep = STEPS.SELECT_WALLET;
 
 const OptionHeight = 60;
-const initHeight = 310;
+const initHeight = 250;
 const wordingHeight = 40;
 
 const ConnectWalletModal = (props: ConnectWalletModalPropsType) => {

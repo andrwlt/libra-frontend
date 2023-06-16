@@ -108,7 +108,7 @@ interface ConnectedExtension extends Extension {
 interface ExtensionDictionary {
     [extensionId: string]: Extension;
 }
-type ExtensionId = 'polkadot-js' | 'subwallet-js' | 'talisman' | 'enkrypt';
+type ExtensionId = 'polkadot-js' | 'subwallet-js' | 'talisman';
 interface ExtensionConfig {
     id: ExtensionId;
     name: string;

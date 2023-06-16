@@ -11,7 +11,7 @@ import Onboarding from 'features/checkout/Onboarding';
 
 import Developers from 'components/Developers/Developers';
 import Webhooks from 'features/webhook/Webhooks';
-import ApiKeys from 'features/apiKey/apiKeys';
+import ApiKeys from 'features/webhook/ApiKeys';
 import CheckoutDetails from 'features/checkout/CheckoutDetails';
 
 const routes: RouteObject[] = [
@@ -48,12 +48,12 @@ const routes: RouteObject[] = [
         element: <Developers />,
         children: [
           {
-            path: PATHS.developers.webhook.root,
+            index: true,
             element: <Webhooks />,
           },
 
           {
-            path: PATHS.developers.apiKey.root,
+            path: PATHS.developers.apiKeys,
             element: <ApiKeys />,
           },
         ],

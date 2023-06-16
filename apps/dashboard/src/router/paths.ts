@@ -20,12 +20,7 @@ const PATHS = {
 
   developers: {
     root: '/developers',
-    webhook: {
-      root: '/developers/webhooks',
-    },
-    apiKey: {
-      root: '/developers/apiKeys',
-    },
+    apiKeys: '/developers/apiKeys',
   },
 };
 

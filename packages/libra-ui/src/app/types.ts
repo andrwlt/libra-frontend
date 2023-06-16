@@ -131,7 +131,7 @@ export interface ExtensionDictionary {
   [extensionId: string]: Extension;
 }
 
-export type ExtensionId = 'polkadot-js' | 'subwallet-js' | 'talisman' | 'enkrypt';
+export type ExtensionId = 'polkadot-js' | 'subwallet-js' | 'talisman';
 
 export interface ExtensionConfig {
   id: ExtensionId;

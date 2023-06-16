@@ -11,6 +11,10 @@ import {
   selectDeleteWebhookState,
   resetWebhook,
   selectFirstLoadState,
+  setFirstLoad,
+  selectGetSecretKeyState,
+  getSecretKey,
+  removeSecretKey,
 } from './webhookSlice';
 import {
   CreateWebhookHook,
@@ -120,5 +124,37 @@ export const useResetWebhook = () => {
 
 export const useFirstLoad = () => {
   const isFirstLoad = useAppSelector(selectFirstLoadState);
-  return isFirstLoad;
+  const dispatch = useAppDispatch();
+  const updateFirstLoad = (isFirstLoad: boolean) => {
+    dispatch(setFirstLoad(isFirstLoad));
+  };
+
+  return { isFirstLoad, updateFirstLoad };
+};
+
+export const useGetSecretKey = () => {
+  const state = useAppSelector(selectGetSecretKeyState);
+  const dispatch = useAppDispatch();
+
+  const handleGetSecretKey = () => {
+    dispatch(getSecretKey());
+  };
+
+  const hideSecretKey = () => {
+    dispatch(removeSecretKey());
+  };
+
+  useEffect(() => {
+    return () => {
+      dispatch(removeSecretKey());
+    };
+  }, [dispatch]);
+
+  useFailed(state.getSecretKeyFailed);
+
+  return {
+    ...state,
+    handleGetSecretKey,
+    hideSecretKey,
+  };
 };
