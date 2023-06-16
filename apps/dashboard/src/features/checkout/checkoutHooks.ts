@@ -14,6 +14,7 @@ import {
   deleteCheckout,
   selectCheckoutDetailsState,
   getCheckoutDetails,
+  updateCheckoutAsset,
 } from 'features/checkout/checkoutSlice';
 import { useTranslation } from 'react-i18next';
 import {
@@ -29,7 +30,8 @@ import { FormInstance, Form } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import PATHS from 'router/paths';
 import { LOCALE_WORKSPACE } from 'app/i18n';
-import { getAssetMetadata } from '@atscale/libra-ui';
+import { getAssetMetadata, getNetworkAssets } from '@atscale/libra-ui';
+import { useNetworks } from 'features/auth/authHooks';
 
 export const useResetCheckout = () => {
   const dispatch = useAppDispatch();
@@ -61,12 +63,24 @@ export const useCheckouts = (): UseCheckoutsReturnType => {
 export const useCheckout = (id?: string) => {
   const state = useAppSelector(selectCheckoutState);
   const dispatch = useAppDispatch();
+  const networks = useNetworks();
 
   useEffect(() => {
     if (id) {
       dispatch(getCheckout(id));
+    } else {
+      const initNetworkId = networks[0]?.id;
+      if (initNetworkId) {
+        const assets = getNetworkAssets(initNetworkId);
+        dispatch(
+          updateCheckoutAsset({
+            networkId: initNetworkId,
+            assetId: assets[0]?.id,
+          }),
+        );
+      }
     }
-  }, [dispatch, id]);
+  }, [dispatch, id, networks]);
 
   useFailed(state.getCheckoutFailed);
   return state;

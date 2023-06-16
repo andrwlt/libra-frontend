@@ -206,7 +206,6 @@ const CheckoutProductFormItems = ({ onFieldsChange }: { onFieldsChange: () => vo
   const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
   const networks = useNetworks();
   const form = Form.useFormInstance();
-
   const isFixedPrice = form.getFieldValue(priceTypeInputName) === 'fixed';
   console.log('isFixedPrice', isFixedPrice);
   return (

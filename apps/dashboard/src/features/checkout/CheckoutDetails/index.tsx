@@ -321,7 +321,6 @@ const CheckoutDetails = () => {
   }
 
   const { checkout, performance, payments } = checkoutDetails;
-  console.log('checkoutDetails', checkoutDetails);
   const { assetId, networkId, payee } = checkout;
   const asset = {
     assetId,

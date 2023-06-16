@@ -88,6 +88,7 @@ export const connectExtension = createAppAsyncThunk(
     }
 
     try {
+      console.log('extensionId', extensionId);
       const connection = await extension.instant.enable(APP_NAME);
 
       const polkadotAccounts = await connection.accounts.get();
@@ -96,6 +97,8 @@ export const connectExtension = createAppAsyncThunk(
         name: account.name,
         address: account.address,
       }));
+
+      console.log('accounts',accounts)
 
       const connectedExtension = {
         ...extension,

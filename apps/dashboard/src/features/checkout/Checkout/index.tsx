@@ -17,7 +17,7 @@ import type { TabsProps } from 'antd';
 import Previewer from 'components/Checkout/Previewer';
 import { useDebounceCallback } from 'app/hooks';
 import { CreatingCheckout, UpdatingCheckout } from 'features/checkout/types';
-import { Checkout, CheckoutComponent, getNetworkAssets } from '@atscale/libra-ui';
+import { Checkout, CheckoutComponent, NumberPrice, getNetworkAssets } from '@atscale/libra-ui';
 import { useTranslation } from 'react-i18next';
 import { formatCheckoutToStringPrice } from 'utils/format/balance';
 import { FixedWrapper } from 'components/Common/Styled';
@@ -87,7 +87,15 @@ const CheckoutDetails = () => {
       if (isNetworkChanged) {
         const assets = getNetworkAssets(value);
         form.setFieldValue(['assetId'], assets?.[0]?.id);
-        form.setFieldValue(['item', 'price'], undefined);
+
+        const price: NumberPrice = form.getFieldValue(['item', 'price']);
+
+        Object.entries(price).forEach(([name, fieldValue]) => {
+
+          if (name !== 'type' && fieldValue) {
+            form.setFieldValue(['item', 'price', name], undefined);
+          }
+        });
       }
     }
 

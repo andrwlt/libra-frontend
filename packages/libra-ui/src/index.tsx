@@ -24,6 +24,7 @@ import {
   PriceType,
   StringPriceProduct,
   NumberPriceProduct,
+  NumberPrice
 } from 'app/types';
 import { EXTENSIONS } from 'config';
 import AccountOption from 'components/Checkout/Right/PaymentPreviewer/AccountOption';
@@ -69,4 +70,5 @@ export type {
   PriceType,
   StringPriceProduct,
   NumberPriceProduct,
+  NumberPrice
 };

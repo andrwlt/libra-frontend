@@ -216,7 +216,6 @@ export default function Checkouts() {
                   return {
                     onClick: () => {
                       navigate(generatePath(PATHS.checkout.details, { id: checkout.id }));
-                      console.log('click', checkout);
                     },
                   };
                 }}

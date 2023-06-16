@@ -180,6 +180,14 @@ export const authSlice = createSlice({
     resetCheckout() {
       return initialState;
     },
+
+    updateCheckoutAsset(state, { payload: { assetId, networkId } }) {
+      state.checkout = {
+        ...state.checkout,
+        assetId,
+        networkId,
+      };
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -316,6 +324,6 @@ export const selectCheckoutDetailsState = ({
   getCheckoutDetailsLoading,
 });
 
-export const { resetCheckout } = authSlice.actions;
+export const { resetCheckout, updateCheckoutAsset } = authSlice.actions;
 
 export default authSlice.reducer as Reducer<CheckoutState>;
