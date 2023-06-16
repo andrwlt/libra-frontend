@@ -148,6 +148,7 @@ declare const priceFormatHelper: {
     }, assetMetadata: AssetMetadata) => string;
     exponentToStringDecimals: typeof exponentToStringDecimals;
 };
+declare function getSs58AddressByAsset(address: string, asset: Asset): string;
 
 declare const getWalletNetworks: () => Network[];
 declare const getNetworkAssets: (networkId: string) => AssetMetadata[];
@@ -167,8 +168,9 @@ interface AccountProps {
     };
     variant?: 'default' | 'select';
     noPadding?: boolean;
+    asset: Asset;
 }
-declare function AccountInfo({ account, variant, noPadding }: AccountProps): JSX.Element;
+declare function AccountInfo({ account, variant, noPadding, asset }: AccountProps): JSX.Element;
 
 declare const ContactInformation: ({ productName, value, onChange, error, resetError, }: {
     productName: string;
@@ -193,4 +195,4 @@ interface WalletListProps {
 }
 declare const WalletList: ({ extensionDictionary, onSelectWallet }: WalletListProps) => JSX.Element;
 
-export { Account, AccountInfo as AccountOption, Asset, AssetMetadata, BaseCheckout, BaseProduct, Checkout, CheckoutPreview as CheckoutComponent, CheckoutResponse, ConnectedExtension, ContactInformation, EXTENSIONS, Extension, ExtensionConfig, ExtensionDictionary, ExtensionId, FlexPriceValid, _default as Loading, Network, NumFlexPrice, NumberPriceCheckoutResponse, NumberPriceProduct, Payment, PriceType, StringPriceProduct, WalletList, WalletType, extensionAPI, getAssetMetadata, getNetwork, getNetworkAssets, getWalletNetworks, priceFormatHelper };
+export { Account, AccountInfo as AccountOption, Asset, AssetMetadata, BaseCheckout, BaseProduct, Checkout, CheckoutPreview as CheckoutComponent, CheckoutResponse, ConnectedExtension, ContactInformation, EXTENSIONS, Extension, ExtensionConfig, ExtensionDictionary, ExtensionId, FlexPriceValid, _default as Loading, Network, NumFlexPrice, NumberPriceCheckoutResponse, NumberPriceProduct, Payment, PriceType, StringPriceProduct, WalletList, WalletType, extensionAPI, getAssetMetadata, getNetwork, getNetworkAssets, getSs58AddressByAsset, getWalletNetworks, priceFormatHelper };

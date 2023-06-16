@@ -20,7 +20,7 @@ const SelectWallet = () => {
   return (
     <WalletListWrapper>
       <Typography.Title level={4} style={{ marginBottom: 15 }}>
-        Select Wallet
+        Connect Wallet
       </Typography.Title>
       <WalletList onSelectWallet={onSelectWallet} extensionDictionary={extensions}></WalletList>
     </WalletListWrapper>

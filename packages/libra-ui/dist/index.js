@@ -403,6 +403,9 @@ __export(src_exports, {
     getNetworkAssets: function() {
         return getNetworkAssets;
     },
+    getSs58AddressByAsset: function() {
+        return getSs58AddressByAsset;
+    },
     getWalletNetworks: function() {
         return getWalletNetworks;
     },
@@ -614,6 +617,7 @@ var getNetwork = function(asset) {
 };
 // src/utils/index.ts
 var import_jsbi = __toESM(require("jsbi"));
+var import_util_crypto = require("@polkadot/util-crypto");
 function toReverseArray(str) {
     var splitString = str.split("");
     var reverseArray = splitString.reverse();
@@ -725,6 +729,13 @@ var priceFormatHelper = {
     getCheckoutPrice: getCheckoutPrice,
     exponentToStringDecimals: exponentToStringDecimals
 };
+function getSs58AddressByAsset(address, asset) {
+    var network = getNetwork(asset);
+    if (!network) {
+        throw new Error("Asset ".concat(asset.assetId, " is unsupported."));
+    }
+    return (0, import_util_crypto.encodeAddress)(address, network.config.ss58Prefix);
+}
 // src/components/Checkout/Left/CheckoutSummary.tsx
 var import_react_i18next = require("react-i18next");
 var import_react = require("react");
@@ -2193,11 +2204,12 @@ var import_react_identicon = __toESM(require("@polkadot/react-identicon"));
 var import_jsx_runtime3 = require("react/jsx-runtime");
 var _import_antd2_Typography = import_antd2.Typography, Paragraph2 = _import_antd2_Typography.Paragraph;
 function AccountInfo(param) {
-    var account = param.account, _param_variant = param.variant, variant = _param_variant === void 0 ? "default" : _param_variant, _param_noPadding = param.noPadding, noPadding = _param_noPadding === void 0 ? false : _param_noPadding;
+    var account = param.account, _param_variant = param.variant, variant = _param_variant === void 0 ? "default" : _param_variant, _param_noPadding = param.noPadding, noPadding = _param_noPadding === void 0 ? false : _param_noPadding, asset = param.asset;
     var name = account.name, address = account.address;
     var _import_antd2_theme_useToken = import_antd2.theme.useToken(), _import_antd2_theme_useToken_token = _import_antd2_theme_useToken.token, colorPrimary = _import_antd2_theme_useToken_token.colorPrimary, colorBorder = _import_antd2_theme_useToken_token.colorBorder;
     var _ref = _sliced_to_array((0, import_react4.useState)(false), 2), hovered = _ref[0], setHovered = _ref[1];
-    var shortedAddress = "".concat(account.address.slice(0, 16), "...").concat(account.address.slice(-12));
+    var ss58Address = getSs58AddressByAsset(address, asset);
+    var shortedAddress = "".concat(ss58Address.slice(0, 16), "...").concat(ss58Address.slice(-12));
     var style = {
         display: "flex",
         justifyContent: "space-between",
@@ -2332,7 +2344,7 @@ var ContactInformation_default = ContactInformation;
 var import_jsx_runtime5 = require("react/jsx-runtime");
 var EXAMPLE_POLKADOT_ADDRESS = "5ERjkQVj8M7v5UVZQ8qTbZ2qb1o5TgNXq9tXt2BsWF9jBpDu";
 function PaymentSummary(param) {
-    var productName = param.productName, checkoutType = param.checkoutType;
+    var productName = param.productName, checkoutType = param.checkoutType, asset = param.asset;
     var _ref = (0, import_react_i18next3.useTranslation)(), t2 = _ref.t;
     var _ref1 = _sliced_to_array((0, import_react6.useState)(false), 2), loading = _ref1[0], setLoading = _ref1[1];
     var _ref2 = _sliced_to_array((0, import_react6.useState)(""), 2), email = _ref2[0], setEmail = _ref2[1];
@@ -2362,7 +2374,8 @@ function PaymentSummary(param) {
                         account: {
                             name: "Test Account",
                             address: EXAMPLE_POLKADOT_ADDRESS
-                        }
+                        },
+                        asset: asset
                     }),
                     /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(import_antd4.Button, {
                         style: {
@@ -5884,7 +5897,11 @@ var CheckoutPreview = function(param) {
                                 productName: item.name || "The product"
                             }) : previewMode ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(PaymentSummary, {
                                 productName: name,
-                                checkoutType: checkoutType
+                                checkoutType: checkoutType,
+                                asset: {
+                                    assetId: assetId,
+                                    networkId: networkId
+                                }
                             }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(HandlePaymentComponent, {
                                 onPaymentSuccess: handlePaymentSuccess,
                                 payment: {
@@ -6096,6 +6113,7 @@ var WalletList_default = WalletList;
     getAssetMetadata: getAssetMetadata,
     getNetwork: getNetwork,
     getNetworkAssets: getNetworkAssets,
+    getSs58AddressByAsset: getSs58AddressByAsset,
     getWalletNetworks: getWalletNetworks,
     priceFormatHelper: priceFormatHelper
 }); /*! Bundled license information:

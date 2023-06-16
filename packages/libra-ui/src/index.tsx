@@ -1,5 +1,5 @@
 import CheckoutComponent from 'components/Checkout';
-import { priceFormatHelper } from 'utils';
+import { priceFormatHelper, getSs58AddressByAsset } from 'utils';
 import { getNetwork, getNetworkAssets, getWalletNetworks, getAssetMetadata } from 'utils/asset';
 import extensionAPI from 'utils/extension';
 import {
@@ -23,7 +23,7 @@ import {
   NumFlexPrice,
   PriceType,
   StringPriceProduct,
-  NumberPriceProduct
+  NumberPriceProduct,
 } from 'app/types';
 import { EXTENSIONS } from 'config';
 import AccountOption from 'components/Checkout/Right/PaymentPreviewer/AccountOption';
@@ -44,6 +44,7 @@ export {
   ContactInformation,
   Loading,
   WalletList,
+  getSs58AddressByAsset,
 };
 
 export type {
@@ -67,5 +68,5 @@ export type {
   NumFlexPrice,
   PriceType,
   StringPriceProduct,
-  NumberPriceProduct
+  NumberPriceProduct,
 };

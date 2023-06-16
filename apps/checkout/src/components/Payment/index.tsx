@@ -64,6 +64,8 @@ const Payment = ({
     }
   };
 
+  const { asset } = payment;
+
   return (
     <div style={{ width: 380, maxWidth: 380, marginLeft: 80 }}>
       {!connectedExtension ? (
@@ -81,7 +83,7 @@ const Payment = ({
           <Wrapper>
             <Form layout="vertical">
               <Title level={4}>Payment Method </Title>
-              <NetworkInfo asset={payment.asset} />
+              <NetworkInfo asset={asset} />
 
               <Form.Item label="Account">
                 {connectedExtension.accounts.length ? (
@@ -90,13 +92,13 @@ const Payment = ({
                     menu={{
                       items: connectedExtension.accounts.map((account) => ({
                         key: account.address,
-                        label: <AccountOption account={account} noPadding />,
+                        label: <AccountOption account={account} noPadding asset={asset} />,
                       })),
                       onClick: onSelectAccount,
                     }}
                   >
                     <div onClick={(e) => e.preventDefault()}>
-                      {account && <AccountOption variant="select" account={account} />}
+                      {account && <AccountOption variant="select" account={account} asset={asset} />}
                     </div>
                   </Dropdown>
                 ) : (

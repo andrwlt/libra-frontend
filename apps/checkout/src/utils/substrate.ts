@@ -1,7 +1,6 @@
 import { ApiPromise, WsProvider } from '@polkadot/api';
-import { getSs58AddressByAsset } from './address';
 import JSBI from 'jsbi';
-import { Asset } from '@atscale/libra-ui';
+import { Asset, getSs58AddressByAsset } from '@atscale/libra-ui';
 
 const connections: Record<string, ApiPromise> = {};
 

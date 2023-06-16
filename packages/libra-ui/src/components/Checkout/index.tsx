@@ -107,7 +107,7 @@ const CheckoutPreview = ({
             {(completed || isShowAfterPayment) && afterPayment ? (
               <AfterPaymentPreviewer afterPayment={afterPayment} productName={item.name || 'The product'} />
             ) : previewMode ? (
-              <PaymentPreviewer productName={name} checkoutType={checkoutType} />
+              <PaymentPreviewer productName={name} checkoutType={checkoutType} asset={{ assetId, networkId }} />
             ) : (
               <HandlePaymentComponent
                 onPaymentSuccess={handlePaymentSuccess}

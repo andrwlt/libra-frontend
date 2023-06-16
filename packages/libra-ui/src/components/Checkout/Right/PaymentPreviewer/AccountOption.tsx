@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { Typography, Space, theme } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import Identicon from '@polkadot/react-identicon';
+import { getSs58AddressByAsset } from 'utils';
+import { Asset } from 'app/types';
 
 const { Paragraph } = Typography;
 
@@ -12,17 +14,19 @@ interface AccountProps {
   };
   variant?: 'default' | 'select';
   noPadding?: boolean;
+  asset: Asset;
 }
 
-export default function AccountInfo({ account, variant = 'default', noPadding = false }: AccountProps) {
+export default function AccountInfo({ account, variant = 'default', noPadding = false, asset }: AccountProps) {
   const { name, address } = account;
   const {
     token: { colorPrimary, colorBorder },
   } = theme.useToken();
 
   const [hovered, setHovered] = useState(false);
+  const ss58Address = getSs58AddressByAsset(address, asset);
 
-  const shortedAddress = `${account.address.slice(0, 16)}...${account.address.slice(-12)}`;
+  const shortedAddress = `${ss58Address.slice(0, 16)}...${ss58Address.slice(-12)}`;
 
   let style: any = {
     display: 'flex',

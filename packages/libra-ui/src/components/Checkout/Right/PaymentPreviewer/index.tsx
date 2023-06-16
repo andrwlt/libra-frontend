@@ -3,15 +3,18 @@ import { Button, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
 import AccountOption from './AccountOption';
 import ContactInformation from './ContactInformation';
+import { Asset } from 'app/types';
 
 const EXAMPLE_POLKADOT_ADDRESS = '5ERjkQVj8M7v5UVZQ8qTbZ2qb1o5TgNXq9tXt2BsWF9jBpDu';
 
 export default function PaymentSummary({
   productName,
   checkoutType,
+  asset,
 }: {
   productName: string;
   checkoutType?: string | null;
+  asset: Asset;
 }) {
   const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
@@ -29,6 +32,7 @@ export default function PaymentSummary({
             name: 'Test Account',
             address: EXAMPLE_POLKADOT_ADDRESS,
           }}
+          asset={asset}
         />
 
         <Button

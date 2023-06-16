@@ -1,6 +1,7 @@
 import { Asset, AssetMetadata } from 'app/types';
-import { getAssetMetadata } from './asset';
+import { getAssetMetadata, getNetwork } from './asset';
 import JSBI from 'jsbi';
+import { encodeAddress } from '@polkadot/util-crypto';
 
 function toReverseArray(str: string) {
   const splitString = str.split('');
@@ -127,3 +128,13 @@ export const priceFormatHelper = {
   getCheckoutPrice,
   exponentToStringDecimals,
 };
+
+export function getSs58AddressByAsset(address: string, asset: Asset) {
+  const network = getNetwork(asset);
+
+  if (!network) {
+    throw new Error(`Asset ${asset.assetId} is unsupported.`);
+  }
+
+  return encodeAddress(address, network.config.ss58Prefix);
+}
