@@ -22,8 +22,8 @@ export interface CheckoutAPI {
   createCheckout: (checkout: CreatingCheckout) => AxiosPromise;
   updateCheckout: (checkout: UpdatingCheckout) => AxiosPromise;
   deleteCheckout: (id: string) => AxiosPromise;
-  getCheckoutSession: (id: string) => Promise<any>;
-  getCheckoutPayments: (id: string) => Promise<any>;
+  getCheckoutPerformance: (id: string) => Promise<{ data: Performance }>;
+  getCheckoutPayments: (id: string) => Promise<{ data: { data: NextCharge[] } }>;
 }
 
 export interface CheckoutListState {
@@ -78,7 +78,7 @@ export interface FormItemsPropsType {
 export interface Performance {
   views: number;
   sales: number;
-  revenue: number;
+  revenue: { value: number };
 }
 
 export interface CheckoutDetails {

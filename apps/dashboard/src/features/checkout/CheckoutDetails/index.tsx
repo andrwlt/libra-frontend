@@ -96,6 +96,19 @@ const Header = ({ checkout }: { checkout: NumberPriceCheckoutResponse }) => {
   );
 };
 
+const ProductTableWrapper = styled.div`
+  .ant-table-content {
+    thead {
+      .photo-th {
+        &::before,
+        &::after {
+          content: none !important;
+        }
+      }
+    }
+  }
+`;
+
 const ProductTable = ({ checkout }: { checkout: NumberPriceCheckoutResponse }) => {
   const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
   const isFixedPrice = checkout.item.price.type === 'fixed';
@@ -110,24 +123,28 @@ const ProductTable = ({ checkout }: { checkout: NumberPriceCheckoutResponse }) =
       title: '',
       key: 'Photo',
       width: 50,
+      className: 'photo-th',
 
       render: (_, { image }) => (
-        <img
-          style={{
-            width: 35,
-            height: 35,
-            objectFit: 'contain',
-            borderRadius: 4,
-            backgroundColor: 'rgba(247, 250, 252, 0.5)',
-          }}
-          src={image || PLACEHOLDER_PRODUCT_ICON}
-          alt="product"
-        />
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <img
+            style={{
+              width: 35,
+              height: 35,
+              objectFit: 'contain',
+              borderRadius: 4,
+              backgroundColor: 'rgba(247, 250, 252, 0.5)',
+            }}
+            src={image || PLACEHOLDER_PRODUCT_ICON}
+            alt="product"
+          />
+        </div>
       ),
     },
     {
       title: t('name'),
       key: 'Name',
+
       render: (_, { name }) =>
         isFixedPrice ? (
           <div style={{ color: '#1677ff', cursor: 'pointer' }}>{name}</div>
@@ -177,10 +194,10 @@ const ProductTable = ({ checkout }: { checkout: NumberPriceCheckoutResponse }) =
       ];
 
   return (
-    <div style={{ marginTop: 20 }}>
+    <ProductTableWrapper style={{ marginTop: 20 }}>
       <SectionTitle title="Product" />
       <Table size="small" rowKey={'name'} columns={columns} dataSource={[checkout.item]} pagination={false} />
-    </div>
+    </ProductTableWrapper>
   );
 };
 
@@ -227,7 +244,7 @@ const Performance = ({ performance }: { performance: PerformanceType }) => {
       <SectionTitle title="Sales" />
       <InfoItem style={{ marginTop: 12 }} label="Views" value={views} />
       <InfoItem label="Sales" value={sales} />
-      <InfoItem label="Revenue" value={revenue} />
+      <InfoItem label="Revenue" value={revenue.value} />
     </div>
   );
 };

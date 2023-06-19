@@ -92,9 +92,15 @@ export const getCheckoutDetails = createAppAsyncThunk(
   'checkout/getCheckoutDetails',
   async (id: string, { rejectWithValue }) => {
     try {
-      const [{ data: checkout }, { data: performance }, { data: payments }] = await Promise.all([
+      const [
+        { data: checkout },
+        { data: performance },
+        {
+          data: { data: payments },
+        },
+      ] = await Promise.all([
         checkoutAPI.getCheckout(id),
-        checkoutAPI.getCheckoutSession(id),
+        checkoutAPI.getCheckoutPerformance(id),
         checkoutAPI.getCheckoutPayments(id),
       ]);
 
