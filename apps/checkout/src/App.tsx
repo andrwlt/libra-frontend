@@ -18,9 +18,9 @@ const checkout: CheckoutResponse = {
     price: {
       type: 'flexible',
       value: '100000000000',
-      minimum: '5000000000',
-      maximum: '15000000000',
-      preset: '6000000000',
+      minimum: '60000000000',
+      maximum: '200000000000',
+      preset: '600000000005',
     },
   },
   networkId: 'nw_kusama',
@@ -35,7 +35,7 @@ const checkout: CheckoutResponse = {
 function App() {
   const { getExtensionsLoading, extensions } = useExtensions();
   const { connectedExtension, onConnectExtension } = useConnectExtension();
-  const { numFlexPrice, onNumFlexPriceChange, flexPriceValid, validateFlexPrice } = useFlexiblePrice(checkout);
+  const { numFlexPrice, onNumFlexPriceChange } = useFlexiblePrice(checkout);
   return (
     <AppWrapper className="App">
       {getExtensionsLoading ? (
@@ -43,8 +43,6 @@ function App() {
       ) : (
         <ExtensionContext.Provider value={{ extensions, onConnectExtension, connectedExtension }}>
           <CheckoutComponent
-            flexPriceValid={flexPriceValid}
-            validateFlexPrice={validateFlexPrice}
             numFlexPrice={numFlexPrice}
             onNumFlexPriceChange={onNumFlexPriceChange}
             previewMode={false}

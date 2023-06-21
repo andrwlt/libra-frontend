@@ -1,19 +1,11 @@
-import { Input, InputNumber, Select, Form, Row, Col, Radio, Checkbox, Typography } from 'antd';
+import { Input, InputNumber, Select, Form, Row, Col, Radio, Typography } from 'antd';
 import ImageUploader from 'components/Inputs/ImageUploader';
 import { useTranslation } from 'react-i18next';
 import { getAssetMetadata, getNetworkAssets } from '@atscale/libra-ui';
 import { LOCALE_WORKSPACE } from 'app/i18n';
 import { useNetworks } from 'features/auth/authHooks';
-import { useState } from 'react';
 import styled from 'styled-components';
-
-const ProductImageUploader = styled(ImageUploader)`
-  .ant-upload {
-    margin-right: 0px !important;
-    margin-bottom: 0px !important;
-    width: 200px !important;
-  }
-`;
+import { Fragment } from 'react';
 
 const FormItem = Form.Item;
 const { Title } = Typography;
@@ -24,22 +16,17 @@ const minPriceInputName = ['item', 'price', 'minimum'];
 const maxPriceInputName = ['item', 'price', 'maximum'];
 const priceTypeInputName = ['item', 'price', 'type'];
 
-const MinMaxFormItem = styled(FormItem)`
-  .ant-form-item-explain-error {
-    padding-left: 24px;
-  }
-`;
+const MinMaxFormItem = styled(FormItem)``;
 
-const ProductPriceFormItem = ({ ver2 }: { ver2?: boolean }) => {
+const ProductPriceFormItem = () => {
   const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
 
   return (
     <Form.Item
-      label={ver2 ? '' : 'Price'}
       name={priceInputName}
       dependencies={['assetId']}
       requiredMark={false}
-      style={{ marginTop: 10, width: '100%' }}
+      style={{ marginTop: 10, marginLeft: 24, width: '100%' }}
       rules={[
         ({ getFieldValue }) => ({
           validator(_, value) {
@@ -64,125 +51,77 @@ const ProductPriceFormItem = ({ ver2 }: { ver2?: boolean }) => {
   );
 };
 
-const FlexProductPriceFormItem = ({ onFieldsChange, ver2 = false }: { onFieldsChange: () => void; ver2?: boolean }) => {
-  const form = Form.useFormInstance();
-  const initHasPresetPrice = form.getFieldValue(priceInputName) === undefined;
-  const initHasMinMaxPrice =
-    form.getFieldValue(minPriceInputName) !== undefined || form.getFieldValue(maxPriceInputName) !== undefined;
-
-  const [hasPresetPrice, setHasPresetPrice] = useState(() => initHasPresetPrice);
-  const [hasMinMaxPrice, setHasMinMaxPrice] = useState(() => initHasMinMaxPrice);
-
+const FlexProductPriceFormItem = () => {
   return (
-    <FormItem noStyle>
-      <Row style={ver2 ? { marginLeft: 24, marginTop: ver2 ? 10 : 5 } : {}}>
-        <Checkbox
-          checked={hasPresetPrice}
-          onChange={({ target: { checked } }) => {
-            setHasPresetPrice(checked);
-            if (!checked) {
-              form.setFieldValue(presetPriceInputName, undefined);
-            }
-            onFieldsChange();
-          }}
+    <Fragment>
+      <Row style={{ marginLeft: 24, marginTop: 10, width: 'calc(100% - 24px)' }}>
+        <FormItem
+          style={{ width: '100%' }}
+          dependencies={[minPriceInputName, maxPriceInputName]}
+          name={presetPriceInputName}
+          label="Preset Amount"
+          required={false}
+          rules={[
+            { required: true, message: 'A preset amount is required' },
+            ({ getFieldValue }) => ({
+              validator(_, value) {
+                const minPrice = getFieldValue(minPriceInputName);
+                const maxPrice = getFieldValue(maxPriceInputName);
+
+                if (value && minPrice && value < minPrice) {
+                  return Promise.reject(new Error('Suggested price must be greater or equal to minimum.'));
+                }
+                if (value && maxPrice && value > maxPrice) {
+                  return Promise.reject(new Error('Suggested price must be less than or equal to maximum.'));
+                }
+
+                return Promise.resolve();
+              },
+            }),
+          ]}
         >
-          Suggest a preset amount
-        </Checkbox>
+          <InputNumber autoComplete="off" min={0} style={{ width: '100%' }} />
+        </FormItem>
       </Row>
+      <MinMaxFormItem>
+        <Row style={{ marginLeft: 24, marginTop: 5 }} justify="space-between">
+          <Col span={11}>
+            <label style={{ fontSize: 12, marginBottom: 5, display: 'block' }}>Min price</label>
+            <FormItem
+              dependencies={[maxPriceInputName]}
+              name={minPriceInputName}
+              rules={[
+                { required: true, message: 'A minimum amount is required' },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    const maxPrice = getFieldValue(maxPriceInputName);
 
-      {hasPresetPrice && (
-        <Row style={{ marginLeft: 24, marginTop: 10, width: ver2 ? 'calc(100% - 24px)' : '100%' }}>
-          <FormItem
-            style={{ width: '100%' }}
-            dependencies={[minPriceInputName, maxPriceInputName]}
-            name={presetPriceInputName}
-            rules={[
-              ({ getFieldValue }) => ({
-                validator(_, value) {
-                  const minPrice = getFieldValue(minPriceInputName);
-                  const maxPrice = getFieldValue(maxPriceInputName);
+                    if (value && maxPrice && value >= maxPrice) {
+                      return Promise.reject(new Error('Minimum must be less than maximum.'));
+                    }
 
-                  if (value && minPrice && value < minPrice) {
-                    return Promise.reject(new Error('Suggested price must be greater or equal to minimum.'));
-                  }
-                  if (value && maxPrice && value > maxPrice) {
-                    return Promise.reject(new Error('Suggested price must be less than or equal to maximum.'));
-                  }
+                    return Promise.resolve();
+                  },
+                }),
+              ]}
+            >
+              <InputNumber autoComplete="off" min={0} style={{ width: '100%' }} />
+            </FormItem>
+          </Col>
 
-                  return Promise.resolve();
-                },
-              }),
-            ]}
-          >
-            <InputNumber autoComplete="off" min={0} style={{ width: '100%' }} />
-          </FormItem>
+          <Col span={11}>
+            <label style={{ fontSize: 12, marginBottom: 5, display: 'block' }}>Max price</label>
+            <FormItem name={maxPriceInputName} rules={[{ required: true, message: 'A maximum amount is required' }]}>
+              <InputNumber autoComplete="off" min={0} style={{ width: '100%' }} />
+            </FormItem>
+          </Col>
         </Row>
-      )}
-
-      <Row
-        style={
-          ver2
-            ? { marginLeft: 24, marginTop: hasPresetPrice ? 0 : 10 }
-            : { marginTop: hasPresetPrice ? 0 : 10, marginBottom: hasMinMaxPrice ? 0 : 24 }
-        }
-      >
-        <Checkbox
-          checked={hasMinMaxPrice}
-          onChange={({ target: { checked } }) => {
-            setHasMinMaxPrice(checked);
-            if (!checked) {
-              form.setFieldValue(minPriceInputName, undefined);
-              form.setFieldValue(maxPriceInputName, undefined);
-            }
-
-            onFieldsChange();
-          }}
-        >
-          Set limit
-        </Checkbox>
-      </Row>
-
-      {hasMinMaxPrice && (
-        <MinMaxFormItem>
-          <Row style={{ marginLeft: 24, marginTop: ver2 ? 5 : 5 }} justify="space-between">
-            <Col span={11}>
-              <label style={{ fontSize: 12, marginBottom: 5, display: 'block' }}>Min price</label>
-              <FormItem
-                noStyle
-                dependencies={maxPriceInputName}
-                name={minPriceInputName}
-                rules={[
-                  ({ getFieldValue }) => ({
-                    validator(_, value) {
-                      const maxPrice = getFieldValue(maxPriceInputName);
-
-                      if (value && maxPrice && value >= maxPrice) {
-                        return Promise.reject(new Error('Minimum must be less than maximum.'));
-                      }
-
-                      return Promise.resolve();
-                    },
-                  }),
-                ]}
-              >
-                <InputNumber autoComplete="off" min={0} style={{ width: '100%' }} />
-              </FormItem>
-            </Col>
-
-            <Col span={11}>
-              <label style={{ fontSize: 12, marginBottom: 5, display: 'block' }}>Max price</label>
-              <FormItem noStyle name={maxPriceInputName}>
-                <InputNumber autoComplete="off" min={0} style={{ width: '100%' }} />
-              </FormItem>
-            </Col>
-          </Row>
-        </MinMaxFormItem>
-      )}
-    </FormItem>
+      </MinMaxFormItem>
+    </Fragment>
   );
 };
 
-const Ver2 = ({ onFieldsChange }: { onFieldsChange: () => void }) => {
+const PriceFormItems = () => {
   const form = Form.useFormInstance();
   const isFixedPrice = form.getFieldValue(priceTypeInputName) === 'fixed';
   return (
@@ -191,23 +130,21 @@ const Ver2 = ({ onFieldsChange }: { onFieldsChange: () => void }) => {
         <Row>
           <Radio value="fixed">Fixed Price</Radio>
         </Row>
-        {isFixedPrice && <ProductPriceFormItem ver2 />}
+        {isFixedPrice && <ProductPriceFormItem />}
 
         <Row style={{ marginTop: 5 }}>
           <Radio value="flexible">Flexible Price</Radio>
         </Row>
-        {!isFixedPrice && <FlexProductPriceFormItem onFieldsChange={onFieldsChange} ver2 />}
+        {!isFixedPrice && <FlexProductPriceFormItem />}
       </Radio.Group>
     </FormItem>
   );
 };
 
-const CheckoutProductFormItems = ({ onFieldsChange }: { onFieldsChange: () => void }) => {
+const CheckoutProductFormItems = () => {
   const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
   const networks = useNetworks();
-  const form = Form.useFormInstance();
-  const isFixedPrice = form.getFieldValue(priceTypeInputName) === 'fixed';
-  console.log('isFixedPrice', isFixedPrice);
+
   return (
     <>
       <Title level={5} style={{ marginTop: 5 }}>
@@ -225,21 +162,25 @@ const CheckoutProductFormItems = ({ onFieldsChange }: { onFieldsChange: () => vo
           >
             <Input autoComplete="off" placeholder={t<string>('productNamePlaceholder')} />
           </FormItem>
-          <Form.Item label={t<string>('description')} name={['item', 'description']}>
-            <Input.TextArea autoComplete="off" rows={2} placeholder={t<string>('descriptionPlaceholder')} />
-          </Form.Item>
+          <FormItem name="checkoutType" label="Action Name">
+            <Input autoComplete="off" placeholder={'Pay'} />
+          </FormItem>
         </Col>
 
         <Col span={8}>
           <Form.Item
             name={['item', 'image']}
             style={{ display: 'flex', justifyContent: 'right', width: '100%', marginTop: 30, marginBottom: 10 }}
-            className="upload-image--large"
+            className="upload-image--large product-upload"
           >
-            <ProductImageUploader label={t<string>('productImage')} purpose="product_image" />
+            <ImageUploader label={t<string>('productImage')} purpose="product_image" />
           </Form.Item>
         </Col>
       </Row>
+
+      <Form.Item label={t<string>('description')} name={['item', 'description']}>
+        <Input.TextArea autoComplete="off" rows={1} placeholder={t<string>('descriptionPlaceholder')} />
+      </Form.Item>
 
       <Title level={5} style={{ marginTop: 5 }}>
         Pricing
@@ -287,16 +228,7 @@ const CheckoutProductFormItems = ({ onFieldsChange }: { onFieldsChange: () => vo
         </Col>
       </Row>
 
-      {/* <FormItem label="Price Type" name={priceTypeInputName} style={{ marginBottom: 14 }}>
-        <Radio.Group>
-          <Radio value="fixed">Fixed Price</Radio>
-          <Radio value="flexible">Flexible Price</Radio>
-        </Radio.Group>
-      </FormItem>
-
-      {isFixedPrice ? <ProductPriceFormItem /> : <FlexProductPriceFormItem onFieldsChange={onFieldsChange} />} */}
-
-      <Ver2 onFieldsChange={onFieldsChange} />
+      <PriceFormItems />
     </>
   );
 };

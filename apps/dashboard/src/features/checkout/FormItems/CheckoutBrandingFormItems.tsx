@@ -80,10 +80,6 @@ const CheckoutBrandingFormItems = ({ isShow, onboardingMode = false }: FormItems
           </Form.Item>
 
           <BrandingNameFormItem />
-
-          <FormItem name="checkoutType" label="Action Name">
-            <Input autoComplete="off" placeholder={'Pay'} />
-          </FormItem>
         </>
       )}
     </>

@@ -14,6 +14,7 @@ const service = {
         from: getSs58AddressByAsset(account.address, asset),
         tx,
         receiptEmail: email,
+        amount,
       };
 
       const response = await fetch(`${window.location.href}/pay`, {

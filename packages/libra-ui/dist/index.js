@@ -618,6 +618,7 @@ var getNetwork = function(asset) {
 // src/utils/index.ts
 var import_jsbi = __toESM(require("jsbi"));
 var import_util_crypto = require("@polkadot/util-crypto");
+var import_js_big_decimal = __toESM(require("js-big-decimal"));
 function toReverseArray(str) {
     var splitString = str.split("");
     var reverseArray = splitString.reverse();
@@ -693,18 +694,25 @@ function exponentToStringDecimals(num) {
         return num.toString();
     }
 }
+var preventFloatingPoint = function(amount, decimal) {
+    return Number(import_js_big_decimal.default.round(amount, decimal || 0));
+};
 function toSmallestUnit(originAmount, asset) {
     try {
         var metadata = getAssetMetadata(asset);
         if (!metadata) {
             return 0;
         }
-        var amount = originAmount;
-        var decimals = metadata === null || metadata === void 0 ? void 0 : metadata.decimals;
+        var decimals = metadata.decimals;
+        var amount = preventFloatingPoint(originAmount, decimals);
         if (!Number.isInteger(amount)) {
             var decimalLength = exponentToStringDecimals(amount).split(".")[1].length;
+            if (decimalLength > decimals) {
+                decimalLength = 0;
+            }
             decimals = decimals - decimalLength;
             amount = amount * Math.pow(10, decimalLength);
+            amount = preventFloatingPoint(amount);
         }
         var scale = import_jsbi.default.exponentiate(import_jsbi.default.BigInt(10), import_jsbi.default.BigInt(decimals));
         var stringNumber = import_jsbi.default.multiply(import_jsbi.default.BigInt(amount), scale).toString();
@@ -739,14 +747,22 @@ function getSs58AddressByAsset(address, asset) {
 // src/components/Checkout/Left/CheckoutSummary.tsx
 var import_react_i18next = require("react-i18next");
 var import_react = require("react");
-var import_FormItem = __toESM(require("antd/es/form/FormItem"));
 var import_jsx_runtime2 = require("react/jsx-runtime");
 var _import_antd_Typography = import_antd.Typography, Paragraph = _import_antd_Typography.Paragraph, Link = _import_antd_Typography.Link;
 var ImageWrapper = import_styled_components.default.div(_templateObject());
 var ProductInfoWrapper = import_styled_components.default.div(_templateObject1());
+var getSliderStep = function(min, max) {
+    if (!min || !max || min >= max) {
+        return 0;
+    }
+    return (max - min) / 20;
+};
 var ProductInformation = function(param) {
-    var product = param.product, asset = param.asset, loading = param.loading, onNumFlexPriceChange = param.onNumFlexPriceChange, numFlexPrice = param.numFlexPrice, flexPriceValid = param.flexPriceValid, previewMode = param.previewMode;
-    var name = product.name, description = product.description, _product_price = product.price, priceType = _product_price.type, priceValue = _product_price.value, presetPrice = _product_price.preset, image = product.image;
+    var product = param.product, asset = param.asset, loading = param.loading, onNumFlexPriceChange = param.onNumFlexPriceChange, numFlexPrice = param.numFlexPrice, previewMode = param.previewMode;
+    var name = product.name, description = product.description, _product_price = product.price, priceType = _product_price.type, priceValue = _product_price.value, presetPrice = _product_price.preset, minimum = _product_price.minimum, maximum = _product_price.maximum, image = product.image;
+    var minPriceNumber = typeof minimum === "string" ? priceFormatHelper.formatBalance(minimum, asset) : minimum;
+    var maxPriceNumber = typeof maximum === "string" ? priceFormatHelper.formatBalance(maximum, asset) : maximum;
+    var step = getSliderStep(minPriceNumber, maxPriceNumber);
     var assetMetadata = getAssetMetadata(asset);
     var _ref = _sliced_to_array((0, import_react.useState)(false), 2), isUpdatingPrice = _ref[0], setIsUpdatingPrice = _ref[1];
     var inputRef = (0, import_react.useRef)(null);
@@ -758,26 +774,7 @@ var ProductInformation = function(param) {
     }, [
         isUpdatingPrice
     ]);
-    var flexPriceElement = /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_FormItem.default, {
-        validateStatus: flexPriceValid !== true ? "error" : "",
-        help: flexPriceValid !== true && flexPriceValid,
-        style: {
-            marginBottom: 0
-        },
-        children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.InputNumber, {
-            ref: inputRef,
-            onBlur: function() {
-                if (flexPriceValid === true) {
-                    setIsUpdatingPrice(false);
-                }
-            },
-            style: {
-                width: 200
-            },
-            value: numFlexPrice,
-            onChange: onNumFlexPriceChange
-        })
-    });
+    var _ref1;
     return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(ProductInfoWrapper, {
         children: [
             /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Skeleton, {
@@ -818,44 +815,44 @@ var ProductInformation = function(param) {
                                     fontSize: 32,
                                     lineHeight: "32px"
                                 },
-                                children: !!priceValue ? getCheckoutPrice({
-                                    price: priceValue,
+                                children: getCheckoutPrice({
+                                    price: priceValue !== null && priceValue !== void 0 ? priceValue : "0",
                                     asset: asset
-                                }, assetMetadata) : "0"
+                                }, assetMetadata)
                             }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", {
-                                children: presetPrice ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", {
-                                    children: isUpdatingPrice ? flexPriceElement : /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Typography.Title, {
-                                        level: 3,
-                                        style: {
-                                            margin: 0,
-                                            fontSize: 32,
-                                            lineHeight: "32px"
-                                        },
-                                        children: getCheckoutPrice({
-                                            price: numFlexPrice !== null && numFlexPrice !== void 0 ? numFlexPrice : presetPrice,
-                                            asset: asset
-                                        }, assetMetadata)
-                                    })
-                                }) : previewMode ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.InputNumber, {
-                                    value: "",
+                                style: {
+                                    width: "100%"
+                                },
+                                children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Typography.Title, {
+                                    level: 3,
                                     style: {
-                                        width: 200
-                                    }
-                                }) : flexPriceElement
+                                        margin: 0,
+                                        fontSize: 32,
+                                        lineHeight: "32px"
+                                    },
+                                    children: getCheckoutPrice({
+                                        price: (_ref1 = numFlexPrice !== null && numFlexPrice !== void 0 ? numFlexPrice : presetPrice) !== null && _ref1 !== void 0 ? _ref1 : "0",
+                                        asset: asset
+                                    }, assetMetadata)
+                                })
                             })
                         ]
                     }),
-                    priceType === "flexible" && presetPrice && !isUpdatingPrice && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Button, {
-                        style: {
-                            display: "block",
-                            marginTop: 20
-                        },
-                        onClick: function() {
+                    priceType === "flexible" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Slider, {
+                        value: numFlexPrice !== null && numFlexPrice !== void 0 ? numFlexPrice : void 0,
+                        min: minPriceNumber !== null && minPriceNumber !== void 0 ? minPriceNumber : 0,
+                        max: maxPriceNumber !== null && maxPriceNumber !== void 0 ? maxPriceNumber : 0,
+                        step: step,
+                        onChange: function(val) {
                             if (!previewMode) {
-                                setIsUpdatingPrice(true);
+                                onNumFlexPriceChange === null || onNumFlexPriceChange === void 0 ? void 0 : onNumFlexPriceChange(val);
                             }
                         },
-                        children: "Change Amount"
+                        tooltip: {
+                            formatter: function() {
+                                return numFlexPrice;
+                            }
+                        }
                     })
                 ]
             }),
@@ -933,7 +930,7 @@ function FooterLinks() {
 }
 var CheckoutSummaryWrapper = import_styled_components.default.div(_templateObject3());
 var CheckoutSummary = function(param) {
-    var product = param.product, asset = param.asset, previewMode = param.previewMode, loading = param.loading, onNumFlexPriceChange = param.onNumFlexPriceChange, numFlexPrice = param.numFlexPrice, flexPriceValid = param.flexPriceValid;
+    var product = param.product, asset = param.asset, previewMode = param.previewMode, loading = param.loading, onNumFlexPriceChange = param.onNumFlexPriceChange, numFlexPrice = param.numFlexPrice;
     return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(CheckoutSummaryWrapper, {
         style: previewMode ? {
             maxHeight: 550
@@ -945,8 +942,7 @@ var CheckoutSummary = function(param) {
                 asset: asset,
                 loading: loading,
                 onNumFlexPriceChange: onNumFlexPriceChange,
-                numFlexPrice: numFlexPrice,
-                flexPriceValid: flexPriceValid
+                numFlexPrice: numFlexPrice
             }),
             /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", {
                 children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(FooterLinks, {})
@@ -5850,7 +5846,7 @@ var Wrapper = (0, import_styled_components3.default)(import_antd7.Layout)(_templ
 var ContentWrapper = (0, import_styled_components3.default)(Content)(_templateObject7());
 var MainContent = (0, import_styled_components3.default)(import_antd7.Row)(_templateObject8());
 var CheckoutPreview = function(param) {
-    var checkoutData = param.checkoutData, _param_previewMode = param.previewMode, previewMode = _param_previewMode === void 0 ? true : _param_previewMode, _param_isShowAfterPayment = param.isShowAfterPayment, isShowAfterPayment = _param_isShowAfterPayment === void 0 ? false : _param_isShowAfterPayment, _param_loading = param.loading, loading = _param_loading === void 0 ? false : _param_loading, HandlePaymentComponent = param.HandlePaymentComponent, onNumFlexPriceChange = param.onNumFlexPriceChange, numFlexPrice = param.numFlexPrice, flexPriceValid = param.flexPriceValid, validateFlexPrice = param.validateFlexPrice;
+    var checkoutData = param.checkoutData, _param_previewMode = param.previewMode, previewMode = _param_previewMode === void 0 ? true : _param_previewMode, _param_isShowAfterPayment = param.isShowAfterPayment, isShowAfterPayment = _param_isShowAfterPayment === void 0 ? false : _param_isShowAfterPayment, _param_loading = param.loading, loading = _param_loading === void 0 ? false : _param_loading, HandlePaymentComponent = param.HandlePaymentComponent, onNumFlexPriceChange = param.onNumFlexPriceChange, numFlexPrice = param.numFlexPrice;
     var branding = checkoutData.branding, item = checkoutData.item, assetId = checkoutData.assetId, networkId = checkoutData.networkId, afterPayment = checkoutData.afterPayment, payee = checkoutData.payee, checkoutType = checkoutData.checkoutType;
     var price = item.price, name = item.name;
     var checkoutPrice = price.type === "fixed" ? price.value : numFlexPrice ? priceFormatHelper.toSmallestUnit(numFlexPrice, {
@@ -5886,8 +5882,7 @@ var CheckoutPreview = function(param) {
                                 },
                                 previewMode: previewMode,
                                 onNumFlexPriceChange: onNumFlexPriceChange,
-                                numFlexPrice: numFlexPrice,
-                                flexPriceValid: flexPriceValid
+                                numFlexPrice: numFlexPrice
                             })
                         }),
                         /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_antd7.Col, {
@@ -5913,7 +5908,6 @@ var CheckoutPreview = function(param) {
                                     },
                                     productName: name
                                 },
-                                validateFlexPrice: validateFlexPrice,
                                 priceType: item.price.type,
                                 numFlexPrice: numFlexPrice,
                                 checkoutType: checkoutType

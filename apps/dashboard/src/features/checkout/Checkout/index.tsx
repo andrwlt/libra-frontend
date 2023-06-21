@@ -91,7 +91,6 @@ const CheckoutDetails = () => {
         const price: NumberPrice = form.getFieldValue(['item', 'price']);
 
         Object.entries(price).forEach(([name, fieldValue]) => {
-
           if (name !== 'type' && fieldValue) {
             form.setFieldValue(['item', 'price', name], undefined);
           }
@@ -163,7 +162,7 @@ const CheckoutDetails = () => {
       forceRender: true,
       key: PRODUCT_STEP_KEY,
       label: t('product'),
-      children: <ProductFormItems onFieldsChange={onFieldsChange} />,
+      children: <ProductFormItems />,
     },
     {
       key: BRANDING_STEP_KEY,
@@ -191,6 +190,7 @@ const CheckoutDetails = () => {
         <CheckoutFormWrapper background={colorBgBase} boxShadow={boxShadow}>
           <div style={{ width: '100%', maxWidth: '440px' }}>
             <Form
+              requiredMark={false}
               autoComplete="off"
               disabled={getCheckoutLoading || isSubmitLoading}
               layout="vertical"
@@ -213,7 +213,6 @@ const CheckoutDetails = () => {
               <RedirectPreviewer />
             ) : (
               <CheckoutComponent
-                flexPriceValid={true}
                 loading={getCheckoutLoading}
                 checkoutData={previewingCheckout}
                 isShowAfterPayment={isShowAfterPayment}

@@ -118,3 +118,8 @@ body {
 .cursor-pointer {
   cursor: pointer !important;
 }
+
+.product-upload .ant-upload {
+  margin-right: 0px !important;
+  margin-bottom: 0px !important;
+}

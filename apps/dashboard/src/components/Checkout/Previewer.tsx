@@ -105,7 +105,7 @@ export default function Previewer({
         height: `${small ? smallHeight : height}px`,
         boxShadow,
         ...style,
-        marginLeft: small ? '0' : 'auto',
+        marginLeft: small ? '0' : '0',
       }}
     >
       <PreviewHeader>

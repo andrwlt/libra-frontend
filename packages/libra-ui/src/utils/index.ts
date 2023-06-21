@@ -2,6 +2,7 @@ import { Asset, AssetMetadata } from 'app/types';
 import { getAssetMetadata, getNetwork } from './asset';
 import JSBI from 'jsbi';
 import { encodeAddress } from '@polkadot/util-crypto';
+import bigDecimal from 'js-big-decimal';
 
 function toReverseArray(str: string) {
   const splitString = str.split('');
@@ -82,6 +83,10 @@ function exponentToStringDecimals(num: number) {
   }
 }
 
+const preventFloatingPoint = (amount: number, decimal?: number) => {
+  return Number(bigDecimal.round(amount, decimal || 0));
+};
+
 function toSmallestUnit(originAmount: number, asset: Asset) {
   try {
     const metadata = getAssetMetadata(asset);
@@ -89,14 +94,23 @@ function toSmallestUnit(originAmount: number, asset: Asset) {
       return 0;
     }
 
-    let amount = originAmount;
-    let decimals = metadata?.decimals;
+    let decimals = metadata.decimals;
+    let amount = preventFloatingPoint(originAmount, decimals);
 
     if (!Number.isInteger(amount)) {
       // avoid scientific notation issue
-      const decimalLength = exponentToStringDecimals(amount).split('.')[1].length;
+      let decimalLength = exponentToStringDecimals(amount).split('.')[1].length;
+
+      if (decimalLength > decimals) {
+        decimalLength = 0;
+      }
+
       decimals = decimals - decimalLength;
+
       amount = amount * Math.pow(10, decimalLength);
+
+      // avoid floating point number issue
+      amount = preventFloatingPoint(amount);
     }
 
     const scale = JSBI.exponentiate(JSBI.BigInt(10), JSBI.BigInt(decimals));

@@ -361,12 +361,7 @@ const CheckoutDetails = () => {
           </Title>
 
           <Previewer small>
-            <CheckoutComponent
-              flexPriceValid={true}
-              loading={false}
-              checkoutData={checkout}
-              isShowAfterPayment={false}
-            />
+            <CheckoutComponent loading={false} checkoutData={checkout} isShowAfterPayment={false} />
           </Previewer>
         </Col>
       </Row>

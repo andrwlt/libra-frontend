@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { Row, Layout, Col } from 'antd';
 import CheckoutSummary from './Left/CheckoutSummary';
 import PaymentPreviewer from './Right/PaymentPreviewer';
-import { Checkout, NumFlexPrice, FlexPriceValid, CheckoutResponse } from 'app/types';
+import { Checkout, NumFlexPrice, CheckoutResponse } from 'app/types';
 import CheckoutBrand from './Brand';
 import AfterPaymentPreviewer from './Right/AfterPaymentPreviewer';
 import 'app/i18n';
@@ -52,8 +52,6 @@ const CheckoutPreview = ({
   HandlePaymentComponent,
   onNumFlexPriceChange,
   numFlexPrice,
-  flexPriceValid,
-  validateFlexPrice,
 }: {
   checkoutData: Checkout | CheckoutResponse;
   previewMode?: boolean;
@@ -61,9 +59,7 @@ const CheckoutPreview = ({
   loading?: boolean;
   HandlePaymentComponent?: any;
   onNumFlexPriceChange?: (price: NumFlexPrice) => void;
-  validateFlexPrice?: (price: NumFlexPrice) => FlexPriceValid;
   numFlexPrice?: NumFlexPrice;
-  flexPriceValid: FlexPriceValid;
 }) => {
   const { branding, item, assetId, networkId, afterPayment, payee, checkoutType } = checkoutData;
   const { price, name } = item;
@@ -99,7 +95,6 @@ const CheckoutPreview = ({
               previewMode={previewMode}
               onNumFlexPriceChange={onNumFlexPriceChange}
               numFlexPrice={numFlexPrice}
-              flexPriceValid={flexPriceValid}
             />
           </Col>
 
@@ -117,7 +112,6 @@ const CheckoutPreview = ({
                   asset: { assetId, networkId },
                   productName: name,
                 }}
-                validateFlexPrice={validateFlexPrice}
                 priceType={item.price.type}
                 numFlexPrice={numFlexPrice}
                 checkoutType={checkoutType}

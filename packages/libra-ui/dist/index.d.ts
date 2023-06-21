@@ -124,16 +124,14 @@ interface Payment {
 type NumFlexPrice = number | null;
 type FlexPriceValid = true | string;
 
-declare const CheckoutPreview: ({ checkoutData, previewMode, isShowAfterPayment, loading, HandlePaymentComponent, onNumFlexPriceChange, numFlexPrice, flexPriceValid, validateFlexPrice, }: {
+declare const CheckoutPreview: ({ checkoutData, previewMode, isShowAfterPayment, loading, HandlePaymentComponent, onNumFlexPriceChange, numFlexPrice, }: {
     checkoutData: Checkout | CheckoutResponse;
     previewMode?: boolean | undefined;
     isShowAfterPayment?: boolean | undefined;
     loading?: boolean | undefined;
     HandlePaymentComponent?: any;
     onNumFlexPriceChange?: ((price: NumFlexPrice) => void) | undefined;
-    validateFlexPrice?: ((price: NumFlexPrice) => FlexPriceValid) | undefined;
     numFlexPrice?: NumFlexPrice | undefined;
-    flexPriceValid: FlexPriceValid;
 }) => JSX.Element;
 
 declare function formatBalance(amount: string, asset: Asset): number;

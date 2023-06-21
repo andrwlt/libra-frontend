@@ -6,7 +6,6 @@ import {
   NumFlexPrice,
   Payment,
   priceFormatHelper,
-  FlexPriceValid,
 } from '@atscale/libra-ui';
 import { useEffect, useMemo, useState } from 'react';
 import { ExtensionDictionary } from 'types';
@@ -155,12 +154,14 @@ export const useFlexiblePrice = (checkout: CheckoutResponse) => {
     networkId,
   } = checkout;
 
-  const { numberFlexiblePrice, numberMinPrice, numberMaxPrice } = useMemo(() => {
+  const asset = { assetId, networkId };
+
+  const { numberFlexiblePrice } = useMemo(() => {
     if (priceType === 'fixed') {
       return {};
     } else {
       const getNumPrice = (price: string | undefined) => {
-        return price ? priceFormatHelper.formatBalance(price, { assetId, networkId }) : undefined;
+        return price ? priceFormatHelper.formatBalance(price, asset) : undefined;
       };
       return {
         numberFlexiblePrice: getNumPrice(presetPrice),
@@ -174,37 +175,16 @@ export const useFlexiblePrice = (checkout: CheckoutResponse) => {
     return numberFlexiblePrice ?? null;
   });
 
-  const [flexPriceValid, setFlexPriceValid] = useState<FlexPriceValid>(true);
-
-  const validateFlexPrice = (price: number | null) => {
-    let priceValid: FlexPriceValid = true;
-
-    if (!price) {
-      priceValid = 'Price is Required!';
-    } else {
-      if (numberMinPrice && price < numberMinPrice) {
-        priceValid = `Price must be greater or equal to ${priceFormatHelper.exponentToStringDecimals(numberMinPrice)}`;
-      }
-
-      if (numberMaxPrice && price > numberMaxPrice) {
-        priceValid = `Price must be less than or equal to ${priceFormatHelper.exponentToStringDecimals(
-          numberMaxPrice,
-        )}`;
-      }
-    }
-    setFlexPriceValid(priceValid);
-    return priceValid;
-  };
-
   const onNumFlexPriceChange = (price: number | null) => {
-    validateFlexPrice(price);
-    setNumFlexPrice(price);
+    const stringPrice = priceFormatHelper.toSmallestUnit(price || 0, asset);
+    if (stringPrice) {
+      const roundedPrice = priceFormatHelper.formatBalance(stringPrice, asset);
+      setNumFlexPrice(roundedPrice);
+    }
   };
 
   return {
     numFlexPrice,
     onNumFlexPriceChange,
-    flexPriceValid,
-    validateFlexPrice,
   };
 };
