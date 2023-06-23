@@ -8,7 +8,7 @@ import WebhookForm from './WebhookForm';
 import type { MenuProps } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import { EllipsisOutlined, PlusOutlined } from '@ant-design/icons';
-import { useWebhooks, useDeleteWebhook, useUpdateWebhook } from 'features/webhook/webhookHooks';
+import { useWebhooks, useDeleteWebhook, useUpdateWebhook, useResetWebhook } from 'features/webhook/webhookHooks';
 import { WebhookResponse } from './types';
 import getTableLoaderProps from 'components/Common/TableLoader';
 import { SubTableCard } from 'components/Common/Styled';
@@ -21,6 +21,7 @@ const Webhooks = () => {
   const [openedPopconfirmDisable, setOpenedPopconfirmDisable] = useState('');
   const { webhooks, getWebhooksLoading, webhooksPaging, refreshCurrentPage } = useWebhooks();
   const { onGoBack, onGoNext, goToFirstPage } = usePageChange(webhooksPaging);
+  useResetWebhook();
 
   const afterUpdatingSucceeded = () => {
     setIsFormOpen(false);

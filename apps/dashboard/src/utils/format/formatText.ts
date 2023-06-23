@@ -10,6 +10,12 @@ export function truncate(address: string, config?: { start: number; end: number 
   return `${address.slice(0, start)} ... ${address.slice(-end)}`;
 }
 
+export function formatAPIKey(apiKey: string, config?: { start: number; end: number }) {
+  const start = config?.start ?? 6;
+  const end = config?.end ?? 4;
+  return `${apiKey.slice(0, start)} ............... ${apiKey.slice(-end)}`;
+}
+
 export const getCheckoutLink = (id: string) => {
   return `${process.env.REACT_APP_CHECKOUT_URL}/${id}`;
 };

@@ -6,7 +6,6 @@ import {
   WebhookListState,
   WebhookResponse,
   DeleteWebhookState,
-  GetSecretKeyState,
 } from './types';
 import { createAppAsyncThunk } from 'app/hooks';
 import webhookAPI from './webhookAPI';
@@ -64,20 +63,7 @@ export const deleteWebhook = createAppAsyncThunk(
   },
 );
 
-export const getSecretKey = createAppAsyncThunk('webhook/getSecretKey', async (_, { rejectWithValue }) => {
-  try {
-    return await webhookAPI.getSecretKey();
-  } catch (err) {
-    return rejectWithValue(err);
-  }
-});
-
-interface WebhookState
-  extends WebhookListState,
-    CreateWebhookState,
-    UpdateWebhookState,
-    DeleteWebhookState,
-    GetSecretKeyState {
+interface WebhookState extends WebhookListState, CreateWebhookState, UpdateWebhookState, DeleteWebhookState {
   isFirstLoad: boolean;
 }
 
@@ -102,26 +88,22 @@ const initialState: WebhookState = {
   deleteWebhookLoading: false,
   deleteWebhookSuccess: undefined,
   deleteWebhookFailed: undefined,
-
-  getSecretKeyLoading: false,
-  secretKey: undefined,
-  getSecretKeyFailed: undefined,
 };
 
 export const webhookSlice = createSlice({
   name: 'webhook',
   initialState,
   reducers: {
-    resetWebhook() {
-      return initialState;
+    resetWebhook(state: any) {
+      Object.entries(initialState).forEach(([key, initVal]) => {
+        if (key !== 'isFirstLoad') {
+          state[key] = initVal;
+        }
+      });
     },
 
-    setFirstLoad(state, { payload }) {
-      state.isFirstLoad = payload;
-    },
-
-    removeSecretKey(state) {
-      state.secretKey = undefined;
+    resetFirstLoad(state, ) {
+      state.isFirstLoad = true;
     },
   },
   extraReducers: (builder) => {
@@ -178,18 +160,6 @@ export const webhookSlice = createSlice({
         state.deleteWebhookFailed = payload;
       })
 
-      .addCase(getSecretKey.pending, (state) => {
-        state.getSecretKeyLoading = true;
-      })
-      .addCase(getSecretKey.fulfilled, (state, { payload }) => {
-        state.getSecretKeyLoading = false;
-        state.secretKey = payload;
-      })
-      .addCase(getSecretKey.rejected, (state, { payload }) => {
-        state.getSecretKeyLoading = false;
-        state.getSecretKeyFailed = payload;
-      })
-
       .addCase(resetStore, () => {
         return initialState;
       });
@@ -229,16 +199,8 @@ export const selectDeleteWebhookState = ({
   deleteWebhookSuccess,
 });
 
-export const selectGetSecretKeyState = ({
-  webhook: { getSecretKeyFailed, getSecretKeyLoading, secretKey },
-}: RootState): GetSecretKeyState => ({
-  getSecretKeyFailed,
-  getSecretKeyLoading,
-  secretKey,
-});
-
 export const selectFirstLoadState = ({ webhook: { isFirstLoad } }: RootState) => isFirstLoad;
 
-export const { resetWebhook, setFirstLoad, removeSecretKey } = webhookSlice.actions;
+export const { resetWebhook, resetFirstLoad } = webhookSlice.actions;
 
 export default webhookSlice.reducer as Reducer<WebhookState>;

@@ -5,6 +5,7 @@ import layout from './layout';
 import webhook from './webhook';
 import checkout from './checkout';
 import payment from './payment';
+import apiKey from './apiKey';
 
 const en = {
   funnyQuotes,
@@ -14,6 +15,7 @@ const en = {
   webhook,
   checkout,
   payment,
+  apiKey,
 };
 
 export default en;

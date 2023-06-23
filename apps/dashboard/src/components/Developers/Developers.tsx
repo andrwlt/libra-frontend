@@ -10,6 +10,7 @@ import { MenuWrapper } from 'components/AppLayout/Styled';
 import { useFirstLoad, useResetWebhook } from 'features/webhook/webhookHooks';
 import Loading from 'components/Common/Loading';
 import { LOCALE_WORKSPACE } from 'app/i18n';
+import { useAPIKeyFirstLoad } from 'features/apiKey/apiKeyHooks';
 
 const DeveloperMenu = () => {
   const { t } = useTranslation(LOCALE_WORKSPACE.LAYOUT);
@@ -70,9 +71,10 @@ const PageHeader = styled.div`
 
 const Developers = () => {
   const { t } = useTranslation(LOCALE_WORKSPACE.LAYOUT);
-  const { isFirstLoad } = useFirstLoad();
+  const isFirstLoad = useFirstLoad();
+  const isAPIKeyFirstLoad = useAPIKeyFirstLoad();
   useResetWebhook();
-  
+
   return (
     <Wrapper>
       <PageHeader>
@@ -82,7 +84,7 @@ const Developers = () => {
       </PageHeader>{' '}
       <DeveloperMenu />
       <Outlet />
-      <Loading isContentPage loading={isFirstLoad} />
+      <Loading isContentPage loading={isFirstLoad && isAPIKeyFirstLoad} />
     </Wrapper>
   );
 };

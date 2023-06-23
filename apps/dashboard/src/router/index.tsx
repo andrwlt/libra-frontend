@@ -11,7 +11,7 @@ import Onboarding from 'features/checkout/Onboarding';
 
 import Developers from 'components/Developers/Developers';
 import Webhooks from 'features/webhook/Webhooks';
-import ApiKeys from 'features/webhook/ApiKeys';
+import ApiKeys from 'features/apiKey/APIKeys';
 import CheckoutDetails from 'features/checkout/CheckoutDetails';
 
 const routes: RouteObject[] = [

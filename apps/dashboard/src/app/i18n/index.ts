@@ -25,6 +25,7 @@ export const LOCALE_WORKSPACE = {
   PAYMENT: 'payment',
   WEBHOOK: 'webhook',
   WORDING: 'wording',
+  API_KEY: 'apiKey',
 };
 
 export default i18n;

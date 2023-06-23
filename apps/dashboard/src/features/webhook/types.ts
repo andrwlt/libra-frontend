@@ -1,4 +1,4 @@
-import { PagingState, BasePagingParams } from 'types';
+import { PagingState, BasePagingParams, GetListResponse } from 'types';
 import { AxiosPromise } from 'axios';
 export interface WebhookBase {
   url: string;
@@ -22,15 +22,6 @@ export interface WebhookListState {
 
 export interface UseWebhooksReturnType extends WebhookListState {
   refreshCurrentPage: () => void;
-}
-
-export interface WebhookAPI {
-  getWebhooks: (params?: BasePagingParams) => AxiosPromise;
-  getWebhook: (id: string) => AxiosPromise;
-  createWebhook: (checkout: WebhookBase) => AxiosPromise;
-  updateWebhook: (checkout: WebhookResponse) => AxiosPromise;
-  deleteWebhook: (id: string) => AxiosPromise;
-  getSecretKey: () => Promise<any>;
 }
 
 export interface CreateWebhookState {
@@ -68,8 +59,10 @@ export interface DeleteWebhookHook extends DeleteWebhookState {
   handleDeleteWebhook: (id: string) => void;
 }
 
-export interface GetSecretKeyState {
-  getSecretKeyLoading: boolean;
-  secretKey?: string;
-  getSecretKeyFailed: any;
+export interface WebhookAPI {
+  getWebhooks: (params?: BasePagingParams) => AxiosPromise;
+  getWebhook: (id: string) => AxiosPromise;
+  createWebhook: (checkout: WebhookBase) => AxiosPromise;
+  updateWebhook: (checkout: WebhookResponse) => AxiosPromise;
+  deleteWebhook: (id: string) => AxiosPromise;
 }
