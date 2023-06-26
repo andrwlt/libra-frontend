@@ -1,6 +1,6 @@
 import { ApiPromise, WsProvider } from '@polkadot/api';
 import JSBI from 'jsbi';
-import { Asset, getSs58AddressByAsset } from '@atscale/libra-ui';
+import { Asset, getSs58AddressByAsset, getAssetNetworkConfig } from '@atscale/libra-ui';
 
 const connections: Record<string, ApiPromise> = {};
 
@@ -30,6 +30,18 @@ const getPaymentInfo = async (tx: any, account: any, asset: any) => {
   }
 };
 
+const buildTx = (connection: ApiPromise, asset: Asset, to: string, amount: number) => {
+  const { config } = getAssetNetworkConfig(asset);
+
+  const ss58Address = getSs58AddressByAsset(to, asset);
+
+  if (config.isNative) {
+    return connection.tx.balances.transferKeepAlive(ss58Address, amount);
+  }
+
+  return connection.tx.assets.transferKeepAlive(config.tokenId, ss58Address, amount);
+};
+
 export async function createTransferTx(
   rpc: string,
   account: any,
@@ -39,7 +51,9 @@ export async function createTransferTx(
 ): Promise<string> {
   const connection = await createConnection(rpc);
   connection.setSigner(account.signer);
-  const tx = connection.tx.balances.transferKeepAlive(getSs58AddressByAsset(to, asset), amount);
+
+  const tx = buildTx(connection, asset, to, amount);
+
   const existentialDeposit = connection.consts.balances.existentialDeposit.toString();
 
   const [balance, paymentInfo] = await Promise.all([
