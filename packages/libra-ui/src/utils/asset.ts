@@ -1,4 +1,4 @@
-import { AssetMetadata, Asset, Network } from 'app/types';
+import { AssetMetadata, Asset, Network, AssetConfigNetwork } from 'app/types';
 import { ASSETS_CONFIG, NETWORKS_CONFIG } from 'config';
 
 export const getWalletNetworks = () => {
@@ -42,4 +42,19 @@ export const getNetwork = (asset: Asset) => {
   const netWork = NETWORKS_CONFIG.find(({ id }) => id === asset.networkId);
   const initNetwork: Network = { id: '', name: '', type: 'substrate', rpc: '', config: {} };
   return netWork ?? initNetwork;
+};
+
+export const getAssetNetworkConfig = ({ assetId, networkId }: Asset): AssetConfigNetwork => {
+  const asset = ASSETS_CONFIG.find((asset) => asset.id === assetId);
+  if (!asset) {
+    throw new Error(`Invalid asset id ${assetId}`);
+  }
+
+  const networkConfig = asset.networks.find((config) => config.networkId === networkId);
+
+  if (!networkConfig) {
+    throw new Error(`Asset ${assetId} is not available on network ${networkId}.`);
+  }
+
+  return networkConfig;
 };

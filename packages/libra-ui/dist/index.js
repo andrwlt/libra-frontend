@@ -397,6 +397,9 @@ __export(src_exports, {
     getAssetMetadata: function() {
         return getAssetMetadata;
     },
+    getAssetNetworkConfig: function() {
+        return getAssetNetworkConfig;
+    },
     getNetwork: function() {
         return getNetwork;
     },
@@ -469,6 +472,25 @@ function LibraLogo(param) {
         ]
     });
 }
+// src/config/extrinsics.ts
+var StatemintAssetTransfer = {
+    module: "assets",
+    method: "transferKeepAlive",
+    params: [
+        {
+            name: "id",
+            required: true
+        },
+        {
+            name: "target",
+            required: true
+        },
+        {
+            name: "amount",
+            required: true
+        }
+    ]
+};
 // src/config/index.ts
 var EXTENSIONS = [
     {
@@ -495,7 +517,18 @@ var NETWORKS_CONFIG = [
         id: "nw_polkadot",
         name: "Polkadot",
         type: "substrate",
+        logoUrl: "https://files.libra.atscale.xyz/file_01H3KVQANXKGZAT7249XNR60CN",
         rpc: "wss://apps-rpc.polkadot.io",
+        config: {
+            ss58Prefix: 0
+        }
+    },
+    {
+        id: "nw_statemint",
+        name: "Polkadot Asset Hub",
+        logoUrl: "https://files.libra.atscale.xyz/file_01H3V843RZK7G9EVQN3HGY5TRM",
+        type: "substrate",
+        rpc: "wss://polkadot-asset-hub-rpc.polkadot.io",
         config: {
             ss58Prefix: 0
         }
@@ -503,10 +536,21 @@ var NETWORKS_CONFIG = [
     {
         id: "nw_kusama",
         name: "Kusama",
+        logoUrl: "https://raw.githubusercontent.com/paritytech/polkadot-staking-dashboard/master/src/img/kusama_icon.svg",
         type: "substrate",
         rpc: "wss://kusama-rpc.polkadot.io",
         config: {
             ss58Prefix: 2
+        }
+    },
+    {
+        id: "nw_westendmint",
+        name: "Westend Asset Hub",
+        logoUrl: "https://files.libra.atscale.xyz/file_01H3V843RZK7G9EVQN3HGY5TRM",
+        type: "substrate",
+        rpc: "wss://westmint-rpc-tn.dwellir.com",
+        config: {
+            ss58Prefix: 0
         }
     }
 ];
@@ -516,7 +560,7 @@ var ASSETS_CONFIG = [
         symbol: "dot",
         name: "Polkadot",
         decimals: 10,
-        logoUrl: "https://avatars.githubusercontent.com/u/33775474?s=200&v=4",
+        logoUrl: "https://files.libra.atscale.xyz/file_01H3KVQANXKGZAT7249XNR60CN",
         networks: [
             {
                 networkId: "nw_polkadot",
@@ -552,6 +596,40 @@ var ASSETS_CONFIG = [
                 networkId: "nw_westend",
                 config: {
                     isNative: true
+                }
+            }
+        ]
+    },
+    {
+        id: "ast_usdt",
+        symbol: "usdt",
+        name: "USDT",
+        decimals: 6,
+        logoUrl: "https://files.libra.atscale.xyz/file_01H3KT8SM33882ADRJACER8TMJ",
+        networks: [
+            {
+                networkId: "nw_statemint",
+                config: {
+                    isNative: false,
+                    tokenId: 1984,
+                    transferMethod: StatemintAssetTransfer
+                }
+            }
+        ]
+    },
+    {
+        id: "ast_lusd",
+        symbol: "lusd",
+        name: "Libra USD",
+        decimals: 6,
+        logoUrl: "https://files.libra.atscale.xyz/file_01H3KT8SM33882ADRJACER8TMJ",
+        networks: [
+            {
+                networkId: "nw_westendmint",
+                config: {
+                    isNative: false,
+                    tokenId: 1995,
+                    transferMethod: StatemintAssetTransfer
                 }
             }
         ]
@@ -614,6 +692,22 @@ var getNetwork = function(asset) {
         config: {}
     };
     return netWork !== null && netWork !== void 0 ? netWork : initNetwork;
+};
+var getAssetNetworkConfig = function(param) {
+    var assetId = param.assetId, networkId = param.networkId;
+    var asset = ASSETS_CONFIG.find(function(asset2) {
+        return asset2.id === assetId;
+    });
+    if (!asset) {
+        throw new Error("Invalid asset id ".concat(assetId));
+    }
+    var networkConfig = asset.networks.find(function(config) {
+        return config.networkId === networkId;
+    });
+    if (!networkConfig) {
+        throw new Error("Asset ".concat(assetId, " is not available on network ").concat(networkId, "."));
+    }
+    return networkConfig;
 };
 // src/utils/index.ts
 var import_jsbi = __toESM(require("jsbi"));
@@ -6105,6 +6199,7 @@ var WalletList_default = WalletList;
     WalletList: WalletList,
     extensionAPI: extensionAPI,
     getAssetMetadata: getAssetMetadata,
+    getAssetNetworkConfig: getAssetNetworkConfig,
     getNetwork: getNetwork,
     getNetworkAssets: getNetworkAssets,
     getSs58AddressByAsset: getSs58AddressByAsset,

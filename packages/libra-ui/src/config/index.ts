@@ -1,4 +1,5 @@
 import { Network, AssetConfig, ExtensionConfig } from 'app/types';
+import { StatemintAssetTransfer } from './extrinsics';
 
 export const EXTENSIONS: ExtensionConfig[] = [
   {
@@ -26,19 +27,40 @@ export const NETWORKS_CONFIG: Network[] = [
     id: 'nw_polkadot',
     name: 'Polkadot',
     type: 'substrate',
+    logoUrl: 'https://files.libra.atscale.xyz/file_01H3KVQANXKGZAT7249XNR60CN',
     rpc: 'wss://apps-rpc.polkadot.io',
     config: {
       ss58Prefix: 0,
     },
   },
-
+  {
+    id: 'nw_statemint',
+    name: 'Polkadot Asset Hub',
+    logoUrl: 'https://files.libra.atscale.xyz/file_01H3V843RZK7G9EVQN3HGY5TRM',
+    type: 'substrate',
+    rpc: 'wss://polkadot-asset-hub-rpc.polkadot.io',
+    config: {
+      ss58Prefix: 0,
+    },
+  },
   {
     id: 'nw_kusama',
     name: 'Kusama',
+    logoUrl: 'https://raw.githubusercontent.com/paritytech/polkadot-staking-dashboard/master/src/img/kusama_icon.svg',
     type: 'substrate',
     rpc: 'wss://kusama-rpc.polkadot.io',
     config: {
       ss58Prefix: 2,
+    },
+  },
+  {
+    id: 'nw_westendmint',
+    name: 'Westend Asset Hub',
+    logoUrl: 'https://files.libra.atscale.xyz/file_01H3V843RZK7G9EVQN3HGY5TRM',
+    type: 'substrate',
+    rpc: 'wss://westmint-rpc-tn.dwellir.com',
+    config: {
+      ss58Prefix: 0,
     },
   },
 ];
@@ -49,7 +71,7 @@ export const ASSETS_CONFIG: AssetConfig[] = [
     symbol: 'dot',
     name: 'Polkadot',
     decimals: 10,
-    logoUrl: 'https://avatars.githubusercontent.com/u/33775474?s=200&v=4',
+    logoUrl: 'https://files.libra.atscale.xyz/file_01H3KVQANXKGZAT7249XNR60CN',
     networks: [
       {
         networkId: 'nw_polkadot',
@@ -85,6 +107,40 @@ export const ASSETS_CONFIG: AssetConfig[] = [
         networkId: 'nw_westend',
         config: {
           isNative: true,
+        },
+      },
+    ],
+  },
+  {
+    id: 'ast_usdt',
+    symbol: 'usdt',
+    name: 'USDT',
+    decimals: 6,
+    logoUrl: 'https://files.libra.atscale.xyz/file_01H3KT8SM33882ADRJACER8TMJ',
+    networks: [
+      {
+        networkId: 'nw_statemint',
+        config: {
+          isNative: false,
+          tokenId: 1984,
+          transferMethod: StatemintAssetTransfer,
+        },
+      },
+    ],
+  },
+  {
+    id: 'ast_lusd',
+    symbol: 'lusd',
+    name: 'Libra USD',
+    decimals: 6,
+    logoUrl: 'https://files.libra.atscale.xyz/file_01H3KT8SM33882ADRJACER8TMJ',
+    networks: [
+      {
+        networkId: 'nw_westendmint',
+        config: {
+          isNative: false,
+          tokenId: 1995,
+          transferMethod: StatemintAssetTransfer,
         },
       },
     ],
