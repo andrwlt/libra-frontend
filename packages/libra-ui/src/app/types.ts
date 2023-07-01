@@ -80,7 +80,7 @@ export interface Network {
   name: string;
   type: 'substrate' | 'evm';
   rpc: string;
-  logo?: string;
+  logoUrl?: string;
   config: {
     ss58Prefix?: number;
     chainId?: number;
@@ -95,11 +95,24 @@ interface AssetConfigInformation {
   logoUrl: string;
 }
 
-interface AssetConfigNetwork {
+interface SubstrateExtrinsicParam {
+  name: string;
+  required: boolean;
+}
+
+export interface SubstrateExtrinsic {
+  module: string;
+  method: string;
+  params: SubstrateExtrinsicParam[];
+}
+
+export interface AssetConfigNetwork {
   networkId: string;
   config: {
     isNative: boolean;
     tokenAddress?: string;
+    tokenId?: number;
+    transferMethod?: SubstrateExtrinsic;
   };
 }
 export interface AssetConfig extends AssetConfigInformation {

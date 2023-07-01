@@ -1,6 +1,6 @@
 import CheckoutComponent from 'components/Checkout';
 import { priceFormatHelper, getSs58AddressByAsset } from 'utils';
-import { getNetwork, getNetworkAssets, getWalletNetworks, getAssetMetadata } from 'utils/asset';
+import { getNetwork, getNetworkAssets, getWalletNetworks, getAssetMetadata, getAssetNetworkConfig } from 'utils/asset';
 import extensionAPI from 'utils/extension';
 import {
   AssetMetadata,
@@ -39,6 +39,7 @@ export {
   getNetworkAssets,
   getWalletNetworks,
   getAssetMetadata,
+  getAssetNetworkConfig,
   extensionAPI,
   EXTENSIONS,
   AccountOption,

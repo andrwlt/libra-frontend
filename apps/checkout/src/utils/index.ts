@@ -1,6 +1,3 @@
-import PolkadotNetWorkIcon from 'assets/polkadot-network.svg';
-import KusamaNetWorkIcon from 'assets/kusama-network.svg';
-
 export const saveConnectedExtension = (extensionId: string): void => {
   localStorage.setItem(extensionId, 'connected');
 };
@@ -22,17 +19,4 @@ export const getErrorMessage = (err: any) => {
   }
 
   return 'Oops! Something went wrong. Please contact help@golibra.xyz to get the supports.';
-};
-
-export const getNetworkLogo = (nextworkId: string) => {
-  switch (nextworkId) {
-    case 'nw_polkadot':
-      return PolkadotNetWorkIcon;
-
-    case 'nw_kusama':
-      return KusamaNetWorkIcon;
-
-    default:
-      break;
-  }
 };

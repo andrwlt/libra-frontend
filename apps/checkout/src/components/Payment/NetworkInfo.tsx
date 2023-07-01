@@ -1,7 +1,6 @@
 import { Asset, getNetwork } from '@atscale/libra-ui';
 import { Row, Typography, Form } from 'antd';
 import styled from 'styled-components';
-import { getNetworkLogo } from 'utils';
 
 const Wrapper = styled(Row)`
   height: 50px;
@@ -19,12 +18,11 @@ const { Text } = Typography;
 
 const NetworkInfo = ({ asset }: { asset: Asset }) => {
   const network = getNetwork(asset);
-  const networkLogo = getNetworkLogo(network.id);
 
   return (
     <Form.Item label="Network">
       <Wrapper align="middle">
-        <img src={networkLogo} alt="icon" style={{ width: 25, objectFit: 'contain', marginRight: 7, marginLeft: 5 }} />
+        <img src={network.logoUrl} alt="icon" style={{ width: 25, objectFit: 'contain', marginRight: 7, marginLeft: 5 }} />
         <Text style={{ marginLeft: 8 }}>{network.name}</Text>
       </Wrapper>
     </Form.Item>

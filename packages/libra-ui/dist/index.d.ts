@@ -69,7 +69,7 @@ interface Network {
     name: string;
     type: 'substrate' | 'evm';
     rpc: string;
-    logo?: string;
+    logoUrl?: string;
     config: {
         ss58Prefix?: number;
         chainId?: number;
@@ -82,11 +82,22 @@ interface AssetConfigInformation {
     decimals: number;
     logoUrl: string;
 }
+interface SubstrateExtrinsicParam {
+    name: string;
+    required: boolean;
+}
+interface SubstrateExtrinsic {
+    module: string;
+    method: string;
+    params: SubstrateExtrinsicParam[];
+}
 interface AssetConfigNetwork {
     networkId: string;
     config: {
         isNative: boolean;
         tokenAddress?: string;
+        tokenId?: number;
+        transferMethod?: SubstrateExtrinsic;
     };
 }
 interface AssetMetadata extends AssetConfigInformation {
@@ -152,6 +163,7 @@ declare const getWalletNetworks: () => Network[];
 declare const getNetworkAssets: (networkId: string) => AssetMetadata[];
 declare const getAssetMetadata: (asset: Asset) => AssetMetadata;
 declare const getNetwork: (asset: Asset) => Network;
+declare const getAssetNetworkConfig: ({ assetId, networkId }: Asset) => AssetConfigNetwork;
 
 declare const extensionAPI: {
     getExtensions(): Promise<Extension[]>;
@@ -193,4 +205,4 @@ interface WalletListProps {
 }
 declare const WalletList: ({ extensionDictionary, onSelectWallet }: WalletListProps) => JSX.Element;
 
-export { Account, AccountInfo as AccountOption, Asset, AssetMetadata, BaseCheckout, BaseProduct, Checkout, CheckoutPreview as CheckoutComponent, CheckoutResponse, ConnectedExtension, ContactInformation, EXTENSIONS, Extension, ExtensionConfig, ExtensionDictionary, ExtensionId, FlexPriceValid, _default as Loading, Network, NumFlexPrice, NumberPrice, NumberPriceCheckoutResponse, NumberPriceProduct, Payment, PriceType, StringPriceProduct, WalletList, WalletType, extensionAPI, getAssetMetadata, getNetwork, getNetworkAssets, getSs58AddressByAsset, getWalletNetworks, priceFormatHelper };
+export { Account, AccountInfo as AccountOption, Asset, AssetMetadata, BaseCheckout, BaseProduct, Checkout, CheckoutPreview as CheckoutComponent, CheckoutResponse, ConnectedExtension, ContactInformation, EXTENSIONS, Extension, ExtensionConfig, ExtensionDictionary, ExtensionId, FlexPriceValid, _default as Loading, Network, NumFlexPrice, NumberPrice, NumberPriceCheckoutResponse, NumberPriceProduct, Payment, PriceType, StringPriceProduct, WalletList, WalletType, extensionAPI, getAssetMetadata, getAssetNetworkConfig, getNetwork, getNetworkAssets, getSs58AddressByAsset, getWalletNetworks, priceFormatHelper };

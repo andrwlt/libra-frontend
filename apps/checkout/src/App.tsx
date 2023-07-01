@@ -10,26 +10,22 @@ const AppWrapper = styled.div`
   height: 100vh;
 `;
 
-const checkout: CheckoutResponse = {
+const checkout: CheckoutResponse = (window as any).checkout || {
   id: 'ckt_01h1e8q2fxqta9y3f2tnfj2wp6',
-  branding: { name: 'Test' },
   item: {
-    name: 'Hung Test Kusama',
-    price: {
-      type: 'flexible',
-      value: '100000000000',
-      minimum: '60000000000',
-      maximum: '200000000000',
-      preset: '600000000005',
-    },
+    name: 'Payment on Polkadot Asset Hub',
+    image: 'https://files.libra.atscale.xyz/file_01H3KW22KJCV7HDNWWZ511DJY6',
+    description: 'Buy me coffee',
+    price: { type: 'fixed', value: '1000000' },
   },
-  networkId: 'nw_kusama',
-  assetId: 'ast_ksm',
-  payee: '5F4n3N5t3GGWmWDvrSoQryhXGQ8AayBmUUA2juS12bwdT6yJ',
-  afterPayment: { type: 'message', config: { message: '' } },
-  active: true,
-  created: '12313',
   checkoutType: 'Donate',
+  networkId: 'nw_westendmint',
+  assetId: 'ast_lusd',
+  branding: { name: 'Libra' },
+  afterPayment: { type: 'message', config: { message: '' } },
+  payee: '5FurykSxW6tXacJ3PDWMZ3MDFdJMC2e9SNvYpFNbAej4hgFD',
+  active: true,
+  created: '12324234',
 };
 
 function App() {
