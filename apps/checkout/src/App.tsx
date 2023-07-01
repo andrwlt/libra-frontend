@@ -10,7 +10,7 @@ const AppWrapper = styled.div`
   height: 100vh;
 `;
 
-const checkout: CheckoutResponse = {
+const checkout: CheckoutResponse = (window as any).checkout || {
   id: 'ckt_01h1e8q2fxqta9y3f2tnfj2wp6',
   item: {
     name: 'Payment on Polkadot Asset Hub',

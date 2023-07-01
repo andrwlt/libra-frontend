@@ -60,7 +60,7 @@ export const NETWORKS_CONFIG: Network[] = [
     type: 'substrate',
     rpc: 'wss://westmint-rpc-tn.dwellir.com',
     config: {
-      ss58Prefix: 0,
+      ss58Prefix: 42,
     },
   },
 ];
