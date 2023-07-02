@@ -144,6 +144,7 @@ const initCheckout: NumberPriceCheckoutResponse = {
   networkId: '',
   active: false,
   created: '',
+  metadata: { actionName: '' },
 };
 
 const initialState: CheckoutState = {

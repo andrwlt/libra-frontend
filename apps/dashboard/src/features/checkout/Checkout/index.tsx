@@ -213,6 +213,7 @@ const CheckoutDetails = () => {
               <RedirectPreviewer />
             ) : (
               <CheckoutComponent
+                flexPriceValid={true}
                 loading={getCheckoutLoading}
                 checkoutData={previewingCheckout}
                 isShowAfterPayment={isShowAfterPayment}

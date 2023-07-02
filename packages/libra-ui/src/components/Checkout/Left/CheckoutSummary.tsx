@@ -1,13 +1,15 @@
 import styled from 'styled-components';
-import { Image, Space, Avatar, Typography, Divider, Skeleton, Slider } from 'antd';
-import { AssetMetadata, NumberPriceProduct, Asset, NumFlexPrice, StringPriceProduct } from 'app/types';
+import { Image, Space, Avatar, Typography, Divider, Skeleton, InputNumber, Button, Form } from 'antd';
+import { AssetMetadata, NumberPriceProduct, Asset, NumFlexPrice, FlexPriceValid, StringPriceProduct } from 'app/types';
 import LibraLogo from 'components/LibraLogo';
-import { getCheckoutPrice, priceFormatHelper } from 'utils';
+import { getCheckoutPrice } from 'utils';
 import { useTranslation } from 'react-i18next';
 import { getAssetMetadata } from 'utils/asset';
 import { useEffect, useRef, useState } from 'react';
 
 const { Paragraph, Link } = Typography;
+
+const FormItem = Form.Item;
 
 const ImageWrapper = styled.div`
   margin: 32px 0;
@@ -54,22 +56,13 @@ const ProductInfoWrapper = styled.div`
   }
 `;
 
-type NumPrice = number | null | undefined;
-
-const getSliderStep = (min: NumPrice, max: NumPrice) => {
-  if (!min || !max || min >= max) {
-    return 0;
-  }
-
-  return (max - min) / 20;
-};
-
 const ProductInformation = ({
   product,
   asset,
   loading,
   onNumFlexPriceChange,
   numFlexPrice,
+  flexPriceValid,
   previewMode,
 }: {
   product: NumberPriceProduct | StringPriceProduct;
@@ -78,6 +71,7 @@ const ProductInformation = ({
   previewMode: boolean;
   onNumFlexPriceChange?: (price: NumFlexPrice) => void;
   numFlexPrice?: NumFlexPrice;
+  flexPriceValid: FlexPriceValid;
 }) => {
   const {
     name,
@@ -85,11 +79,6 @@ const ProductInformation = ({
     price: { type: priceType, value: priceValue, preset: presetPrice, minimum, maximum },
     image,
   } = product;
-
-  const minPriceNumber = typeof minimum === 'string' ? priceFormatHelper.formatBalance(minimum, asset) : minimum;
-  const maxPriceNumber = typeof maximum === 'string' ? priceFormatHelper.formatBalance(maximum, asset) : maximum;
-
-  const step = getSliderStep(minPriceNumber, maxPriceNumber);
 
   const assetMetadata: AssetMetadata = getAssetMetadata(asset);
   const [isUpdatingPrice, setIsUpdatingPrice] = useState(false);
@@ -101,50 +90,88 @@ const ProductInformation = ({
     }
   }, [isUpdatingPrice]);
 
+  const flexPriceElement = (
+    <FormItem validateStatus={flexPriceValid !== true ? 'error' : ''} help={flexPriceValid !== true && flexPriceValid}>
+      <InputNumber
+        ref={inputRef}
+        onBlur={() => {
+          if (flexPriceValid === true) {
+            setIsUpdatingPrice(false);
+          }
+        }}
+        style={{ width: 200 }}
+        value={numFlexPrice}
+        onChange={onNumFlexPriceChange}
+      />
+    </FormItem>
+  );
+
+  const isPlexPrice = priceType === 'flexible';
+
   return (
     <ProductInfoWrapper>
-      <Skeleton active className="product-name-skeleton" paragraph={false} loading={loading}>
-        <Typography.Title type="secondary" level={4} style={{ marginBottom: 0, fontWeight: 400 }}>
-          {name || 'Product name'}
-        </Typography.Title>
-      </Skeleton>
+      <div style={{ minHeight: isPlexPrice ? (description ? 170 : 140) : 0 }}>
+        <Skeleton active className="product-name-skeleton" paragraph={false} loading={loading}>
+          <Typography.Title type="secondary" level={4} style={{ marginBottom: 0, fontWeight: 400 }}>
+            {name || 'Product name'}
+          </Typography.Title>
+        </Skeleton>
 
-      <Skeleton active className="product-price-skeleton" paragraph={false} loading={loading}>
-        <Space align="start" style={{ marginTop: 10 }}>
-          {assetMetadata && <Avatar src={assetMetadata.logoUrl}>{assetMetadata.symbol}</Avatar>}
+        <Skeleton active className="product-price-skeleton" paragraph={false} loading={loading}>
+          <Space align="start" style={{ marginTop: 10 }}>
+            {assetMetadata && <Avatar src={assetMetadata.logoUrl}>{assetMetadata.symbol}</Avatar>}
 
-          {priceType === 'fixed' ? (
-            <Typography.Title level={3} style={{ margin: 0, fontSize: 32, lineHeight: '32px' }}>
-              {getCheckoutPrice({ price: priceValue ?? '0', asset }, assetMetadata)}
-            </Typography.Title>
-          ) : (
-            <div style={{ width: '100%' }}>
+            {!isPlexPrice ? (
               <Typography.Title level={3} style={{ margin: 0, fontSize: 32, lineHeight: '32px' }}>
-                {getCheckoutPrice({ price: numFlexPrice ?? presetPrice ?? '0', asset }, assetMetadata)}
+                {!!priceValue ? getCheckoutPrice({ price: priceValue, asset }, assetMetadata) : '0'}
               </Typography.Title>
-            </div>
+            ) : (
+              <div>
+                {presetPrice ? (
+                  <div>
+                    {isUpdatingPrice ? (
+                      flexPriceElement
+                    ) : (
+                      <Typography.Title
+                        level={3}
+                        style={{ margin: 0, fontSize: 32, marginBottom: 24, lineHeight: '32px' }}
+                      >
+                        {getCheckoutPrice({ price: numFlexPrice ?? presetPrice, asset }, assetMetadata)}
+                      </Typography.Title>
+                    )}
+                  </div>
+                ) : previewMode ? (
+                  <InputNumber value="" style={{ width: 200 }} />
+                ) : (
+                  flexPriceElement
+                )}
+              </div>
+            )}
+          </Space>
+
+          {isPlexPrice && presetPrice && !isUpdatingPrice && (
+            <Button
+              style={{ display: 'block', marginBottom: 10 }}
+              onClick={() => {
+                if (!previewMode) {
+                  setIsUpdatingPrice(true);
+                }
+              }}
+            >
+              Change Amount
+            </Button>
           )}
-        </Space>
+        </Skeleton>
 
-        {priceType === 'flexible' && (
-          <Slider
-            value={numFlexPrice ?? undefined}
-            min={minPriceNumber ?? 0}
-            max={maxPriceNumber ?? 0}
-            step={step}
-            onChange={(val) => {
-              if (!previewMode) {
-                onNumFlexPriceChange?.(val);
-              }
-            }}
-            tooltip={{ formatter: () => numFlexPrice }}
-          />
-        )}
-      </Skeleton>
-
-      <Skeleton active className="product-description-skeleton" paragraph={false} loading={loading}>
-        <Typography.Paragraph type="secondary">{description}</Typography.Paragraph>
-      </Skeleton>
+        <Skeleton active className="product-description-skeleton" paragraph={false} loading={loading}>
+          <Typography.Paragraph
+            style={{ marginTop: isPlexPrice ? 0 : 5, marginBottom: description ? '1em' : 0 }}
+            type="secondary"
+          >
+            {description}
+          </Typography.Paragraph>
+        </Skeleton>
+      </div>
 
       <ImageWrapper>
         {loading ? (
@@ -209,6 +236,7 @@ const CheckoutSummary = ({
   loading,
   onNumFlexPriceChange,
   numFlexPrice,
+  flexPriceValid,
 }: {
   product: NumberPriceProduct | StringPriceProduct;
   asset: Asset;
@@ -216,6 +244,7 @@ const CheckoutSummary = ({
   loading: boolean;
   onNumFlexPriceChange?: (price: NumFlexPrice) => void;
   numFlexPrice?: NumFlexPrice;
+  flexPriceValid: FlexPriceValid;
 }) => {
   return (
     <CheckoutSummaryWrapper style={previewMode ? { maxHeight: 550 } : {}}>
@@ -226,6 +255,7 @@ const CheckoutSummary = ({
         loading={loading}
         onNumFlexPriceChange={onNumFlexPriceChange}
         numFlexPrice={numFlexPrice}
+        flexPriceValid={flexPriceValid}
       />
       <div>
         <FooterLinks />

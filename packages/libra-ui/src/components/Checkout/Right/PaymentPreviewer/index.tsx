@@ -1,19 +1,20 @@
 import { useState } from 'react';
-import { Button, Typography } from 'antd';
+import { Button, Form, Typography } from 'antd';
 import { useTranslation } from 'react-i18next';
 import AccountOption from './AccountOption';
 import ContactInformation from './ContactInformation';
 import { Asset } from 'app/types';
+import NetworkInfo from './NetworkInfo';
 
 const EXAMPLE_POLKADOT_ADDRESS = '5ERjkQVj8M7v5UVZQ8qTbZ2qb1o5TgNXq9tXt2BsWF9jBpDu';
 
 export default function PaymentSummary({
   productName,
-  checkoutType,
+  actionName,
   asset,
 }: {
   productName: string;
-  checkoutType?: string | null;
+  actionName?: string | null;
   asset: Asset;
 }) {
   const { t } = useTranslation();
@@ -24,16 +25,19 @@ export default function PaymentSummary({
     <div style={{ width: 380, maxWidth: 380, marginLeft: 80 }}>
       <ContactInformation value={email} onChange={setEmail} productName={productName} />
 
-      <div>
+      <Form layout="vertical">
         <Typography.Title level={4}>{t('paymentMethod')} </Typography.Title>
-        <AccountOption
-          variant="select"
-          account={{
-            name: 'Test Account',
-            address: EXAMPLE_POLKADOT_ADDRESS,
-          }}
-          asset={asset}
-        />
+        <NetworkInfo asset={asset} />
+        <Form.Item label='Account'>
+          <AccountOption
+            variant="select"
+            account={{
+              name: 'Test Account',
+              address: EXAMPLE_POLKADOT_ADDRESS,
+            }}
+            asset={asset}
+          />
+        </Form.Item>
 
         <Button
           style={{ marginTop: 32, marginBottom: 8 }}
@@ -48,9 +52,9 @@ export default function PaymentSummary({
             }, 1000);
           }}
         >
-          {checkoutType || t('pay')}
+          {actionName || t('pay')}
         </Button>
-      </div>
+      </Form>
     </div>
   );
 }

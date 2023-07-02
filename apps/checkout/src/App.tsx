@@ -1,7 +1,7 @@
 import { CheckoutComponent, Loading } from '@atscale/libra-ui';
 import styled from 'styled-components';
 import ExtensionContext from './context';
-import { useConnectExtension, useExtensions, useFlexiblePrice } from 'hooks';
+import { useConnectExtension, useExtensions, useFlexiblePrice, useInitWallet } from 'hooks';
 import Payment from 'components/Payment';
 import { CheckoutResponse } from '@atscale/libra-ui';
 
@@ -10,7 +10,8 @@ const AppWrapper = styled.div`
   height: 100vh;
 `;
 
-const checkout: CheckoutResponse = (window as any).checkout || {
+// const checkout: CheckoutResponse = (window as any).checkout || {
+const checkout: CheckoutResponse = {
   id: 'ckt_01h1e8q2fxqta9y3f2tnfj2wp6',
   item: {
     name: 'Payment on Polkadot Asset Hub',
@@ -18,7 +19,9 @@ const checkout: CheckoutResponse = (window as any).checkout || {
     description: 'Buy me coffee',
     price: { type: 'fixed', value: '1000000' },
   },
-  checkoutType: 'Donate',
+  metadata: {
+    actionName: 'Donate',
+  },
   networkId: 'nw_westendmint',
   assetId: 'ast_lusd',
   branding: { name: 'Libra' },
@@ -31,14 +34,18 @@ const checkout: CheckoutResponse = (window as any).checkout || {
 function App() {
   const { getExtensionsLoading, extensions } = useExtensions();
   const { connectedExtension, onConnectExtension } = useConnectExtension();
-  const { numFlexPrice, onNumFlexPriceChange } = useFlexiblePrice(checkout);
+  const initWalletLoading = useInitWallet(extensions, getExtensionsLoading, onConnectExtension);
+  const { numFlexPrice, onNumFlexPriceChange, flexPriceValid, validateFlexPrice } = useFlexiblePrice(checkout);
+
   return (
     <AppWrapper className="App">
-      {getExtensionsLoading ? (
+      {initWalletLoading ? (
         <Loading isFullPage />
       ) : (
         <ExtensionContext.Provider value={{ extensions, onConnectExtension, connectedExtension }}>
           <CheckoutComponent
+            flexPriceValid={flexPriceValid}
+            validateFlexPrice={validateFlexPrice}
             numFlexPrice={numFlexPrice}
             onNumFlexPriceChange={onNumFlexPriceChange}
             previewMode={false}

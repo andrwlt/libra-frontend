@@ -31,14 +31,14 @@ const Payment = ({
   validateFlexPrice,
   priceType,
   numFlexPrice,
-  checkoutType,
+  actionName,
 }: {
   payment: PaymentType;
   onPaymentSuccess: Function;
   validateFlexPrice: (price: NumFlexPrice) => FlexPriceValid;
   priceType: PriceType;
   numFlexPrice: NumFlexPrice;
-  checkoutType?: string | null;
+  actionName?: string | null;
 }) => {
   const { connectedExtension } = useContext(ExtensionContext);
   const { account, onSelectAccount } = useAccount(connectedExtension);
@@ -114,7 +114,7 @@ const Payment = ({
                   loading={paying}
                   onClick={onPay}
                 >
-                  {checkoutType || 'Pay'}
+                  {actionName || 'Pay'}
                 </Button>
                 {paymentError && <Typography.Text type="danger">{paymentError}</Typography.Text>}
               </Form.Item>

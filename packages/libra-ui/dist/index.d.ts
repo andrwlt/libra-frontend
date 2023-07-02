@@ -47,7 +47,9 @@ interface BaseCheckout {
     networkId: string;
     afterPayment?: AfterPayment;
     payee?: string;
-    checkoutType?: string | null;
+    metadata: {
+        actionName?: string | null;
+    };
 }
 interface Checkout extends BaseCheckout {
     item: NumberPriceProduct;
@@ -135,7 +137,7 @@ interface Payment {
 type NumFlexPrice = number | null;
 type FlexPriceValid = true | string;
 
-declare const CheckoutPreview: ({ checkoutData, previewMode, isShowAfterPayment, loading, HandlePaymentComponent, onNumFlexPriceChange, numFlexPrice, }: {
+declare const CheckoutPreview: ({ checkoutData, previewMode, isShowAfterPayment, loading, HandlePaymentComponent, onNumFlexPriceChange, numFlexPrice, flexPriceValid, validateFlexPrice, }: {
     checkoutData: Checkout | CheckoutResponse;
     previewMode?: boolean | undefined;
     isShowAfterPayment?: boolean | undefined;
@@ -143,6 +145,8 @@ declare const CheckoutPreview: ({ checkoutData, previewMode, isShowAfterPayment,
     HandlePaymentComponent?: any;
     onNumFlexPriceChange?: ((price: NumFlexPrice) => void) | undefined;
     numFlexPrice?: NumFlexPrice | undefined;
+    validateFlexPrice?: ((price: NumFlexPrice) => FlexPriceValid) | undefined;
+    flexPriceValid: FlexPriceValid;
 }) => JSX.Element;
 
 declare function formatBalance(amount: string, asset: Asset): number;
@@ -158,6 +162,7 @@ declare const priceFormatHelper: {
     exponentToStringDecimals: typeof exponentToStringDecimals;
 };
 declare function getSs58AddressByAsset(address: string, asset: Asset): string;
+declare const isPriceTooLong: (price: any) => boolean;
 
 declare const getWalletNetworks: () => Network[];
 declare const getNetworkAssets: (networkId: string) => AssetMetadata[];
@@ -205,4 +210,4 @@ interface WalletListProps {
 }
 declare const WalletList: ({ extensionDictionary, onSelectWallet }: WalletListProps) => JSX.Element;
 
-export { Account, AccountInfo as AccountOption, Asset, AssetMetadata, BaseCheckout, BaseProduct, Checkout, CheckoutPreview as CheckoutComponent, CheckoutResponse, ConnectedExtension, ContactInformation, EXTENSIONS, Extension, ExtensionConfig, ExtensionDictionary, ExtensionId, FlexPriceValid, _default as Loading, Network, NumFlexPrice, NumberPrice, NumberPriceCheckoutResponse, NumberPriceProduct, Payment, PriceType, StringPriceProduct, WalletList, WalletType, extensionAPI, getAssetMetadata, getAssetNetworkConfig, getNetwork, getNetworkAssets, getSs58AddressByAsset, getWalletNetworks, priceFormatHelper };
+export { Account, AccountInfo as AccountOption, Asset, AssetMetadata, BaseCheckout, BaseProduct, Checkout, CheckoutPreview as CheckoutComponent, CheckoutResponse, ConnectedExtension, ContactInformation, EXTENSIONS, Extension, ExtensionConfig, ExtensionDictionary, ExtensionId, FlexPriceValid, _default as Loading, Network, NumFlexPrice, NumberPrice, NumberPriceCheckoutResponse, NumberPriceProduct, Payment, PriceType, StringPriceProduct, WalletList, WalletType, extensionAPI, getAssetMetadata, getAssetNetworkConfig, getNetwork, getNetworkAssets, getSs58AddressByAsset, getWalletNetworks, isPriceTooLong, priceFormatHelper };

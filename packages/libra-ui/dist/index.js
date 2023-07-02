@@ -168,7 +168,7 @@ function _templateObject3() {
 }
 function _templateObject4() {
     var data = _tagged_template_literal([
-        "\n  height: 56px;\n  position: fixed;\n  top: 0;\n"
+        "\n  height: 50px;\n  border: 1px solid rgb(217, 217, 217);\n  border-radius: 8px;\n  padding: 10px;\n  transition: all 0.2s;\n\n  &:hover {\n    border-color: rgb(11, 119, 255);\n  }\n"
     ]);
     _templateObject4 = function _templateObject4() {
         return data;
@@ -177,7 +177,7 @@ function _templateObject4() {
 }
 function _templateObject5() {
     var data = _tagged_template_literal([
-        "\n  height: 100%;\n  width: 100%;\n  display: flex;\n  align-items: center;\n  padding-left: 24px;\n\n  .brand-skeleton {\n    .ant-skeleton-title {\n      width: 50px;\n      height: 20px !important;\n      margin-left: 0px;\n    }\n  }\n"
+        "\n  height: 56px;\n  position: fixed;\n  top: 0;\n"
     ]);
     _templateObject5 = function _templateObject5() {
         return data;
@@ -186,7 +186,7 @@ function _templateObject5() {
 }
 function _templateObject6() {
     var data = _tagged_template_literal([
-        "\n  width: 100%;\n  height: 100%;\n  min-height: 100%;\n  background-color: #fff;\n  display: block;\n"
+        "\n  height: 100%;\n  width: 100%;\n  display: flex;\n  align-items: center;\n  padding-left: 24px;\n\n  .brand-skeleton {\n    .ant-skeleton-title {\n      width: 50px;\n      height: 20px !important;\n      margin-left: 0px;\n    }\n  }\n"
     ]);
     _templateObject6 = function _templateObject6() {
         return data;
@@ -195,7 +195,7 @@ function _templateObject6() {
 }
 function _templateObject7() {
     var data = _tagged_template_literal([
-        "\n  display: flex;\n  justify-content: center;\n\n  &::before {\n    animation-fill-mode: both;\n    background: #ffffff;\n    content: ' ';\n    height: 100%;\n    position: fixed;\n    right: 0;\n    top: 0;\n    transform-origin: right;\n    width: 50%;\n    box-shadow: 15px 0 30px 0 rgba(0, 0, 0, 0.18);\n  }\n"
+        "\n  width: 100%;\n  height: 100%;\n  min-height: 100%;\n  background-color: #fff;\n  display: block;\n"
     ]);
     _templateObject7 = function _templateObject7() {
         return data;
@@ -204,7 +204,7 @@ function _templateObject7() {
 }
 function _templateObject8() {
     var data = _tagged_template_literal([
-        "\n  height: 678px;\n  max-width: 920px;\n  width: 100%;\n  transform: translateY(max(48px, calc(50vh - 55%)));\n"
+        "\n  display: flex;\n  justify-content: center;\n\n  &::before {\n    animation-fill-mode: both;\n    background: #ffffff;\n    content: ' ';\n    height: 100%;\n    position: fixed;\n    right: 0;\n    top: 0;\n    transform-origin: right;\n    width: 50%;\n    box-shadow: 15px 0 30px 0 rgba(0, 0, 0, 0.18);\n  }\n"
     ]);
     _templateObject8 = function _templateObject8() {
         return data;
@@ -213,7 +213,7 @@ function _templateObject8() {
 }
 function _templateObject9() {
     var data = _tagged_template_literal([
-        "\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100vw;\n  height: 100vh;\n  display: flex;\n  justify-content: center;\n  z-index: 1000;\n  align-items: center;\n"
+        "\n  height: 678px;\n  max-width: 920px;\n  width: 100%;\n  transform: translateY(max(48px, calc(50vh - 55%)));\n"
     ]);
     _templateObject9 = function _templateObject9() {
         return data;
@@ -222,7 +222,7 @@ function _templateObject9() {
 }
 function _templateObject10() {
     var data = _tagged_template_literal([
-        "\n  width: 100%;\n  height: 100%;\n  top: 0;\n  left: 0;\n  position: absolute;\n  display: flex;\n  justify-content: center;\n  z-index: 1000;\n  align-items: center;\n"
+        "\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100vw;\n  height: 100vh;\n  display: flex;\n  justify-content: center;\n  z-index: 1000;\n  align-items: center;\n"
     ]);
     _templateObject10 = function _templateObject10() {
         return data;
@@ -231,7 +231,7 @@ function _templateObject10() {
 }
 function _templateObject11() {
     var data = _tagged_template_literal([
-        "\n  height: calc(100vh - 56px);\n  top: 56px;\n\n  .ant-space {\n    margin-bottom: 100px;\n  }\n"
+        "\n  width: 100%;\n  height: 100%;\n  top: 0;\n  left: 0;\n  position: absolute;\n  display: flex;\n  justify-content: center;\n  z-index: 1000;\n  align-items: center;\n"
     ]);
     _templateObject11 = function _templateObject11() {
         return data;
@@ -240,7 +240,7 @@ function _templateObject11() {
 }
 function _templateObject12() {
     var data = _tagged_template_literal([
-        "\n  .ant-spin-spinning {\n    display: flex;\n    justify-content: center;\n    align-items: center;\n  }\n"
+        "\n  height: calc(100vh - 56px);\n  top: 56px;\n\n  .ant-space {\n    margin-bottom: 100px;\n  }\n"
     ]);
     _templateObject12 = function _templateObject12() {
         return data;
@@ -249,9 +249,18 @@ function _templateObject12() {
 }
 function _templateObject13() {
     var data = _tagged_template_literal([
-        "\n  height: 50px;\n  border: 1px solid rgb(217, 217, 217);\n  border-radius: 8px;\n  padding: 10px;\n  cursor: pointer;\n  transition: all 0.2s;\n\n  &:hover {\n    border-color: rgb(11, 119, 255);\n  }\n\n  &:not(:first-child) {\n    margin-top: 10px;\n  }\n"
+        "\n  .ant-spin-spinning {\n    display: flex;\n    justify-content: center;\n    align-items: center;\n  }\n"
     ]);
     _templateObject13 = function _templateObject13() {
+        return data;
+    };
+    return data;
+}
+function _templateObject14() {
+    var data = _tagged_template_literal([
+        "\n  height: 50px;\n  border: 1px solid rgb(217, 217, 217);\n  border-radius: 8px;\n  padding: 10px;\n  cursor: pointer;\n  transition: all 0.2s;\n\n  &:hover {\n    border-color: rgb(11, 119, 255);\n  }\n\n  &:not(:first-child) {\n    margin-top: 10px;\n  }\n"
+    ]);
+    _templateObject14 = function _templateObject14() {
         return data;
     };
     return data;
@@ -412,14 +421,17 @@ __export(src_exports, {
     getWalletNetworks: function() {
         return getWalletNetworks;
     },
+    isPriceTooLong: function() {
+        return isPriceTooLong;
+    },
     priceFormatHelper: function() {
         return priceFormatHelper;
     }
 });
 module.exports = __toCommonJS(src_exports);
 // src/components/Checkout/index.tsx
-var import_styled_components3 = __toESM(require("styled-components"));
-var import_antd7 = require("antd");
+var import_styled_components4 = __toESM(require("styled-components"));
+var import_antd8 = require("antd");
 // src/components/Checkout/Left/CheckoutSummary.tsx
 var import_styled_components = __toESM(require("styled-components"));
 var import_antd = require("antd");
@@ -838,25 +850,25 @@ function getSs58AddressByAsset(address, asset) {
     }
     return (0, import_util_crypto.encodeAddress)(address, network.config.ss58Prefix);
 }
+var MAXIMUM_DECIMAL_PATH_LENGTH = 4;
+var isPriceTooLong = function(price) {
+    if (!price || price && Number.isInteger(price)) {
+        return false;
+    }
+    var decimalPath = exponentToStringDecimals(price).split(".")[1].length;
+    return decimalPath > MAXIMUM_DECIMAL_PATH_LENGTH;
+};
 // src/components/Checkout/Left/CheckoutSummary.tsx
 var import_react_i18next = require("react-i18next");
 var import_react = require("react");
 var import_jsx_runtime2 = require("react/jsx-runtime");
 var _import_antd_Typography = import_antd.Typography, Paragraph = _import_antd_Typography.Paragraph, Link = _import_antd_Typography.Link;
+var FormItem = import_antd.Form.Item;
 var ImageWrapper = import_styled_components.default.div(_templateObject());
 var ProductInfoWrapper = import_styled_components.default.div(_templateObject1());
-var getSliderStep = function(min, max) {
-    if (!min || !max || min >= max) {
-        return 0;
-    }
-    return (max - min) / 20;
-};
 var ProductInformation = function(param) {
-    var product = param.product, asset = param.asset, loading = param.loading, onNumFlexPriceChange = param.onNumFlexPriceChange, numFlexPrice = param.numFlexPrice, previewMode = param.previewMode;
+    var product = param.product, asset = param.asset, loading = param.loading, onNumFlexPriceChange = param.onNumFlexPriceChange, numFlexPrice = param.numFlexPrice, flexPriceValid = param.flexPriceValid, previewMode = param.previewMode;
     var name = product.name, description = product.description, _product_price = product.price, priceType = _product_price.type, priceValue = _product_price.value, presetPrice = _product_price.preset, minimum = _product_price.minimum, maximum = _product_price.maximum, image = product.image;
-    var minPriceNumber = typeof minimum === "string" ? priceFormatHelper.formatBalance(minimum, asset) : minimum;
-    var maxPriceNumber = typeof maximum === "string" ? priceFormatHelper.formatBalance(maximum, asset) : maximum;
-    var step = getSliderStep(minPriceNumber, maxPriceNumber);
     var assetMetadata = getAssetMetadata(asset);
     var _ref = _sliced_to_array((0, import_react.useState)(false), 2), isUpdatingPrice = _ref[0], setIsUpdatingPrice = _ref[1];
     var inputRef = (0, import_react.useRef)(null);
@@ -868,97 +880,126 @@ var ProductInformation = function(param) {
     }, [
         isUpdatingPrice
     ]);
-    var _ref1;
+    var flexPriceElement = /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(FormItem, {
+        validateStatus: flexPriceValid !== true ? "error" : "",
+        help: flexPriceValid !== true && flexPriceValid,
+        children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.InputNumber, {
+            ref: inputRef,
+            onBlur: function() {
+                if (flexPriceValid === true) {
+                    setIsUpdatingPrice(false);
+                }
+            },
+            style: {
+                width: 200
+            },
+            value: numFlexPrice,
+            onChange: onNumFlexPriceChange
+        })
+    });
+    var isPlexPrice = priceType === "flexible";
     return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(ProductInfoWrapper, {
         children: [
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Skeleton, {
-                active: true,
-                className: "product-name-skeleton",
-                paragraph: false,
-                loading: loading,
-                children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Typography.Title, {
-                    type: "secondary",
-                    level: 4,
-                    style: {
-                        marginBottom: 0,
-                        fontWeight: 400
-                    },
-                    children: name || "Product name"
-                })
-            }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_antd.Skeleton, {
-                active: true,
-                className: "product-price-skeleton",
-                paragraph: false,
-                loading: loading,
+            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)("div", {
+                style: {
+                    minHeight: isPlexPrice ? description ? 170 : 140 : 0
+                },
                 children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_antd.Space, {
-                        align: "start",
-                        style: {
-                            marginTop: 10
-                        },
+                    /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Skeleton, {
+                        active: true,
+                        className: "product-name-skeleton",
+                        paragraph: false,
+                        loading: loading,
+                        children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Typography.Title, {
+                            type: "secondary",
+                            level: 4,
+                            style: {
+                                marginBottom: 0,
+                                fontWeight: 400
+                            },
+                            children: name || "Product name"
+                        })
+                    }),
+                    /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_antd.Skeleton, {
+                        active: true,
+                        className: "product-price-skeleton",
+                        paragraph: false,
+                        loading: loading,
                         children: [
-                            assetMetadata && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Avatar, {
-                                src: assetMetadata.logoUrl,
-                                children: assetMetadata.symbol
+                            /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(import_antd.Space, {
+                                align: "start",
+                                style: {
+                                    marginTop: 10
+                                },
+                                children: [
+                                    assetMetadata && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Avatar, {
+                                        src: assetMetadata.logoUrl,
+                                        children: assetMetadata.symbol
+                                    }),
+                                    !isPlexPrice ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Typography.Title, {
+                                        level: 3,
+                                        style: {
+                                            margin: 0,
+                                            fontSize: 32,
+                                            lineHeight: "32px"
+                                        },
+                                        children: !!priceValue ? getCheckoutPrice({
+                                            price: priceValue,
+                                            asset: asset
+                                        }, assetMetadata) : "0"
+                                    }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", {
+                                        children: presetPrice ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", {
+                                            children: isUpdatingPrice ? flexPriceElement : /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Typography.Title, {
+                                                level: 3,
+                                                style: {
+                                                    margin: 0,
+                                                    fontSize: 32,
+                                                    marginBottom: 24,
+                                                    lineHeight: "32px"
+                                                },
+                                                children: getCheckoutPrice({
+                                                    price: numFlexPrice !== null && numFlexPrice !== void 0 ? numFlexPrice : presetPrice,
+                                                    asset: asset
+                                                }, assetMetadata)
+                                            })
+                                        }) : previewMode ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.InputNumber, {
+                                            value: "",
+                                            style: {
+                                                width: 200
+                                            }
+                                        }) : flexPriceElement
+                                    })
+                                ]
                             }),
-                            priceType === "fixed" ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Typography.Title, {
-                                level: 3,
+                            isPlexPrice && presetPrice && !isUpdatingPrice && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Button, {
                                 style: {
-                                    margin: 0,
-                                    fontSize: 32,
-                                    lineHeight: "32px"
+                                    display: "block",
+                                    marginBottom: 10
                                 },
-                                children: getCheckoutPrice({
-                                    price: priceValue !== null && priceValue !== void 0 ? priceValue : "0",
-                                    asset: asset
-                                }, assetMetadata)
-                            }) : /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", {
-                                style: {
-                                    width: "100%"
+                                onClick: function() {
+                                    if (!previewMode) {
+                                        setIsUpdatingPrice(true);
+                                    }
                                 },
-                                children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Typography.Title, {
-                                    level: 3,
-                                    style: {
-                                        margin: 0,
-                                        fontSize: 32,
-                                        lineHeight: "32px"
-                                    },
-                                    children: getCheckoutPrice({
-                                        price: (_ref1 = numFlexPrice !== null && numFlexPrice !== void 0 ? numFlexPrice : presetPrice) !== null && _ref1 !== void 0 ? _ref1 : "0",
-                                        asset: asset
-                                    }, assetMetadata)
-                                })
+                                children: "Change Amount"
                             })
                         ]
                     }),
-                    priceType === "flexible" && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Slider, {
-                        value: numFlexPrice !== null && numFlexPrice !== void 0 ? numFlexPrice : void 0,
-                        min: minPriceNumber !== null && minPriceNumber !== void 0 ? minPriceNumber : 0,
-                        max: maxPriceNumber !== null && maxPriceNumber !== void 0 ? maxPriceNumber : 0,
-                        step: step,
-                        onChange: function(val) {
-                            if (!previewMode) {
-                                onNumFlexPriceChange === null || onNumFlexPriceChange === void 0 ? void 0 : onNumFlexPriceChange(val);
-                            }
-                        },
-                        tooltip: {
-                            formatter: function() {
-                                return numFlexPrice;
-                            }
-                        }
+                    /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Skeleton, {
+                        active: true,
+                        className: "product-description-skeleton",
+                        paragraph: false,
+                        loading: loading,
+                        children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Typography.Paragraph, {
+                            style: {
+                                marginTop: isPlexPrice ? 0 : 5,
+                                marginBottom: description ? "1em" : 0
+                            },
+                            type: "secondary",
+                            children: description
+                        })
                     })
                 ]
-            }),
-            /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Skeleton, {
-                active: true,
-                className: "product-description-skeleton",
-                paragraph: false,
-                loading: loading,
-                children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Typography.Paragraph, {
-                    type: "secondary",
-                    children: description
-                })
             }),
             /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(ImageWrapper, {
                 children: loading ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.Skeleton.Avatar, {
@@ -1024,7 +1065,7 @@ function FooterLinks() {
 }
 var CheckoutSummaryWrapper = import_styled_components.default.div(_templateObject3());
 var CheckoutSummary = function(param) {
-    var product = param.product, asset = param.asset, previewMode = param.previewMode, loading = param.loading, onNumFlexPriceChange = param.onNumFlexPriceChange, numFlexPrice = param.numFlexPrice;
+    var product = param.product, asset = param.asset, previewMode = param.previewMode, loading = param.loading, onNumFlexPriceChange = param.onNumFlexPriceChange, numFlexPrice = param.numFlexPrice, flexPriceValid = param.flexPriceValid;
     return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(CheckoutSummaryWrapper, {
         style: previewMode ? {
             maxHeight: 550
@@ -1036,7 +1077,8 @@ var CheckoutSummary = function(param) {
                 asset: asset,
                 loading: loading,
                 onNumFlexPriceChange: onNumFlexPriceChange,
-                numFlexPrice: numFlexPrice
+                numFlexPrice: numFlexPrice,
+                flexPriceValid: flexPriceValid
             }),
             /* @__PURE__ */ (0, import_jsx_runtime2.jsx)("div", {
                 children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(FooterLinks, {})
@@ -1047,7 +1089,7 @@ var CheckoutSummary = function(param) {
 var CheckoutSummary_default = CheckoutSummary;
 // src/components/Checkout/Right/PaymentPreviewer/index.tsx
 var import_react6 = require("react");
-var import_antd4 = require("antd");
+var import_antd5 = require("antd");
 var import_react_i18next3 = require("react-i18next");
 // src/components/Checkout/Right/PaymentPreviewer/AccountOption.tsx
 var import_react4 = require("react");
@@ -2430,44 +2472,86 @@ var ContactInformation = function(param) {
     });
 };
 var ContactInformation_default = ContactInformation;
-// src/components/Checkout/Right/PaymentPreviewer/index.tsx
+// src/components/Checkout/Right/PaymentPreviewer/NetworkInfo.tsx
+var import_antd4 = require("antd");
+var import_styled_components2 = __toESM(require("styled-components"));
 var import_jsx_runtime5 = require("react/jsx-runtime");
+var Wrapper = (0, import_styled_components2.default)(import_antd4.Row)(_templateObject4());
+var Text = import_antd4.Typography.Text;
+var NetworkInfo = function(param) {
+    var asset = param.asset;
+    var network = getNetwork(asset);
+    return /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(import_antd4.Form.Item, {
+        label: "Network",
+        children: /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(Wrapper, {
+            align: "middle",
+            children: [
+                /* @__PURE__ */ (0, import_jsx_runtime5.jsx)("img", {
+                    src: network.logoUrl,
+                    alt: "icon",
+                    style: {
+                        width: 25,
+                        objectFit: "contain",
+                        marginRight: 7,
+                        marginLeft: 5
+                    }
+                }),
+                /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(Text, {
+                    style: {
+                        marginLeft: 8
+                    },
+                    children: network.name
+                })
+            ]
+        })
+    });
+};
+var NetworkInfo_default = NetworkInfo;
+// src/components/Checkout/Right/PaymentPreviewer/index.tsx
+var import_jsx_runtime6 = require("react/jsx-runtime");
 var EXAMPLE_POLKADOT_ADDRESS = "5ERjkQVj8M7v5UVZQ8qTbZ2qb1o5TgNXq9tXt2BsWF9jBpDu";
 function PaymentSummary(param) {
-    var productName = param.productName, checkoutType = param.checkoutType, asset = param.asset;
+    var productName = param.productName, actionName = param.actionName, asset = param.asset;
     var _ref = (0, import_react_i18next3.useTranslation)(), t2 = _ref.t;
     var _ref1 = _sliced_to_array((0, import_react6.useState)(false), 2), loading = _ref1[0], setLoading = _ref1[1];
     var _ref2 = _sliced_to_array((0, import_react6.useState)(""), 2), email = _ref2[0], setEmail = _ref2[1];
-    return /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", {
+    return /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)("div", {
         style: {
             width: 380,
             maxWidth: 380,
             marginLeft: 80
         },
         children: [
-            /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(ContactInformation_default, {
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(ContactInformation_default, {
                 value: email,
                 onChange: setEmail,
                 productName: productName
             }),
-            /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)("div", {
+            /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(import_antd5.Form, {
+                layout: "vertical",
                 children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(import_antd4.Typography.Title, {
+                    /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(import_antd5.Typography.Title, {
                         level: 4,
                         children: [
                             t2("paymentMethod"),
                             " "
                         ]
                     }),
-                    /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(AccountInfo, {
-                        variant: "select",
-                        account: {
-                            name: "Test Account",
-                            address: EXAMPLE_POLKADOT_ADDRESS
-                        },
+                    /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(NetworkInfo_default, {
                         asset: asset
                     }),
-                    /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(import_antd4.Button, {
+                    /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_antd5.Form.Item, {
+                        label: "Account",
+                        children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(AccountInfo, {
+                            variant: "select",
+                            account: {
+                                name: "Test Account",
+                                address: EXAMPLE_POLKADOT_ADDRESS
+                            },
+                            asset: asset
+                        })
+                    }),
+                    /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_antd5.Button, {
                         style: {
                             marginTop: 32,
                             marginBottom: 8
@@ -2482,7 +2566,7 @@ function PaymentSummary(param) {
                                 setLoading(false);
                             }, 1e3);
                         },
-                        children: checkoutType || t2("pay")
+                        children: actionName || t2("pay")
                     })
                 ]
             })
@@ -2491,26 +2575,26 @@ function PaymentSummary(param) {
 }
 // src/components/Checkout/Brand.tsx
 var import_react7 = require("react");
-var import_styled_components2 = __toESM(require("styled-components"));
-var import_antd5 = require("antd");
-var import_jsx_runtime6 = require("react/jsx-runtime");
-var Title = import_antd5.Typography.Title;
-var LogoBox = import_styled_components2.default.div(_templateObject4());
-var LogoWrapper = import_styled_components2.default.div(_templateObject5());
+var import_styled_components3 = __toESM(require("styled-components"));
+var import_antd6 = require("antd");
+var import_jsx_runtime7 = require("react/jsx-runtime");
+var Title = import_antd6.Typography.Title;
+var LogoBox = import_styled_components3.default.div(_templateObject5());
+var LogoWrapper = import_styled_components3.default.div(_templateObject6());
 var CheckoutBrand = function(param) {
     var branding = param.branding, loading = param.loading;
     var name = branding.name, logo = branding.logo;
     var HasNoBrand = !logo && !name;
-    return /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(LogoBox, {
-        children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(LogoWrapper, {
-            children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(import_antd5.Skeleton, {
+    return /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(LogoBox, {
+        children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(LogoWrapper, {
+            children: /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_antd6.Skeleton, {
                 className: "brand-skeleton",
                 paragraph: false,
                 loading: loading,
                 active: true,
-                children: HasNoBrand ? "Brand" : /* @__PURE__ */ (0, import_jsx_runtime6.jsxs)(import_react7.Fragment, {
+                children: HasNoBrand ? "Brand" : /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)(import_react7.Fragment, {
                     children: [
-                        logo && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)("img", {
+                        logo && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)("img", {
                             style: {
                                 height: 24,
                                 marginRight: 10
@@ -2518,7 +2602,7 @@ var CheckoutBrand = function(param) {
                             src: logo,
                             alt: "brand logo"
                         }),
-                        name && /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(Title, {
+                        name && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(Title, {
                             style: {
                                 margin: 0
                             },
@@ -2533,15 +2617,15 @@ var CheckoutBrand = function(param) {
 };
 var Brand_default = CheckoutBrand;
 // src/components/Checkout/Right/AfterPaymentPreviewer.tsx
-var import_antd6 = require("antd");
+var import_antd7 = require("antd");
 var import_react_i18next4 = require("react-i18next");
-var import_jsx_runtime7 = require("react/jsx-runtime");
+var import_jsx_runtime8 = require("react/jsx-runtime");
 var AfterPaymentPreviewer = function(param) {
     var afterPayment = param.afterPayment, productName = param.productName;
     var _afterPayment_config;
     var _ref = (0, import_react_i18next4.useTranslation)(), t2 = _ref.t;
     var message = (_afterPayment_config = afterPayment.config) === null || _afterPayment_config === void 0 ? void 0 : _afterPayment_config.message;
-    return /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", {
+    return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)("div", {
         style: {
             width: 380,
             maxWidth: 380,
@@ -2549,7 +2633,7 @@ var AfterPaymentPreviewer = function(param) {
         },
         children: [
             " ",
-            /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(import_antd6.Result, {
+            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_antd7.Result, {
                 status: "success",
                 title: message || t2("thankForYourPayment"),
                 subTitle: !message && t2("productWillBeSent", {
@@ -5934,14 +6018,14 @@ instance.use(import_i18next_browser_languagedetector.default).use(import_react_i
 });
 // src/components/Checkout/index.tsx
 var import_react8 = require("react");
-var import_jsx_runtime8 = require("react/jsx-runtime");
-var Content = import_antd7.Layout.Content;
-var Wrapper = (0, import_styled_components3.default)(import_antd7.Layout)(_templateObject6());
-var ContentWrapper = (0, import_styled_components3.default)(Content)(_templateObject7());
-var MainContent = (0, import_styled_components3.default)(import_antd7.Row)(_templateObject8());
+var import_jsx_runtime9 = require("react/jsx-runtime");
+var Content = import_antd8.Layout.Content;
+var Wrapper2 = (0, import_styled_components4.default)(import_antd8.Layout)(_templateObject7());
+var ContentWrapper = (0, import_styled_components4.default)(Content)(_templateObject8());
+var MainContent = (0, import_styled_components4.default)(import_antd8.Row)(_templateObject9());
 var CheckoutPreview = function(param) {
-    var checkoutData = param.checkoutData, _param_previewMode = param.previewMode, previewMode = _param_previewMode === void 0 ? true : _param_previewMode, _param_isShowAfterPayment = param.isShowAfterPayment, isShowAfterPayment = _param_isShowAfterPayment === void 0 ? false : _param_isShowAfterPayment, _param_loading = param.loading, loading = _param_loading === void 0 ? false : _param_loading, HandlePaymentComponent = param.HandlePaymentComponent, onNumFlexPriceChange = param.onNumFlexPriceChange, numFlexPrice = param.numFlexPrice;
-    var branding = checkoutData.branding, item = checkoutData.item, assetId = checkoutData.assetId, networkId = checkoutData.networkId, afterPayment = checkoutData.afterPayment, payee = checkoutData.payee, checkoutType = checkoutData.checkoutType;
+    var checkoutData = param.checkoutData, _param_previewMode = param.previewMode, previewMode = _param_previewMode === void 0 ? true : _param_previewMode, _param_isShowAfterPayment = param.isShowAfterPayment, isShowAfterPayment = _param_isShowAfterPayment === void 0 ? false : _param_isShowAfterPayment, _param_loading = param.loading, loading = _param_loading === void 0 ? false : _param_loading, HandlePaymentComponent = param.HandlePaymentComponent, onNumFlexPriceChange = param.onNumFlexPriceChange, numFlexPrice = param.numFlexPrice, flexPriceValid = param.flexPriceValid, validateFlexPrice = param.validateFlexPrice;
+    var branding = checkoutData.branding, item = checkoutData.item, assetId = checkoutData.assetId, networkId = checkoutData.networkId, afterPayment = checkoutData.afterPayment, payee = checkoutData.payee, actionName = checkoutData.metadata.actionName;
     var price = item.price, name = item.name;
     var checkoutPrice = price.type === "fixed" ? price.value : numFlexPrice ? priceFormatHelper.toSmallestUnit(numFlexPrice, {
         assetId: assetId,
@@ -5955,19 +6039,19 @@ var CheckoutPreview = function(param) {
         }
         setCompleted(true);
     };
-    return /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(Wrapper, {
+    return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(Wrapper2, {
         children: [
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(Brand_default, {
+            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Brand_default, {
                 branding: branding,
                 loading: loading
             }),
-            /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(ContentWrapper, {
-                children: /* @__PURE__ */ (0, import_jsx_runtime8.jsxs)(MainContent, {
+            /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(ContentWrapper, {
+                children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(MainContent, {
                     justify: "space-between",
                     children: [
-                        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_antd7.Col, {
+                        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_antd8.Col, {
                             span: 12,
-                            children: /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(CheckoutSummary_default, {
+                            children: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(CheckoutSummary_default, {
                                 loading: loading,
                                 product: item,
                                 asset: {
@@ -5976,22 +6060,23 @@ var CheckoutPreview = function(param) {
                                 },
                                 previewMode: previewMode,
                                 onNumFlexPriceChange: onNumFlexPriceChange,
-                                numFlexPrice: numFlexPrice
+                                numFlexPrice: numFlexPrice,
+                                flexPriceValid: flexPriceValid
                             })
                         }),
-                        /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(import_antd7.Col, {
+                        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_antd8.Col, {
                             span: 12,
-                            children: (completed || isShowAfterPayment) && afterPayment ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(AfterPaymentPreviewer_default, {
+                            children: (completed || isShowAfterPayment) && afterPayment ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(AfterPaymentPreviewer_default, {
                                 afterPayment: afterPayment,
                                 productName: item.name || "The product"
-                            }) : previewMode ? /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(PaymentSummary, {
+                            }) : previewMode ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(PaymentSummary, {
                                 productName: name,
-                                checkoutType: checkoutType,
+                                actionName: actionName,
                                 asset: {
                                     assetId: assetId,
                                     networkId: networkId
                                 }
-                            }) : /* @__PURE__ */ (0, import_jsx_runtime8.jsx)(HandlePaymentComponent, {
+                            }) : /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(HandlePaymentComponent, {
                                 onPaymentSuccess: handlePaymentSuccess,
                                 payment: {
                                     payee: payee !== null && payee !== void 0 ? payee : "",
@@ -6004,7 +6089,8 @@ var CheckoutPreview = function(param) {
                                 },
                                 priceType: item.price.type,
                                 numFlexPrice: numFlexPrice,
-                                checkoutType: checkoutType
+                                actionName: actionName,
+                                validateFlexPrice: validateFlexPrice
                             })
                         })
                     ]
@@ -6054,19 +6140,19 @@ var extensionAPI = {
 var extension_default = extensionAPI;
 // src/components/Common/Loading.tsx
 var import_react9 = require("react");
-var import_styled_components4 = __toESM(require("styled-components"));
-var import_antd8 = require("antd");
+var import_styled_components5 = __toESM(require("styled-components"));
+var import_antd9 = require("antd");
 var import_react_i18next6 = require("react-i18next");
-var import_jsx_runtime9 = require("react/jsx-runtime");
+var import_jsx_runtime10 = require("react/jsx-runtime");
 function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-var FullPageWrapper = import_styled_components4.default.div(_templateObject9());
-var LoadingWrapper = import_styled_components4.default.div(_templateObject10());
-var PageContentLoadingWrapper = (0, import_styled_components4.default)(FullPageWrapper)(_templateObject11());
-var LoaderContainer = import_styled_components4.default.div(_templateObject12());
+var FullPageWrapper = import_styled_components5.default.div(_templateObject10());
+var LoadingWrapper = import_styled_components5.default.div(_templateObject11());
+var PageContentLoadingWrapper = (0, import_styled_components5.default)(FullPageWrapper)(_templateObject12());
+var LoaderContainer = import_styled_components5.default.div(_templateObject13());
 var useFunnyQuote = function(loading) {
     var prevQuoteRef = (0, import_react9.useRef)();
     var _ref = (0, import_react_i18next6.useTranslation)(), t2 = _ref.t;
@@ -6092,18 +6178,18 @@ var NORMAL_TEXT_FONT_SIZE = 15;
 var FULL_PAGE_TEXT_FONT_SIZE = 17;
 var Loading = function(param) {
     var _param_loading = param.loading, loading = _param_loading === void 0 ? true : _param_loading, isFullPage = param.isFullPage, isContentPage = param.isContentPage, message = param.message, bordered = param.bordered;
-    var _import_antd8_theme_useToken = import_antd8.theme.useToken(), _import_antd8_theme_useToken_token = _import_antd8_theme_useToken.token, colorBgBase = _import_antd8_theme_useToken_token.colorBgBase, colorTextTertiary = _import_antd8_theme_useToken_token.colorTextTertiary;
+    var _import_antd9_theme_useToken = import_antd9.theme.useToken(), _import_antd9_theme_useToken_token = _import_antd9_theme_useToken.token, colorBgBase = _import_antd9_theme_useToken_token.colorBgBase, colorTextTertiary = _import_antd9_theme_useToken_token.colorTextTertiary;
     var quote = useFunnyQuote(loading);
     var style = {
         background: colorBgBase,
         borderRadius: bordered ? 8 : 0
     };
-    var loadingContent = /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(LoaderContainer, {
-        children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)(import_antd8.Space, {
+    var loadingContent = /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(LoaderContainer, {
+        children: /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(import_antd9.Space, {
             align: "center",
             children: [
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_antd8.Spin, {
-                    indicator: /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Loading3QuartersOutlined_default2, {
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_antd9.Spin, {
+                    indicator: /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Loading3QuartersOutlined_default2, {
                         style: {
                             fontSize: isFullPage || isContentPage ? FULL_PAGE_ICON_SIZE : NORMAL_ICON_SIZE,
                             color: colorTextTertiary
@@ -6111,7 +6197,7 @@ var Loading = function(param) {
                         spin: true
                     })
                 }),
-                /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(import_antd8.Typography.Paragraph, {
+                /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(import_antd9.Typography.Paragraph, {
                     style: {
                         margin: 0,
                         marginLeft: 7,
@@ -6127,15 +6213,15 @@ var Loading = function(param) {
         return null;
     }
     if (isContentPage) {
-        return /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(PageContentLoadingWrapper, {
+        return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(PageContentLoadingWrapper, {
             style: style,
             children: loadingContent
         });
     }
-    return isFullPage ? /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(FullPageWrapper, {
+    return isFullPage ? /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(FullPageWrapper, {
         style: style,
         children: loadingContent
-    }) : /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(LoadingWrapper, {
+    }) : /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(LoadingWrapper, {
         style: style,
         children: loadingContent
     });
@@ -6144,15 +6230,15 @@ var Loading_default = (0, import_react9.memo)(Loading, function(oldProps, newPro
     return oldProps.loading === newProps.loading;
 });
 // src/components/Common/WalletList.tsx
-var import_antd9 = require("antd");
-var import_styled_components5 = __toESM(require("styled-components"));
-var import_jsx_runtime10 = require("react/jsx-runtime");
-var ExtensionOptionWrapper = (0, import_styled_components5.default)(import_antd9.Row)(_templateObject13());
-var Text = import_antd9.Typography.Text;
+var import_antd10 = require("antd");
+var import_styled_components6 = __toESM(require("styled-components"));
+var import_jsx_runtime11 = require("react/jsx-runtime");
+var ExtensionOptionWrapper = (0, import_styled_components6.default)(import_antd10.Row)(_templateObject14());
+var _import_antd10_Typography = import_antd10.Typography, Text2 = _import_antd10_Typography.Text;
 var ExtensionOption = function(param) {
     var extension = param.extension, onSelect = param.onSelect, installed = param.installed;
     var name = extension.name;
-    return /* @__PURE__ */ (0, import_jsx_runtime10.jsxs)(ExtensionOptionWrapper, {
+    return /* @__PURE__ */ (0, import_jsx_runtime11.jsxs)(ExtensionOptionWrapper, {
         align: "middle",
         onClick: installed ? function() {
             return onSelect === null || onSelect === void 0 ? void 0 : onSelect(extension.id);
@@ -6160,7 +6246,7 @@ var ExtensionOption = function(param) {
             window.open(extension.installURL);
         },
         children: [
-            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("img", {
+            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("img", {
                 src: extension.logo,
                 alt: "icon",
                 style: {
@@ -6170,7 +6256,7 @@ var ExtensionOption = function(param) {
                     marginLeft: 5
                 }
             }),
-            /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(Text, {
+            /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(Text2, {
                 children: name
             })
         ]
@@ -6178,9 +6264,9 @@ var ExtensionOption = function(param) {
 };
 var WalletList = function(param) {
     var extensionDictionary = param.extensionDictionary, onSelectWallet = param.onSelectWallet;
-    return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("div", {
+    return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("div", {
         children: EXTENSIONS.map(function(extension) {
-            return /* @__PURE__ */ (0, import_jsx_runtime10.jsx)(ExtensionOption, {
+            return /* @__PURE__ */ (0, import_jsx_runtime11.jsx)(ExtensionOption, {
                 extension: extension,
                 onSelect: onSelectWallet,
                 installed: !!extensionDictionary[extension.id]
@@ -6204,6 +6290,7 @@ var WalletList_default = WalletList;
     getNetworkAssets: getNetworkAssets,
     getSs58AddressByAsset: getSs58AddressByAsset,
     getWalletNetworks: getWalletNetworks,
+    isPriceTooLong: isPriceTooLong,
     priceFormatHelper: priceFormatHelper
 }); /*! Bundled license information:
 

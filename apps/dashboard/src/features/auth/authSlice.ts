@@ -79,7 +79,7 @@ export const getExtensions = createAppAsyncThunk('auth/getExtensions', async (_,
 
 export const connectExtension = createAppAsyncThunk(
   'auth/connectExtension',
-  async (extensionId: string, { rejectWithValue, getState, dispatch }) => {
+  async (extensionId: string, { rejectWithValue, getState }) => {
     const extensions = getState().auth.extensions;
     const extension = extensions.find((ext) => ext.id === extensionId);
 
@@ -88,7 +88,6 @@ export const connectExtension = createAppAsyncThunk(
     }
 
     try {
-      console.log('extensionId', extensionId);
       const connection = await extension.instant.enable(APP_NAME);
 
       const polkadotAccounts = await connection.accounts.get();
@@ -97,8 +96,6 @@ export const connectExtension = createAppAsyncThunk(
         name: account.name,
         address: account.address,
       }));
-
-      console.log('accounts',accounts)
 
       const connectedExtension = {
         ...extension,

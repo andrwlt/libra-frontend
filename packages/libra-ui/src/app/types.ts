@@ -53,7 +53,9 @@ export interface BaseCheckout {
   networkId: string;
   afterPayment?: AfterPayment;
   payee?: string;
-  checkoutType?: string | null;
+  metadata: {
+    actionName?: string | null;
+  };
 }
 
 export interface Checkout extends BaseCheckout {

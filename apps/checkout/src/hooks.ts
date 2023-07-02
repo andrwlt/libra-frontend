@@ -6,6 +6,8 @@ import {
   NumFlexPrice,
   Payment,
   priceFormatHelper,
+  FlexPriceValid,
+  isPriceTooLong,
 } from '@atscale/libra-ui';
 import { useEffect, useMemo, useState } from 'react';
 import { ExtensionDictionary } from 'types';
@@ -13,7 +15,7 @@ import { APP_NAME } from 'config';
 import { Account } from '@atscale/libra-ui';
 import { MenuProps, message } from 'antd';
 import service from 'service';
-import { getErrorMessage } from 'utils';
+import { getErrorMessage, storageHelper } from 'utils';
 
 export const useExtensions = () => {
   const [extensions, setExtensions] = useState<ExtensionDictionary>({});
@@ -70,6 +72,7 @@ export const useConnectExtension = () => {
       };
 
       setConnectedExtension(nextConnectedExtension);
+      storageHelper.saveWallet(extension.id);
     } catch (err: any) {
       message.error({
         content: err,
@@ -87,12 +90,31 @@ export const useAccount = (connectedExtension?: ConnectedExtension) => {
     if (connectedExtension) {
       const selectedAccount = connectedExtension.accounts.find((account) => account.address === key);
       setAccount(selectedAccount);
+      storageHelper.saveAccount(selectedAccount?.address || '');
     }
   };
 
   useEffect(() => {
-    if (connectedExtension) {
-      setAccount(connectedExtension.accounts?.[0]);
+    const { accounts } = connectedExtension || {};
+
+    if (accounts) {
+      const initAccountAddress = storageHelper.getSavedAccount();
+      const initFirstAccount = () => {
+        setAccount(accounts[0]);
+        storageHelper.saveAccount(accounts[0]?.address);
+      };
+
+      if (initAccountAddress) {
+        const initAccount = accounts.find((account) => account.address === initAccountAddress);
+
+        if (initAccount) {
+          setAccount(initAccount);
+        } else {
+          initFirstAccount();
+        }
+      } else {
+        initFirstAccount();
+      }
     }
   }, [connectedExtension]);
 
@@ -156,7 +178,7 @@ export const useFlexiblePrice = (checkout: CheckoutResponse) => {
 
   const asset = { assetId, networkId };
 
-  const { numberFlexiblePrice } = useMemo(() => {
+  const { numberFlexiblePrice, numberMinPrice, numberMaxPrice } = useMemo(() => {
     if (priceType === 'fixed') {
       return {};
     } else {
@@ -169,13 +191,41 @@ export const useFlexiblePrice = (checkout: CheckoutResponse) => {
         numberMaxPrice: getNumPrice(maxPrice),
       };
     }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [priceType, presetPrice, minPrice, maxPrice, assetId, networkId]);
 
   const [numFlexPrice, setNumFlexPrice] = useState<NumFlexPrice>(() => {
     return numberFlexiblePrice ?? null;
   });
 
+  const [flexPriceValid, setFlexPriceValid] = useState<FlexPriceValid>(true);
+
+  const validateFlexPrice = (price: number | null) => {
+    let priceValid: FlexPriceValid = true;
+
+    if (!price) {
+      priceValid = 'Price is Required!';
+    } else if (isPriceTooLong(price)) {
+      priceValid = 'Decimal path is too long!';
+    } else {
+      if (numberMinPrice && price < numberMinPrice) {
+        priceValid = `Price must be greater or equal to ${priceFormatHelper.exponentToStringDecimals(numberMinPrice)}`;
+      }
+
+      if (numberMaxPrice && price > numberMaxPrice) {
+        priceValid = `Price must be less than or equal to ${priceFormatHelper.exponentToStringDecimals(
+          numberMaxPrice,
+        )}`;
+      }
+    }
+    setFlexPriceValid(priceValid);
+    return priceValid;
+  };
+
   const onNumFlexPriceChange = (price: number | null) => {
+    validateFlexPrice(price);
+
     const stringPrice = priceFormatHelper.toSmallestUnit(price || 0, asset);
     if (stringPrice) {
       const roundedPrice = priceFormatHelper.formatBalance(stringPrice, asset);
@@ -186,5 +236,42 @@ export const useFlexiblePrice = (checkout: CheckoutResponse) => {
   return {
     numFlexPrice,
     onNumFlexPriceChange,
+    flexPriceValid,
+    validateFlexPrice,
   };
+};
+
+export const useInitWallet = (
+  extensions: ExtensionDictionary,
+  getExtensionsLoading: boolean,
+  onConnectExtension: (extension: Extension) => Promise<void>,
+) => {
+  const [initWalletLoading, setInitWalletLoading] = useState(true);
+
+  useEffect(() => {
+    if (!getExtensionsLoading) {
+      const init = async () => {
+        const initExtensionId = storageHelper.getSavedWallet();
+        if (initExtensionId) {
+          const initExtension = extensions[initExtensionId];
+          if (initExtension) {
+            await onConnectExtension(initExtension);
+          } else {
+            storageHelper.deleteSavedWallet();
+            storageHelper.deleteSavedAccount();
+          }
+
+          setInitWalletLoading(false);
+        } else {
+          setInitWalletLoading(false);
+        }
+      };
+
+      init();
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [getExtensionsLoading, extensions]);
+
+  return initWalletLoading;
 };

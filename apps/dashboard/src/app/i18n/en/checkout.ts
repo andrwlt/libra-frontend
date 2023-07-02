@@ -54,6 +54,7 @@ const checkout = {
   orderWillBeSent: 'An order summary will be sent to your email within minutes',
   websiteWillBeShow: 'Your website will be shown after payment',
   priceTooSmall: 'Price is too small',
+  decimalPathTooLong: 'Decimal path is too long',
 
   connectWallet: 'Connect wallet',
   creatingCheckoutPage: 'Creating your checkout page...',
@@ -64,6 +65,26 @@ const checkout = {
   name: 'Name',
   price: 'Price',
   created: 'Created',
+
+  presetAmount: 'Preset Amount',
+  presetAmountIsRequired: 'A preset amount is required',
+  priceMustBeGreaterThanMinimum: 'Suggested price must be greater or equal to minimum.',
+  priceMustBeLessThanMaximum: 'Suggested price must be less than or equal to maximum.',
+
+  minPrice: 'Min price',
+  minPriceIsRequired: 'A minimum amount is required',
+  minimumMustBeLessThanMaximum: 'Minimum must be less than maximum.',
+
+  maxPrice: 'Max price',
+  maxPriceIsRequired: 'A maximum amount is required',
+
+  fixedPrice: 'Fixed Price',
+  flexPrice: 'Flexible Price',
+
+  information: 'Information',
+  actionName: 'Action Name',
+  pricing: 'Pricing',
+  network: 'Network',
 };
 
 export default checkout;

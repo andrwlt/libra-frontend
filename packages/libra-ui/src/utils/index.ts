@@ -152,3 +152,15 @@ export function getSs58AddressByAsset(address: string, asset: Asset) {
 
   return encodeAddress(address, network.config.ss58Prefix);
 }
+
+const MAXIMUM_DECIMAL_PATH_LENGTH = 4;
+
+export const isPriceTooLong = (price: any) => {
+  if (!price || (price && Number.isInteger(price))) {
+    return false;
+  }
+
+  const decimalPath = exponentToStringDecimals(price).split('.')[1].length;
+
+  return decimalPath > MAXIMUM_DECIMAL_PATH_LENGTH;
+};
