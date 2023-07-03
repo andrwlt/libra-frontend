@@ -39,7 +39,7 @@ const Header = ({ checkout }: { checkout: NumberPriceCheckoutResponse }) => {
       </Text>
 
       <Row>
-        <CopyableField textStyle={{ fontWeight: 500 }} text={getCheckoutLink(checkout.id)} />
+        <CopyableField textStyle={{ fontWeight: 500, minWidth: 503 }} text={getCheckoutLink(checkout.id)} />
       </Row>
     </Fragment>
   );

@@ -884,6 +884,7 @@ var ProductInformation = function(param) {
         validateStatus: flexPriceValid !== true ? "error" : "",
         help: flexPriceValid !== true && flexPriceValid,
         children: /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.InputNumber, {
+            autoComplete: "off",
             ref: inputRef,
             onBlur: function() {
                 if (flexPriceValid === true) {
@@ -963,6 +964,7 @@ var ProductInformation = function(param) {
                                                 }, assetMetadata)
                                             })
                                         }) : previewMode ? /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(import_antd.InputNumber, {
+                                            autoComplete: "off",
                                             value: "",
                                             style: {
                                                 width: 200
@@ -2460,6 +2462,7 @@ var ContactInformation = function(param) {
                         height: 88
                     },
                     children: /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(import_antd3.Input, {
+                        autoComplete: "off",
                         value: value,
                         onInput: function(e) {
                             onChange(e.target.value);

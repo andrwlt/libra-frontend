@@ -97,6 +97,7 @@ const LatestPayments = ({ payments }: { payments: NextCharge[] }) => {
       title: t('created'),
       className: 'created-cell',
       render: ({ created }) => <span>{formatCreatedDate(created)}</span>,
+      width: 200,
     },
   ];
   return (

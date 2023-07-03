@@ -61,6 +61,7 @@ const ContactInformation = ({
           style={{ height: 88 }}
         >
           <Input
+            autoComplete="off"
             value={value}
             onInput={(e: any) => {
               onChange(e.target.value);

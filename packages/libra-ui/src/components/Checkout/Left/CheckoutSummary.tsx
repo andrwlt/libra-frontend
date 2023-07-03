@@ -93,6 +93,7 @@ const ProductInformation = ({
   const flexPriceElement = (
     <FormItem validateStatus={flexPriceValid !== true ? 'error' : ''} help={flexPriceValid !== true && flexPriceValid}>
       <InputNumber
+        autoComplete="off"
         ref={inputRef}
         onBlur={() => {
           if (flexPriceValid === true) {
@@ -141,7 +142,7 @@ const ProductInformation = ({
                     )}
                   </div>
                 ) : previewMode ? (
-                  <InputNumber value="" style={{ width: 200 }} />
+                  <InputNumber autoComplete="off" value="" style={{ width: 200 }} />
                 ) : (
                   flexPriceElement
                 )}
