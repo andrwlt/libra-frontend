@@ -206,7 +206,7 @@ export default function Checkouts() {
           {getCheckoutsLoading || hasCheckout ? (
             <Fragment>
               <Table
-                size="middle"
+                
                 dataSource={checkouts}
                 columns={columns}
                 pagination={false}

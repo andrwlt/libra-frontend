@@ -2546,7 +2546,7 @@ function PaymentSummary(param) {
                             variant: "select",
                             account: {
                                 name: "Test Account",
-                                address: EXAMPLE_POLKADOT_ADDRESS
+                                address: getSs58AddressByAsset(EXAMPLE_POLKADOT_ADDRESS, asset)
                             },
                             asset: asset
                         })

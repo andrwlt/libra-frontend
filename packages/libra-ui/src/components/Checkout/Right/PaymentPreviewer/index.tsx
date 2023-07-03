@@ -5,6 +5,7 @@ import AccountOption from './AccountOption';
 import ContactInformation from './ContactInformation';
 import { Asset } from 'app/types';
 import NetworkInfo from './NetworkInfo';
+import { getSs58AddressByAsset } from 'utils';
 
 const EXAMPLE_POLKADOT_ADDRESS = '5ERjkQVj8M7v5UVZQ8qTbZ2qb1o5TgNXq9tXt2BsWF9jBpDu';
 
@@ -28,12 +29,12 @@ export default function PaymentSummary({
       <Form layout="vertical">
         <Typography.Title level={4}>{t('paymentMethod')} </Typography.Title>
         <NetworkInfo asset={asset} />
-        <Form.Item label='Account'>
+        <Form.Item label="Account">
           <AccountOption
             variant="select"
             account={{
               name: 'Test Account',
-              address: EXAMPLE_POLKADOT_ADDRESS,
+              address: getSs58AddressByAsset(EXAMPLE_POLKADOT_ADDRESS, asset),
             }}
             asset={asset}
           />

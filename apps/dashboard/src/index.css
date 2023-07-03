@@ -89,13 +89,6 @@ body {
   background-color: #fff !important;
 }
 
-.transparent-table .ant-table-thead > tr > th,
-.transparent-table .ant-table-thead > tr > td,
-.transparent-table .ant-table-tbody > tr > td,
-.transparent-table .ant-table-tbody > tr.ant-table-placeholder {
-  background-color: rgb(250, 250, 250) !important;
-}
-
 .charge-description {
   white-space: nowrap;
   overflow: hidden;
