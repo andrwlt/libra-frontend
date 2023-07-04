@@ -47,7 +47,7 @@ interface BaseCheckout {
     networkId: string;
     afterPayment?: AfterPayment;
     payee?: string;
-    metadata: {
+    metadata?: {
         actionName?: string | null;
     };
 }
@@ -101,6 +101,9 @@ interface AssetConfigNetwork {
         tokenId?: number;
         transferMethod?: SubstrateExtrinsic;
     };
+}
+interface AssetConfig extends AssetConfigInformation {
+    networks: AssetConfigNetwork[];
 }
 interface AssetMetadata extends AssetConfigInformation {
     network: AssetConfigNetwork;
@@ -175,6 +178,7 @@ declare const extensionAPI: {
 };
 
 declare const EXTENSIONS: ExtensionConfig[];
+declare const ASSETS_CONFIG: AssetConfig[];
 
 interface AccountProps {
     account: {
@@ -210,4 +214,4 @@ interface WalletListProps {
 }
 declare const WalletList: ({ extensionDictionary, onSelectWallet }: WalletListProps) => JSX.Element;
 
-export { Account, AccountInfo as AccountOption, Asset, AssetMetadata, BaseCheckout, BaseProduct, Checkout, CheckoutPreview as CheckoutComponent, CheckoutResponse, ConnectedExtension, ContactInformation, EXTENSIONS, Extension, ExtensionConfig, ExtensionDictionary, ExtensionId, FlexPriceValid, _default as Loading, Network, NumFlexPrice, NumberPrice, NumberPriceCheckoutResponse, NumberPriceProduct, Payment, PriceType, StringPriceProduct, WalletList, WalletType, extensionAPI, getAssetMetadata, getAssetNetworkConfig, getNetwork, getNetworkAssets, getSs58AddressByAsset, getWalletNetworks, isPriceTooLong, priceFormatHelper };
+export { ASSETS_CONFIG, Account, AccountInfo as AccountOption, Asset, AssetMetadata, BaseCheckout, BaseProduct, Checkout, CheckoutPreview as CheckoutComponent, CheckoutResponse, ConnectedExtension, ContactInformation, EXTENSIONS, Extension, ExtensionConfig, ExtensionDictionary, ExtensionId, FlexPriceValid, _default as Loading, Network, NumFlexPrice, NumberPrice, NumberPriceCheckoutResponse, NumberPriceProduct, Payment, PriceType, StringPriceProduct, WalletList, WalletType, extensionAPI, getAssetMetadata, getAssetNetworkConfig, getNetwork, getNetworkAssets, getSs58AddressByAsset, getWalletNetworks, isPriceTooLong, priceFormatHelper };

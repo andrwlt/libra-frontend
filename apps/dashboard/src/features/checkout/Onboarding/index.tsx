@@ -1,14 +1,13 @@
 import { useState, useRef, useEffect } from 'react';
 import styled from 'styled-components';
-// import Previewer from 'components/Checkout/Previewer';
-// import { Checkout } from '@atscale/libra-ui';
+import Previewer from 'components/Checkout/Previewer';
+import { ASSETS_CONFIG, CheckoutComponent, isPriceTooLong } from '@atscale/libra-ui';
 import Loading from 'components/Common/Loading';
 import Steps from './steps/Steps';
 import ConnectWallet from '../FormItems/ConnectWallet';
 import { theme, Button, Form, Modal, Space } from 'antd';
-import { useLogin, useConnectExtension1 } from 'features/auth/authHooks';
+import { useLogin } from 'features/auth/authHooks';
 import { useCheckout, useCreateCheckout, useResetCheckout } from 'features/checkout/checkoutHooks';
-import SelectAccountModal from 'components/SelectAccountModal';
 import CheckoutProductFormItems from 'features/checkout/FormItems/CheckoutProductFormItems';
 import CheckoutBrandingFormItems from 'features/checkout/FormItems/CheckoutBrandingFormItems';
 import Congratulation from './Congratulation';
@@ -19,6 +18,7 @@ import { formatCheckoutToStringPrice } from 'utils/format/balance';
 import { LOCALE_WORKSPACE } from 'app/i18n';
 import { initMessageAfterPayment } from 'config';
 import waveIcon from 'assets/wave.png';
+import ConnectWalletModal from 'components/ConnectWalletModal';
 
 const Header = styled.div`
   padding: 32px 64px;
@@ -45,12 +45,13 @@ export default function Onboarding() {
 
   const onboardingMode = true;
   const { checkoutURL, handleCreateCheckout, createCheckoutLoading } = useCreateCheckout(onboardingMode);
-  const [previewingCheckout, setPreviewingCheckout] = useState(checkout);
-  const [isOpenSelectAccountModal, setIsOpenSelectAccountModal] = useState(false);
-  const { handleLogin, loginLoading, loginSuccess, loginFailed } = useLogin();
-  const { handleConnectExtension, connectExtensionLoading, connectedExtension } = useConnectExtension1(() => {
-    setIsOpenSelectAccountModal(true);
+  const [previewingCheckout, setPreviewingCheckout] = useState({
+    ...checkout,
+    assetId: 'ast_dot',
+    networkId: 'nw_polkadot',
   });
+  const [isOpenSelectWalletModal, setIsOpenSelectWalletModal] = useState(false);
+  const { handleLogin, loginLoading, loginSuccess, loginFailed } = useLogin();
   const [stepIndex, setStepIndex] = useState(0);
   const loginSuccessRef = useRef(null);
   const loginFailedRef = useRef(null);
@@ -59,7 +60,20 @@ export default function Onboarding() {
   loginFailedRef.current = loginFailed;
 
   const onFieldsChange = useDebounceCallback(() => {
-    setPreviewingCheckout(form.getFieldsValue());
+    const formValues = form.getFieldsValue();
+
+    const network = ASSETS_CONFIG.find(({ id }) => id === formValues.assetId)?.networks[0].networkId;
+
+    const previewingCheckout = {
+      ...formValues,
+      networkId: network,
+      item: {
+        ...formValues.item,
+        price: { value: formValues.item.price.value, type: 'fixed' },
+      },
+      metadata: { actionName: '' },
+    };
+    setPreviewingCheckout(previewingCheckout);
   });
 
   useResetCheckout();
@@ -89,7 +103,10 @@ export default function Onboarding() {
   } = theme.useToken();
 
   const {
-    item: { name, price },
+    item: {
+      name,
+      price: { value },
+    },
     branding,
   } = previewingCheckout;
 
@@ -97,7 +114,7 @@ export default function Onboarding() {
     {
       index: 0,
       name: 'Add your product',
-      disabled: !name || !price,
+      disabled: !name || !value || isPriceTooLong(value),
     },
     {
       index: 1,
@@ -108,7 +125,7 @@ export default function Onboarding() {
       index: 2,
       name: 'Add your wallet',
       nextAction: (
-        <Button loading={connectExtensionLoading} type="primary" onClick={handleConnectExtension}>
+        <Button type="primary" onClick={() => setIsOpenSelectWalletModal(true)}>
           {t('connectWallet')}
         </Button>
       ),
@@ -116,7 +133,7 @@ export default function Onboarding() {
   ];
 
   const loginThenCreateCheckout = async (account: Account) => {
-    setIsOpenSelectAccountModal(false);
+    setIsOpenSelectWalletModal(false);
     await handleLogin(account);
 
     if (loginSuccessRef.current) {
@@ -146,7 +163,7 @@ export default function Onboarding() {
             form={form}
             layout="vertical"
             style={{ width: '100%', display: 'flex', justifyContent: 'center' }}
-            initialValues={checkout}
+            initialValues={previewingCheckout}
             onFieldsChange={onFieldsChange}
           >
             <CheckoutProductFormItems isShow={stepIndex === 0} onboardingMode onFieldsChange={onFieldsChange} />
@@ -157,10 +174,15 @@ export default function Onboarding() {
         </Steps>
       </Header>
 
-      <Content style={{ background: colorBgLayout }}>
-        {/* <Previewer onboardingMode width={768}>
-          <Checkout checkoutData={previewingCheckout} />
-        </Previewer> */}
+      <Content style={{ background: colorBgLayout, display: 'flex', justifyContent: 'center' }}>
+        <Previewer onboardingMode width={768} style={{ marginRight: '0px' }}>
+          <CheckoutComponent
+            flexPriceValid={true}
+            previewMode={true}
+            checkoutData={previewingCheckout}
+            isShowAfterPayment={false}
+          />
+        </Previewer>
       </Content>
 
       <Loading
@@ -169,12 +191,10 @@ export default function Onboarding() {
         message={t('creatingCheckoutPage') as string}
       />
 
-      <SelectAccountModal
-        open={isOpenSelectAccountModal}
-        onClose={() => setIsOpenSelectAccountModal(false)}
-        onSelectAccount={loginThenCreateCheckout}
-        connectExtensionLoading={connectExtensionLoading}
-        connectedExtension={connectedExtension}
+      <ConnectWalletModal
+        handleLogin={loginThenCreateCheckout}
+        open={isOpenSelectWalletModal}
+        onClose={() => setIsOpenSelectWalletModal(false)}
       />
     </>
   );

@@ -30,7 +30,7 @@ import { FormInstance, Form } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import PATHS from 'router/paths';
 import { LOCALE_WORKSPACE } from 'app/i18n';
-import { getAssetMetadata, getNetworkAssets } from '@atscale/libra-ui';
+import { getNetworkAssets, isPriceTooLong } from '@atscale/libra-ui';
 import { useNetworks } from 'features/auth/authHooks';
 
 export const useResetCheckout = () => {
@@ -164,8 +164,6 @@ export const useHelpText = (isError?: boolean): UseHelpTextReturnType => {
   const [shouldShowHelpText, setShouldShowHelpText] = useState<any>();
   const isFieldTouchedRef = useRef<any>(null);
 
-  const form = Form.useFormInstance();
-
   const onFocus = () => {
     if (!isError) {
       setShouldShowHelpText(true);
@@ -177,17 +175,8 @@ export const useHelpText = (isError?: boolean): UseHelpTextReturnType => {
     return value === null || value === undefined || value === '';
   };
 
-  const isPriceTooSmall = (value: number) => {
-    const assetId = form.getFieldValue(['assetId']);
-    const networkId = form.getFieldValue(['networkId']);
-    const { decimals } = getAssetMetadata({ assetId, networkId });
-    const smallestPrice = 1 / Math.pow(10, decimals);
-
-    return value === 0 || (value && value < smallestPrice);
-  };
-
   const onChange = (value: any, isPriceInput = false) => {
-    if (isEmpty(value) || (isPriceInput && isPriceTooSmall(value))) {
+    if (isEmpty(value) || (isPriceInput && isPriceTooLong(value))) {
       if (shouldShowHelpText) {
         setShouldShowHelpText(false);
       }

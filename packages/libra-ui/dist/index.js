@@ -382,6 +382,9 @@ var require_classnames = __commonJS({
 // src/index.tsx
 var src_exports = {};
 __export(src_exports, {
+    ASSETS_CONFIG: function() {
+        return ASSETS_CONFIG;
+    },
     AccountOption: function() {
         return AccountInfo;
     },
@@ -583,36 +586,6 @@ var ASSETS_CONFIG = [
         ]
     },
     {
-        id: "ast_ksm",
-        symbol: "ksm",
-        name: "Kusama",
-        decimals: 12,
-        logoUrl: "https://raw.githubusercontent.com/paritytech/polkadot-staking-dashboard/master/src/img/kusama_icon.svg",
-        networks: [
-            {
-                networkId: "nw_kusama",
-                config: {
-                    isNative: true
-                }
-            }
-        ]
-    },
-    {
-        id: "ast_wnd",
-        symbol: "wnd",
-        name: "Westend",
-        decimals: 12,
-        logoUrl: "https://raw.githubusercontent.com/paritytech/polkadot-staking-dashboard/master/src/img/westend_icon.svg",
-        networks: [
-            {
-                networkId: "nw_westend",
-                config: {
-                    isNative: true
-                }
-            }
-        ]
-    },
-    {
         id: "ast_usdt",
         symbol: "usdt",
         name: "USDT",
@@ -629,6 +602,36 @@ var ASSETS_CONFIG = [
             }
         ]
     },
+    {
+        id: "ast_ksm",
+        symbol: "ksm",
+        name: "Kusama",
+        decimals: 12,
+        logoUrl: "https://raw.githubusercontent.com/paritytech/polkadot-staking-dashboard/master/src/img/kusama_icon.svg",
+        networks: [
+            {
+                networkId: "nw_kusama",
+                config: {
+                    isNative: true
+                }
+            }
+        ]
+    },
+    // {
+    //   id: 'ast_wnd',
+    //   symbol: 'wnd',
+    //   name: 'Westend',
+    //   decimals: 12,
+    //   logoUrl: 'https://raw.githubusercontent.com/paritytech/polkadot-staking-dashboard/master/src/img/westend_icon.svg',
+    //   networks: [
+    //     {
+    //       networkId: 'nw_westend',
+    //       config: {
+    //         isNative: true,
+    //       },
+    //     },
+    //   ],
+    // },
     {
         id: "ast_lusd",
         symbol: "lusd",
@@ -6028,8 +6031,9 @@ var ContentWrapper = (0, import_styled_components4.default)(Content)(_templateOb
 var MainContent = (0, import_styled_components4.default)(import_antd8.Row)(_templateObject9());
 var CheckoutPreview = function(param) {
     var checkoutData = param.checkoutData, _param_previewMode = param.previewMode, previewMode = _param_previewMode === void 0 ? true : _param_previewMode, _param_isShowAfterPayment = param.isShowAfterPayment, isShowAfterPayment = _param_isShowAfterPayment === void 0 ? false : _param_isShowAfterPayment, _param_loading = param.loading, loading = _param_loading === void 0 ? false : _param_loading, HandlePaymentComponent = param.HandlePaymentComponent, onNumFlexPriceChange = param.onNumFlexPriceChange, numFlexPrice = param.numFlexPrice, flexPriceValid = param.flexPriceValid, validateFlexPrice = param.validateFlexPrice;
-    var branding = checkoutData.branding, item = checkoutData.item, assetId = checkoutData.assetId, networkId = checkoutData.networkId, afterPayment = checkoutData.afterPayment, payee = checkoutData.payee, actionName = checkoutData.metadata.actionName;
+    var branding = checkoutData.branding, item = checkoutData.item, assetId = checkoutData.assetId, networkId = checkoutData.networkId, afterPayment = checkoutData.afterPayment, payee = checkoutData.payee, metadata = checkoutData.metadata;
     var price = item.price, name = item.name;
+    var actionName = (metadata !== null && metadata !== void 0 ? metadata : {}).actionName;
     var checkoutPrice = price.type === "fixed" ? price.value : numFlexPrice ? priceFormatHelper.toSmallestUnit(numFlexPrice, {
         assetId: assetId,
         networkId: networkId
@@ -6280,6 +6284,7 @@ var WalletList = function(param) {
 var WalletList_default = WalletList;
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
+    ASSETS_CONFIG: ASSETS_CONFIG,
     AccountOption: AccountOption,
     CheckoutComponent: CheckoutComponent,
     ContactInformation: ContactInformation,

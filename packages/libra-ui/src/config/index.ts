@@ -82,36 +82,6 @@ export const ASSETS_CONFIG: AssetConfig[] = [
     ],
   },
   {
-    id: 'ast_ksm',
-    symbol: 'ksm',
-    name: 'Kusama',
-    decimals: 12,
-    logoUrl: 'https://raw.githubusercontent.com/paritytech/polkadot-staking-dashboard/master/src/img/kusama_icon.svg',
-    networks: [
-      {
-        networkId: 'nw_kusama',
-        config: {
-          isNative: true,
-        },
-      },
-    ],
-  },
-  {
-    id: 'ast_wnd',
-    symbol: 'wnd',
-    name: 'Westend',
-    decimals: 12,
-    logoUrl: 'https://raw.githubusercontent.com/paritytech/polkadot-staking-dashboard/master/src/img/westend_icon.svg',
-    networks: [
-      {
-        networkId: 'nw_westend',
-        config: {
-          isNative: true,
-        },
-      },
-    ],
-  },
-  {
     id: 'ast_usdt',
     symbol: 'usdt',
     name: 'USDT',
@@ -128,6 +98,37 @@ export const ASSETS_CONFIG: AssetConfig[] = [
       },
     ],
   },
+  {
+    id: 'ast_ksm',
+    symbol: 'ksm',
+    name: 'Kusama',
+    decimals: 12,
+    logoUrl: 'https://raw.githubusercontent.com/paritytech/polkadot-staking-dashboard/master/src/img/kusama_icon.svg',
+    networks: [
+      {
+        networkId: 'nw_kusama',
+        config: {
+          isNative: true,
+        },
+      },
+    ],
+  },
+  // {
+  //   id: 'ast_wnd',
+  //   symbol: 'wnd',
+  //   name: 'Westend',
+  //   decimals: 12,
+  //   logoUrl: 'https://raw.githubusercontent.com/paritytech/polkadot-staking-dashboard/master/src/img/westend_icon.svg',
+  //   networks: [
+  //     {
+  //       networkId: 'nw_westend',
+  //       config: {
+  //         isNative: true,
+  //       },
+  //     },
+  //   ],
+  // },
+
   {
     id: 'ast_lusd',
     symbol: 'lusd',

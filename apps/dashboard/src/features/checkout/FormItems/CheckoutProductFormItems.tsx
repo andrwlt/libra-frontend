@@ -2,7 +2,7 @@ import { Input, InputNumber, Select, Form, Space } from 'antd';
 import ImageUploader from 'components/Inputs/ImageUploader';
 import { useTranslation } from 'react-i18next';
 import { FormItemsPropsType, PriceInputPropsType } from 'features/checkout/types';
-import { getAssetMetadata } from '@atscale/libra-ui';
+import { ASSETS_CONFIG, isPriceTooLong } from '@atscale/libra-ui';
 import { LOCALE_WORKSPACE } from 'app/i18n';
 import { useCheckFieldError, useHelpText } from 'features/checkout/checkoutHooks';
 import styled from 'styled-components';
@@ -12,20 +12,18 @@ const FormItem = Form.Item;
 interface AssetInputProps {
   onChange?: Function;
   value?: string;
-  onboardingMode?: boolean;
 }
 
-const AssetInput = ({ onChange, value, onboardingMode }: AssetInputProps) => {
-  // const assetOptions = [ASSET_METADATA.ksm, ASSET_METADATA.dot];
+const AssetInput = ({ onChange, value }: AssetInputProps) => {
   return (
-    <Select style={{ width: onboardingMode ? '88px' : '102px' }} value={value} onChange={(val) => onChange?.(val)}>
-      {/* {assetOptions.map((asset: AssetMetadata) => {
+    <Select style={{ width: 125 }} value={value} onChange={(val) => onChange?.(val)}>
+      {ASSETS_CONFIG.map((asset) => {
         return (
-          <Select.Option key={asset.code} value={asset.code}>
-            {asset.symbol}
+          <Select.Option key={asset.id} value={asset.id}>
+            {asset.name}
           </Select.Option>
         );
-      })} */}
+      })}
     </Select>
   );
 };
@@ -71,27 +69,21 @@ const PriceInput = (props: PriceInputProps) => {
 };
 
 const ProductPriceFormItem = (props: PriceInputPropsType) => {
-  const { onboardingMode } = props;
   const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
 
   return (
     <Form.Item
       label={'Price'}
-      noStyle={!!onboardingMode}
+      noStyle
       style={{ flexGrow: 1, paddingRight: '32px' }}
-      name={['item', 'price']}
+      name={['item', 'price', 'value']}
       required
       dependencies={['assetId']}
       rules={[
-        ({ getFieldValue }) => ({
+        () => ({
           validator(_, value) {
-            const assetId = getFieldValue(['assetId']);
-            const networkId = getFieldValue(['networkId']);
-            const { decimals } = getAssetMetadata({ assetId, networkId });
-            const smallestPrice = 1 / Math.pow(10, decimals);
-
-            if (value === 0 || (value && value < smallestPrice)) {
-              return Promise.reject(new Error(t<string>('priceTooSmall')));
+            if (value && isPriceTooLong(value)) {
+              return Promise.reject(new Error(t<string>('decimalPathTooLong')));
             }
 
             return Promise.resolve();
@@ -106,17 +98,17 @@ const ProductPriceFormItem = (props: PriceInputPropsType) => {
   );
 };
 
-const ProductNameFormItem = ({ onboardingMode }: FormItemsPropsType) => {
+const ProductNameFormItem = () => {
   const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
-  const label = onboardingMode ? t('productNameLabelOnboarding') : t('productNameLabel');
-  const placeholder = onboardingMode ? t('productNamePlaceholderOnboarding') : t('productNamePlaceholder');
+  const label = t('productNameLabelOnboarding');
+  const placeholder = t('productNamePlaceholderOnboarding');
   const isError = useCheckFieldError(['item', 'name']);
   const { shouldShowHelpText, onFocus, onBlur, onChange } = useHelpText(isError);
 
   return (
     <FormItem
-      style={{ marginBottom: onboardingMode ? 32 : 24 }}
-      help={onboardingMode && shouldShowHelpText ? t('productNameHelpTextOnboarding') : undefined}
+      style={{ marginBottom: 32 }}
+      help={shouldShowHelpText ? t('productNameHelpTextOnboarding') : undefined}
       name={['item', 'name']}
       label={label}
       rules={[{ required: true, message: t<string>('productNameIsRequired') }]}
@@ -125,9 +117,9 @@ const ProductNameFormItem = ({ onboardingMode }: FormItemsPropsType) => {
       <Input
         autoComplete="off"
         placeholder={placeholder}
-        onFocus={onboardingMode ? onFocus : () => {}}
-        onBlur={onboardingMode ? onBlur : () => {}}
-        onChange={onboardingMode ? (event) => onChange(event.target.value) : () => {}}
+        onFocus={onFocus}
+        onBlur={onBlur}
+        onChange={(event) => onChange(event.target.value)}
       />
     </FormItem>
   );
@@ -148,9 +140,10 @@ export const StyledOnboardingImageFormItem = styled(Form.Item)`
   }
 `;
 
-const CheckoutProductFormItems = ({ isShow, onboardingMode = false }: FormItemsPropsType) => {
+const CheckoutProductFormItems = ({ isShow }: FormItemsPropsType) => {
   const { t } = useTranslation(LOCALE_WORKSPACE.CHECKOUT);
-  const isPriceInputError = useCheckFieldError(['item', 'price']);
+  const isPriceInputError = useCheckFieldError(['item', 'price', 'value']);
+
   const {
     shouldShowHelpText: shouldShowPriceHelpText,
     onFocus: onPriceInputFocus,
@@ -167,73 +160,45 @@ const CheckoutProductFormItems = ({ isShow, onboardingMode = false }: FormItemsP
 
   const isError = useCheckFieldError(['item', 'price']);
   return (
-    <>
-      {onboardingMode ? (
-        <Space size={60} style={{ display: isShow ? '' : 'none' }}>
-          <div style={{ width: '400px' }}>
-            <ProductNameFormItem onboardingMode />
+    <Space size={60} style={{ display: isShow ? '' : 'none' }}>
+      <div style={{ width: '400px' }}>
+        <ProductNameFormItem />
 
-            <FormItem
-              style={{ height: 106, marginBottom: 0 }}
-              label={t('priceLabelOnboarding')}
-              help={shouldShowPriceHelpText ? t('priceHelpTextOnboarding') : undefined}
-              required
-              validateStatus={isError ? 'error' : 'success'}
-            >
-              <Space.Compact style={{ width: '100%' }}>
-                <ProductPriceFormItem
-                  onboardingMode
-                  onPriceInputFocus={onPriceInputFocus}
-                  onPriceInputChange={onPriceInputChange}
-                  onPriceInputBlur={onPriceInputBlur}
-                />
-
-                <Form.Item name="asset" noStyle>
-                  <AssetInput onboardingMode />
-                </Form.Item>
-              </Space.Compact>
-            </FormItem>
-          </div>
-
-          <StyledOnboardingImageFormItem
-            help={shouldShowImageHelpText ? t('productImageHelpTextOnboarding') : undefined}
-            name={['item', 'image']}
-            style={{ width: 340, marginBottom: 0, marginTop: 10, height: 176 }}
-          >
-            <ImageUploader
-              onHoverImageInput={onHoverImageInput}
-              onMouseLeaveImageInput={onMouseLeaveImageInput}
-              label={t<string>('productImage')}
-              purpose="product_image"
+        <FormItem
+          style={{ height: 106, marginBottom: 0 }}
+          label={t('priceLabelOnboarding')}
+          help={shouldShowPriceHelpText ? t('priceHelpTextOnboarding') : undefined}
+          required
+          validateStatus={isError ? 'error' : 'success'}
+        >
+          <Space.Compact style={{ width: '100%' }}>
+            <ProductPriceFormItem
+              onboardingMode
+              onPriceInputFocus={onPriceInputFocus}
+              onPriceInputChange={onPriceInputChange}
+              onPriceInputBlur={onPriceInputBlur}
             />
-          </StyledOnboardingImageFormItem>
-        </Space>
-      ) : (
-        <>
-          <Form.Item
-            name={['item', 'image']}
-            style={{ display: 'flex', justifyContent: 'center', width: '100%', marginTop: 15, marginBottom: 10 }}
-            className="upload-image--large"
-          >
-            <ImageUploader label={t<string>('productImage')} purpose="product_image" />
-          </Form.Item>
 
-          <ProductNameFormItem />
-
-          <div style={{ width: '100%', display: 'flex' }}>
-            <ProductPriceFormItem />
-
-            <Form.Item label={t<string>('asset')} name="asset">
+            <Form.Item name="assetId" noStyle>
               <AssetInput />
             </Form.Item>
-          </div>
+          </Space.Compact>
+        </FormItem>
+      </div>
 
-          <Form.Item label={t<string>('description')} name={['item', 'description']}>
-            <Input.TextArea autoComplete="off" rows={3} placeholder={t<string>('descriptionPlaceholder')} />
-          </Form.Item>
-        </>
-      )}
-    </>
+      <StyledOnboardingImageFormItem
+        help={shouldShowImageHelpText ? t('productImageHelpTextOnboarding') : undefined}
+        name={['item', 'image']}
+        style={{ width: 340, marginBottom: 0, marginTop: 10, height: 176 }}
+      >
+        <ImageUploader
+          onHoverImageInput={onHoverImageInput}
+          onMouseLeaveImageInput={onMouseLeaveImageInput}
+          label={t<string>('productImage')}
+          purpose="product_image"
+        />
+      </StyledOnboardingImageFormItem>
+    </Space>
   );
 };
 

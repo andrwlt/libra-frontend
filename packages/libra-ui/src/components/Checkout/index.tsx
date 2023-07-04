@@ -65,16 +65,9 @@ const CheckoutPreview = ({
   validateFlexPrice?: (price: NumFlexPrice) => FlexPriceValid;
   flexPriceValid: FlexPriceValid;
 }) => {
-  const {
-    branding,
-    item,
-    assetId,
-    networkId,
-    afterPayment,
-    payee,
-    metadata: { actionName },
-  } = checkoutData;
+  const { branding, item, assetId, networkId, afterPayment, payee, metadata } = checkoutData;
   const { price, name } = item;
+  const { actionName } = metadata ?? {};
 
   const checkoutPrice =
     price.type === 'fixed'

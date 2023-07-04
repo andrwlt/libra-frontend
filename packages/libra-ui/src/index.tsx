@@ -26,7 +26,7 @@ import {
   NumberPriceProduct,
   NumberPrice,
 } from 'app/types';
-import { EXTENSIONS } from 'config';
+import { EXTENSIONS, ASSETS_CONFIG } from 'config';
 import AccountOption from 'components/Checkout/Right/PaymentPreviewer/AccountOption';
 import ContactInformation from 'components/Checkout/Right/PaymentPreviewer/ContactInformation';
 import Loading from 'components/Common/Loading';
@@ -47,7 +47,8 @@ export {
   Loading,
   WalletList,
   getSs58AddressByAsset,
-  isPriceTooLong
+  isPriceTooLong,
+  ASSETS_CONFIG,
 };
 
 export type {
